@@ -140,21 +140,18 @@ Par expemple, pour un taux pondere, la somme des taux n'est pas possible, mais o
 Par exemple:
 
     Key                             Description                           Source   Type	  Data                                                Total
-    SITADEL_LOCAUX_SURF_HAB_AVANT	Surface 'Habitation ' avant travaux	  SIT      INT    com_sitadelLocaux['SURF_HAB_AVANT'].sum()           SUM
+    SITADEL_LOCAUX_SURF_HAB_AVANT	Surface 'Habitation ' avant travaux   SIT      INT    com_sitadelLocaux['SURF_HAB_AVANT'].sum()           SUM
     SRU_CARENCE_2020                Taux de Carence en 2020               SRU      INT    round0(SRU_RP_2020 * (0.25 - SRU_TX_LLS_2020), 4)	  SUM
 
 
-Le fichier de configuration par defaut est input/Configuration.xlsx
+Le fichier de configuration par defaut est "_input/Configuration.xlsx_"
 Le ficher de configuration a utiliser peut etre specifie en parametre de la ligne de commamde.
 
 ## Diagnostic
 
 Sur les donnees collectees, des verifications peuvent etre faites.
-
 Le fichier de configuration xls contient un Tab Diagnostic.
-
 Chaque ligne permet de verifier une condition et d'afficher le diagnostic correspondant.
-
 Ces diagnostics sont ensuite disponible pour generer le rapport.
 
 **Key** : L'identifiant du Diagnostic
@@ -182,7 +179,7 @@ Le rapport consiste en:
 
 Le rapport HTML est base sur un template, qui permet d'ajuster la presentation et les donnees a presenter.
 
-Le fichier template de rapport par defaut est input/report_template.html
+Le fichier template de rapport par defaut est "_input/report_template.html_"
 Le ficher de template a utiliser peut etre specifie en parametre de la ligne de commamde.
 
 ## Les sources de donnes
