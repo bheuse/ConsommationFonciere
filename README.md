@@ -11,21 +11,22 @@ Il permet de mettre en oeuvre l'objectif ZAN - Zero Artificialisatiom Nette.
 
 Les donnees sont issues (voir les liens en bas de ce document):
 - De l'INSEE pour les donnees historques de base sur les communes
-- De l'INSEE pour les projections future en nombre d'habitants
+- De l'INSEE pour les projections futures en nombre d'habitants
 - Des fichiers Sitadel pour les permis de construire
 - Du Cerema pour les donnees d'artificialisation
 - De la DREAL pour les donnees SRU
 
 Les territoires geres:
-- Les Communes
-- Les EPCI
-- Les Departements de PACA
-- La Region PACA
+- "**COMMUNE**" : Les Communes 
+- "**EPCI**" : Les EPCI (Communautes d'Agglomeration, Metropoles, Communautes de Communes)
+- "**DEPT**" : Les Departements de PACA
+- "**REGION**" : La Region PACA
+
 
 A venir:
+- "**SCOT**" : Les territoires des SCoT
 - Les autres Regions
 - Les ensembles de communes
-- Les territoires des SCoT
 - La France Entiere
 
 L'outil permet de definir des regles de diagnostic.
@@ -82,18 +83,66 @@ On peut aussi calculer de nouvelles metriques basees sur les autres (par exemple
 
 Ces metriques sont ensuite disponibles pour generer le rapport.
 
+Pour collecter de nouvelles metriques, ajouter des lignes dans le fichier de configuration, _TAB_ **Collect**
 
 **Key**	: L'identifiant de la metrique (donnee)
 
-**Description**	: La Description de la metrique (donnee
+Ce champ doit etre unique, sans espaces ni characteres speciaux. Exemple:
+
+    SRU_CARENCE_2020
+
+**Description**	: La Description de la metrique (indicateur de la donnee)
+
+Text libre, par exemple:
+
+    Taux de Carence en 2020
 
 **Source**: La Source de la metrique
 
-**Type**	: La Source de la metrique
+Ce champ est indicatif.
+- "DATA" : Donnees de Base
+- "CODE" : Donnees Codes Postaux
+- "INTERCO" : Donnees Intercommunalites
+- "INSEE" : Donnees INSEE
+- "CALC" : Donnee calculees
+- "SRU" : Donnees SRU DREAL
+- "ART" : Donnees Artificialisation CEREMA
+- "PROJ" : Donnees Projection INSEE
+- "EVOL" : Donnees Evolution INSEE
+- "SIT" ; Donnees SITADEL
+ 
+**Type**	: Le type de la metrique
 
-**Data**	: La Source de la metrique
+Les types supportes sont:
+- "INT" : Entier sans decimale
+- "STR" : Chaine de Caractere
+- "FLOAT" : Nombre decimal
+- "TAUX" : Taux. 0,1 represente 10 %
+- "PERCENT" : Poucentage. 0,1 represente 0,1 %
+ 
+**Data**	: Le calcul de la la metrique (une expression Python)
 
-**Total** : La Source de la metrique
+**Total** : La calcul du total de la metrique pour plusieurs communes
+
+Le possibilites sont:
+- "SUM" : la somme des valeurs de toutes les communes
+- "AVG" : la moyenne des valeurs de toutes les communes
+- "COUNT" : le nombre de communes 
+- "EQUAL" : la meme valeur de la premiere commune
+- "IGNORE" : Ignore le total
+- "N/A" : Non applicable
+- "CUSTOM" : une expression python qui utilise des KEY des autres totaux
+
+Par expemple, pour un taux pondere, la somme des taux n'est pas possible, mais on peut utiliser les sommes des autres totaux:
+
+    round(SRU_RP_2020 * (0.25 - SRU_TX_LLS_2020), 4)
+
+Par exemple:
+
+    Key                             Description                           Source   Type	  Data                                                Total
+    SITADEL_LOCAUX_SURF_HAB_AVANT	Surface 'Habitation ' avant travaux	  SIT      INT    com_sitadelLocaux['SURF_HAB_AVANT'].sum()           SUM
+    SRU_CARENCE_2020                Taux de Carence en 2020               SRU      INT    round0(SRU_RP_2020 * (0.25 - SRU_TX_LLS_2020), 4)	  SUM
+
 
 Le fichier de configuration par defaut est input/Configuration.xlsx
 Le ficher de configuration a utiliser peut etre specifie en parametre de la ligne de commamde.
