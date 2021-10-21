@@ -17,6 +17,8 @@ from termcolor     import colored
 from mako.template import Template
 import mako.runtime
 import warnings
+import zipfile
+import shutil
 
 warnings.filterwarnings("ignore")
 warnings.simplefilter(action='ignore', category=pd.errors.PerformanceWarning)
@@ -62,8 +64,8 @@ def load_sitadel(sitadel1316_file:  str = sitadel1316File,
                  sitadel_meta_file: str = sitadelMetaFile):
     global sitadel1316, sitadel1721, sitadelMeta
     if (sitadel1316 is None) or (sitadel1721 is None)  or (sitadelMeta is None):
-        downloadFile(sitadelSource1316File, sitadel1316File)
-        downloadFile(sitadelSource1721File, sitadel1721File)
+        downloadFile(sitadelSource1316File, sitadel1316File, zip=True, zipped_file="PC_DP_créant_logements_2013_2016.csv")
+        downloadFile(sitadelSource1721File, sitadel1721File, zip=True, zipped_file="PC_DP_créant_logements_2017_2021.csv")
         downloadFile(sitadelSourceMetaFile, sitadelMetaFile)
         print_blue("Lecture Sitadel Logements 2013-2016 : " + sitadel1316_file + " ...")
         sitadel1316 = pd.read_csv(sitadel1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str})
@@ -99,8 +101,8 @@ def load_sitadel_locaux(sitadelLocaux1316_file:  str = sitadelLocaux1316File,
                         sitadelLocaux_meta_file: str = sitadelLocauxMetaFile):
     global sitadel_locaux_1316, sitadel_locaux_1721, sitadel_locaux_Meta
     if (sitadel_locaux_1316 is None) or (sitadel_locaux_1721 is None)  or (sitadel_locaux_Meta is None):
-        downloadFile(sitadelLocaux1316File, sitadelLocaux1316File)
-        downloadFile(sitadelLocaux1721File, sitadelLocaux1721File)
+        downloadFile(sitadelLocaux1316File, sitadelLocaux1316File, zip=True, zipped_file="PC_DP_créant_locaux_2013_2016.csv")
+        downloadFile(sitadelLocaux1721File, sitadelLocaux1721File, zip=True, zipped_file="PC_DP_créant_locaux_2017_2021.csv")
         downloadFile(sitadelLocauxMetaFile, sitadelLocauxMetaFile)
         print_blue("Lecture Sitadel Locaux 2013-2016 : " + sitadelLocaux1316_file + " ...")
         sitadel_locaux_1316 = pd.read_csv(sitadelLocaux1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "ZONE_OP": str, "NATURE_PROJET": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float})
@@ -307,6 +309,7 @@ global_context["URL_SOURCE_COMMUNES"] = metaDossierSourcePage
 def load_communes(meta_dossier_file: str = metaDossierFile, dossier_complet_file: str = dossierCompletFile):
     global metaDossier, dossierComplet
     if (metaDossier is None) or (dossierComplet is None):
+        downloadFile(metaDossierSourceFile, dossierCompletFile, zip=True, zipped_file="dossier_complet.csv")
         print_blue("Lecture Meta Donnees Communes : " + metaDossierFile + " ...")
         metaDossier = pd.read_csv(meta_dossier_file, delimiter=';', index_col=0)
         print_blue("Lecture Donnees Communes : " + dossier_complet_file + " ...")
@@ -375,20 +378,30 @@ def display_in_browser(html_file):
 ###
 
 
-# Ne marche pas pour les gros fichiers ((
-def downloadFile(url : str, filename: str) -> str:
+def downloadFile(url: str, filename: str, zip=False, zipped_file: str = None) -> str:
+    """ Download Files and Unzip"""
     if (os.path.isfile(filename)): return filename
-    print_red("Downloading "+filename+" from : "+url)
-    print_red("If this download fails please download manually.")
+    print_red("Downloading : "+filename)
     local_filename = filename
     with requests.get(url, stream=True) as r:
         r.raise_for_status()
         with open(local_filename, 'wb') as f:
+            i = 1
             for chunk in r.iter_content(chunk_size=8192):
-                print(".",end="")
+                i = i + 1
+                print(".", end="")
+                if i == 150:
+                    print("")
+                    i = 1
                 f.write(chunk)
         f.close()
-        print(".")
+        print("")
+    if (zip):
+        print_red("Unzipping : " + filename)
+        with zipfile.ZipFile(local_filename, 'r') as zip_ref:
+            zip_ref.extractall("zip")
+        shutil.move('zip' + os.sep + zipped_file, filename)
+    print_red("Exctracted : " + local_filename)
     return local_filename
 
 

@@ -14,7 +14,5 @@ mako
 numpy
 jk_commentjson
 pyyaml
-xmltodict
 requests
-tqdm
 

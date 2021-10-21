@@ -2,7 +2,7 @@
 
 [Cet outil](https://github.com/bheuse/ConsommationFonciere) consolide les données qui permettent un diagnostic de Consommation Foncière en France.
 
-Il permet de mettre en œuvre l'objectif ZAN - Zéro Artificialisation Nette.
+Il vise à mettre en œuvre l'objectif ZAN - Zéro Artificialisation Nette.
 
 Les étapes sont les suivantes :
 - Collecte des Données
