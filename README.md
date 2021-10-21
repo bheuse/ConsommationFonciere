@@ -190,15 +190,29 @@ Si le Test renvoi VRAI, le Message est affiche.
 Le rapport consiste en :
 - Un fichier xls avec les données consolidées pour la commune ou le territoire
 - Un fichier csv avec les données consolidées pour la commune ou le territoire
-- Une page HTML avec des graphique, des diagnostic etc ...
+- Une page HTML avec des graphiques, des diagnostics, etc.
 
-Le rapport HTML est base sur un template, qui permet d'ajuster la présentation et les données a présenter.
+### Rapport CSV
+
+Le rapport CSV ne contient que les métriques brutes, avec le total et les meta-données
+
+### Rapport Excel
+
+Le rapport généré est considéré comme corrompu par Excel, mais il peut le réparer)).
+Il contient 3 TAB :
+- TAB **Data** : les métriques brutes, avec le total et les meta-données
+- TAB **Pivot** : une transposition de ces données 
+- TAB **Diagnotics** : la liste des diagnostics et les valeurs calculées
+
+### Rapport HTML
+
+Le rapport HTML est base sur un template, qui permet d'ajuster la présentation et les données a afficher.
 
 Le fichier template de rapport par défaut est "_input/report_template.html_"
 
 Il utilise le moteur [MAKO](https://docs.makotemplates.org/en/latest/).
 
-Les balises pour les metriques qui peuvent etre utilisées sont listées dans le fichier "_output/context.yaml_"
+Les balises pour les métriques qui peuvent etre utilisées sont listées dans le fichier "_output/context.yaml_"
 
 Le fichier de template a utiliser peut être spécifié en paramètre de la ligne de commande.
 

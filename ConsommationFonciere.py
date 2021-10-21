@@ -1,5 +1,4 @@
 import unittest
-from tqdm import tqdm
 from typing import Union
 import yaml
 import jk_commentjson as jsonc
@@ -10,35 +9,29 @@ import webbrowser
 import requests
 import io
 import re
-import getopt, sys
+import getopt
+import sys
 import base64
 import unidecode
 from termcolor     import colored
 from mako.template import Template
 import mako.runtime
-mako.runtime.UNDEFINED = 'MISSING_CONTEXT'
 import warnings
+
 warnings.filterwarnings("ignore")
 warnings.simplefilter(action='ignore', category=pd.errors.PerformanceWarning)
 
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.image import MIMEImage
-from email.mime.base import MIMEBase
-from email import encoders
-import glob
 
 # Working Directories
 output_dir = "output" + os.sep
 data_dir   = "data"   + os.sep
 input_dir  = "input"  + os.sep
 
-html_template      = input_dir + "report_template.html"
 configurationFile  = input_dir + "Configuration.xlsx"
+html_template      = input_dir + "report_template.html"
+context_file       = output_dir + "context.yaml"
 
 global_context     = {}
-context_file       = output_dir + "context.yaml"
 
 # DataFile and Data Frames
 
@@ -62,6 +55,7 @@ sitadelMeta = None
 
 # Logements
 # "REG";"DEP";"COMM";"Type_DAU";"Num_DAU";"Etat_DAU";"DATE_REELLE_AUTORISATION";"DATE_REELLE_DOC";"DATE_REELLE_DAACT";"DPC_AUT";"DPC_DOC";"DPC_DERN";"APE_DEM";"CJ_DEM";"DENOM_DEM";"SIREN_DEM";"SIRET_DEM";"CODPOST_DEM";"LOCALITE_DEM";"REC_ARCHI";"ADR_NUM_TER";"ADR_TYPEVOIE_TER";"ADR_LIBVOIE_TER";"ADR_LIEUDIT_TER";"ADR_LOCALITE_TER";"ADR_CODPOST_TER";"sec_cadastre1";"num_cadastre1";"sec_cadastre2";"num_cadastre2";"sec_cadastre3";"num_cadastre3";"SUPERFICIE_TERRAIN";"ZONE_OP";"NATURE_PROJET";"I_EXTENSION";"I_SURELEVATION";"I_NIVSUPP";"NB_NIV_MAX";"NB_CHAMBRES";"SURF_HAB_AVANT";"SURF_HAB_CREEE";"SURF_HAB_ISSUE_TRANSFO";"SURF_HAB_DEMOLIE";"SURF_HAB_TRANSFORMEE";"SURF_LOC_AVANT";"SURF_LOC_CREEE";"SURF_LOC_ISSUE_TRANSFO";"SURF_LOC_DEMOLIE";"SURF_LOC_TRANSFORMEE";"SURF_HEB_AVANT";"SURF_HEB_CREEE";"SURF_HEB_ISSUE_TRANSFO";"SURF_HEB_DEMOLIE";"SURF_HEB_TRANSFORMEE";"SURF_BUR_AVANT";"SURF_BUR_CREEE";"SURF_BUR_ISSUE_TRANSFO";"SURF_BUR_DEMOLIE";"SURF_BUR_TRANSFORMEE";"SURF_COM_AVANT";"SURF_COM_CREEE";"SURF_COM_ISSUE_TRANSFO";"SURF_COM_DEMOLIE";"SURF_COM_TRANSFORMEE";"SURF_ART_AVANT";"SURF_ART_CREEE";"SURF_ART_ISSUE_TRANSFO";"SURF_ART_DEMOLIE";"SURF_ART_TRANSFORMEE";"SURF_IND_AVANT";"SURF_IND_CREEE";"SURF_IND_ISSUE_TRANSFO";"SURF_IND_DEMOLIE";"SURF_IND_TRANSFORMEE";"SURF_AGR_AVANT";"SURF_AGR_CREEE";"SURF_AGR_ISSUE_TRANSFO";"SURF_AGR_DEMOLIE";"SURF_AGR_TRANSFORMEE";"SURF_ENT_AVANT";"SURF_ENT_CREEE";"SURF_ENT_ISSUE_TRANSFO";"SURF_ENT_DEMOLIE";"SURF_ENT_TRANSFORMEE";"SURF_PUB_AVANT";"SURF_PUB_CREEE";"SURF_PUB_ISSUE_TRANSFO";"SURF_PUB_DEMOLIE";"SURF_PUB_TRANSFORMEE";"TYPE_SERVICE_PUBLIC"
+
 
 def load_sitadel(sitadel1316_file:  str = sitadel1316File,
                  sitadel1721_file:  str = sitadel1721File,
@@ -345,6 +339,7 @@ def load_artificialisation(dossier_artificialisation_file: str = dossierArtifici
 ###
 ### Collect Data Description
 ###
+
 collectDataFile    = configurationFile
 collectDataMetrics = None
 collectDiagnostics = None
@@ -364,16 +359,23 @@ def load_collectData(collect_file: str = collectDataFile):
 
 
 ###
-### Display
+### Display in Browser
 ###
+
 DISPLAY_HTML = True
+
+
+def display_in_browser(html_file):
+    if DISPLAY_HTML is False : return
+    webbrowser.open_new_tab(html_file)
+
 
 ###
 ### Utils
 ###
 
 
-# Ne marche pas pour les gros fichiers
+# Ne marche pas pour les gros fichiers ((
 def downloadFile(url : str, filename: str) -> str:
     if (os.path.isfile(filename)): return filename
     print_red("Downloading "+filename+" from : "+url)
@@ -383,8 +385,10 @@ def downloadFile(url : str, filename: str) -> str:
         r.raise_for_status()
         with open(local_filename, 'wb') as f:
             for chunk in r.iter_content(chunk_size=8192):
+                print(".",end="")
                 f.write(chunk)
         f.close()
+        print(".")
     return local_filename
 
 
@@ -503,14 +507,14 @@ def fig_to_base64(figure):
 
 ## Calculate Population Evolution and Rate
 def calc_after(annee_depart : int, pop_depart, annee_arrivee : int, taux_croissance, rounding=3) -> float :
-    # P1 = P0 x ( 1 + T/100) puissance N
+    """ Retourne l'after )) : P1 = P0 x ( 1 + T/100) puissance N """
     annee = annee_arrivee - annee_depart
     pop_arrivee = pop_depart * (1 + taux_croissance / 100) ** annee
     return round0(pop_arrivee, rounding)
 
 
 def calc_taux(annee_depart : int, pop_depart, annee_arrivee : int, pop_arrivee, rounding=3) -> float :
-    # T/100 = [ P1/P0 ] puissance 1/N - 1
+    """ Retourne le taux  : T/100 = [ P1/P0 ] puissance 1/N - 1 """
     annee = annee_arrivee - annee_depart
     taux_croissance = (pop_arrivee / pop_depart) ** (1 / annee)
     return round0(- (1 - taux_croissance) * 100, rounding)
@@ -523,6 +527,7 @@ def taux(part, total, rounding=3) -> float :
 
 ## Data Access
 def get_code_insee_commune(code_postal) -> [int, str]:
+    """ Retourne le code insee et le nom de la commune """
     load_codes()
     the_list = codesPostaux.index[codesPostaux['Code_postal'] == code_postal].tolist()
     if (not the_list):
@@ -534,6 +539,7 @@ def get_code_insee_commune(code_postal) -> [int, str]:
 
 
 def get_code_postal_commune(code_insee) -> [int, str]:
+    """ Retourne le code postal et le nom de la commune """
     load_codes()
     try:
         code_postal = codesPostaux["Code_postal"][code_insee]
@@ -686,6 +692,7 @@ def list_region() -> list[int]:
 
 
 def get_sru2017(key, code_insee, rounding=6):
+    """ Retourne la valeur comsolidee de la cle SRU 17-19 pour la commune  """
     load_sru(sruFile)
     try:
         return round0(sru2017[key][int(code_insee)], rounding)
@@ -694,6 +701,7 @@ def get_sru2017(key, code_insee, rounding=6):
 
 
 def get_sru2020(key, code_insee, rounding=6):
+    """ Retourne la valeur comsolidee de la cle SRU 20-22 pour la commune  """
     load_sru(sruFile)
     try:
         return round0(sru2020[key][int(code_insee)], rounding)
@@ -702,6 +710,7 @@ def get_sru2020(key, code_insee, rounding=6):
 
 
 def get_art(key, code_insee, rounding=6):
+    """ Retourne la valeur comsolidee de la cle ART pour la commune  """
     load_artificialisation()
     try:
         return round0(dossierArtificialisation[key][code_insee], rounding)
@@ -748,6 +757,12 @@ mode_custom    = "CUSTOM"
 mode_na        = "N/A"
 mode_average   = "AVG"
 
+type_int       = "INT"
+type_str       = "STR"
+type_taux      = "TAUX"
+type_percent   = "PERCENT"
+type_float     = "FLOAT"
+
 entite_commune = "COMMUNE"
 entite_epci    = "EPCI"
 entite_dept    = "DEPT"
@@ -777,6 +792,7 @@ class DataStore():
         self.html        = None
 
     def add_metric(self, key : str, meta : str, source: str, mode : str, type: str, index : str = None, data=None):
+        """ Add a metric to the data store """
         self.key_datas.append(key)
         self.meta_dict[key]    = meta
         self.source_dict[key]  = source
@@ -787,11 +803,13 @@ class DataStore():
         return self.add_data(key, index, data)
 
     def add_diagnostic(self, _key:str, _description:str, test:str, message:str, data : bool):
+        """ Add a diagnostic to the data store """
         diagnostic = { "key" : _key , "description" : _description , "test" : test , "message" : message, "value" : data }
         self.diagnostics.append(diagnostic)
         return diagnostic
 
     def add_data(self, key : str, index : str, data):
+        """ Add a data to the data store - with type checking """
         if (data  is None): return
         if (key   is None): return
         if (index is None): index = self.store_index
@@ -817,6 +835,7 @@ class DataStore():
         return None
 
     def add_value(self, key : str, index : str, data):
+        """ Add a raw value to the data store.  """
         self.data_frame.at[index, key] = data
         return data
 
@@ -827,12 +846,14 @@ class DataStore():
         return self.add_data(key, self.store_index, value)
 
     def get(self, key : str, index : str = None):
+        """ Return a value from data store.  """
         if (key   is None): return None
         if (index is None): index = self.store_index
         if (index is None): return None
         return self.data_frame.at[index, key]
 
     def get_row_as_dict(self, index : str = None):
+        """ Return a raw as a dict with keys as keys.  """
         if (index is None): index = self.store_index
         if (index is None): return None
         dc = {}
@@ -841,6 +862,7 @@ class DataStore():
         return dc
 
     def get_fullname(self):
+        """ Datastore name for file name.  """
         fullname = str(self.store_type) + "_" + str(self.store_name) + "_" + str(self.store_code)
         return clean_name(fullname)
 
@@ -848,6 +870,10 @@ class DataStore():
         # DF TO EXCEL
         writer = pd.ExcelWriter(output_dir + self.get_fullname() + ".xlsx")
         self.data_frame.to_excel(writer, "Data")
+        pivot = self.data_frame.transpose()
+        pivot.to_excel(writer, "Pivot")
+        diagdf = self.data_frame.from_dict(self.diagnostics)
+        diagdf.to_excel(writer,"Diagnotics")
         writer.save()
         writer.close()
         # DF TO CSV
@@ -904,6 +930,7 @@ class DataStore():
         context["COMMUNE"] = str(context["NOM_COMMUNE"]).title()
         save_file(to_yaml(context), context_file)
         # Rendering Template
+        mako.runtime.UNDEFINED = 'MISSING_CONTEXT'
         temp = Template(filename=template)
         self.html = temp.render(**context)
         # Saving to File
@@ -914,7 +941,7 @@ class DataStore():
         return p_html_file
 
     # Add Meta Data
-    def meta_data(self):
+    def add_meta_data(self):
         self.data_frame = self.data_frame.append(pd.Series(self.meta_dict,   name='meta'))
         self.data_frame = self.data_frame.sort_index(ascending=False)        # sorting by index
         self.data_frame = self.data_frame.append(pd.Series(self.mode_dict,   name='mode'))
@@ -924,7 +951,7 @@ class DataStore():
         return self
 
     # Get Data Frame without Meta Data - Clean Meta Data
-    def clean_data(self, inplace=True) :
+    def clean_meta_data(self, inplace=True) :
         clean_data_frame = self.data_frame
         if 'meta'   in clean_data_frame.index : clean_data_frame.drop(labels="meta",   axis=0, inplace=inplace)
         if 'mode'   in clean_data_frame.index : clean_data_frame.drop(labels="mode",   axis=0, inplace=inplace)
@@ -1499,7 +1526,7 @@ class DataStore():
 
     def total_data(self, meta=True):
 
-        data_clean = self.clean_data()
+        data_clean = self.clean_meta_data()
         if 'total'   in data_clean.index : data_clean.drop(labels="total",   axis=0, inplace=True)
 
         total_dict = {}
@@ -1665,7 +1692,6 @@ class DataStore():
                 error = "Error evaluating Diagnostic : " + _key + " + eval : " + _test + " - Error : " + str(e)
                 print_red(error)
                 self.add_diagnostic(_key, _description, test=_test, message=error, data=value)
-
         return self
 
     def report(self, force=True):
@@ -1698,7 +1724,7 @@ class DataStore():
 
         self.run_diagnostic()
         html_file = gen_report(ds=self)
-        display_html_report(html_file)
+        display_in_browser(html_file)
         return self
 
 
@@ -1713,13 +1739,16 @@ def update_DataStoreCache(ds : DataStore, code_insee=None):
         print_red("Not Added in Cache : DataStore without code INSEE : " + ds.store_name)
 
 
-# Display Report in Browser
-def display_html_report(html_file):
-    if DISPLAY_HTML is False : return
-    webbrowser.open_new_tab(html_file)
-
 
 '''
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
+from email.mime.base import MIMEBase
+from email import encoders
+import glob
+
 def email_html_report(self, ka: KPI_Analysis, kc: KPI_Configuration, p_to_address=""):
 
         if (p_to_address != ""):
