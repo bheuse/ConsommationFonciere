@@ -151,7 +151,7 @@ Par exemple, pour un taux pondéré, la somme des taux n'est pas possible, mais 
 
 **Exemple de Ligne de Configuration**:
 
-    Key                             Description                           Source   Type	  Data                                                Total
+    Key                             Description                           Source   Type   Data                                                Total
     SITADEL_LOCAUX_SURF_HAB_AVANT	Surface 'Habitation ' avant travaux   SIT      INT    com_sitadelLocaux['SURF_HAB_AVANT'].sum()           SUM
     SRU_CARENCE_2020                Taux de Carence en 2020               SRU      INT    round0(SRU_RP_2020 * (0.25 - SRU_TX_LLS_2020), 4)	  SUM
 
