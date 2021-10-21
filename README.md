@@ -1,6 +1,6 @@
 # Consommation Foncière
 
-Cet outil consolide les données qui permettent un diagnostic de Consommation Foncière en France.
+[Cet outil](https://github.com/bheuse/ConsommationFonciere) consolide les données qui permettent un diagnostic de Consommation Foncière en France.
 
 Il permet de mettre en œuvre l'objectif ZAN - Zéro Artificialisation Nette.
 
