@@ -622,10 +622,18 @@ def region_dept(code_dept) -> int :
     return reg_list[0]
 
 
-def list_dept() -> list[int]:
+def list_dept(code_region = None) -> list[int]:
     """ La liste des Departements """
     load_departements()
-    return sorted(list(map(str, list(set(departements.index.values.tolist())))))
+    liste_dept = sorted(list(map(str, list(set(departements.index.values.tolist())))))
+    if (code_region):
+        liste_dept_region = []
+        for dept in liste_dept :
+            if (str(region_dept(dept)) == str(code_region)):
+                liste_dept_region.append(dept)
+        return liste_dept_region
+    else:
+        return liste_dept
 
 
 def epci_region(code_reg) -> list[int]:
@@ -2109,7 +2117,7 @@ def gen_report(ds : DataStore):
     return ds.render_report()
 
 
-def report_commune(code_postal: str = "06250", force=True):
+def report_commune(code_postal: str = "06250", force=True, with_communes=False):
     code_insee, commune = get_code_insee_commune(code_postal)
     entite = entite_commune
     name   = commune
@@ -2117,24 +2125,35 @@ def report_commune(code_postal: str = "06250", force=True):
     return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force)
 
 
-def report_epci(epci_id: str = "200039915", force=True):
+def report_epci(epci_id: str = "200039915", force=True, with_communes=False):
     entite = entite_epci
     name   = nom_epci(epci_id, clean=True)
     code   = epci_id
+    if (with_communes):
+        for commune in communes_epci(epci_id):
+            report_commune(commune, force, with_communes)
     return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force)
 
 
-def report_dept(dept_id: str = "06", force=True):
+def report_dept(dept_id: str = "06", force=True, with_communes=False):
     entite = entite_dept
     name   = nom_dept(dept_id, clean=True)
     code   = dept_id
+    if (with_communes):
+        for commune in communes_dept(dept_id):
+            report_commune(commune, force, with_communes)
     return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force)
 
 
-def report_region(reg_id: str = "93", force=True):
+def report_region(reg_id: str = "93", force=True, with_communes=False):
     entite = "REGION"
     name   = nom_region(reg_id, clean=True)
     code   = reg_id
+    if (with_communes):
+        for dept in list_dept(reg_id):
+            report_dept(dept, force, with_communes=True)
+        for commune in communes_region(reg_id):
+            report_commune(commune, force, with_communes)
     return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force)
 
 
@@ -2391,32 +2410,46 @@ FORCE        = False
 DISPLAY_HTML = False
 CONFIGURATION_FILE = None
 TEMPLATE_FILE      = None
-
+CODE_COMMUNE       = None
+CODE_EPCI          = None
+CODE_DEPT          = None
+CODE_REGION        = None
+DEBUG              = False
+WITH_COMMUNES      = False
 
 def read_command_line_args(argv):
-    global DISPLAY_HTML, FORCE
+    global DISPLAY_HTML, FORCE, DEBUG, WITH_COMMUNES
     global CONFIGURATION_FILE, TEMPLATE_FILE
+    global CODE_COMMUNE, CODE_EPCI, CODE_DEPT, CODE_REGION
     print_yellow("Command Line Arguments : " + str(argv))
-    usage = 'Usage: -c <code> -e <code> -d <code> -r <code> \
+    usage = 'Usage: -c <code> -e <code> -d <code> -r <code> -all          \
               --cxlsx  <ConfigurationFile.xlsx> : Use Configuration File  \
               --rhtml  <ReportTemplate.html>    : Use ReportTemplate      \
-              --commune   : Report for Code INSEE / Postal               \
-              --ecpi      : Report for ECPI                              \
-              --dep       : Report for Departement                       \
-              --region    : Report for Region                            \
-              '
+              --commune   : Report for Code INSEE / Postal                \
+              --ecpi      : Report for ECPI                               \
+              --dep       : Report for Departement                        \
+              --region    : Report for Region                             \
+              --all       : Report for all communes in Territory          \
+              --force     : Report reading source data (cache ignored)    \
+    '
     try:
-        opts, args = getopt.getopt(argv, "hc:e:d:p:", [ "help", "commune=", "epci=", "dep=", "reg=", "no_debug" ])
+        opts, args = getopt.getopt(argv, "hafc:e:d:p:", [ "help", "commune=", "epci=", "dep=", "reg=", "no_debug" ])
     except getopt.GetoptError:
         print(usage)
         raise
         sys.exit(2)
     for opt, arg in opts:
+        print(opt)
+        print(arg)
         if opt in ("-h", "--help"):
             print(usage)
             quit()
+        elif opt in ("--debug"):
+            DEBUG = True
         elif opt in ("-f", "-F"):
             FORCE = True
+        elif opt in ("-a", "-A", "-all", "-All", "-ALL"):
+            WITH_COMMUNES = True
         elif opt in ("-b"):
             DISPLAY_HTML = True
         elif opt in ("-cxlsx"):
@@ -2424,27 +2457,27 @@ def read_command_line_args(argv):
         elif opt in ("-rhtml"):
             TEMPLATE_FILE = arg
         elif opt in ("-c", "--commune"):
-            code = arg
-            print_yellow("> Commune "+str(code))
-            report_commune(code, force=FORCE)
+            print("Communes")
+            CODE_COMMUNE = arg
+            print_yellow("> Commune "+str(CODE_COMMUNE))
+            report_commune(CODE_COMMUNE, force=FORCE, with_communes=WITH_COMMUNES)
             print_yellow("< Commune "+str(code))
         elif opt in ("-e", "--epci"):
-            code = arg
-            print_yellow("> EPCI " + str(code))
-            report_epci(code, force=FORCE)
-            print_yellow("< EPCI " + str(code))
+            CODE_EPCI = arg
+            print_yellow("> EPCI " + str(CODE_EPCI))
+            report_epci(CODE_EPCI, force=FORCE, with_communes=WITH_COMMUNES)
+            print_yellow("< EPCI " + str(CODE_EPCI))
         elif opt in ("-d", "--dep"):
-            code = arg
-            print_yellow("> Departement " + str(code))
-            report_dept(code, force=FORCE)
-            print_yellow("< Departement " + str(code))
+            CODE_DEPT = arg
+            print_yellow("> Departement " + str(CODE_DEPT))
+            report_dept(CODE_DEPT, force=FORCE, with_communes=WITH_COMMUNES)
+            print_yellow("< Departement " + str(CODE_DEPT))
         elif opt in ("-r", "--reg"):
-            code = arg
-            print_yellow("> Region " + str(code))
-            report_region(code, force=FORCE)
-            print_yellow("< Region " + str(code))
-        elif opt in ("--no_debug"):
-            NO_DEBUG = "True"
+            CODE_REGION = arg
+            print_yellow("> Region " + str(CODE_REGION))
+            report_region(CODE_REGION, force=FORCE, with_communes=WITH_COMMUNES)
+            print_yellow("< Region " + str(CODE_REGION))
+        quit()
 
 read_command_line_args(argv=sys.argv[1:])
 
