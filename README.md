@@ -9,6 +9,13 @@ Il permet de mettre en oeuvre l'objectif ZAN - Zero Artificialisatiom Nette.
 - Etablissement d'un Diagnostic
 - Generation d'un Rapport
 
+Les donnees sont issues (voir les liens en bas de ce document):
+- De l'INSEE pour les donnees historques de base sur les communes
+- De l'INSEE pour les projections future en nombre d'habitants
+- Des fichiers Sitadel pour les permis de construire
+- Du Cerema pour les donnees d'artificialisation
+- De la DREAL pour les donnees SRU
+
 Les territoires geres:
 - Les Communes
 - Les EPCI
@@ -21,7 +28,20 @@ A venir:
 - Les territoires des SCoT
 - La France Entiere
 
-L'outil permet de definir des regles de diagnostic
+L'outil permet de definir des regles de diagnostic.
+
+## Concepts 
+
+Le programme consolide des metriques (indicateurs) sur les communes, et peut etablir des diagnostic.
+Ensuite un rapport en genere.
+
+Le contenu du rapport en ajustable en fonction des besoins. 
+On peut ajuster:
+- Les metriques collectees et affichees
+- Les diagnostic a etablir
+- Le format et le contenu du rapport
+
+
 
 ## Utilisation
 
@@ -33,11 +53,35 @@ L'outil permet de definir des regles de diagnostic
            --region  : Report for Region                              
            --all     : Report for all communes in Territory           
            --force   : Report reading source data (cache ignored)     
-           --browse  : Start Browser on generated browser            
+           --browse  : Start Browser on generated report            
            --cxlsx     <ConfigurationFile.xlsx> : Use Configuration File  
            --rhtml     <ReportTemplate.html>    : Use ReportTemplate      
 
+**Exemples:**
+
+Pour generer le rapport sur Mougins, et le visualisr dans le browser:
+
+    python ConsommationFonciere.py -b -c 06260
+
+Pour lister les codes des communes et EPCI du departement 06:
+
+    python ConsommationFonciere.py -l -d 06
+
+Pour generer le rapport sur la CACPL (CA Cannes Pays de Lerins):
+
+    python ConsommationFonciere.py -e 200039915
+
+
+
 ## Configuration
+
+Les donnees sources, c'est plus de 1500 indicateurs (metriques) par communes. 
+Par defaut , un certain nombre de donneees sont collectees. 
+Par configuration, on peut ensuite demander la collecte de donnees supplementaires.
+On peut aussi calculer de nouvelles metriques basees sur les autres (par exemple des taux)
+
+Ces metriques sont ensuite disponibles pour generer le rapport.
+
 
 **Key**	: L'identifiant de la metrique (donnee)
 
@@ -51,6 +95,8 @@ L'outil permet de definir des regles de diagnostic
 
 **Total** : La Source de la metrique
 
+Le fichier de configuration par defaut est input/Configuration.xlsx
+Le ficher de configuration a utiliser peut etre specifie en parametre de la ligne de commamde.
 
 ## Diagnostic
 
@@ -59,6 +105,8 @@ Sur les donnees collectees, des verifications peuvent etre faites.
 Le fichier de configuration xls contient un Tab Diagnostic.
 
 Chaque ligne permet de verifier une condition et d'afficher le diagnostic correspondant.
+
+Ces diagnostics sont ensuite disponible pour generer le rapport.
 
 **Key** : L'identifiant du Diagnostic
 
@@ -76,9 +124,17 @@ Chaque ligne permet de verifier une condition et d'afficher le diagnostic corres
 
     Exanple: Votre Commune doit construire des logements sociaux
 
+## Rapport
 
+Le rapport consiste en:
+- Un fichier xls avec les donnees consolidees pour la commune ou le territoire
+- Un fichier csv avec les donnees consolidees pour la commune ou le territoire
+- Une page HTML avec des graphique, des diagnostic etc ...
 
+Le rapport HTML est base sur un template, qui permet d'ajuster la presentation et les donnees a presenter.
 
+Le fichier template de rapport par defaut est input/report_template.html
+Le ficher de template a utiliser peut etre specifie en parametre de la ligne de commamde.
 
 ## Les sources de donnes
 

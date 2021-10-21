@@ -2224,10 +2224,6 @@ def report_paca(force=True):
     report_region("93", force=force)
 
 
-###
-### Main
-###
-
 def load_min_data():
     load_codes()
     load_departements()
@@ -2438,8 +2434,8 @@ class TestConsommation(unittest.TestCase):
 ###
 
 # Arg Options
-FORCE        = False
-DISPLAY_HTML = False
+DISPLAY_HTML       = False
+FORCE              = False
 CONFIGURATION_FILE = None
 TEMPLATE_FILE      = None
 CODE_COMMUNE       = None
@@ -2450,11 +2446,12 @@ DEBUG              = False
 WITH_COMMUNES      = False
 LIST_COMMUNE       = False
 
+
 def read_command_line_args(argv):
     global DISPLAY_HTML, FORCE, DEBUG, WITH_COMMUNES, LIST_COMMUNE
     global CONFIGURATION_FILE, TEMPLATE_FILE
     global CODE_COMMUNE, CODE_EPCI, CODE_DEPT, CODE_REGION
-    print_yellow("Command Line Arguments : " + str(argv))
+    # print_yellow("Command Line Arguments : " + str(argv))
 
     usage = """
     Usage: -f -a -b -l -c <commune_code> -e <epci_code> -d <dept_code> -r <region_code>   
@@ -2465,7 +2462,7 @@ def read_command_line_args(argv):
            --region  : Report for Region                              
            --all     : Report for all communes in Territory           
            --force   : Report reading source data (cache ignored)     
-           --browse  : Start Browser on generated browser            
+           --browse  : Start Browser on generated report            
            --cxlsx     <ConfigurationFile.xlsx> : Use Configuration File  
            --rhtml     <ReportTemplate.html>    : Use ReportTemplate      
     """
@@ -2496,9 +2493,15 @@ def read_command_line_args(argv):
             DISPLAY_HTML = True
             continue
         elif (opt == "-cxlsx"):
+            if (not os.path.isfile(arg)):
+                print_red("Configuration File not found : "+arg)
+                quit()
             CONFIGURATION_FILE = arg
             continue
         elif (opt == "-rhtml"):
+            if (not os.path.isfile(arg)):
+                print_red("Template File not found : "+arg)
+                quit()
             TEMPLATE_FILE = arg
             continue
         elif opt in ("-l", "--list"):
@@ -2543,11 +2546,12 @@ def read_command_line_args(argv):
                 print_yellow("< Region " + str(CODE_REGION))
                 quit()
 
-read_command_line_args(argv=sys.argv[1:])
 
 ###
 ### Main
 ###
+
+read_command_line_args(argv=sys.argv[1:])
 
 if __name__ == '__main__':
     print_yellow("Consommation Fonciere - Test Suite > " + __name__)
