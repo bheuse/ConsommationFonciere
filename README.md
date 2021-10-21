@@ -6,6 +6,49 @@ Il permet de mettre en oeuvre l'objectif ZAN - Zero Artificialisatiom Nette.
 
 # Utilisation
 
+## Configuration
+
+**Key**	: L'identifiant de la metrique (donnee)
+
+**Description**	: La Description de la metrique (donnee
+
+**Source**: La Source de la metrique
+
+**Type**	: La Source de la metrique
+
+**Data**	: La Source de la metrique
+
+**Total** : La Source de la metrique
+
+
+## Diagnostic
+
+Sur les donnees collectees, des verifications peuvent etre faites.
+
+Le fichier de configuration xls contient un Tab Diagnostic.
+
+Chaque ligne permet de verifier une condition et d'afficher le diagnostic correspondant.
+
+**Key** : L'identifiant du Diagnostic
+
+    Exemple: LOG_SRU
+
+**Description** : La Description du Diagnostic 
+
+    Example: Test si la commune a des obligation en matiere de Logements Sociaux
+
+**Test** : La condition a verifier, une expression bolleenne en python 
+
+    Exanple: SRU_TX_LLS_2020 > 0
+
+**Message** : Le message a afficher si la condition est fausse 
+
+    Exanple: Votre Commune doit construire des logements sociaux
+
+
+
+
+
 ## Les sources de donnes
 
 ### Sitadel Logements 2
@@ -92,7 +135,7 @@ Ain            662,244	                                      0.7%	   0.3%	      
     # CODGEO	LIBGEO	EPCI	LIBEPCI	DEP	REG
 `
 
-
+ 
 ### Codes Postaux
 
 [Page Source Codes Postaux](https://datanova.laposte.fr/explore/dataset/laposte_hexasmal/information/?disjunctive.code_commune_insee&disjunctive.nom_de_la_commune&disjunctive.code_postal&disjunctive.ligne_5)
@@ -138,47 +181,4 @@ Les donnees ont ete compilees manuellement a partir des PDF
 
 `    # idcom,idcomtxt,idreg,idregtxt,iddep,iddeptxt,epci20,epci20txt,aav2020,libaav2020,cateaav2020,naf09art10,art09act10,art09hab10,art09mix10,art09inc10,naf10art11,art10act11,art10hab11,art10mix11,art10inc11,naf11art12,art11act12,art11hab12,art11mix12,art11inc12,naf12art13,art12act13,art12hab13,art12mix13,art12inc13,naf13art14,art13act14,art13hab14,art13mix14,art13inc14,naf14art15,art14act15,art14hab15,art14mix15,art14inc15,naf15art16,art15act16,art15hab16,art15mix16,art15inc16,naf16art17,art16act17,art16hab17,art16mix17,art16inc17,naf17art18,art17act18,art17hab18,art17mix18,art17inc18,naf18art19,art18act19,art18hab19,art18mix19,art18inc19,naf19art20,art19act20,art19hab20,art19mix20,art19inc20,nafart0920,artact0920,arthab0920,artmix0920,artinc0920,artcom0920,pop12,pop17,pop1217,men12,men17,men1217,emp17,emp12,emp1217,mepart1217,menhab1217,artpop1217,surfcom20
 `
-
-## Configuration
-
-**Key**	: L'identifiant de la metrique (donnee)
-
-**Description**	: La Description de la metrique (donnee
-
-**Source**: La Source de la metrique
-
-**Type**	: La Source de la metrique
-
-**Data**	: La Source de la metrique
-
-**Total** : La Source de la metrique
-
-
-## Diagnostic
-
-Sur les donnees collectees, des verifications peuvent etre faites.
-
-Le fichier de configuration xls contient un Tab Diagnostic.
-
-Chaque ligne permet de verifier une condition et d'afficher le diagnostic correspondant.
-
-**Key** : L'identifiant du Diagnostic
-
-    Exemple: LOG_SRU
-
-**Description** : La Description du Diagnostic 
-
-    Example: Test si la commune a des obligation en matiere de Logements Sociaux
-
-**Test** : La condition a verifier, une expression bolleenne en python 
-
-    Exanple: SRU_TX_LLS_2020 > 0
-
-**Message** : Le message a afficher si la condition est fausse 
-
-    Exanple: Votre Commune doit construire des logements sociaux
-
-
-
-
 
