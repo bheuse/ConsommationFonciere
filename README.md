@@ -195,7 +195,12 @@ Le rapport consiste en :
 Le rapport HTML est base sur un template, qui permet d'ajuster la présentation et les données a présenter.
 
 Le fichier template de rapport par défaut est "_input/report_template.html_"
-Le ficher de template a utiliser peut être spécifié en paramètre de la ligne de commande.
+
+Il utilise le moteur [MAKO](https://docs.makotemplates.org/en/latest/).
+
+Les balises pour les metriques qui peuvent etre utilisées sont listées dans le fichier "_output/context.yaml_"
+
+Le fichier de template a utiliser peut être spécifié en paramètre de la ligne de commande.
 
 ## Les sources de donnes
 
