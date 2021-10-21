@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <title>VigiFoncier.fr ${COMMUNE}</title>
+  <meta name="description" content="Statistiques et Projections de Consommation Fonciere des PLUs et SCoTs dans toute la France.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <meta property="og:title" content="VigiFoncier.fr">
+  <meta property="og:description" content="Statistiques et Projections de Consommation Fonciere des PLUs et SCoTs dans toute la France.">
+  <meta property="og:image" content="https://vigibati.fr/static/img/social-preview.jpg">
+  <link rel="shortcut icon" type="image/png" href="https://vigibati.fr/static/img/favicon.png">
+<style>
+   body {background-color: powderblue;}
+   h1   {color: red;}
+   h3   {color: blue;}
+   p    {color: black;}
+#GoogleMaps {
+  width: 600px;
+  height: 300px;
+  border: solid 10px #eee;
+    border-radius:5px;
+    box-shadow:5px 5px 5px #ccc;
+}
+</style>
+
+<!--Include the Google Maps Javascript API resources-->
+<script type="text/javascript"
+  src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script>
+var results;
+var map;
+
+window.onload = function() {
+
+  // Map Options
+  var myOptions = {
+	zoom: 10,    // Zoom Levels , range between 0 to 21
+    mapTypeId: google.maps.MapTypeId.ROADMAP // Map Type is default
+  };
+  map = new google.maps.Map(document.getElementById("GoogleMaps"), myOptions);
+
+  var location = new google.maps.LatLng (27.2046,77.4977);
+
+  map.setCenter(location); // user location in the centre of display
+
+  // to display some information on message for user
+  var infowindow = new google.maps.InfoWindow();
+
+  infowindow.setContent("Votre Commune ${COMMUNE}");// message
+	  infowindow.setPosition(location);
+	  infowindow.open(map);
+
+  results.innerHTML = "Mapping your Current Location on Google Maps";
+}
+</script>
+</head>
+
+<body>
+  <h1> Rapport pour ${NOM_COMMUNE} : </h1>
+  ${HTML_SOURCES}
+  ${HTML_DIAGNOSTIC}
+  ${HTML_PLOT_LOGEMENTS}
+  ${HTML_PLOT_POPULATION}
+  ${HTML_PLOT_TAILLE_DES_MENAGES}
+  ${HTML_TABLE_HISTORIQUE}
+  ${HTML_TABLE_PROJECTIONS}
+  ${HTML_TABLE_SRU}
+  ${HTML_TABLE_ARTIFICIALISATION}
+  <p id="results">La localisation de ${COMMUNE} : </p>
+  <div id="GoogleMaps"></div>
+  <h3> Donnees pour ${COMMUNE} : </h3>
+  ${HTML_TABLE_SUMMARY}
+  ${HTML_FULL_DATA}
+</body>
+</html>
