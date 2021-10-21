@@ -373,6 +373,7 @@ DISPLAY_HTML = True
 ###
 
 
+# Ne marche pas pour les gros fichiers
 def downloadFile(url : str, filename: str) -> str:
     if (os.path.isfile(filename)): return filename
     print_red("Downloading "+filename+" from : "+url)
@@ -382,7 +383,6 @@ def downloadFile(url : str, filename: str) -> str:
         r.raise_for_status()
         with open(local_filename, 'wb') as f:
             for chunk in r.iter_content(chunk_size=8192):
-                print("Chunk")
                 f.write(chunk)
         f.close()
     return local_filename
