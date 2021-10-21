@@ -1,10 +1,29 @@
-# ConsommationFonciere
+# Consommation Fonciere
 
 Cet outil consolide les donnees qui permettent un diagnostoc de Consommation Fonciere en France.
 
 Il permet de mettre en oeuvre l'objectif ZAN - Zero Artificialisatiom Nette.
 
-# Utilisation
+- Collecte des Donnees
+- Consolidation des Donnees
+- Etablissement d'un Diagnostic
+- Generation d'un Rapport
+
+Les territoires geres:
+- Les Communes
+- Les EPCI
+- Les Departements de PACA
+- La Region PACA
+
+A venir:
+- Les autres Regions
+- Les ensembles de communes
+- Les territoires des SCoT
+- La France Entiere
+
+L'outil permet de definir des regles de diagnostic
+
+## Utilisation
 
 ## Configuration
 
@@ -50,6 +69,10 @@ Chaque ligne permet de verifier une condition et d'afficher le diagnostic corres
 
 
 ## Les sources de donnes
+
+Les sources de donnees sont listees ci-dessous.
+
+_Note_ : Toutes les donnees sources ne sont pas stockees dans GitHub vu la taille des fichiers.
 
 ### Sitadel Logements 2
 
