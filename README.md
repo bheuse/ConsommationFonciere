@@ -19,39 +19,38 @@ Les données sont issues (voir les liens en bas de ce document):
 
 **_Les données Sitadel et INSEE pour les communes ne sont pas pré-téléchargées dans GitHub._**
 - [dossier_complet.csv](https://www.insee.fr/fr/statistiques/fichier/5359146/dossier_complet.zip) (unzip après download)
-- [PC_DP_creant_logements_2013_2016.csv](https://www.data.gouv.fr/es/datasets/r/67dd4ee1-0d73-4676-a90f-854fe9012f5d) (renommer après download)
-- [PC_DP_creant_logements_2017_2021.csv](https://www.data.gouv.fr/es/datasets/r/1fa467ef-5e3a-456f-b961-be9032cfa3df) (renommer après download)
-- [PC_DP_creant_locaux_2013_2016.csv](https://www.data.gouv.fr/es/datasets/r/3b987380-d1cf-4047-8dc5-1a19a3ecf812) (renommer après download)
-- [PC_DP_creant_locaux_2017_2021.csv](https://www.data.gouv.fr/es/datasets/r/98ff9fd3-a14e-474d-bb8f-12bde12d9f70) (renommer aft après er download)
+- [PC_DP_creant_logements_2013_2016.csv](https://www.data.gouv.fr/es/datasets/r/67dd4ee1-0d73-4676-a90f-854fe9012f5d) (renommer sans accents après download)
+- [PC_DP_creant_logements_2017_2021.csv](https://www.data.gouv.fr/es/datasets/r/1fa467ef-5e3a-456f-b961-be9032cfa3df) (renommer sans accents après download)
+- [PC_DP_creant_locaux_2013_2016.csv](https://www.data.gouv.fr/es/datasets/r/3b987380-d1cf-4047-8dc5-1a19a3ecf812) (renommer sans accents après download)
+- [PC_DP_creant_locaux_2017_2021.csv](https://www.data.gouv.fr/es/datasets/r/98ff9fd3-a14e-474d-bb8f-12bde12d9f70) (renommer sans accents après er download)
 
-**Les télécharger manuellement et sauver les dans le répertoire data.**
-
+**_Téléchargez manuellement ces fichiers et sauver les dans le répertoire "data"._**
 Voir ci-dessous les pages pour ces liens pour plus de détails. 
 
-Les territoires gérés:
+### Les territoires gérés:
 - "**COMMUNE**" : Les Communes 
 - "**EPCI**" : Les EPCI (Communautés d'Agglomération, Métropoles, Communautés de Communes)
 - "**DEPT**" : Les Départements de PACA
 - "**REGION**" : La Région PACA
 
 
-A venir:
+### A venir:
 - "**SCOT**" : Les territoires des SCoT
-- Les autres Régions
+- Les autres régions
 - Les ensembles de communes
-- La France Entière
+- La France entière
 
 L'outil permet de définir des règles de diagnostic.
 
 ## Concepts 
 
-Le programme consolide des métriques (indicateurs) sur les communes, et peut établir des diagnostic.
+Le programme consolide des métriques (indicateurs) de différentes sources sur les communes  et peut établir des diagnostics.
 Ensuite un rapport en généré.
 
 Le contenu du rapport en ajustable en fonction des besoins. 
 On peut ajuster :
 - Les métriques collectées et affichées
-- Les diagnostic a établir
+- Les diagnostics a établir
 - Le format et le contenu du rapport
 
 
@@ -84,12 +83,12 @@ Pour générer le rapport sur la CACPL (CA Cannes Pays de Lérins) :
 
     python ConsommationFonciere.py -e 200039915
 
-
+Les rapports sont générés dans le repertoire "output".
 
 ## Configuration
 
 Les données sources, c'est plus de 1500 indicateurs (métriques) par communes. 
-Par défaut , un certain nombre de données sont collectées. 
+Par défaut, un certain nombre de données sont collectées. 
 Par configuration, on peut ensuite demander la collecte de données supplémentaires.
 On peut aussi calculer de nouvelles métriques basées sur les autres (par exemple des taux)
 
@@ -125,7 +124,7 @@ Ce champ est indicatif.
  
 **Type**	: Le type de la métrique
 
-Les types supportes sont:
+Les types supportés sont :
 - "INT" : Entier sans décimale
 - "STR" : Chaine de caractères
 - "FLOAT" : Nombre décimal
@@ -134,18 +133,18 @@ Les types supportes sont:
  
 **Data**	: Le calcul de la métrique (une expression Python)
 
-**Total** : La calcul du total de la métrique pour plusieurs communes
+**Total** : Le calcul du total de la métrique pour plusieurs communes
 
-Le possibilités sont :
+Les possibilités sont :
 - "SUM" : la somme des valeurs de toutes les communes
 - "AVG" : la moyenne des valeurs de toutes les communes
 - "COUNT" : le nombre de communes 
 - "EQUAL" : la même valeur de la première commune
 - "IGNORE" : Ignore le total
-- "N/A" : Non applicable
+- "N/A" : Non-applicable
 - "CUSTOM" : une expression python qui utilise des KEY des autres totaux
 
-Par , pour un taux pondéré, la somme des taux n'est pas possible, mais on peut utiliser les sommes des autres totaux:
+Par exemple, pour un taux pondéré, la somme des taux n'est pas possible, mais on peut utiliser les sommes des autres totaux:
 
     round(SRU_RP_2020 * (0.25 - SRU_TX_LLS_2020), 4)
 
@@ -158,7 +157,7 @@ Par , pour un taux pondéré, la somme des taux n'est pas possible, mais on peut
 
 
 Le fichier de configuration par défaut est "_input/Configuration.xlsx_"
-Le ficher de configuration a utiliser peut être spécifié en paramètre de la ligne de commande.
+Le fichier de configuration à utiliser peut être spécifié en paramètre de la ligne de commande.
 
 ## Diagnostic
 
@@ -214,7 +213,7 @@ Il utilise le moteur [MAKO](https://docs.makotemplates.org/en/latest/).
 
 Les balises pour les métriques qui peuvent etre utilisées sont listées dans le fichier "_output/context.yaml_"
 
-Le fichier de template a utiliser peut être spécifié en paramètre de la ligne de commande.
+Le fichier de template à utiliser peut être spécifié en paramètre de la ligne de commande.
 
 ## Les sources de donnes
 
