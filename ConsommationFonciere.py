@@ -35,7 +35,7 @@ data_dir   = "data"   + os.sep
 input_dir  = "input"  + os.sep
 
 html_template      = input_dir + "report_template.html"
-configurationFile  = input_dir+"Configuration.xlsx"
+configurationFile  = input_dir + "Configuration.xlsx"
 
 global_context     = {}
 context_file       = output_dir + "context.yaml"
