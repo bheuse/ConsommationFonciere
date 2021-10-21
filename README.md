@@ -73,7 +73,7 @@ On peut ajuster :
 
 Pour générer le rapport sur Mougins, et le visualiser dans le browser :
 
-    python ConsommationFonciere.py -b -c 06260
+    python ConsommationFonciere.py -b -c 06250
 
 Pour lister les codes des communes et EPCI du département 06 :
 
