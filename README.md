@@ -1,9 +1,10 @@
 # Consommation Fonciere
 
-Cet outil consolide les donnees qui permettent un diagnostoc de Consommation Fonciere en France.
+Cet outil consolide les donnees qui permettent un diagnostic de Consommation Fonciere en France.
 
-Il permet de mettre en oeuvre l'objectif ZAN - Zero Artificialisatiom Nette.
+Il permet de mettre en oeuvre l'objectif ZAN - Zero Artificialisation Nette.
 
+Les etapes sont les suivantes:
 - Collecte des Donnees
 - Consolidation des Donnees
 - Etablissement d'un Diagnostic
@@ -15,6 +16,17 @@ Les donnees sont issues (voir les liens en bas de ce document):
 - Des fichiers Sitadel pour les permis de construire
 - Du Cerema pour les donnees d'artificialisation
 - De la DREAL pour les donnees SRU
+
+**_Les donnees Sitadel et INSEE pour les communes ne sont pas pre-telechargees dans GitHub._**
+- [dossier_complet.csv](https://www.insee.fr/fr/statistiques/fichier/5359146/dossier_complet.zip) (unzip after download)
+- [PC_DP_creant_logements_2013_2016.csv](https://www.data.gouv.fr/es/datasets/r/67dd4ee1-0d73-4676-a90f-854fe9012f5d) (renommer after download)
+- [PC_DP_creant_logements_2017_2021.csv](https://www.data.gouv.fr/es/datasets/r/1fa467ef-5e3a-456f-b961-be9032cfa3df) (renommer after download)
+- [PC_DP_creant_locaux_2013_2016.csv](https://www.data.gouv.fr/es/datasets/r/3b987380-d1cf-4047-8dc5-1a19a3ecf812) (renommer after download)
+- [PC_DP_creant_locaux_2017_2021.csv](https://www.data.gouv.fr/es/datasets/r/98ff9fd3-a14e-474d-bb8f-12bde12d9f70) (renommer after download)
+
+**Les telecharger manuellement et sauver les dans le repertoire data.**
+
+Voir ci-dessous les pages pour ces liens pour plus de details. 
 
 Les territoires geres:
 - "**COMMUNE**" : Les Communes 
@@ -50,7 +62,7 @@ On peut ajuster:
            --list    : List for all communes/epci/ in Territory       
            --commune : Report for Code INSEE / Postal                 
            --ecpi    : Report for ECPI                                
-           --dep     : Report for Departement                         
+           --dept    : Report for Departement                         
            --region  : Report for Region                              
            --all     : Report for all communes in Territory           
            --force   : Report reading source data (cache ignored)     
@@ -133,11 +145,12 @@ Le possibilites sont:
 - "N/A" : Non applicable
 - "CUSTOM" : une expression python qui utilise des KEY des autres totaux
 
-Par expemple, pour un taux pondere, la somme des taux n'est pas possible, mais on peut utiliser les sommes des autres totaux:
+Par , pour un taux pondere, la somme des taux n'est pas possible, mais on peut utiliser les sommes des autres totaux:
 
     round(SRU_RP_2020 * (0.25 - SRU_TX_LLS_2020), 4)
 
-Par exemple:
+
+**Exemple de Ligne de Configuration**:
 
     Key                             Description                           Source   Type	  Data                                                Total
     SITADEL_LOCAUX_SURF_HAB_AVANT	Surface 'Habitation ' avant travaux   SIT      INT    com_sitadelLocaux['SURF_HAB_AVANT'].sum()           SUM
@@ -170,6 +183,8 @@ Ces diagnostics sont ensuite disponible pour generer le rapport.
 
     Exanple: Votre Commune doit construire des logements sociaux
 
+Si le Test renvoi VRAI, le Message est affiche.
+
 ## Rapport
 
 Le rapport consiste en:
@@ -188,7 +203,9 @@ Les sources de donnees sont listees ci-dessous.
 
 _Note_ : Toutes les donnees sources ne sont pas stockees dans GitHub vu la taille des fichiers.
 
-### Sitadel Logements 2
+### Sitadel Logements
+
+Ces donnees ne sont pas pre-telechargees dans GitHub.
 
 [Page Sitadel Source](https://www.data.gouv.fr/es/datasets/base-des-permis-de-construire-et-autres-autorisations-durbanisme-sitadel/)
 
@@ -199,6 +216,8 @@ _Note_ : Toutes les donnees sources ne sont pas stockees dans GitHub vu la taill
 `REG;DEP;COMM;Type_DAU;Num_DAU;Etat_DAU;DATE_REELLE_AUTORISATION;DATE_REELLE_DOC;DATE_REELLE_DAACT;DPC_AUT;DPC_DOC;DPC_DERN;APE_DEM;CJ_DEM;DENOM_DEM;SIREN_DEM;SIRET_DEM;CODPOST_DEM;LOCALITE_DEM;REC_ARCHI;ADR_NUM_TER;ADR_TYPEVOIE_TER;ADR_LIBVOIE_TER;ADR_LIEUDIT_TER;ADR_LOCALITE_TER;ADR_CODPOST_TER;sec_cadastre1;num_cadastre1;sec_cadastre2;num_cadastre2;sec_cadastre3;num_cadastre3;SUPERFICIE_TERRAIN;ZONE_OP;NATURE_PROJET;I_EXTENSION;I_SURELEVATION;I_NIVSUPP;NB_NIV_MAX;NB_CHAMBRES;SURF_HAB_AVANT;SURF_HAB_CREEE;SURF_HAB_ISSUE_TRANSFO;SURF_HAB_DEMOLIE;SURF_HAB_TRANSFORMEE;SURF_LOC_AVANT;SURF_LOC_CREEE;SURF_LOC_ISSUE_TRANSFO;SURF_LOC_DEMOLIE;SURF_LOC_TRANSFORMEE;SURF_HEB_AVANT;SURF_HEB_CREEE;SURF_HEB_ISSUE_TRANSFO;SURF_HEB_DEMOLIE;SURF_HEB_TRANSFORMEE;SURF_BUR_AVANT;SURF_BUR_CREEE;SURF_BUR_ISSUE_TRANSFO;SURF_BUR_DEMOLIE;SURF_BUR_TRANSFORMEE;SURF_COM_AVANT;SURF_COM_CREEE;SURF_COM_ISSUE_TRANSFO;SURF_COM_DEMOLIE;SURF_COM_TRANSFORMEE;SURF_ART_AVANT;SURF_ART_CREEE;SURF_ART_ISSUE_TRANSFO;SURF_ART_DEMOLIE;SURF_ART_TRANSFORMEE;SURF_IND_AVANT;SURF_IND_CREEE;SURF_IND_ISSUE_TRANSFO;SURF_IND_DEMOLIE;SURF_IND_TRANSFORMEE;SURF_AGR_AVANT;SURF_AGR_CREEE;SURF_AGR_ISSUE_TRANSFO;SURF_AGR_DEMOLIE;SURF_AGR_TRANSFORMEE;SURF_ENT_AVANT;SURF_ENT_CREEE;SURF_ENT_ISSUE_TRANSFO;SURF_ENT_DEMOLIE;SURF_ENT_TRANSFORMEE;SURF_PUB_AVANT;SURF_PUB_CREEE;SURF_PUB_ISSUE_TRANSFO;SURF_PUB_DEMOLIE;SURF_PUB_TRANSFORMEE;TYPE_SERVICE_PUBLIC`
 
 ### Sitadel Locaux
+
+Ces donnees ne sont pas pre-telechargees dans GitHub.
 
 [Page Sitadel Source](https://www.data.gouv.fr/es/datasets/base-des-permis-de-construire-et-autres-autorisations-durbanisme-sitadel/)
 
@@ -302,6 +321,8 @@ Les donnees ont ete compilees manuellement a partir des PDF
 `    # idcom,idcomtxt,idreg,idregtxt,iddep,iddeptxt,epci20,epci20txt,aav2020,libaav2020,cateaav2020,naf09art10,art09act10,art09hab10,art09mix10,art09inc10,naf10art11,art10act11,art10hab11,art10mix11,art10inc11,naf11art12,art11act12,art11hab12,art11mix12,art11inc12,naf12art13,art12act13,art12hab13,art12mix13,art12inc13,naf13art14,art13act14,art13hab14,art13mix14,art13inc14,naf14art15,art14act15,art14hab15,art14mix15,art14inc15,naf15art16,art15act16,art15hab16,art15mix16,art15inc16,naf16art17,art16act17,art16hab17,art16mix17,art16inc17,naf17art18,art17act18,art17hab18,art17mix18,art17inc18,naf18art19,art18act19,art18hab19,art18mix19,art18inc19,naf19art20,art19act20,art19hab20,art19mix20,art19inc20,nafart0920,artact0920,arthab0920,artmix0920,artinc0920,artcom0920,pop12,pop17,pop1217,men12,men17,men1217,emp17,emp12,emp1217,mepart1217,menhab1217,artpop1217,surfcom20`
 
 ### Communes
+
+Ces donnees ne sont pas pre-telechargees dans GitHub.
 
 [Page Source Communes - INSEE](https://www.insee.fr/fr/statistiques/5359146)
 - "dossier_complet.csv" : [Description des Donnees](https://www.insee.fr/fr/statistiques/fichier/5359146/dossier_complet.zip)

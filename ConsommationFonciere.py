@@ -68,6 +68,9 @@ def load_sitadel(sitadel1316_file:  str = sitadel1316File,
                  sitadel_meta_file: str = sitadelMetaFile):
     global sitadel1316, sitadel1721, sitadelMeta
     if (sitadel1316 is None) or (sitadel1721 is None)  or (sitadelMeta is None):
+        downloadFile(sitadelSource1316File, sitadel1316File)
+        downloadFile(sitadelSource1721File, sitadel1721File)
+        downloadFile(sitadelSourceMetaFile, sitadelMetaFile)
         print_blue("Lecture Sitadel Logements 2013-2016 : " + sitadel1316_file + " ...")
         sitadel1316 = pd.read_csv(sitadel1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str})
         print_blue("Lecture Sitadel Logements 2017-2021 : " + sitadel1721_file + " ...")
@@ -102,6 +105,9 @@ def load_sitadel_locaux(sitadelLocaux1316_file:  str = sitadelLocaux1316File,
                         sitadelLocaux_meta_file: str = sitadelLocauxMetaFile):
     global sitadel_locaux_1316, sitadel_locaux_1721, sitadel_locaux_Meta
     if (sitadel_locaux_1316 is None) or (sitadel_locaux_1721 is None)  or (sitadel_locaux_Meta is None):
+        downloadFile(sitadelLocaux1316File, sitadelLocaux1316File)
+        downloadFile(sitadelLocaux1721File, sitadelLocaux1721File)
+        downloadFile(sitadelLocauxMetaFile, sitadelLocauxMetaFile)
         print_blue("Lecture Sitadel Locaux 2013-2016 : " + sitadelLocaux1316_file + " ...")
         sitadel_locaux_1316 = pd.read_csv(sitadelLocaux1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "ZONE_OP": str, "NATURE_PROJET": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float})
         print_blue("Lecture Sitadel Locaux 2017-2021 : " + sitadelLocaux1721_file + " ...")
@@ -247,7 +253,7 @@ def load_interco(interco_file: str = intercoFile):
 #################
 
 codesPostauxSourcePage = "https://datanova.laposte.fr/explore/dataset/laposte_hexasmal/information/?disjunctive.code_commune_insee&disjunctive.nom_de_la_commune&disjunctive.code_postal&disjunctive.ligne_5"
-codesPostauxSourceFile = "https://datanova.laposte.fr/explore/dataset/laposte_hexasmal/download/?format=csv&timezone=Europe/Berlin&lang=fr&use_labels_for_header=true&csv_separator=%3B£"
+codesPostauxSourceFile = "https://datanova.laposte.fr/explore/dataset/laposte_hexasmal/download/?format=csv&timezone=Europe/Berlin&lang=fr&use_labels_for_header=true&csv_separator=%3B"
 codesPostauxFile = data_dir + "laposte_hexasmal.csv"
 codesPostaux = None
 global_context["URL_SOURCE_CODES_POSTAUX"] = codesPostauxSourcePage
@@ -369,11 +375,14 @@ DISPLAY_HTML = True
 
 def downloadFile(url : str, filename: str) -> str:
     if (os.path.isfile(filename)): return filename
+    print_red("Downloading "+filename+" from : "+url)
+    print_red("If this download fails please download manually.")
     local_filename = filename
     with requests.get(url, stream=True) as r:
         r.raise_for_status()
         with open(local_filename, 'wb') as f:
             for chunk in r.iter_content(chunk_size=8192):
+                print("Chunk")
                 f.write(chunk)
         f.close()
     return local_filename
