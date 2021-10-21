@@ -439,6 +439,33 @@ def print_data_frame(p_data_frame: pd.DataFrame, code_insee: str):
         print(column + " - " + str(p_data_frame[column]["meta"]) + " : " + str(p_data_frame[column][code_insee]))
 
 
+def print_commune(commune):
+    if (isinstance(commune, int)):
+        print(str(commune)+" : "+nom_commune(commune))
+        return
+    for comm in commune :
+        print(str(comm)+" : "+nom_commune(comm))
+    return
+
+
+def print_epci(ecpi):
+    if (isinstance(ecpi, int)):
+        print(str(ecpi)+" : "+nom_epci(ecpi))
+        return
+    for ep in ecpi :
+        print(str(ep)+" : "+nom_epci(ep))
+    return
+
+
+def print_dept(dept):
+    if (isinstance(dept, int)):
+        print(str(dept)+" : "+nom_dept(dept))
+        return
+    for dp in dept :
+        print(str(dp)+" : "+nom_dept(dp))
+    return
+
+
 def to_json(obj,  indent=4):
     return(jsonc.dumps(obj,  indent=indent))
 
@@ -1610,6 +1637,7 @@ class DataStore():
 
     def run_diagnostic(self):
 
+        load_min_data()
         _line = 0
         for index, metric in collectDiagnostics.iterrows():
             _line = _line + 1
@@ -1633,6 +1661,7 @@ class DataStore():
 
     def report(self, force=True):
 
+        load_min_data()
         print_yellow("Preparation Rapport "+self.store_type + " " + self.store_name + " (Code INSEE : "+self.store_code+")")
         loaded = None
         if (force is False) :
@@ -2119,6 +2148,9 @@ def gen_report(ds : DataStore):
 
 def report_commune(code_postal: str = "06250", force=True, with_communes=False):
     code_insee, commune = get_code_insee_commune(code_postal)
+    if (str(commune).startswith("Pas")):
+        code_insee, commune = get_code_postal_commune(code_postal)
+        if (not str(commune).startswith("Pas")): code_insee = code_postal
     entite = entite_commune
     name   = commune
     code   = code_insee
@@ -2416,68 +2448,100 @@ CODE_DEPT          = None
 CODE_REGION        = None
 DEBUG              = False
 WITH_COMMUNES      = False
+LIST_COMMUNE       = False
 
 def read_command_line_args(argv):
-    global DISPLAY_HTML, FORCE, DEBUG, WITH_COMMUNES
+    global DISPLAY_HTML, FORCE, DEBUG, WITH_COMMUNES, LIST_COMMUNE
     global CONFIGURATION_FILE, TEMPLATE_FILE
     global CODE_COMMUNE, CODE_EPCI, CODE_DEPT, CODE_REGION
     print_yellow("Command Line Arguments : " + str(argv))
-    usage = 'Usage: -c <code> -e <code> -d <code> -r <code> -all          \
-              --cxlsx  <ConfigurationFile.xlsx> : Use Configuration File  \
-              --rhtml  <ReportTemplate.html>    : Use ReportTemplate      \
-              --commune   : Report for Code INSEE / Postal                \
-              --ecpi      : Report for ECPI                               \
-              --dep       : Report for Departement                        \
-              --region    : Report for Region                             \
-              --all       : Report for all communes in Territory          \
-              --force     : Report reading source data (cache ignored)    \
-    '
+
+    usage = """
+    Usage: -f -a -b -l -c <commune_code> -e <epci_code> -d <dept_code> -r <region_code>   
+           --list    : List for all communes/epci/dept in Territory       
+           --commune : Report for Code INSEE / Postal                 
+           --ecpi    : Report for ECPI                                
+           --dept    : Report for Departement                         
+           --region  : Report for Region                              
+           --all     : Report for all communes in Territory           
+           --force   : Report reading source data (cache ignored)     
+           --browse  : Start Browser on generated browser            
+           --cxlsx     <ConfigurationFile.xlsx> : Use Configuration File  
+           --rhtml     <ReportTemplate.html>    : Use ReportTemplate      
+    """
+
     try:
-        opts, args = getopt.getopt(argv, "hafc:e:d:p:", [ "help", "commune=", "epci=", "dep=", "reg=", "no_debug" ])
+        opts, args = getopt.getopt(argv, "halbfc:e:d:r:", [ "help", "list", "commune=", "epci=", "dep=", "reg=", "no_debug" ])
     except getopt.GetoptError:
         print(usage)
         raise
         sys.exit(2)
     for opt, arg in opts:
-        print(opt)
-        print(arg)
         if opt in ("-h", "--help"):
             print(usage)
             quit()
-        elif opt in ("--debug"):
+        elif (opt == "--debug"):
             DEBUG = True
+            continue
+        elif opt in ("-b", "-B"):
+            DISPLAY_HTML = True
+            continue
         elif opt in ("-f", "-F"):
             FORCE = True
+            continue
         elif opt in ("-a", "-A", "-all", "-All", "-ALL"):
             WITH_COMMUNES = True
-        elif opt in ("-b"):
+            continue
+        elif opt in ("-b", "--browse"):
             DISPLAY_HTML = True
-        elif opt in ("-cxlsx"):
+            continue
+        elif (opt == "-cxlsx"):
             CONFIGURATION_FILE = arg
-        elif opt in ("-rhtml"):
+            continue
+        elif (opt == "-rhtml"):
             TEMPLATE_FILE = arg
+            continue
+        elif opt in ("-l", "--list"):
+            LIST_COMMUNE = True
+            continue
         elif opt in ("-c", "--commune"):
-            print("Communes")
             CODE_COMMUNE = arg
             print_yellow("> Commune "+str(CODE_COMMUNE))
             report_commune(CODE_COMMUNE, force=FORCE, with_communes=WITH_COMMUNES)
-            print_yellow("< Commune "+str(code))
+            print_yellow("< Commune "+str(CODE_COMMUNE))
+            quit()
         elif opt in ("-e", "--epci"):
             CODE_EPCI = arg
-            print_yellow("> EPCI " + str(CODE_EPCI))
-            report_epci(CODE_EPCI, force=FORCE, with_communes=WITH_COMMUNES)
-            print_yellow("< EPCI " + str(CODE_EPCI))
-        elif opt in ("-d", "--dep"):
+            if (LIST_COMMUNE):
+                print_commune(communes_epci(CODE_EPCI))
+            else:
+                print_yellow("> EPCI " + str(CODE_EPCI))
+                report_epci(CODE_EPCI, force=FORCE, with_communes=WITH_COMMUNES)
+                print_yellow("< EPCI " + str(CODE_EPCI))
+                quit()
+        elif opt in ("-d", "--dept"):
             CODE_DEPT = arg
-            print_yellow("> Departement " + str(CODE_DEPT))
-            report_dept(CODE_DEPT, force=FORCE, with_communes=WITH_COMMUNES)
-            print_yellow("< Departement " + str(CODE_DEPT))
+            if (LIST_COMMUNE):
+                print_commune(communes_dept(CODE_DEPT))
+                print_epci(epci_dept(CODE_DEPT))
+                quit()
+            else:
+                print_yellow("> Departement " + str(CODE_DEPT))
+                report_dept(CODE_DEPT, force=FORCE, with_communes=WITH_COMMUNES)
+                print_yellow("< Departement " + str(CODE_DEPT))
+                quit()
         elif opt in ("-r", "--reg"):
             CODE_REGION = arg
-            print_yellow("> Region " + str(CODE_REGION))
-            report_region(CODE_REGION, force=FORCE, with_communes=WITH_COMMUNES)
-            print_yellow("< Region " + str(CODE_REGION))
-        quit()
+            if (LIST_COMMUNE):
+                print_commune(communes_region(CODE_REGION))
+                print_epci(epci_region(CODE_REGION))
+                print_dept(list_dept(CODE_REGION))
+                quit()
+            else:
+                print_yellow("> Region " + str(CODE_REGION))
+                report_region(CODE_REGION, force=FORCE, with_communes=WITH_COMMUNES)
+                print_yellow("< Region " + str(CODE_REGION))
+                quit()
 
 read_command_line_args(argv=sys.argv[1:])
 

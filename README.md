@@ -25,6 +25,18 @@ L'outil permet de definir des regles de diagnostic
 
 ## Utilisation
 
+    Usage: -f -a -b -l -c <commune_code> -e <epci_code> -d <dept_code> -r <region_code>   
+           --list    : List for all communes/epci/ in Territory       
+           --commune : Report for Code INSEE / Postal                 
+           --ecpi    : Report for ECPI                                
+           --dep     : Report for Departement                         
+           --region  : Report for Region                              
+           --all     : Report for all communes in Territory           
+           --force   : Report reading source data (cache ignored)     
+           --browse  : Start Browser on generated browser            
+           --cxlsx     <ConfigurationFile.xlsx> : Use Configuration File  
+           --rhtml     <ReportTemplate.html>    : Use ReportTemplate      
+
 ## Configuration
 
 **Key**	: L'identifiant de la metrique (donnee)
