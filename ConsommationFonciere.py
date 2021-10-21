@@ -41,7 +41,7 @@ global_context     = {}
 ### Sitadel Logements
 ##########################
 
-sitadelSourcePage     = "https://www.data.gouv.fr/es/datasets/base-des-permis-de-construire-et-autres-autorisations-durbanisme-sitadel/"
+sitadelSourcePage     = "https://www.data.gouv.fr/es/datasets/base-des-permis-de-construire-et-autres-autorisations-durbanisme-sitadel"
 global_context["URL_SOURCE_SITADEL"] = sitadelSourcePage
 
 sitadelSource1316File = "https://www.data.gouv.fr/es/datasets/r/67dd4ee1-0d73-4676-a90f-854fe9012f5d"
@@ -81,9 +81,9 @@ def load_sitadel(sitadel1316_file:  str = sitadel1316File,
 ### Sitadel Locaux
 ##########################
 
-sitadelLocaux1316File = "https://www.data.gouv.fr/es/datasets/r/3b987380-d1cf-4047-8dc5-1a19a3ecf812"
-sitadelLocaux1721File = "https://www.data.gouv.fr/es/datasets/r/98ff9fd3-a14e-474d-bb8f-12bde12d9f70"
-sitadelLocauxMetaFile = "https://www.data.gouv.fr/es/datasets/r/b3ffee5b-fd75-4345-a086-02ded2018705"
+sitadelLocauxSource1316File = "https://www.data.gouv.fr/es/datasets/r/3b987380-d1cf-4047-8dc5-1a19a3ecf812"
+sitadelLocauxSource1721File = "https://www.data.gouv.fr/es/datasets/r/98ff9fd3-a14e-474d-bb8f-12bde12d9f70"
+sitadelLocauxSourceMetaFile = "https://www.data.gouv.fr/es/datasets/r/b3ffee5b-fd75-4345-a086-02ded2018705"
 sitadelLocaux1316File = data_dir + "PC_DP_creant_locaux_2013_2016.csv"
 sitadelLocaux1721File = data_dir + "PC_DP_creant_locaux_2017_2021.csv"
 sitadelLocauxMetaFile = data_dir + "dictionnaire_variables_locaux_permis_construire.xls"
@@ -101,9 +101,9 @@ def load_sitadel_locaux(sitadelLocaux1316_file:  str = sitadelLocaux1316File,
                         sitadelLocaux_meta_file: str = sitadelLocauxMetaFile):
     global sitadel_locaux_1316, sitadel_locaux_1721, sitadel_locaux_Meta
     if (sitadel_locaux_1316 is None) or (sitadel_locaux_1721 is None)  or (sitadel_locaux_Meta is None):
-        downloadFile(sitadelLocaux1316File, sitadelLocaux1316File, zip=True, zipped_file="PC_DP_créant_locaux_2013_2016.csv")
-        downloadFile(sitadelLocaux1721File, sitadelLocaux1721File, zip=True, zipped_file="PC_DP_créant_locaux_2017_2021.csv")
-        downloadFile(sitadelLocauxMetaFile, sitadelLocauxMetaFile)
+        downloadFile(sitadelLocauxSource1316File, sitadelLocaux1316File, zip=True, zipped_file="PC_DP_créant_locaux_2013_2016.csv")
+        downloadFile(sitadelLocauxSource1721File, sitadelLocaux1721File, zip=True, zipped_file="PC_DP_créant_locaux_2017_2021.csv")
+        downloadFile(sitadelLocauxSourceMetaFile, sitadelLocauxMetaFile)
         print_blue("Lecture Sitadel Locaux 2013-2016 : " + sitadelLocaux1316_file + " ...")
         sitadel_locaux_1316 = pd.read_csv(sitadelLocaux1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "ZONE_OP": str, "NATURE_PROJET": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float})
         print_blue("Lecture Sitadel Locaux 2017-2021 : " + sitadelLocaux1721_file + " ...")

@@ -24,7 +24,7 @@ Les données sont issues (voir les liens en bas de ce document):
 - [PC_DP_creant_locaux_2013_2016.csv](https://www.data.gouv.fr/es/datasets/r/3b987380-d1cf-4047-8dc5-1a19a3ecf812) (renommer sans accents après download)
 - [PC_DP_creant_locaux_2017_2021.csv](https://www.data.gouv.fr/es/datasets/r/98ff9fd3-a14e-474d-bb8f-12bde12d9f70) (renommer sans accents après er download)
 
-**_Téléchargez manuellement ces fichiers et sauver les dans le répertoire "data"._**
+**_Ces données seront téléchargées a la premiere utilisation dans le répertoire "data"._**
 Voir ci-dessous les pages pour ces liens pour plus de détails. 
 
 ### Les territoires gérés:
@@ -223,7 +223,7 @@ _Note_ : Toutes les données sources ne sont pas stockées dans GitHub vu la tai
 
 ### Sitadel Logements
 
-Ces données ne sont pas pré-téléchargées dans GitHub.
+Ces données ne sont pas pré-téléchargées dans GitHub - elles le seront a la premiere utilisation.
 
 [Page Sitadel Source](https://www.data.gouv.fr/es/datasets/base-des-permis-de-construire-et-autres-autorisations-durbanisme-sitadel/)
 
@@ -235,7 +235,7 @@ Ces données ne sont pas pré-téléchargées dans GitHub.
 
 ### Sitadel Locaux
 
-Ces données ne sont pas pré-téléchargées dans GitHub.
+Ces données ne sont pas pré-téléchargées dans GitHub - elles le seront a la premiere utilisation.
 
 [Page Sitadel Source](https://www.data.gouv.fr/es/datasets/base-des-permis-de-construire-et-autres-autorisations-durbanisme-sitadel/)
 
@@ -340,7 +340,7 @@ Les données ont été compilées manuellement a partir des PDF
 
 ### Communes
 
-Ces données ne sont pas pré-téléchargées dans GitHub.
+Ces données ne sont pas pré-téléchargées dans GitHub - elles le seront a la premiere utilisation.
 
 [Page Source Communes - INSEE](https://www.insee.fr/fr/statistiques/5359146)
 - "dossier_complet.csv" : [Description des Donnees](https://www.insee.fr/fr/statistiques/fichier/5359146/dossier_complet.zip)
