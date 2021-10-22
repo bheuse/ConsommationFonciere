@@ -8,6 +8,8 @@ import os
 import webbrowser
 import requests
 import io
+import os
+import glob
 import re
 import getopt
 import sys
@@ -19,6 +21,12 @@ import mako.runtime
 import warnings
 import zipfile
 import shutil
+import matplotlib
+from importlib import reload
+
+
+reload(matplotlib)
+matplotlib.use('Agg')
 
 warnings.filterwarnings("ignore")
 warnings.simplefilter(action='ignore', category=pd.errors.PerformanceWarning)
@@ -29,9 +37,11 @@ output_dir = "output" + os.sep
 data_dir   = "data"   + os.sep
 input_dir  = "input"  + os.sep
 
-configurationFile  = input_dir + "Configuration.xlsx"
-html_template      = input_dir + "report_template.html"
-context_file       = output_dir + "context.yaml"
+configurationFile    = input_dir  + "Configuration.xlsx"
+html_report_template = input_dir  + "report_template.html"
+html_index_template  = input_dir  + "index_template.html"
+context_file         = output_dir + "context.yaml"
+regions_file         = output_dir + "france.json"
 
 global_context     = {}
 
@@ -360,6 +370,19 @@ def load_collectData(collect_file: str = collectDataFile):
         collectDiagnostics = pd.read_excel(xls, 'Diagnostic', index_col=0, dtype=str)
     return collectDataMetrics
 
+###
+### File Management
+###
+
+def delete_patten(dir = output_dir, pattern = "*.bck"):
+    # Get a list of all the file paths that ends with .txt from in specified directory
+    fileList = glob.glob(output_dir+ext)
+    # Iterate over the list of filepaths & remove each file.
+    for filePath in fileList:
+        try:
+            os.remove(filePath)
+        except:
+            print("Error while deleting file : ", filePath)
 
 ###
 ### Display in Browser
@@ -474,7 +497,7 @@ def print_commune(commune):
     return
 
 
-def print_epci(ecpi):
+def print_epci(ecpi) -> dict :
     if (isinstance(ecpi, int)):
         print(str(ecpi)+" : "+nom_epci(ecpi))
         return
@@ -483,7 +506,7 @@ def print_epci(ecpi):
     return
 
 
-def print_dept(dept):
+def print_dept(dept) -> dict :
     if (isinstance(dept, int)):
         print(str(dept)+" : "+nom_dept(dept))
         return
@@ -696,6 +719,14 @@ def epci_region(code_reg) -> list[int]:
     load_interco()
     epci_list    = intercoDossier[intercoDossier["Unnamed: 5"] == code_reg]["Unnamed: 2"]
     return sorted(list(set(epci_list)))
+
+
+def epci_commune(code_commune) -> int:
+    """ L'EPCI d'une Commune """
+    load_interco()
+    epci_list    = intercoDossier[intercoDossier.index == str(code_commune)]["Unnamed: 2"]#
+    if epci_list.size == 0 : return None
+    return epci_list[0]
 
 
 def list_region() -> list[int]:
@@ -940,7 +971,7 @@ class DataStore():
         self.render_report()
         return self.html
 
-    def render_report(self, template=html_template):
+    def render_report(self, template=html_report_template):
         # Building Mako Template Context
         context = {**self.get_row_as_dict(), **global_context}
         metric_list = []
@@ -972,7 +1003,6 @@ class DataStore():
         self.data_frame = self.data_frame.append(pd.Series(self.mode_dict,   name='mode'))
         self.data_frame = self.data_frame.append(pd.Series(self.type_dict,   name='type'))
         self.data_frame = self.data_frame.append(pd.Series(self.source_dict, name='source'))
-        update_DataStoreCache(self)
         return self
 
     # Get Data Frame without Meta Data - Clean Meta Data
@@ -1535,7 +1565,7 @@ class DataStore():
             _total       = metric["Total"]
             if (str(_key) == "nan") : continue          # Empty Line
             if (str(_key).startswith("#")) : continue   # Ignore key starting with #
-            print_grey("Evaluating Metric " + str(_line) + ": " + str(_key) + " : " + str(_data))
+            # print_grey("Evaluating Metric " + str(_line) + ": " + str(_key) + " : " + str(_data))
             _data = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _data)    # Replace ${VAR} by VAR
             try:
                 value = eval(_data, self.get_row_as_dict(), {**globals(), **locals()} )
@@ -1546,13 +1576,14 @@ class DataStore():
                 self.add_metric(_key, _description, source=_source, mode=_total, data=error, type=_type)
 
         self.store_index = save_index
-        update_DataStoreCache(self, code_insee)
         return self
 
     def total_data(self, meta=True):
 
         data_clean = self.clean_meta_data()
         if 'total'   in data_clean.index : data_clean.drop(labels="total",   axis=0, inplace=True)
+
+        print_green("> Total Donnees : " + str(self.store_code) + " : " + self.store_name )
 
         total_dict = {}
         for key in self.key_datas:
@@ -1708,7 +1739,7 @@ class DataStore():
             _message     = metric["Message"]
             if (str(_key) == "nan") : continue          # Ignore empty lines
             if (str(_key).startswith("#")) : continue   # Ignore key starting with #
-            print_grey("Evaluating Diagnostic " + str(_line) + ": " + str(_key) + " : " + str(_test))
+            # print_grey("Evaluating Diagnostic " + str(_line) + ": " + str(_key) + " : " + str(_test))
             _data = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _test)    # Replace ${VAR} by VAR
             try:
                 value = bool(eval(_test, self.get_row_as_dict(), {**globals(), **locals()}))
@@ -1748,8 +1779,9 @@ class DataStore():
                 self.store_index = 'total'
 
         self.run_diagnostic()
-        html_file = gen_report(ds=self)
-        display_in_browser(html_file)
+        html_report_file = gen_report(ds=self)
+        html_index_file  = gen_index()
+        display_in_browser(html_index_file)
         return self
 
 
@@ -1763,6 +1795,19 @@ def update_DataStoreCache(ds : DataStore, code_insee=None):
     else:
         print_red("Not Added in Cache : DataStore without code INSEE : " + ds.store_name)
 
+def render_index(template=html_index_template):
+    # Building Mako Template Context
+    context = {**report_region_dict(region="93", filename=regions_file), **global_context}
+    # Rendering Template
+    mako.runtime.UNDEFINED = 'MISSING_CONTEXT'
+    temp = Template(filename=template)
+    index_html = temp.render(**context)
+    # Saving to File
+    p_html_file = output_dir + "index.html"
+    f = open(p_html_file, 'w')
+    f.write(index_html)
+    f.close()
+    return p_html_file
 
 
 '''
@@ -2191,9 +2236,12 @@ def plot_population(ds: DataStore):
 ### Reports
 ###
 
+def gen_index():
+    report_region_dict("93", filename=regions_file)
+    return render_index()
+
 
 def gen_report(ds : DataStore):
-
     ds.save_data()
     global_context["HTML_SOURCES"]                 = report_source(ds)
     global_context["HTML_DIAGNOSTIC"]              = report_diagnostic(ds)
@@ -2237,6 +2285,8 @@ def report_dept(dept_id: str = "06", force=True, with_communes=False):
     if (with_communes):
         for commune in communes_dept(dept_id):
             report_commune(commune, force, with_communes)
+        for epci in epci_dept(dept_id):
+            report_epci(epci, force, with_communes)
     return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force)
 
 
@@ -2285,6 +2335,105 @@ def report_paca(force=True):
 
     print_yellow("REGION 93 - Region PACA : ")
     report_region("93", force=force)
+
+
+report_france = {}
+
+def report_region_dict(region=None, filename=None) -> dict:
+    global report_france
+    if str(region) in report_france : return report_france[str(region)]
+
+    if (os.path.isfile(filename)):
+        with open(filename, "r") as read_file:
+            print("Converting JSON encoded data into Python dictionary")
+            france = jsonc.load(read_file)
+            report_france[str(region)] = france
+            return france
+    france = {}
+    france["REGIONS"] = []
+    if (not region):
+        lr = list_region()
+    else:
+        lr = [str(region)]
+    for r in lr:
+        rd = {}
+        rd["TYPE"] =  "REGION"
+        rd["INSEE"]  = str(r)
+        rd["Nom"]    = nom_region(r, clean=True)
+        rd["Clean"]  = nom_region(r, clean=False)
+        rd["HTML"] = "REGION_" + rd["Clean"] + ".html"
+        rd["Region"] = str(r)
+        rd["DEPARTEMENTS"] = []
+        france["REGIONS"].append(rd)
+        # all[str(r)] = rd
+        for d in list_dept(r):
+            dd = {}
+            dd["TYPE"] = "DEPT"
+            dd["INSEE"] = str(d)
+            dd["Nom"]   = nom_dept(d, clean=True)
+            dd["Clean"] = nom_dept(d, clean=False)
+            dd["HTML"] = "DEPT_" + dd["Clean"] + ".html"
+            dd["Departement"] = str(d)
+            dd["Region"] = str(r)
+            dd["Nom_Region"] = nom_region(r, clean=True)
+            dd["EPCI"] = []
+            dd["COMMUNES"] = []
+            rd["DEPARTEMENTS"].append(dd)
+            # rd[str(d)] = dd
+            for e in epci_dept(d):
+                de = {}
+                de["TYPE"]  = "EPCI"
+                de["INSEE"] = str(e)
+                de["Nom"] = nom_epci(e,   clean=True)
+                de["Clean"] = nom_epci(e, clean=False)
+                de["HTML"] = "EPCI_" + de["Clean"] + ".html"
+                de["Departement"]     = str(d)
+                de["Nom_Departement"] = nom_dept(d, clean=True)
+                de["Region"]          = str(r)
+                de["Nom_Region"]      = nom_region(r, clean=True)
+                de["COMMUNES"] = []
+                dd["EPCI"].append(de)
+                # dd[str(e)] = de
+                for c in communes_epci(e):
+                    cd = {}
+                    cd["TYPE"]  = "COMMUNE"
+                    cd["INSEE"] = str(c)
+                    pos, lib = get_code_postal_commune(c)
+                    cd["Postal"] = pos
+                    cd["Libelle"] = lib
+                    cd["Nom"] = nom_commune(c,   clean=True)
+                    cd["Clean"] = nom_commune(c, clean=False)
+                    cd["HTML"] = "COMMUNE_" + cd["Clean"] + ".html"
+                    cd["Departement"]     = str(d)
+                    cd["Nom_Departement"] = nom_dept(d, clean=True)
+                    cd["Region"]          = str(r)
+                    cd["Nom_Region"]      = nom_region(r, clean=True)
+                    cd["EPCI"]            = epci_commune(c)
+                    cd["Nom_EPCI"]        = nom_epci(epci_commune(c))
+                    de["COMMUNES"].append(cd)
+                    # de[str(c)] = cd
+            for c in communes_dept(d):
+                cd = {}
+                cd["TYPE"]  = "COMMUNE"
+                cd["INSEE"] = str(c)
+                pos, lib = get_code_postal_commune(c)
+                cd["Postal"] = pos
+                cd["Libelle"] = lib
+                cd["Nom"] = nom_commune(c,   clean=True)
+                cd["Clean"] = nom_commune(c, clean=False)
+                cd["HTML"] = "COMMUNE_" + cd["Clean"] + ".html"
+                cd["Departement"]     = str(d)
+                cd["Nom_Departement"] = nom_dept(d, clean=True)
+                cd["Region"]          = str(r)
+                cd["Nom_Region"]      = nom_region(r, clean=True)
+                cd["EPCI"]            = epci_commune(c)
+                cd["Nom_EPCI"]        = nom_epci(epci_commune(c))
+                dd["COMMUNES"].append(cd)
+                # d[str(c)] = cd
+    if (filename):
+        save_file(to_json(france, indent=4),  filename)
+    report_france[str(region)] = france
+    return france
 
 
 def load_min_data():
@@ -2368,6 +2517,16 @@ class TestConsommation(unittest.TestCase):
         ds = report_region(reg_id="93", force=False)
         self.assertEqual(str(ds.get("NOM_COMMUNE")), "946")
         print_yellow("< Region Provence Alpes Cote d'Azur")
+
+    def test_report_region_dict(self):
+        all = report_region_dict("93", filename=regions_file)
+        print_blue(to_json(all, indent=4))
+
+    def test_render_index(self):
+        global DISPLAY_HTML
+        DISPLAY_HTML = True
+        html_index = gen_index()
+        display_in_browser(html_index)
 
     def testPacaReport(self):
         global DISPLAY_HTML
@@ -2457,6 +2616,10 @@ class TestConsommation(unittest.TestCase):
         nom = nom_commune(code_insee="06085", clean=True)
         print(nom)
         self.assertEqual("Mougins", nom)
+        ecpi = epci_commune("06085")
+        print(str(ecpi))
+        self.assertEqual("200039915", ecpi)
+
 
     def testCalc(self):
         self.assertEqual("0",    round0str(0,   rounding=0))
@@ -2528,6 +2691,7 @@ def read_command_line_args(argv):
            --browse  : Start Browser on generated report            
            --cxlsx     <ConfigurationFile.xlsx> : Use Configuration File  
            --rhtml     <ReportTemplate.html>    : Use ReportTemplate      
+           --clean   : Delete Report files      
     """
 
     try:
@@ -2555,13 +2719,20 @@ def read_command_line_args(argv):
         elif opt in ("-b", "--browse"):
             DISPLAY_HTML = True
             continue
-        elif (opt == "-cxlsx"):
+        elif (opt == "--cxlsx"):
             if (not os.path.isfile(arg)):
                 print_red("Configuration File not found : "+arg)
                 quit()
             CONFIGURATION_FILE = arg
             continue
-        elif (opt == "-rhtml"):
+        elif (opt == "--clean"):
+            delete_patten(output_dir, "*.png")
+            delete_patten(output_dir, "*.csv")
+            delete_patten(output_dir, "*.json")
+            delete_patten(output_dir, "*.xlsx")
+            delete_patten(output_dir, "*.html")
+            quit()
+        elif (opt == "--rhtml"):
             if (not os.path.isfile(arg)):
                 print_red("Template File not found : "+arg)
                 quit()
