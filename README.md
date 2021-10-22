@@ -67,7 +67,9 @@ On peut ajuster :
            --force   : Report reading source data (cache ignored)     
            --browse  : Start Browser on generated report            
            --cxlsx     <ConfigurationFile.xlsx> : Use Configuration File  
-           --rhtml     <ReportTemplate.html>    : Use ReportTemplate      
+           --rhtml     <ReportTemplate.html>    : Use ReportTemplate   
+           --clean   : Delete Report files      
+
 
 **Exemples:**
 
