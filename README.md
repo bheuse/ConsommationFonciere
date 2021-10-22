@@ -195,6 +195,10 @@ Le rapport consiste en :
 
 Le rapport CSV ne contient que les métriques brutes, avec le total et les meta-données
 
+### Rapport JSON
+
+Le rapport JSON ne contient que les métriques brutes, avec le total et les meta-données
+
 ### Rapport Excel
 
 Le rapport généré est considéré comme corrompu par Excel, mais il peut le réparer)).
