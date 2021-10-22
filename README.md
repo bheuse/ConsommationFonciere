@@ -197,7 +197,9 @@ Le rapport CSV ne contient que les métriques brutes, avec le total et les meta-
 
 ### Rapport JSON
 
-Le rapport JSON ne contient que les métriques brutes, avec le total et les meta-données
+Les rapports JSON ne contient que les métriques brutes, avec le total et les meta-données. Il y a trois fichiers:
+- Vue selon les communes (_c)  : une entree par commune(+ meta), avec les valeurs pour chaque métrique
+- Vue selon les metriques (_m) : une entree par métrique, avec les valeurs pour chaque commune (+ meta)
 
 ### Rapport Excel
 

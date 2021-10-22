@@ -1,5 +1,5 @@
-[
-    {
+{
+    "meta": {
         "CODE_INSEE": "Code INSEE Commune",
         "CODE_POSTAL": "Code Postal Commune",
         "NOM_COMMUNE": "Nom de Commune",
@@ -248,7 +248,7 @@
         "SITADEL_LOCAUX_SURF_PUB_DEMOLIE": "Surface de plancher de la destination ' Services publics ou d'int\u00e9r\u00eat collectif ' d\u00e9molie",
         "SITADEL_LOCAUX_SURF_PUB_TRANSFORMEE": "Surface de plancher de la destination ' Services publics ou d'int\u00e9r\u00eat collectif ' supprim\u00e9e par changement de destination"
     },
-    {
+    "06085": {
         "CODE_INSEE": "06085",
         "CODE_POSTAL": "06250",
         "NOM_COMMUNE": "MOUGINS",
@@ -497,7 +497,7 @@
         "SITADEL_LOCAUX_SURF_PUB_DEMOLIE": 686.0,
         "SITADEL_LOCAUX_SURF_PUB_TRANSFORMEE": 631.0
     },
-    {
+    "total": {
         "CODE_INSEE": "06085",
         "CODE_POSTAL": 1,
         "NOM_COMMUNE": 1,
@@ -746,7 +746,7 @@
         "SITADEL_LOCAUX_SURF_PUB_DEMOLIE": 686.0,
         "SITADEL_LOCAUX_SURF_PUB_TRANSFORMEE": 631.0
     },
-    {
+    "mode": {
         "CODE_INSEE": "COUNT",
         "CODE_POSTAL": "COUNT",
         "NOM_COMMUNE": "COUNT",
@@ -995,7 +995,7 @@
         "SITADEL_LOCAUX_SURF_PUB_DEMOLIE": "SUM",
         "SITADEL_LOCAUX_SURF_PUB_TRANSFORMEE": "SUM"
     },
-    {
+    "type": {
         "CODE_INSEE": "STR",
         "CODE_POSTAL": "STR",
         "NOM_COMMUNE": "STR",
@@ -1244,7 +1244,7 @@
         "SITADEL_LOCAUX_SURF_PUB_DEMOLIE": "INT",
         "SITADEL_LOCAUX_SURF_PUB_TRANSFORMEE": "INT"
     },
-    {
+    "source": {
         "CODE_INSEE": "CODE",
         "CODE_POSTAL": "CODE",
         "NOM_COMMUNE": "CODE",
@@ -1493,4 +1493,4 @@
         "SITADEL_LOCAUX_SURF_PUB_DEMOLIE": "SIT",
         "SITADEL_LOCAUX_SURF_PUB_TRANSFORMEE": "SIT"
     }
-]
+}

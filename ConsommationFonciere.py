@@ -892,20 +892,17 @@ class DataStore():
         # DF TO CSV
         self.data_frame.to_csv(output_dir + self.get_fullname() + ".csv", sep=',')
         # DF TO JSON
-        with open(output_dir + self.get_fullname() + "_i.json", 'w') as f:
-            global_context["JSON_DATA_SET_I"] = to_json(jsonc.loads(self.data_frame.to_json(orient='index')), indent=4)
-            f.write(global_context["JSON_DATA_SET_I"])
         with open(output_dir + self.get_fullname() + "_c.json", 'w') as f:
-            global_context["JSON_DATA_SET_C"] = to_json(jsonc.loads(self.data_frame.to_json(orient='records')), indent=4)
+            global_context["JSON_DATA_SET_C"] = to_json(jsonc.loads(self.data_frame.to_json(orient='index')), indent=4)
             f.write(global_context["JSON_DATA_SET_C"])
         all = {}
         for name, values in self.data_frame.iteritems():
             all[name] = {}
             for name2, value2 in values.iteritems():
                 all[name][name2] = value2
-        with open(output_dir + self.get_fullname() + "_a.json", 'w') as f:
-            global_context["JSON_DATA_SET_A"] = to_json(all, indent=4)
-            f.write(global_context["JSON_DATA_SET_A"])
+        with open(output_dir + self.get_fullname() + "_m.json", 'w') as f:
+            global_context["JSON_DATA_SET_M"] = to_json(all, indent=4)
+            f.write(global_context["JSON_DATA_SET_M"])
 
     def load_data(self):
         # EXCEL to DF
