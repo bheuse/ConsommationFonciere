@@ -4,7 +4,6 @@ import yaml
 import jk_commentjson as jsonc
 import matplotlib.pyplot as plt
 import pandas as pd
-import os
 import webbrowser
 import requests
 import io
@@ -41,7 +40,7 @@ configurationFile    = input_dir  + "Configuration.xlsx"
 html_report_template = input_dir  + "report_template.html"
 html_index_template  = input_dir  + "index_template.html"
 context_file         = output_dir + "context.yaml"
-regions_file         = output_dir + "france.json"
+france_file          = output_dir + "france.json"
 
 global_context     = {}
 
@@ -115,9 +114,9 @@ def load_sitadel_locaux(sitadelLocaux1316_file:  str = sitadelLocaux1316File,
         downloadFile(sitadelLocauxSource1721File, sitadelLocaux1721File, zip=True, zipped_file="PC_DP_créant_locaux_2017_2021.csv")
         downloadFile(sitadelLocauxSourceMetaFile, sitadelLocauxMetaFile)
         print_blue("Lecture Sitadel Locaux 2013-2016 : " + sitadelLocaux1316_file + " ...")
-        sitadel_locaux_1316 = pd.read_csv(sitadelLocaux1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "ZONE_OP": str, "NATURE_PROJET": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float})
+        sitadel_locaux_1316 = pd.read_csv(sitadelLocaux1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "ZONE_OP": str, "NATURE_PROJET": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float})
         print_blue("Lecture Sitadel Locaux 2017-2021 : " + sitadelLocaux1721_file + " ...")
-        sitadel_locaux_1721 = pd.read_csv(sitadelLocaux1721_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "ADR_LOCALITE_TER" : str, "ADR_CODPOST_TER" : str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "ZONE_OP": str, "NATURE_PROJET": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float})
+        sitadel_locaux_1721 = pd.read_csv(sitadelLocaux1721_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "ADR_LOCALITE_TER" : str, "ADR_CODPOST_TER" : str, "NATURE_PROJET" : str, "ZONE_OP": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float})
         print_blue("Lecture Meta Locaux Sitadel : " + sitadelLocaux_meta_file + " ...")
         xls = pd.ExcelFile(sitadelLocaux_meta_file)
         sitadel_locaux_Meta = pd.read_excel(xls, 'Variables_Locaux', index_col=0)
@@ -297,8 +296,8 @@ def load_sru(sru_file: str = sruFile):
     if (sru2017 is None) or (sru2020 is None):
         print_blue("Lecture Carences SRU PACA : " + sru_file + " ...")
         xls = pd.ExcelFile(sru_file)
-        sru2017 = pd.read_excel(xls, '2017-2019_communes_sru_en_paca', index_col=2, dtype={"REG": str, "DEP": str, "REG": str})
-        sru2020 = pd.read_excel(xls, '2020-2022_communes_sru_en_paca', index_col=2, dtype={"REG": str, "DEP": str, "REG": str})
+        sru2017 = pd.read_excel(xls, '2017-2019_communes_sru_en_paca', index_col=2, dtype={"REG": str, "DEP": str})
+        sru2020 = pd.read_excel(xls, '2020-2022_communes_sru_en_paca', index_col=2, dtype={"REG": str, "DEP": str})
     return sru2017, sru2020
 
 #################
@@ -376,7 +375,7 @@ def load_collectData(collect_file: str = collectDataFile):
 
 def delete_patten(dir = output_dir, pattern = "*.bck"):
     # Get a list of all the file paths that ends with .txt from in specified directory
-    fileList = glob.glob(output_dir+ext)
+    fileList = glob.glob(output_dir+pattern)
     # Iterate over the list of filepaths & remove each file.
     for filePath in fileList:
         try:
@@ -590,6 +589,9 @@ def get_code_postal_commune(code_insee) -> [int, str]:
     commune     = codesPostaux["Nom_commune"][code_insee]
     return code_postal, commune
 
+def get_code_postal(code_insee) -> [int, str]:
+    code, comm = get_code_postal_commune(code_insee)
+    return code
 
 def get_code_insee(code_postal : Union[int, str]) -> int:
     """ Le Code INSEE du Code Postal """
@@ -600,6 +602,28 @@ def get_code_insee(code_postal : Union[int, str]) -> int:
         code_insee = codesPostaux["Code_commune_INSEE"][code_postal][0]
     return code_insee
 
+
+def get_gps_insee(code_insee : Union[int, str])-> [str, str]:
+    """ Le GPS Coord INSEE du Code Postal """
+    load_codes()
+    if (code_insee not in codesPostaux["Code_postal"]) :  return "", ""
+    if (isinstance(codesPostaux["coordonnees_gps"][code_insee], str)):
+        gps = codesPostaux["coordonnees_gps"][code_insee]
+    else:
+        gps = codesPostaux["coordonnees_gps"][code_insee][0]
+    lat  = gps.split(",")[0]
+    long = gps.split(",")[1]
+    return lat, long
+
+
+def get_gps_lat_insee(code_insee : Union[int, str])-> str:
+    lat, long = get_gps_insee(code_insee)
+    return lat
+
+
+def get_gps_long_insee(code_insee : Union[int, str])-> str:
+    lat, long = get_gps_insee(code_insee)
+    return long
 
 def nom_epci(code_epci, clean=False) -> str:
     """ Le nom de l'EPCI """
@@ -623,8 +647,8 @@ def nom_commune(code_insee=None, code_postal=None, clean=False) -> str:
     """ Le nom de la commune """
     load_codes()
     commune = "Pas de nom"
-    if (code_insee)  : code_postal, commune = get_code_postal_commune(code_insee)
-    if (code_postal) : code_insee,  commune = get_code_insee_commune(code_postal)
+    if   (code_insee)  : code_postal, commune = get_code_postal_commune(code_insee)
+    elif (code_postal) : code_insee,  commune = get_code_insee_commune(code_postal)
     nom = str(commune).title()
     if (clean): return nom
     return clean_name(nom) + "_" + str(code_insee)
@@ -700,7 +724,7 @@ def region_dept(code_dept) -> int :
     return reg_list[0]
 
 
-def list_dept(code_region = None) -> list[int]:
+def list_dept(code_region=None) -> list[int]:
     """ La liste des Departements """
     load_departements()
     liste_dept = sorted(list(map(str, list(set(departements.index.values.tolist())))))
@@ -721,15 +745,15 @@ def epci_region(code_reg) -> list[int]:
     return sorted(list(set(epci_list)))
 
 
-def epci_commune(code_commune) -> int:
+def epci_commune(code_commune) -> Union[int, None]:
     """ L'EPCI d'une Commune """
     load_interco()
-    epci_list    = intercoDossier[intercoDossier.index == str(code_commune)]["Unnamed: 2"]#
+    epci_list    = intercoDossier[intercoDossier.index == str(code_commune)]["Unnamed: 2"]
     if epci_list.size == 0 : return None
     return epci_list[0]
 
 
-def list_region() -> list[int]:
+def list_region() -> list[str]:
     """ La liste des Regions """
     load_departements()
     return list(map(str, sorted(list(set(departements["code_region"])))))
@@ -830,25 +854,28 @@ class DataStore():
         self.type_dict   = {}  # { "INT", "STR",    "TAUX",  "PERCENT", "FLOAT" }
         self.source_dict = {}  # { "SRU", "INSEE",  "ART",   "SIT",     "DATA", "PROJ", "EVOL", "CALC" }
         self.mode_dict   = {}  # { "SUM", "IGNORE", "EQUAL", "COUNT",   "CUSTOM", "N/A", "AVG" }
+        self.expr_dict   = {}  # Expression USed for Calculations
         self.error_dict  = {}  # Error while processing this indicator / metric
         self.metric_list = []  # List of Metrics for Rendering
         self.diagnostics = []  # List of Diagnostic for Rendering
         self.html        = None
 
-    def add_metric(self, key : str, meta : str, source: str, mode : str, type: str, index : str = None, data=None):
+    def add_metric(self, key : str, meta : str, source: str, mode : str, type: str, index : str = None, data=None, expr="None"):
         """ Add a metric to the data store """
         self.key_datas.append(key)
         self.meta_dict[key]    = meta
         self.source_dict[key]  = source
         self.type_dict[key]    = type
         self.mode_dict[key]    = mode
+        self.expr_dict[key]    = expr
         self.error_dict[key]   = "OK"
-        self.metric_list.append({"key" : key , "meta" : meta , "source" : source , "type" : type, "mode" : mode})
+        self.metric_list.append({"key" : key , "meta" : meta , "source" : source , "type" : type, "mode" : mode, "expr" : expr})
         return self.add_data(key, index, data)
 
-    def add_diagnostic(self, _key:str, _description:str, test:str, message:str, data : bool):
+    def add_diagnostic(self, _key:str, _description: str, test: str, messageV: str, data : bool, messageF: str, cat:str):
         """ Add a diagnostic to the data store """
-        diagnostic = { "key" : _key , "description" : _description , "test" : test , "message" : message, "value" : data }
+        diagnostic = {"key" : _key , "description" : _description , "test" : test, "value" : data, "categorie" : cat,
+                      "message" : messageV,  "messageSiFaux" : messageF, "messageSiVrai" : messageV  }
         self.diagnostics.append(diagnostic)
         return diagnostic
 
@@ -876,7 +903,6 @@ class DataStore():
             self.add_value(key, index, str(data))
             quit()
             return None
-        return None
 
     def add_value(self, key : str, index : str, data):
         """ Add a raw value to the data store.  """
@@ -897,7 +923,7 @@ class DataStore():
         return self.data_frame.at[index, key]
 
     def get_row_as_dict(self, index : str = None):
-        """ Return a raw as a dict with keys as keys.  """
+        """ Return the index raw as a dict with columm names as keys.  """
         if (index is None): index = self.store_index
         if (index is None): return None
         dc = {}
@@ -906,27 +932,38 @@ class DataStore():
         return dc
 
     def get_fullname(self):
-        """ Datastore name for file name.  """
+        """ Base file name for DataStore.  """
         fullname = str(self.store_type) + "_" + str(self.store_name) + "_" + str(self.store_code)
         return clean_name(fullname)
 
     def save_data(self):
+        """ Save raw DataStore data in various formats (xlsx, json, csv)  """
         # DF TO EXCEL
         writer = pd.ExcelWriter(output_dir + self.get_fullname() + ".xlsx")
         self.data_frame.to_excel(writer, "Data")
         pivot = self.data_frame.transpose()
         pivot.to_excel(writer, "Pivot")
         diagdf = self.data_frame.from_dict(self.diagnostics)
-        diagdf.to_excel(writer,"Diagnotics")
+        diagdf.to_excel(writer, "Diagnotics")
         writer.save()
         writer.close()
         # DF TO CSV
         self.data_frame.to_csv(output_dir + self.get_fullname() + ".csv", sep=',')
         # DF TO JSON
+        ## _d.json
+        with open(output_dir + self.get_fullname() + "_d.json", 'w') as f:
+            global_context["JSON_DIAGNOSTICS"] = " { \"Diagnostic\" : "+to_json(jsonc.loads(jsonc.dumps(self.diagnostics)), indent=4) + "}"
+            f.write(global_context["JSON_DIAGNOSTICS"])
+        ## _c.json
         with open(output_dir + self.get_fullname() + "_c.json", 'w') as f:
-            global_context["JSON_DATA_SET_C"] = to_json(jsonc.loads(self.data_frame.to_json(orient='index')), indent=4)
-            f.write(global_context["JSON_DATA_SET_C"])
+            data_c = self.data_frame.to_dict(orient='index')
+            data_c["Diagnostics"] = jsonc.loads(jsonc.dumps(self.diagnostics))
+            global_context["JSON_DATA_SET_C"] = self.data_frame.to_json(orient='index')
+            # global_context["JSON_DATA_SET_C"] = to_json(jsonc.loads(self.data_frame.to_json(orient='index')), indent=4)
+            # f.write(global_context["JSON_DATA_SET_C"])
+            f.write(to_json(data_c, indent=4))
         all = {}
+        ## _m.json
         for name, values in self.data_frame.iteritems():
             all[name] = {}
             for name2, value2 in values.iteritems():
@@ -935,7 +972,9 @@ class DataStore():
             global_context["JSON_DATA_SET_M"] = to_json(all, indent=4)
             f.write(global_context["JSON_DATA_SET_M"])
 
+
     def load_data(self):
+        """ Load DataStore data from xlsx file  """
         # EXCEL to DF
         filename = output_dir + self.get_fullname() + ".xlsx"
         if not os.path.isfile(filename) : return None
@@ -945,33 +984,41 @@ class DataStore():
         self.key_datas   = list(self.data_frame.columns.values)
         self.meta_dict   = self.get_row_as_dict('meta')
         self.mode_dict   = self.get_row_as_dict('mode')
+        self.expr_dict   = self.get_row_as_dict('expr')
         self.type_dict   = self.get_row_as_dict('type')
         self.source_dict = self.get_row_as_dict('source')
         return self.data_frame
 
     def number(self, key, round=0, suffix="") -> str:
+        """ Return a INT key value as a rounded number formatted string, with a suffix (e.g. %)  """
         return round0str(self.data_frame[key][self.store_index], round)+suffix
 
     def str(self, key) -> str:
+        """ Return a STR key value as a string """
         return str(self.data_frame[key][self.store_index])
 
     def taux(self, key, round=2, suffix="") -> str:
+        """ Return a TAUX key value as a rounded number formatted string, with a suffix (e.g. %)  """
         val = self.data_frame[key][self.store_index]
         if (suffix == "%"): val = val * 100
         return round0str(val, round)+suffix
 
     def tauxp100(self, key, round=2) -> str:
+        """ Return a TAUX key value as a percentage rounded number formatted string, with a suffix (e.g. %)  """
         return round0str(self.data_frame[key][self.store_index] * 100, round)+"%"
 
     def percent(self, key, round=2, suffix="%") -> str:
+        """ Return a PERCENT key value as a rounded number formatted string, with a suffix (e.g. %)  """
         return round0str(self.data_frame[key][self.store_index], round) + suffix
 
     def getHTML(self) -> str:
+        """ Return HTML of rendered Report """
         if (self.html) : return self.html
         self.render_report()
         return self.html
 
     def render_report(self, template=html_report_template):
+        """ Render Report with specific HTML Mako Template """
         # Building Mako Template Context
         context = {**self.get_row_as_dict(), **global_context}
         metric_list = []
@@ -984,9 +1031,10 @@ class DataStore():
             diag_list.append(diagnostic)
         context["DIAGNOSTICS"] = diag_list
         context["COMMUNE"] = str(context["NOM_COMMUNE"]).title()
+        # Save Context File as reference TAGS for Make Template
         save_file(to_yaml(context), context_file)
         # Rendering Template
-        mako.runtime.UNDEFINED = 'MISSING_CONTEXT'
+        mako.runtime.UNDEFINED = 'CONTEXT_MISSING_DATA'
         temp = Template(filename=template)
         self.html = temp.render(**context)
         # Saving to File
@@ -998,23 +1046,28 @@ class DataStore():
 
     # Add Meta Data
     def add_meta_data(self):
+        """ Adds Meta data to DataStore """
         self.data_frame = self.data_frame.append(pd.Series(self.meta_dict,   name='meta'))
         self.data_frame = self.data_frame.sort_index(ascending=False)        # sorting by index
         self.data_frame = self.data_frame.append(pd.Series(self.mode_dict,   name='mode'))
+        self.data_frame = self.data_frame.append(pd.Series(self.expr_dict,   name='expr'))
         self.data_frame = self.data_frame.append(pd.Series(self.type_dict,   name='type'))
         self.data_frame = self.data_frame.append(pd.Series(self.source_dict, name='source'))
         return self
 
     # Get Data Frame without Meta Data - Clean Meta Data
     def clean_meta_data(self, inplace=True) :
+        """ Removes Meta data from DataStore """
         clean_data_frame = self.data_frame
         if 'meta'   in clean_data_frame.index : clean_data_frame.drop(labels="meta",   axis=0, inplace=inplace)
         if 'mode'   in clean_data_frame.index : clean_data_frame.drop(labels="mode",   axis=0, inplace=inplace)
         if 'type'   in clean_data_frame.index : clean_data_frame.drop(labels="type",   axis=0, inplace=inplace)
         if 'source' in clean_data_frame.index : clean_data_frame.drop(labels="source", axis=0, inplace=inplace)
+        if 'expr'   in clean_data_frame.index : clean_data_frame.drop(labels="expr",   axis=0, inplace=inplace)
         return clean_data_frame
 
     def collect_data(self, code_postal=None, code_insee=None):
+        """ Collect individual Commune data """
 
         commune = "Pas de Nom"
         if (code_postal):
@@ -1034,7 +1087,7 @@ class DataStore():
 
         # Donnees Commune
         self.add_metric("CODE_INSEE",     "Code INSEE Commune",        source=source_codes,    mode=mode_count, data=code_insee,       type="STR")
-        self.add_metric("CODE_POSTAL",    "Code Postal Commune",       source=source_codes,    mode=mode_count, data=code_postal,      type="STR")
+        self.add_metric("CODE_POSTAL",    "Code Postal Commune",       source=source_codes,    mode=mode_equal, data=code_postal,      type="STR")
         self.add_metric("NOM_COMMUNE",    "Nom de Commune",            source=source_codes,    mode=mode_count, data=commune,          type="STR")
         self.add_metric("LIBELLE",        "Libelle",                   source=source_codes,    mode=mode_count, data=commune.title(),  type="STR")
 
@@ -1422,7 +1475,6 @@ class DataStore():
         loc_nouveau        = com_sitadelLocaux.loc[com_sitadelLocaux['NATURE_PROJET'] == 1]
         # These will be loaded from Collect Excel
 
-
         # Projections Calculees
         self.add_metric(key="TX_POP_2030", meta="Taux Evolution de la Population entre 2020 et 2030",
                       source=source_proj,  mode=mode_custom, type="PERCENT",
@@ -1542,13 +1594,13 @@ class DataStore():
                       data=(round(self["NB_LGT_PRET_LOC_SOCIAL_1316"]   + self["NB_LGT_PRET_LOC_SOCIAL_1721"])))
         self.add_metric(key="TX_LGT_PRET_LOC_SOCIAL_1321", meta="Taux de Construction de LS entre 2013 et 2020  (8 ans)",
                       source=source_calc,  mode=mode_custom, type="TAUX",
-                      data=self["NB_LGT_PRET_LOC_SOCIAL_1321"] / self["NB_LGT_TOT_COMMENCES_1321"])
+                      data=self["NB_LGT_PRET_LOC_SOCIAL_1321"] / self["NB_LGT_TOT_COMMENCES_1321"] + sys.float_info.epsilon)
         self.add_metric(key="TX_LGT_PRET_LOC_SOCIAL_1316", meta="Taux de Construction de LS entre 2013 et 2016  (8 ans)",
                       source=source_calc,  mode=mode_custom, type="TAUX",
-                      data=(round(self["NB_LGT_PRET_LOC_SOCIAL_1316"] / self["NB_LGT_TOT_COMMENCES_1316"], 4)))
+                      data=(round(self["NB_LGT_PRET_LOC_SOCIAL_1316"] / self["NB_LGT_TOT_COMMENCES_1316"] + sys.float_info.epsilon, 4)))
         self.add_metric(key="TX_LGT_PRET_LOC_SOCIAL_1721", meta="Taux de Construction de LS  entre 2017 et 2021  (8 ans)",
                       source=source_calc,  mode=mode_custom, type="TAUX",
-                      data=(round(self["NB_LGT_PRET_LOC_SOCIAL_1721"] / self["NB_LGT_TOT_COMMENCES_1721"], 4)))
+                      data=(round(self["NB_LGT_PRET_LOC_SOCIAL_1721"] / self["NB_LGT_TOT_COMMENCES_1721"] + sys.float_info.epsilon, 4)))
         self.add_metric(key="LOG_NON_VENDUS_1320", meta="Logements Construits non encore vendus en 2020",
                       source=source_calc,  mode=mode_sum, type="INT",
                       data=(self["NB_LGT_TOT_COMMENCES_1321"] - self["NOUV_LOG_1320"]))
@@ -1562,28 +1614,30 @@ class DataStore():
             _source      = metric["Source"]
             _type        = metric["Type"]
             _data        = str(metric["Data"])
+            _expr        = str(metric["Data"])
             _total       = metric["Total"]
             if (str(_key) == "nan") : continue          # Empty Line
             if (str(_key).startswith("#")) : continue   # Ignore key starting with #
             # print_grey("Evaluating Metric " + str(_line) + ": " + str(_key) + " : " + str(_data))
             _data = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _data)    # Replace ${VAR} by VAR
             try:
-                value = eval(_data, self.get_row_as_dict(), {**globals(), **locals()} )
-                self.add_metric(_key, _description, source=_source, mode=_total, data=value, type=_type)
+                value = eval(_data, self.get_row_as_dict(), {**globals(), **locals()})
+                self.add_metric(_key, _description, source=_source, mode=_total, data=value, type=_type, expr=_expr)
             except Exception as e :
                 error = "Error evaluating metrique : " + _key + " + eval : " + _data + " - Error : " + str(e)
                 print_red(error)
-                self.add_metric(_key, _description, source=_source, mode=_total, data=error, type=_type)
+                self.add_metric(_key, _description, source=_source, mode=_total, data=error, type=_type, expr=_expr)
 
         self.store_index = save_index
         return self
 
     def total_data(self, meta=True):
+        """ Consolidate total data for a set of Commune data """
 
         data_clean = self.clean_meta_data()
         if 'total'   in data_clean.index : data_clean.drop(labels="total",   axis=0, inplace=True)
 
-        print_green("> Total Donnees : " + str(self.store_code) + " : " + self.store_name )
+        print_green("> Total Donnees : " + str(self.store_code) + " : " + self.store_name)
 
         total_dict = {}
         for key in self.key_datas:
@@ -1606,7 +1660,9 @@ class DataStore():
                 quit()
 
         if (self.store_type == "COMMUNE"):
+            total_dict["LIBELLE"]       = self.store_name
             total_dict["TYPE_EPCI"]     = "COMMUNE"
+            total_dict["CODE_POSTAL"]   = get_code_postal(self.store_code)
             url_dossier = "https://www.insee.fr/fr/statistiques/2011101?geo=COM-" + str(self.store_code)
             total_dict["DOSSIER_INSEE"]          = url_dossier
             global_context["URL_SOURCE_DOSSIER"] = url_dossier
@@ -1720,6 +1776,7 @@ class DataStore():
             self.data_frame = self.data_frame.append(pd.Series(self.mode_dict,   name='mode'))
             self.data_frame = self.data_frame.append(pd.Series(self.type_dict,   name='type'))
             self.data_frame = self.data_frame.append(pd.Series(self.source_dict, name='source'))
+            self.data_frame = self.data_frame.append(pd.Series(self.expr_dict,   name='expr'))
         else:
             # Store in Data Frame
             self.data_frame = self.data_frame.append(pd.Series(total_dict, name="total"))
@@ -1728,7 +1785,7 @@ class DataStore():
         return self
 
     def run_diagnostic(self):
-
+        """ Evaluate diagnostics on the total data """
         load_min_data()
         _line = 0
         for index, metric in collectDiagnostics.iterrows():
@@ -1736,22 +1793,24 @@ class DataStore():
             _key         = index  # Key
             _description = metric["Description"]
             _test        = str(metric["Test"])
-            _message     = metric["Message"]
+            _messageV    = metric["MessageSiVrai"]
+            _messageF    = metric["MessageSiFaux"]
+            _categorie   = metric["Categorie"]
             if (str(_key) == "nan") : continue          # Ignore empty lines
             if (str(_key).startswith("#")) : continue   # Ignore key starting with #
             # print_grey("Evaluating Diagnostic " + str(_line) + ": " + str(_key) + " : " + str(_test))
             _data = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _test)    # Replace ${VAR} by VAR
             try:
                 value = bool(eval(_test, self.get_row_as_dict(), {**globals(), **locals()}))
-                self.add_diagnostic(_key, _description, test=_test, message=_message, data=value)
+                self.add_diagnostic(_key, _description, test=_test, messageV=_messageV, data=value, messageF=_messageF, cat=_categorie)
             except Exception as e :
                 error = "Error evaluating Diagnostic : " + _key + " + eval : " + _test + " - Error : " + str(e)
                 print_red(error)
-                self.add_diagnostic(_key, _description, test=_test, message=error, data=value)
+                self.add_diagnostic(_key, _description, test=_test, messageV=error, data=value, messageF=error, cat=_categorie)
         return self
 
-    def report(self, force=True):
-
+    def report(self, force=True, data_only: bool = False):
+        """ Generate report for DataStore. Force = True will re-calculate DataStore data from source. """
         load_min_data()
         print_yellow("Preparation Rapport "+self.store_type + " " + self.store_name + " (Code INSEE : "+self.store_code+")")
         loaded = None
@@ -1779,13 +1838,14 @@ class DataStore():
                 self.store_index = 'total'
 
         self.run_diagnostic()
-        html_report_file = gen_report(ds=self)
-        html_index_file  = gen_index()
-        display_in_browser(html_index_file)
+        html_report_file = gen_report(ds=self, data_only=data_only)
+        # html_index_file  = gen_index()
+        display_in_browser(html_report_file)
         return self
 
 
 def update_DataStoreCache(ds : DataStore, code_insee=None):
+    """ Cache a DataStore for re-use without re-calculations """
     if code_insee and ((isinstance(code_insee, int)) or (isinstance(code_insee, str))):
         DataStoreCache[str(code_insee)] = ds
         print_green("Added in Cache : DataStore with code INSEE " + str(ds.store_code) + " : "  + ds.store_name)
@@ -1795,19 +1855,19 @@ def update_DataStoreCache(ds : DataStore, code_insee=None):
     else:
         print_red("Not Added in Cache : DataStore without code INSEE : " + ds.store_name)
 
-def render_index(template=html_index_template):
-    # Building Mako Template Context
-    context = {**report_region_dict(region="93", filename=regions_file), **global_context}
+def render_index(template=html_index_template, region="93"):
+    """" Building Mako Template Context """
+    context = {**report_region_dict(region=region, filename=france_file), **global_context}
     # Rendering Template
     mako.runtime.UNDEFINED = 'MISSING_CONTEXT'
     temp = Template(filename=template)
     index_html = temp.render(**context)
     # Saving to File
-    p_html_file = output_dir + "index.html"
-    f = open(p_html_file, 'w')
+    p_html_index_filename = output_dir + "index.html"
+    f = open(p_html_index_filename, 'w')
     f.write(index_html)
     f.close()
-    return p_html_file
+    return p_html_index_filename
 
 
 '''
@@ -1900,7 +1960,7 @@ def email_html_report(self, ka: KPI_Analysis, kc: KPI_Configuration, p_to_addres
 
 
 def report_diagnostic(ds: DataStore):
-    # Diagnostic Report
+    """ Diagnostic Report in HTML """
     data_html = "<h3>" + "Diagnostic des Donnees" + "</h3>"
     for diagnostic in ds.diagnostics:
         if (diagnostic["value"]==True):
@@ -1911,6 +1971,7 @@ def report_diagnostic(ds: DataStore):
 
 
 def report_source(ds: DataStore):
+    """ Sources in HTML """
     # Summary Table
     data_html = "<h3>" + "Sources de Donnees" + "</h3>"
     data_html = data_html + "<p>" + "Artificialisation :    <a target=\"_blank\" href=\"" + artificialisationSourcePage + "\">Dossier Cerema  </a>" + "</p>"
@@ -1925,8 +1986,8 @@ def report_source(ds: DataStore):
 
 
 def report_sru(ds: DataStore):
+    """ SRU Data in HTML """
     data_dict = ds.get_row_as_dict(ds.store_index)
-    # Summary Table
     df = pd.DataFrame(columns=['Item', '2017', '2020'])
     row = {'Item': "Residences Principales",     '2017': ds.number("SRU_RP_2017"),    '2020': ds.number("SRU_RP_2020")}
     df = df.append(row, ignore_index=True)
@@ -1953,25 +2014,27 @@ def report_sru(ds: DataStore):
     log_sociaux  = round(carence2017 + evol_carence - carence2020, 0)
     html = "<h2>" + "Logements Sociaux " + ds.store_name + "</h2>"
     html = html   + "<p>" + df.to_html() + "</p>"
-    html = html   + "<p>" + "Evolution 2017-2020 des RP : "       + round0str(evol_res_pr, 0)     + "</p>"
-    html = html   + "<p>" + "Evolution 2017-2020 Carence : "      + round0str(evol_carence, 0)    + "</p>"
-    html = html   + "<p>" + "LS Realises en 2017-2020 : "            + round0str(log_sociaux, 0)     + "</p>"
-    html = html   + "<p>" + "Total de logements a construire en 36/65 : "  + round0str(mod3565_carence, 0) + "</p>"
+    html = html   + "<p>" + "Evolution 2017-2020 des RP : "               + round0str(evol_res_pr, 0)     + "</p>"
+    html = html   + "<p>" + "Evolution 2017-2020 Carence : "              + round0str(evol_carence, 0)    + "</p>"
+    html = html   + "<p>" + "LS Realises en 2017-2020 : "                 + round0str(log_sociaux, 0)     + "</p>"
+    html = html   + "<p>" + "Total de logements a construire en 36/65 : " + round0str(mod3565_carence, 0) + "</p>"
     global_context["HTML_TABLE_SRU"] = html
     return html
 
 
 def report_artificialisation(ds: DataStore):
+    """ Artificialisation Data in HTML """
     data_dict = ds.get_row_as_dict(ds.store_index)
     html = "<h2>" + "Artificialisation sur 10 ans (2009-2020)" + "</h2>"
     html = html   + "<p>" + "Surface du Territoire       = " + round0str(data_dict["SURFACE_COMMUNE"] / 10000, 1) + " ha"+"</p>"
     html = html   + "<p>" + "Artificialisation 2009-2020 = " + round0str(data_dict["ART_TOTAL"] / 10000, 1)  + " ha"+"</p>"
-    html = html   + "<p>" + "Supplement                  = " + round0str(data_dict["ART_POURCENT"] , 1) + "%"+"</p>"
+    html = html   + "<p>" + "Supplement 2009-2020        = " + round0str(data_dict["ART_POURCENT"] , 1) + "%"+"</p>"
     global_context["HTML_TABLE_ARTIFICIALISATION"] = html
     return html
 
 
 def report_historique(ds: DataStore):
+    """ Historiques Data in HTML """
     data_dict = ds.get_row_as_dict(ds.store_index)
     # Summary Table
     df = pd.DataFrame(columns=['Item', '2008', '2013', '2018'])
@@ -2015,6 +2078,7 @@ def report_historique(ds: DataStore):
 
 
 def report_projection(ds: DataStore):
+    """ Projection Data in HTML """
     data_dict = ds.get_row_as_dict(ds.store_index)
     # Summary Table
     df = pd.DataFrame(columns=['Item', '2020', '2030', '2040', '2050'])
@@ -2039,7 +2103,7 @@ def report_projection(ds: DataStore):
 
 
 def report_summary_data(ds: DataStore):
-    # Summary Table
+    """ Summary Data in HTML """
     data_dict = {}
     df = pd.DataFrame(columns=['Key', 'Value', 'Meta'])
     for column in ds.data_frame:
@@ -2053,6 +2117,7 @@ def report_summary_data(ds: DataStore):
 
 
 def report_full_data(ds: DataStore):
+    """ Full Data in HTML """
     data_html = "<h3>" + "Toutes les Donnees - Details : " + ds.store_name + "</h3>"
     data_html = data_html + ds.data_frame.to_html(index=True)
     global_context["HTML_FULL_DATA"] = data_html
@@ -2071,6 +2136,7 @@ def new_figure():
 
 
 def plot_logements(ds: DataStore):
+    """ Graphique Logements en HTML et png. """
     data_dict = ds.get_row_as_dict(ds.store_index)
     label = "Logements"
 
@@ -2148,6 +2214,7 @@ def plot_logements(ds: DataStore):
 
 
 def plot_taille_menages(ds: DataStore):
+    """ Graphique taille des menages en HTML et png. """
     data_dict = ds.get_row_as_dict(ds.store_index)
     label = "Taille des Menages"
     df1 = pd.DataFrame({'x_values': (2008, 2013, 2018, 2020),
@@ -2191,6 +2258,7 @@ def plot_taille_menages(ds: DataStore):
 
 
 def plot_population(ds: DataStore):
+    """ Graphique Population en HTML et png."""
     data_dict = ds.get_row_as_dict(ds.store_index)
     label = "Population"
     df1 = pd.DataFrame({'x_values': (2008, 2013, 2018, 2020),
@@ -2236,13 +2304,17 @@ def plot_population(ds: DataStore):
 ### Reports
 ###
 
-def gen_index():
-    report_region_dict("93", filename=regions_file)
+
+def gen_index(region="93"):
+    """ Generates Index for a Region or France (if region = None) """
+    report_region_dict(region, filename=france_file)
     return render_index()
 
 
-def gen_report(ds : DataStore):
+def gen_report(ds : DataStore, data_only : bool = False):
+    """ Generates Report for DataStore """
     ds.save_data()
+    if (data_only) : return None
     global_context["HTML_SOURCES"]                 = report_source(ds)
     global_context["HTML_DIAGNOSTIC"]              = report_diagnostic(ds)
     global_context["HTML_PLOT_LOGEMENTS"]          = plot_logements(ds)
@@ -2257,52 +2329,70 @@ def gen_report(ds : DataStore):
     return ds.render_report()
 
 
-def report_commune(code_postal: str = "06250", force=True, with_communes=False):
-    code_insee, commune = get_code_insee_commune(code_postal)
-    if (str(commune).startswith("Pas")):
-        code_insee, commune = get_code_postal_commune(code_postal)
-        if (not str(commune).startswith("Pas")): code_insee = code_postal
+def report_commune(code_insee : str = None, code_postal: str = None, force=True, data_only : bool = False):
+    """ Generates Report for a COMMUNE identified by Code INSEE or Postal """
+    commune = None
+    if (code_insee):
+        commune = nom_commune(code_insee=code_insee, clean=True)
+    elif (code_postal):
+        code_insee, commune = get_code_insee_commune(code_postal)
+    if ((not commune) or (str(commune).startswith("Pas"))):
+        print_red("COMMUNE non trouvee for codes : INSEE ["+str(code_insee+"] POSTAL : ["+str(code_postal)+"]"))
+        return None
     entite = entite_commune
     name   = commune
     code   = code_insee
-    return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force)
+    return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force, data_only=data_only)
 
 
-def report_epci(epci_id: str = "200039915", force=True, with_communes=False):
+def report_epci(epci_id: str = "200039915", force=True, with_communes=False, data_only : bool = False):
+    """ Generates Report for a EPCI identified by Code INSEE  """
     entite = entite_epci
     name   = nom_epci(epci_id, clean=True)
     code   = epci_id
+    if ((not name) or (str(name).startswith("Pas"))):
+        print_red("EPCI non trouvee for codes :  [" + str(epci_id) + "]")
+        return None
     if (with_communes):
         for commune in communes_epci(epci_id):
-            report_commune(commune, force, with_communes)
-    return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force)
+            report_commune(code_insee=str(commune), force=force, data_only=data_only)
+    return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force, data_only=data_only)
 
 
-def report_dept(dept_id: str = "06", force=True, with_communes=False):
+def report_dept(dept_id: str = "06", force=True, with_communes=False, data_only : bool = False):
+    """ Generates Report for a Departement identified by Code INSEE  """
     entite = entite_dept
     name   = nom_dept(dept_id, clean=True)
     code   = dept_id
+    if ((not name) or (str(name).startswith("Pas"))):
+        print_red("DEPT non trouve for codes :  [" + str(dept_id) + "]")
+        return None
     if (with_communes):
         for commune in communes_dept(dept_id):
-            report_commune(commune, force, with_communes)
+            report_commune(code_insee=str(commune), force=force, data_only=data_only)
         for epci in epci_dept(dept_id):
-            report_epci(epci, force, with_communes)
-    return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force)
+            report_epci(str(epci), force, with_communes, data_only=data_only)
+    return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force, data_only=data_only)
 
 
-def report_region(reg_id: str = "93", force=True, with_communes=False):
+def report_region(reg_id: str = "93", force=True, with_communes=False, data_only : bool = False):
+    """ Generates Report for a Region identified by Code INSEE  """
     entite = "REGION"
     name   = nom_region(reg_id, clean=True)
     code   = reg_id
+    if ((not name) or (str(name).startswith("Pas"))):
+        print_red("REGION non trouvee for codes :  [" + str(reg_id) + "]")
+        return None
     if (with_communes):
         for dept in list_dept(reg_id):
-            report_dept(dept, force, with_communes=True)
+            report_dept(str(dept), force, with_communes=True, data_only=data_only)
         for commune in communes_region(reg_id):
-            report_commune(commune, force, with_communes)
-    return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force)
+            report_commune(code_insee=str(commune), force=force, data_only=data_only)
+    return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force, data_only=data_only)
 
 
 def report_paca(force=True):
+    """ Generates Report for PACA Region  """
     print_yellow("DEPT 06 - Alpes-Maritimes : ")
     for epci in epci_dept("06"):
         report_epci(str(epci), force=force)
@@ -2339,11 +2429,12 @@ def report_paca(force=True):
 
 report_france = {}
 
-def report_region_dict(region=None, filename=None) -> dict:
+
+def report_region_dict(region=None, filename=None, force=False) -> dict:
     global report_france
     if str(region) in report_france : return report_france[str(region)]
 
-    if (os.path.isfile(filename)):
+    if ((force==False) and (os.path.isfile(filename))):
         with open(filename, "r") as read_file:
             print("Converting JSON encoded data into Python dictionary")
             france = jsonc.load(read_file)
@@ -2360,50 +2451,47 @@ def report_region_dict(region=None, filename=None) -> dict:
         rd["TYPE"] =  "REGION"
         rd["INSEE"]  = str(r)
         rd["Nom"]    = nom_region(r, clean=True)
-        rd["Clean"]  = nom_region(r, clean=False)
-        rd["HTML"] = "REGION_" + rd["Clean"] + ".html"
+        rd["Clean"]  = "REGION_" + nom_region(r, clean=False)
+        rd["HTML"]   = rd["Clean"] + ".html"
         rd["Region"] = str(r)
         rd["DEPARTEMENTS"] = []
         france["REGIONS"].append(rd)
-        # all[str(r)] = rd
         for d in list_dept(r):
             dd = {}
             dd["TYPE"] = "DEPT"
             dd["INSEE"] = str(d)
             dd["Nom"]   = nom_dept(d, clean=True)
-            dd["Clean"] = nom_dept(d, clean=False)
-            dd["HTML"] = "DEPT_" + dd["Clean"] + ".html"
+            dd["Clean"] = "DEPT_" + nom_dept(d, clean=False)
+            dd["HTML"]  = dd["Clean"] + ".html"
             dd["Departement"] = str(d)
             dd["Region"] = str(r)
             dd["Nom_Region"] = nom_region(r, clean=True)
             dd["EPCI"] = []
             dd["COMMUNES"] = []
             rd["DEPARTEMENTS"].append(dd)
-            # rd[str(d)] = dd
             for e in epci_dept(d):
                 de = {}
-                de["TYPE"]  = "EPCI"
-                de["INSEE"] = str(e)
-                de["Nom"] = nom_epci(e,   clean=True)
-                de["Clean"] = nom_epci(e, clean=False)
-                de["HTML"] = "EPCI_" + de["Clean"] + ".html"
+                de["TYPE"]   = "EPCI"
+                de["INSEE"]  = str(e)
+                de["Nom"]    = nom_epci(e,   clean=True)
+                de["Clean"]  = "EPCI_" + nom_epci(e, clean=False)
+                de["HTML"]   = de["Clean"] + ".html"
                 de["Departement"]     = str(d)
                 de["Nom_Departement"] = nom_dept(d, clean=True)
                 de["Region"]          = str(r)
                 de["Nom_Region"]      = nom_region(r, clean=True)
-                de["COMMUNES"] = []
+                de["COMMUNES"]        = []
                 dd["EPCI"].append(de)
-                # dd[str(e)] = de
                 for c in communes_epci(e):
                     cd = {}
-                    cd["TYPE"]  = "COMMUNE"
-                    cd["INSEE"] = str(c)
-                    pos, lib = get_code_postal_commune(c)
-                    cd["Postal"] = pos
+                    cd["TYPE"]    = "COMMUNE"
+                    cd["INSEE"]   = str(c)
+                    pos, lib      = get_code_postal_commune(c)
+                    cd["Postal"]  = pos
                     cd["Libelle"] = lib
-                    cd["Nom"] = nom_commune(c,   clean=True)
-                    cd["Clean"] = nom_commune(c, clean=False)
-                    cd["HTML"] = "COMMUNE_" + cd["Clean"] + ".html"
+                    cd["Nom"]     = nom_commune(code_insee=c, clean=True)
+                    cd["Clean"]   = "COMMUNE_" + nom_commune(code_insee=c, clean=False)
+                    cd["HTML"]    = cd["Clean"] + ".html"
                     cd["Departement"]     = str(d)
                     cd["Nom_Departement"] = nom_dept(d, clean=True)
                     cd["Region"]          = str(r)
@@ -2411,17 +2499,16 @@ def report_region_dict(region=None, filename=None) -> dict:
                     cd["EPCI"]            = epci_commune(c)
                     cd["Nom_EPCI"]        = nom_epci(epci_commune(c))
                     de["COMMUNES"].append(cd)
-                    # de[str(c)] = cd
             for c in communes_dept(d):
                 cd = {}
-                cd["TYPE"]  = "COMMUNE"
-                cd["INSEE"] = str(c)
-                pos, lib = get_code_postal_commune(c)
-                cd["Postal"] = pos
-                cd["Libelle"] = lib
-                cd["Nom"] = nom_commune(c,   clean=True)
-                cd["Clean"] = nom_commune(c, clean=False)
-                cd["HTML"] = "COMMUNE_" + cd["Clean"] + ".html"
+                cd["TYPE"]    = "COMMUNE"
+                cd["INSEE"]   = str(c)
+                pos, lib      = get_code_postal_commune(c)
+                cd["Postal"]  = pos
+                cd["Libelle"] = lib 
+                cd["Nom"]     = nom_commune(code_insee=c,   clean=True)
+                cd["Clean"]   = "COMMUNE_" + nom_commune(code_insee=c, clean=False)
+                cd["HTML"]    = cd["Clean"] + ".html"
                 cd["Departement"]     = str(d)
                 cd["Nom_Departement"] = nom_dept(d, clean=True)
                 cd["Region"]          = str(r)
@@ -2429,7 +2516,6 @@ def report_region_dict(region=None, filename=None) -> dict:
                 cd["EPCI"]            = epci_commune(c)
                 cd["Nom_EPCI"]        = nom_epci(epci_commune(c))
                 dd["COMMUNES"].append(cd)
-                # d[str(c)] = cd
     if (filename):
         save_file(to_json(france, indent=4),  filename)
     report_france[str(region)] = france
@@ -2466,13 +2552,13 @@ class TestConsommation(unittest.TestCase):
 
     def testSaintTropez(self):
         print_yellow("> Saint-Tropez")
-        ds = report_commune("83990", force=False)
+        ds = report_commune(code_postal="83990", force=False)
         self.assertEqual(ds.get("NOM_COMMUNE"), "ST TROPEZ")
         print_yellow("< Saint-Tropez")
 
     def testMougins(self):
         print_yellow("> Mougins")
-        ds = report_commune("06250", force=False)
+        ds = report_commune(code_postal="06250", force=True)
         self.assertEqual(ds.get("NOM_COMMUNE"), "MOUGINS")
         print_yellow("< Mougins")
 
@@ -2485,7 +2571,7 @@ class TestConsommation(unittest.TestCase):
         global DISPLAY_HTML
         DISPLAY_HTML = True
         print_yellow("> Cannes")
-        ds = report_commune("06400", force=False)
+        ds = report_commune(code_postal="06400", force=False)
         self.assertEqual(ds.get("NOM_COMMUNE"), "CANNES")
         print_yellow("< Cannes")
 
@@ -2519,7 +2605,7 @@ class TestConsommation(unittest.TestCase):
         print_yellow("< Region Provence Alpes Cote d'Azur")
 
     def test_report_region_dict(self):
-        all = report_region_dict("93", filename=regions_file)
+        all = report_region_dict("93", filename=france_file, force=True)
         print_blue(to_json(all, indent=4))
 
     def test_render_index(self):
@@ -2619,7 +2705,20 @@ class TestConsommation(unittest.TestCase):
         ecpi = epci_commune("06085")
         print(str(ecpi))
         self.assertEqual("200039915", ecpi)
-
+        lat, long = get_gps_insee("06085")
+        print(str(lat))
+        print(str(long))
+        self.assertEqual("43.5961410556", lat)
+        self.assertEqual("7.00129444919", long)
+        lat = get_gps_lat_insee("06085")
+        print(str(lat))
+        self.assertEqual("43.5961410556", lat)
+        long = get_gps_long_insee("06085")
+        print(str(long))
+        self.assertEqual("7.00129444919", long)
+        long = get_gps_long_insee("06222085")
+        print(str(long))
+        self.assertEqual("", long)
 
     def testCalc(self):
         self.assertEqual("0",    round0str(0,   rounding=0))
@@ -2671,6 +2770,7 @@ CODE_REGION        = None
 DEBUG              = False
 WITH_COMMUNES      = False
 LIST_COMMUNE       = False
+DATA_ONLY          = False
 
 
 def read_command_line_args(argv):
@@ -2680,25 +2780,25 @@ def read_command_line_args(argv):
     # print_yellow("Command Line Arguments : " + str(argv))
 
     usage = """
-    Usage: -f -a -b -l -c <commune_code> -e <epci_code> -d <dept_code> -r <region_code>   
-           --list    : List for all communes/epci/dept in Territory       
-           --commune : Report for Code INSEE / Postal                 
-           --ecpi    : Report for ECPI                                
-           --dept    : Report for Departement                         
-           --region  : Report for Region                              
-           --all     : Report for all communes in Territory           
-           --force   : Report reading source data (cache ignored)     
-           --browse  : Start Browser on generated report            
-           --cxlsx     <ConfigurationFile.xlsx> : Use Configuration File  
-           --rhtml     <ReportTemplate.html>    : Use ReportTemplate      
-           --clean   : Delete Report files      
+    Usage: -f -a -n -b -l -c <commune_code> -e <epci_code> -d <dept_code> -r <region_code>   
+           -l --list    : List for all communes/epci/dept in Territory       
+           -c --commune : Report for Code INSEE / Postal                 
+           -e --ecpi    : Report for ECPI                                
+           -d --dept    : Report for Departement                         
+           -r --region  : Report for Region                              
+           -a --all     : Report for all communes in Territory           
+           -n --data    : No report - Generate only data           
+           -f --force   : Report reading source data (cache ignored)     
+           --browse     : Start Browser on generated report            
+           --cxlsx        <ConfigurationFile.xlsx> : Use Configuration File  
+           --rhtml        <ReportTemplate.html>    : Use ReportTemplate      
+           --clean      : Delete Report files      
     """
 
     try:
-        opts, args = getopt.getopt(argv, "halbfc:e:d:r:", [ "help", "list", "commune=", "epci=", "dep=", "reg=", "no_debug" ])
+        opts, args = getopt.getopt(argv, "hanlbfc:e:d:r:", ["help", "list", "data" , "commune=", "epci=", "dep=", "reg=", "no_debug"])
     except getopt.GetoptError:
         print(usage)
-        raise
         sys.exit(2)
     for opt, arg in opts:
         if opt in ("-h", "--help"):
@@ -2715,6 +2815,9 @@ def read_command_line_args(argv):
             continue
         elif opt in ("-a", "-A", "-all", "-All", "-ALL"):
             WITH_COMMUNES = True
+            continue
+        elif opt in ("-n", "-N", "-data", "-Data", "-DATA"):
+            DATA_ONLY = True
             continue
         elif opt in ("-b", "--browse"):
             DISPLAY_HTML = True
@@ -2744,7 +2847,7 @@ def read_command_line_args(argv):
         elif opt in ("-c", "--commune"):
             CODE_COMMUNE = arg
             print_yellow("> Commune "+str(CODE_COMMUNE))
-            report_commune(CODE_COMMUNE, force=FORCE, with_communes=WITH_COMMUNES)
+            report_commune(code_insee=CODE_COMMUNE, force=FORCE, data_only=DATA_ONLY)
             print_yellow("< Commune "+str(CODE_COMMUNE))
             quit()
         elif opt in ("-e", "--epci"):
@@ -2753,7 +2856,7 @@ def read_command_line_args(argv):
                 print_commune(communes_epci(CODE_EPCI))
             else:
                 print_yellow("> EPCI " + str(CODE_EPCI))
-                report_epci(CODE_EPCI, force=FORCE, with_communes=WITH_COMMUNES)
+                report_epci(CODE_EPCI, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY)
                 print_yellow("< EPCI " + str(CODE_EPCI))
                 quit()
         elif opt in ("-d", "--dept"):
@@ -2764,7 +2867,7 @@ def read_command_line_args(argv):
                 quit()
             else:
                 print_yellow("> Departement " + str(CODE_DEPT))
-                report_dept(CODE_DEPT, force=FORCE, with_communes=WITH_COMMUNES)
+                report_dept(CODE_DEPT, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY)
                 print_yellow("< Departement " + str(CODE_DEPT))
                 quit()
         elif opt in ("-r", "--reg"):
@@ -2776,7 +2879,7 @@ def read_command_line_args(argv):
                 quit()
             else:
                 print_yellow("> Region " + str(CODE_REGION))
-                report_region(CODE_REGION, force=FORCE, with_communes=WITH_COMMUNES)
+                report_region(CODE_REGION, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY)
                 print_yellow("< Region " + str(CODE_REGION))
                 quit()
 
@@ -2791,4 +2894,3 @@ if __name__ == '__main__':
     print_yellow("Consommation Fonciere - Test Suite > " + __name__)
     load_min_data()
     unittest.main()
-
