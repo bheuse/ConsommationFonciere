@@ -1422,7 +1422,7 @@ class DataStore():
                         data=log_commences1721['NB_LGT_TOT_CREES'].sum() + log_termines1721['NB_LGT_TOT_CREES'].sum())
         self.add_metric(key="NB_LGT_TX_REALISATION", meta="Taux de Logements Commences",
                         source=source_proj,  mode=mode_custom,  type="TAUX",
-                        data=0 if self.get("NB_LGT_TOT_CREES") == 0 else self.get("NB_LGT_TOT_COMMENCES") / self.get("NB_LGT_TOT_CREES"))
+                        data=(0 if self.get("NB_LGT_TOT_CREES") == 0 else self.get("NB_LGT_TOT_COMMENCES") / self.get("NB_LGT_TOT_CREES")))
         log_renouv = com_sitadel.loc[com_sitadel['NATURE_PROJET'] == 2]
         self.add_metric(key="NB_LGT_RENOUVELLEMENT", meta="Logements en Renouvellement",
                         source=source_proj,  mode=mode_sum, type="INT",
@@ -1594,13 +1594,13 @@ class DataStore():
                       data=(round(self["NB_LGT_PRET_LOC_SOCIAL_1316"]   + self["NB_LGT_PRET_LOC_SOCIAL_1721"])))
         self.add_metric(key="TX_LGT_PRET_LOC_SOCIAL_1321", meta="Taux de Construction de LS entre 2013 et 2020  (8 ans)",
                       source=source_calc,  mode=mode_custom, type="TAUX",
-                      data=self["NB_LGT_PRET_LOC_SOCIAL_1321"] / self["NB_LGT_TOT_COMMENCES_1321"] + sys.float_info.epsilon)
+                      data=(0 if (self["NB_LGT_TOT_COMMENCES_1321"] == 0) else self["NB_LGT_PRET_LOC_SOCIAL_1321"] / self["NB_LGT_TOT_COMMENCES_1321"]))
         self.add_metric(key="TX_LGT_PRET_LOC_SOCIAL_1316", meta="Taux de Construction de LS entre 2013 et 2016  (8 ans)",
                       source=source_calc,  mode=mode_custom, type="TAUX",
-                      data=(round(self["NB_LGT_PRET_LOC_SOCIAL_1316"] / self["NB_LGT_TOT_COMMENCES_1316"] + sys.float_info.epsilon, 4)))
+                      data=(0 if (self["NB_LGT_TOT_COMMENCES_1316"] == 0) else round(self["NB_LGT_PRET_LOC_SOCIAL_1316"] / self["NB_LGT_TOT_COMMENCES_1316"], 4)))
         self.add_metric(key="TX_LGT_PRET_LOC_SOCIAL_1721", meta="Taux de Construction de LS  entre 2017 et 2021  (8 ans)",
                       source=source_calc,  mode=mode_custom, type="TAUX",
-                      data=(round(self["NB_LGT_PRET_LOC_SOCIAL_1721"] / self["NB_LGT_TOT_COMMENCES_1721"] + sys.float_info.epsilon, 4)))
+                      data=(0 if (self["NB_LGT_TOT_COMMENCES_1721"] == 0) else round(self["NB_LGT_PRET_LOC_SOCIAL_1721"] / self["NB_LGT_TOT_COMMENCES_1721"], 4)))
         self.add_metric(key="LOG_NON_VENDUS_1320", meta="Logements Construits non encore vendus en 2020",
                       source=source_calc,  mode=mode_sum, type="INT",
                       data=(self["NB_LGT_TOT_COMMENCES_1321"] - self["NOUV_LOG_1320"]))
