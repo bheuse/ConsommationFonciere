@@ -13,6 +13,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-chartjs/3.5.1/vue-chartjs.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-purple.css">
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-teal.css">
@@ -23,7 +24,23 @@
           content="Statistiques et Projections de Consommation Fonciere des PLUs et SCoTs dans toute la France.">
     <meta property="og:image" content="https://vigibati.fr/static/img/social-preview.jpg">
     <link rel="shortcut icon" type="image/png" href="https://vigibati.fr/static/img/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+    .btn {
+      background-color: Teal;
+      border: none;
+      color: white;
+      padding: 10px 30px;
+      cursor: pointer;
+      font-size: 18px;
+    }
 
+    /* Darker background on mouse-over */
+    .btn:hover {
+      background-color: Emerald;
+      color: white;
+    }
+    </style>
     <style>
     option:hover{background-color:yellow;}
     </style>
@@ -688,6 +705,20 @@ function openTab(evt, cityName) {
     <h2>Donnees Brutes</h2>
     <div v-if="this.data_c != null">
         <p><a target="_blank" :href="ds.DOSSIER_INSEE">Dossier Insee Complet {{ nom }}</a></p>
+        <br>
+        <div class="w3-cell-row">
+            <div class="w3-container w3-cell w3-mobile">
+                <p><a class="btn w3-btn fa fa-download" :href="ds.DOWNLOAD_CSV"> Download CSV</a></p>
+            </div>
+            <div class="w3-container w3-cell w3-mobile">
+                <p><a class="btn w3-btn fa fa-download" :href="ds.DOWNLOAD_XLSX"> Download XLSX</a></p>
+            </div>
+            <div class="w3-container w3-cell w3-mobile">
+                <p><a class="btn w3-btn fa fa-download" :href="ds.DOWNLOAD_JSON"> Download JSON</a></p>
+            </div>
+        </div>
+        </div>
+        <br>
         <table class="w3-table-all w3-hoverable w3-card-4" style="width: 100%;">
             <tr class="w3-teal">
                 <th                        style="width: 10%;">Cle de Donnee</th>
@@ -701,7 +732,6 @@ function openTab(evt, cityName) {
             </tr>
         </table>
     </div>
-</div>
 <div id="Sources"           class="w3-container city w3-animate-opacity">
     <h2>Sources</h2>
     <div v-if="this.data_c != null">

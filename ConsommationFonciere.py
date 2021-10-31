@@ -939,6 +939,8 @@ class DataStore():
     def save_data(self):
         """ Save raw DataStore data in various formats (xlsx, json, csv)  """
         # DF TO EXCEL
+        if ("__builtins__" in self.data_frame.columns):
+            self.data_frame.drop("__builtins__", axis=1,inplace=True)
         writer = pd.ExcelWriter(output_dir + self.get_fullname() + ".xlsx")
         self.data_frame.to_excel(writer, "Data")
         pivot = self.data_frame.transpose()
@@ -954,16 +956,8 @@ class DataStore():
         with open(output_dir + self.get_fullname() + "_d.json", 'w') as f:
             global_context["JSON_DIAGNOSTICS"] = " { \"Diagnostic\" : "+to_json(jsonc.loads(jsonc.dumps(self.diagnostics)), indent=4) + "}"
             f.write(global_context["JSON_DIAGNOSTICS"])
-        ## _c.json
-        with open(output_dir + self.get_fullname() + "_c.json", 'w') as f:
-            data_c = self.data_frame.fillna('').to_dict(orient='index')
-            data_c["Diagnostics"] = jsonc.loads(jsonc.dumps(self.diagnostics))
-            global_context["JSON_DATA_SET_C"] = self.data_frame.to_json(orient='index')
-            # global_context["JSON_DATA_SET_C"] = to_json(jsonc.loads(self.data_frame.to_json(orient='index')), indent=4)
-            # f.write(global_context["JSON_DATA_SET_C"])
-            f.write(to_json(data_c, indent=4))
-        all = {}
         ## _m.json
+        all = {}
         for name, values in self.data_frame.iteritems():
             all[name] = {}
             for name2, value2 in values.iteritems():
@@ -971,6 +965,15 @@ class DataStore():
         with open(output_dir + self.get_fullname() + "_m.json", 'w') as f:
             global_context["JSON_DATA_SET_M"] = to_json(all, indent=4)
             f.write(global_context["JSON_DATA_SET_M"])
+        ## _c.json
+        with open(output_dir + self.get_fullname() + "_c.json", 'w') as f:
+            data_c = self.data_frame.fillna('').to_dict(orient='index')
+            data_c["Data"] = all
+            data_c["Diagnostics"] = self.diagnostics
+            global_context["JSON_DATA_SET_C"] = self.data_frame.to_dict(orient='index')
+            # global_context["JSON_DATA_SET_C"] = to_json(jsonc.loads(self.data_frame.to_json(orient='index')), indent=4)
+            # f.write(global_context["JSON_DATA_SET_C"])
+            f.write(to_json(data_c, indent=4))
 
 
     def load_data(self):
@@ -1086,10 +1089,12 @@ class DataStore():
         print_green("Collecte Donnees : " + str(code_postal) + " : " + commune + " (Code INSEE : " + code_insee + ")")
 
         # Donnees Commune
-        self.add_metric("CODE_INSEE",     "Code INSEE Commune",        source=source_codes,    mode=mode_count, data=code_insee,       type="STR")
-        self.add_metric("CODE_POSTAL",    "Code Postal Commune",       source=source_codes,    mode=mode_equal, data=code_postal,      type="STR")
-        self.add_metric("NOM_COMMUNE",    "Nom de Commune",            source=source_codes,    mode=mode_count, data=commune,          type="STR")
-        self.add_metric("LIBELLE",        "Libelle",                   source=source_codes,    mode=mode_count, data=commune.title(),  type="STR")
+        self.add_metric("CODE_INSEE",     "Code INSEE Commune",        source=source_codes,    mode=mode_count,  data=code_insee,          type="STR")
+        self.add_metric("CODE_POSTAL",    "Code Postal Commune",       source=source_codes,    mode=mode_equal,  data=code_postal,         type="STR")
+        self.add_metric("NOM_COMMUNE",    "Nom de Commune",            source=source_codes,    mode=mode_count,  data=commune,             type="STR")
+        self.add_metric("LIBELLE",        "Libelle",                   source=source_codes,    mode=mode_count,  data=commune.title(),     type="STR")
+        self.add_metric("BASE_NAME",      "Nom Unique",                source=source_codes,    mode=mode_custom, data=self.get_fullname(), type="STR")
+
 
         # Donnees EPCI
         self.add_metric("EPCI",      "Code EPCI - Métropole",          source=source_interco,  mode=mode_count, data=intercoDossier["Unnamed: 2"][code_insee],       type="STR")
@@ -1660,6 +1665,7 @@ class DataStore():
                 quit()
 
         if (self.store_type == "COMMUNE"):
+            total_dict["BASE_NAME"]     = self.get_fullname()
             total_dict["LIBELLE"]       = self.store_name
             total_dict["TYPE_EPCI"]     = "COMMUNE"
             total_dict["CODE_POSTAL"]   = get_code_postal(self.store_code)
@@ -1668,6 +1674,7 @@ class DataStore():
             global_context["URL_SOURCE_DOSSIER"] = url_dossier
 
         if (self.store_type == "EPCI"):
+            total_dict["BASE_NAME"]     = self.get_fullname()
             total_dict["LIBELLE"]       = self.store_name
             total_dict["CODE_INSEE"]    = self.store_code
             total_dict["CODE_POSTAL"]   = "EPCI"
@@ -1685,6 +1692,7 @@ class DataStore():
             global_context["URL_SOURCE_DOSSIER"] = url_dossier
 
         if (self.store_type == "DEPT"):
+            total_dict["BASE_NAME"]     = self.get_fullname()
             total_dict["LIBELLE"]       = self.store_name
             total_dict["CODE_INSEE"]    = self.store_code
             total_dict["CODE_POSTAL"]   = "DEPT"
@@ -1702,6 +1710,7 @@ class DataStore():
             global_context["URL_SOURCE_DOSSIER"] = url_dossier
 
         if (self.store_type == "REGION"):
+            total_dict["BASE_NAME"]     = self.get_fullname()
             total_dict["LIBELLE"]       = self.store_name
             total_dict["CODE_INSEE"]    = self.store_code
             total_dict["CODE_POSTAL"]   = "REGION"
@@ -1761,7 +1770,7 @@ class DataStore():
             else:
                 try:
                     mode = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', mode)    # Replace ${VAR} by VAR
-                    total_dict[key] = eval(mode, self.get_row_as_dict(), globals())
+                    total_dict[key] =eval(mode, total_dict, globals())
                 except Exception as e:
                     error = "Error evaluating metrique total mode : " + key + " + eval : " + mode + " - Error : " + str(e)
                     print_red(error)
