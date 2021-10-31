@@ -872,10 +872,10 @@ class DataStore():
         self.metric_list.append({"key" : key , "meta" : meta , "source" : source , "type" : type, "mode" : mode, "expr" : expr})
         return self.add_data(key, index, data)
 
-    def add_diagnostic(self, _key:str, _description: str, test: str, messageV: str, data : bool, messageF: str, cat:str):
+    def add_diagnostic(self, _key:str, _description: str, test: str, messageV: str, data : bool, messageF: str, cat:str, type: str ):
         """ Add a diagnostic to the data store """
-        diagnostic = {"key" : _key , "description" : _description , "test" : test, "value" : data, "categorie" : cat,
-                      "message" : messageV,  "messageSiFaux" : messageF, "messageSiVrai" : messageV  }
+        diagnostic = {"key"  : _key , "description" : _description , "test" : test, "value" : data, "categorie" : cat,
+                      "type" : type,  "messageSiFaux" : messageF, "messageSiVrai" : messageV  }
         self.diagnostics.append(diagnostic)
         return diagnostic
 
@@ -1796,17 +1796,26 @@ class DataStore():
             _messageV    = metric["MessageSiVrai"]
             _messageF    = metric["MessageSiFaux"]
             _categorie   = metric["Categorie"]
+            _type        = metric["Type"]
             if (str(_key) == "nan") : continue          # Ignore empty lines
             if (str(_key).startswith("#")) : continue   # Ignore key starting with #
             # print_grey("Evaluating Diagnostic " + str(_line) + ": " + str(_key) + " : " + str(_test))
             _data = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _test)    # Replace ${VAR} by VAR
             try:
                 value = bool(eval(_test, self.get_row_as_dict(), {**globals(), **locals()}))
-                self.add_diagnostic(_key, _description, test=_test, messageV=_messageV, data=value, messageF=_messageF, cat=_categorie)
+                if (str(_messageV) == "nan") : _messageV = ""          # Empty Line
+                if (str(_messageV).startswith("\"")):
+                    _messageV = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _messageV)  # Replace ${VAR} by VAR
+                    _messageV = str(eval(_messageV, self.get_row_as_dict(), {**globals(), **locals()}))
+                if (str(_messageF) == "nan") : _messageF = ""          # Empty Line
+                if (str(_messageF).startswith("\"")):
+                    _messageF = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _messageF)    # Replace ${VAR} by VAR
+                    _messageF = str(eval(_messageF, self.get_row_as_dict(), {**globals(), **locals()}))
+                self.add_diagnostic(_key, _description, test=_test, messageV=_messageV, data=value, messageF=_messageF, cat=_categorie, type=_type)
             except Exception as e :
                 error = "Error evaluating Diagnostic : " + _key + " + eval : " + _test + " - Error : " + str(e)
                 print_red(error)
-                self.add_diagnostic(_key, _description, test=_test, messageV=error, data=value, messageF=error, cat=_categorie)
+                self.add_diagnostic(_key, _description, test=_test, messageV=error, data=value, messageF=error, cat=_categorie, type=_type)
         return self
 
     def report(self, force=True, data_only: bool = False):
@@ -1964,9 +1973,9 @@ def report_diagnostic(ds: DataStore):
     data_html = "<h3>" + "Diagnostic des Donnees" + "</h3>"
     for diagnostic in ds.diagnostics:
         if (diagnostic["value"]==True):
-            data_html = data_html + "<p style=color:green;>" + " OK  : "      + str(diagnostic["message"]) + "</p>"
+            data_html = data_html + "<p style=color:green;>" + " OK  : "      + str(diagnostic["messageSiVrai"]) + "</p>"
         else:
-            data_html = data_html + "<p style=color:red;>"   + " Problem  : " + str(diagnostic["message"]) + "</p>"
+            data_html = data_html + "<p style=color:red;>"   + " Problem  : " + str(diagnostic["messageSiFaux"]) + "</p>"
     return data_html
 
 
