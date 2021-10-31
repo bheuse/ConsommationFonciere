@@ -2,15 +2,17 @@
 <!-- saved from url=(0127)http://localhost:63342/ConsommationFonciere/ConsommationFonciere.html?_ijt=s3otpshjr8fq8t12u01p0l2ck4&_ij_reload=RELOAD_ON_SAVE -->
 <html lang="fr">
 <head>
+    <title>Consommation Fonciere</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width," initial-scale="1.0">
-    <title>Consommation Fonciere</title>
+    <meta name="referrer" content="no-referrer">
+    <meta property="og:title" content="VigiFoncier.fr">
+    <meta property="og:description"
+          content="Statistiques et Projections de Consommation Fonciere pour PLUs et SCoTs dans toute la France.">
+    <meta property="og:image" content="https://vigibati.fr/static/img/social-preview.jpg">
+    <link rel="shortcut icon" type="image/png" href="https://vigibati.fr/static/img/favicon.png">
     <script src="https://unpkg.com/vue@next"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
-    <script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-chartjs/3.5.1/vue-chartjs.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -18,12 +20,6 @@
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-purple.css">
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-teal.css">
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-flat.css">
-    <meta name="referrer" content="no-referrer">
-    <meta property="og:title" content="VigiFoncier.fr">
-    <meta property="og:description"
-          content="Statistiques et Projections de Consommation Fonciere des PLUs et SCoTs dans toute la France.">
-    <meta property="og:image" content="https://vigibati.fr/static/img/social-preview.jpg">
-    <link rel="shortcut icon" type="image/png" href="https://vigibati.fr/static/img/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
     .btn {
@@ -41,13 +37,16 @@
       color: white;
     }
     </style>
-    <style>
-    option:hover{background-color:yellow;}
-    </style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+<script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
 
 </head>
 
 <body onload="onPageLoaded()">
+
 
 <div id="app">
 
@@ -88,6 +87,7 @@
 
 <hr>
 
+
 <!-- Departements de Paca Seulement ... -->
 <h2 class="w3-center">Region PACA</h2>
 <div><img class="w3-center"
@@ -105,7 +105,7 @@
             <p class="w3-padding-8 w3-right-align"> Commune : </p>
         </div>
         <div class="w3-container w3-teal w3-cell w3-mobile w3-cell-middle w3-threequarter w3-padding-16">
-        <select class="w3-theme-dark w3-select w3-hover-green" searchable="w3-select Rechercher ici ..." @change="selectDept($event); this.size=1; this.blur();" onblur='this.size=0;' autofocus>
+        <select class="w3-theme-dark w3-select w3-hover-green" searchable="w3-select Rechercher ici ..." @change="selectDept($event);"  autofocus>
             <option disabled="" value="" disabled selected> Selectionner un Departement</option>
             <div v-if="this.data_c !== null" >
                 <option v-for='item in this.depts' :content="item.nom" >{{ item.nom }}</option>
@@ -168,11 +168,14 @@ function openTab(evt, cityName) {
 <button class="w3-bar-item w3-button testbtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'Sources')">        Sources </button>
 <button class="w3-bar-item w3-button testbtn w3-padding-16 w3-flat-wisteria"  onclick="openTab(event,'DonneesBrutes')"> Donnees Brutes </button>
 <button class="w3-bar-item w3-button testbtn w3-padding-16 w3-grey" onclick="openTab(event,'Debug')">                   Debug </button>
+<button class="w3-bar-item w3-button testbtn w3-padding-16 w3-grey" onclick="openTab(event,'Graphiques')">                   Graphiques </button>
 </div>
 
 <div id="Logements"         class="w3-container city w3-animate-opacity">
     <h2>Logements</h2>
     <div v-if="this.data_c != null">
+         <img :src="ds.GRAPHIQUE_LOGEMENTS"           alt="Logements" >
+         <br>
          <table class="w3-table-all w3-hoverable w3-card-4">
                     <tbody>
                     <tr class="w3-teal">
@@ -849,6 +852,97 @@ function openTab(evt, cityName) {
     -->
     </div>
 </div>
+<div id="Graphiques"        class="w3-container city w3-animate-opacity">
+    <h2>Graphiques</h2>
+    <div v-if="this.data_c != null">
+        <div class="w3-container w3-section w3-teal"><h2 class="w3-teal w3-padding-16">Logements</h2></div>
+        <img :src="ds.GRAPHIQUE_LOGEMENTS"           alt="Logements" >
+        <div class="w3-container w3-section w3-teal"><h2 class="w3-teal w3-padding-16">Population</h2></div>
+        <img :src="ds.GRAPHIQUE_POPULATION"          alt="Population" >
+        <div class="w3-container w3-section w3-teal"><h2 class="w3-teal w3-padding-16">Taille des Menages</h2></div>
+        <img :src="ds.GRAPHIQUE_TAILLE_DES_MENAGES"  alt="Taille des Menages" >
+
+            <div >
+            <canvas id="line-chart" width="200" height="50"></canvas>
+            <script>
+              new Chart(document.getElementById("line-chart"), {
+              type: 'line',
+              data: {
+                labels: [1500,1600,1700,1750,1800,1850,1900,1950,1999,2050],
+                datasets: [{
+                    data: [86,114,106,106,107,111,133,221,783,2478],
+                    label: "Africa",
+                    borderColor: "#3e95cd",
+                    fill: false
+                  }, {
+                    data: [282,350,411,502,635,809,947,1402,3700,5267],
+                    label: "Asia",
+                    borderColor: "#8e5ea2",
+                    fill: false
+                  }, {
+                    data: [168,170,178,190,203,276,408,547,675,734],
+                    label: "Europe",
+                    borderColor: "#3cba9f",
+                    fill: false
+                  }, {
+                    data: [40,20,10,16,24,38,74,167,508,784],
+                    label: "Latin America",
+                    borderColor: "#e8c3b9",
+                    fill: false
+                  }, {
+                    data: [6,3,2,2,7,26,82,172,312,433],
+                    label: "North America",
+                    borderColor: "#c45850",
+                    fill: false
+                  }
+                ]
+              },
+              options: {
+                title: {
+                  display: true,
+                  text: 'World population per region (in millions)'
+                }
+              }
+            });
+            </script>
+            </div>
+
+
+    </div>
+</div>
+
+
+     <!--
+    <div v-for="(item, key) in this.data_m" :key="key">
+      <p>{{ key }}</p>
+      <p> Semantique : {{ item.meta  }}</p>
+      <p> Type : {{ item.type  }}</p>
+      <p> Mode : {{ item.mode  }}</p>
+      <p> Expression : {{ item.expr  }}</p>
+      <p> Valeur : {{ item.total  }}</p>
+    </div>
+    --><!--
+    <table class="w3-table-all w3-hoverable w3-card-4" style="width:100%">
+    <tr class="w3-teal">
+      <th style="width:5%" >Cle de Donnee</th>
+      <th style="width:5%" class="w3-right-align" >Type</th>
+      <th style="width:5%" class="w3-right-align" >Mode</th>
+      <th style="width:15%" class="w3-right-align">Semantique</th>
+      <th style="width:15%" class="w3-left-align" >Expression</th>
+      <th style="width:55%" class="w3-left-align" >Data</th>
+    </tr>
+    <tr v-for="(item, key) in this.data_m" :key="key">
+      <td>{{ key }}</td>
+      <td class="w3-right-align">{{ item.type  }}</td>
+      <td class="w3-right-align">{{ item.mode  }}</td>
+      <td class="w3-right-align">{{ item.meta  }}</td>
+      <td style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"  class="w3-left-align">{{ item.expr }}</td>
+      <td style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"  class="w3-left-align">{{ item.total }}</td>
+    </tr>
+    </table>
+    -->
+    </div>
+</div>
 
 </div>
 
@@ -928,18 +1022,7 @@ function openTab(evt, cityName) {
 
 <script src="ConsommationFonciere.js"></script>
 
-<script>
-import { Line } from 'vue-chartjs'
 
-export default {
-  extends: Line,
-  props: ['chartdata', 'options'],
-  mounted () {
-    this.renderChart(this.chartdata, this.options)
-  }
-}
-
-</script>
 
 </footer>
 </div>

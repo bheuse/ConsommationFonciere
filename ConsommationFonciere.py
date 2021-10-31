@@ -1407,9 +1407,15 @@ class DataStore():
         com_sitadel1 = sitadel1316.loc[sitadel1316['COMM'] == str(code_insee)]
         com_sitadel2 = sitadel1721.loc[sitadel1721['COMM'] == str(code_insee)]
         com_sitadel  = pd.concat([com_sitadel1, com_sitadel2])
-        self.add_metric(key="NB_LGT_TOT_CREES", meta="Logements Autorises",
+        self.add_metric(key="NB_LGT_TOT_CREES", meta="Logements Autorises 2013 2021",
                         source=source_proj,  mode=mode_sum, type="INT",
                         data=com_sitadel['NB_LGT_TOT_CREES'].sum())
+        self.add_metric(key="NB_LGT_TOT_CREES_1316", meta="Logements Autorises 2013 2016",
+                        source=source_proj,  mode=mode_sum, type="INT",
+                        data=com_sitadel1['NB_LGT_TOT_CREES'].sum())
+        self.add_metric(key="NB_LGT_TOT_CREES_1721", meta="Logements Autorises 2017 2021",
+                        source=source_proj,  mode=mode_sum, type="INT",
+                        data=com_sitadel2['NB_LGT_TOT_CREES'].sum())
         log_commences = com_sitadel.loc[com_sitadel['Etat_DAU'] == 5]
         log_termines  = com_sitadel.loc[com_sitadel['Etat_DAU'] == 6]
         self.add_metric(key="NB_LGT_TOT_COMMENCES", meta="Logements Commences",
@@ -1428,6 +1434,12 @@ class DataStore():
         self.add_metric(key="NB_LGT_TX_REALISATION", meta="Taux de Logements Commences",
                         source=source_proj,  mode=mode_custom,  type="TAUX",
                         data=(0 if self.get("NB_LGT_TOT_CREES") == 0 else self.get("NB_LGT_TOT_COMMENCES") / self.get("NB_LGT_TOT_CREES")))
+        self.add_metric(key="NB_LGT_TX_REALISATION_1316", meta="Taux de Logements Commences entre 2013 et 2016",
+                        source=source_proj,  mode=mode_custom,  type="TAUX",
+                        data=(0 if self.get("NB_LGT_TOT_CREES_1316") == 0 else self.get("NB_LGT_TOT_COMMENCES_1316") / self.get("NB_LGT_TOT_CREES_1316")))
+        self.add_metric(key="NB_LGT_TX_REALISATION_1721", meta="Taux de Logements Commences entre 2017 et 2021",
+                        source=source_proj,  mode=mode_custom,  type="TAUX",
+                        data=(0 if self.get("NB_LGT_TOT_CREES_1721") == 0 else self.get("NB_LGT_TOT_COMMENCES_1721") / self.get("NB_LGT_TOT_CREES_1721")))
         log_renouv = com_sitadel.loc[com_sitadel['NATURE_PROJET'] == 2]
         self.add_metric(key="NB_LGT_RENOUVELLEMENT", meta="Logements en Renouvellement",
                         source=source_proj,  mode=mode_sum, type="INT",
@@ -2177,6 +2189,9 @@ def plot_logements(ds: DataStore):
                         'y_values': (data_dict["NOUV_LOG_0813"],
                                      data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_TOT_COMMENCES_1316"],  # Logements Construits
                                      data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_TOT_COMMENCES_1316"] + data_dict["NB_LGT_TOT_COMMENCES_1721"])})
+    df31 = pd.DataFrame({'x_values': (2020, 2021),
+                        'y_values': (data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_TOT_COMMENCES_1316"] + data_dict["NB_LGT_TOT_COMMENCES_1721"],
+                                     data_dict["NOUV_LOG_0813"] + data_dict["PROJ_LOG_REALISES_2021"])})  # Projection de Logements Construits
     df4 = pd.DataFrame({'x_values': (2013, 2016, 2020),
                         'y_values': (data_dict["NOUV_LOG_0813"],
                                      data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_PRET_LOC_SOCIAL_1316"],  # Logements Sociaux Construits
@@ -2194,6 +2209,8 @@ def plot_logements(ds: DataStore):
              linestyle='dotted', linewidth=3, label="Indeterminees (Principales / Secondaires / Non-Vendues)")
     plt.plot('x_values', 'y_values', data=df3, color='black',
              linestyle='-', linewidth=3, label="Logements Construits")
+    plt.plot('x_values', 'y_values', data=df31, color='black',
+             linestyle='dotted', linewidth=3, label="Projection Logements Construits")
     plt.plot('x_values', 'y_values', data=df4, color='grey',
              linestyle='--', linewidth=3, label="Logements Sociaux Construits")
 
@@ -2793,7 +2810,7 @@ DATA_ONLY          = False
 
 def read_command_line_args(argv):
     global DISPLAY_HTML, FORCE, DEBUG, WITH_COMMUNES, LIST_COMMUNE
-    global CONFIGURATION_FILE, TEMPLATE_FILE
+    global CONFIGURATION_FILE, TEMPLATE_FILE, DATA_ONLY
     global CODE_COMMUNE, CODE_EPCI, CODE_DEPT, CODE_REGION
     # print_yellow("Command Line Arguments : " + str(argv))
 

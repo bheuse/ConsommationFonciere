@@ -178,3 +178,4 @@ function onPageLoaded() {
   console.log(init_page);
   // alert("Page is loaded : " + init_page);
 }
+
