@@ -47,7 +47,7 @@ const vm = Vue.createApp({
             console.log("page_c2 : "+page_c2);
             this.data_c = null ;
             data_c2     = null ;
-            $.getJSON(page_c2, function(json) { data_c2 = json });  
+            $.getJSON(page_c2, function(json) { data_c2 = json ; console.log(data_c2) });
             this.data_c = data_c2;
             this.ds = this.data_c.total;
             console.log("> this.data_c : ")

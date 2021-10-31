@@ -956,7 +956,7 @@ class DataStore():
             f.write(global_context["JSON_DIAGNOSTICS"])
         ## _c.json
         with open(output_dir + self.get_fullname() + "_c.json", 'w') as f:
-            data_c = self.data_frame.to_dict(orient='index')
+            data_c = self.data_frame.fillna('').to_dict(orient='index')
             data_c["Diagnostics"] = jsonc.loads(jsonc.dumps(self.diagnostics))
             global_context["JSON_DATA_SET_C"] = self.data_frame.to_json(orient='index')
             # global_context["JSON_DATA_SET_C"] = to_json(jsonc.loads(self.data_frame.to_json(orient='index')), indent=4)
