@@ -153,8 +153,10 @@ function openTab(evt, cityName) {
 <button class="w3-bar-item w3-button testbtn w3-padding-16 w3-grey" onclick="openTab(event,'Debug')">                   Debug </button>
 </div>
 
-<div id="Logements"         class="w3-container city w3-animate-opacity"><h2>Logements</h2>
-            <div>
+<div id="Logements"         class="w3-container city w3-animate-opacity">
+    <h2>Logements</h2>
+    <div v-if="this.data_c != null">
+        <div>
                 <table class="w3-table-all w3-hoverable w3-card-4">
                     <tbody>
                     <tr class="w3-teal">
@@ -163,39 +165,39 @@ function openTab(evt, cityName) {
                     </tr>
                     <tr>
                         <td>Taux de Residences Secondaires en 2018</td>
-                        <td class="w3-right-align">19%</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.TX_RES_SEC_18 * 10000).toFixed(4)) ) / 100  }}%</td>
                     </tr>
                     <tr>
                         <td>Taux de Residences Vacantes en 2018</td>
-                        <td class="w3-right-align">5%</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.TX_RES_VAC_18 * 10000).toFixed(4)) ) / 100  }}%</td>
                     </tr>
                     <tr>
                         <td>Periode 2013 - 2020 : Exces en Logements</td>
-                        <td class="w3-right-align">940</td>
+                        <td class="w3-right-align">{{ds.EXCES_BESOINS_1320}}</td>
                     </tr>
                     <tr>
                         <td> - Besoins en logements :</td>
-                        <td class="w3-right-align">728</td>
+                        <td class="w3-right-align">{{ds.BESOINS_1320}}</td>
                     </tr>
                     <tr>
                         <td> - Logements Construits :</td>
-                        <td class="w3-right-align">1668</td>
+                        <td class="w3-right-align">{{ds.NB_LGT_TOT_COMMENCES_1321}}</td>
                     </tr>
                     <tr>
                         <td> - Exces de Logements Construits par rapport aux besoins :</td>
-                        <td class="w3-right-align">940</td>
+                        <td class="w3-right-align">{{ds.EXCES_BESOINS_1320}}</td>
                     </tr>
                     <tr>
                         <td> -&gt; Nouvelles Residences Secondaires :</td>
-                        <td class="w3-right-align">315</td>
+                        <td class="w3-right-align">{{ds.NOUV_RESSEC_1318}}</td>
                     </tr>
                     <tr>
                         <td> -&gt; Nouvelles Residences Vacantes :</td>
-                        <td class="w3-right-align">-49</td>
+                        <td class="w3-right-align">{{ds.NOUV_LOGVAC_1318}}</td>
                     </tr>
                     <tr>
                         <td> -&gt; Indetermines / Non-Vendus :</td>
-                        <td class="w3-right-align">674</td>
+                        <td class="w3-right-align">{{ds.LOG_NON_VENDUS_1320}}</td>
                     </tr>
                     <tr>
                         <td> Periode 2013 - 2021 :</td>
@@ -203,48 +205,48 @@ function openTab(evt, cityName) {
                     </tr>
                     <tr>
                         <td> - Logements Construits :</td>
-                        <td class="w3-right-align">1668</td>
+                        <td class="w3-right-align">{{ds.NB_LGT_TOT_COMMENCES_1321}}</td>
                     </tr>
                     <tr>
                         <td> - Logements Sociaux :</td>
-                        <td class="w3-right-align">541</td>
+                        <td class="w3-right-align">{{ds.NB_LGT_PRET_LOC_SOCIAL_1321}}</td>
                     </tr>
                     <tr>
                         <td> - Taux de Logements Sociaux Construits :</td>
-                        <td class="w3-right-align">32.43%</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.TX_LGT_PRET_LOC_SOCIAL_1321 * 10000).toFixed(4)) ) / 100  }}%</td>
                     </tr>
                     </tbody>
                 </table>
                 <br>
-                <div><!--v-if--></div>
-                <div><!--v-if--></div>
-                <div><!--v-if--></div>
-                <div><!--v-if--></div>
-                <div><!--v-if--></div>
-                <div><!--v-if--></div>
-                <div><!--v-if--></div>
-                <div>
-                    <div>
-                        <div>
-                            <div class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border"><p>LOG_VACANTS -
-                                LOG</p>
-                                <p>Logements Vacants</p>
-                                <p>Taux de Residences Vacantes - moins de 5%</p></div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <div>
-                            <div class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border"><p>LOG_SECONDAIRES
-                                - LOG</p>
-                                <p>Residences Secondaires</p>
-                                <p>Taux de Residences Secondaires - moins de 20%</p></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <div v-for='diag in this.data_c.Diagnostics' >
+                     <div v-if="diag.categorie == 'LOG'" >
+                         <h2>{{diag.key}}</h2>
+                         <p>{{diag.description}}</p>
+                         <p>{{diag.test}}</p>
+                         <p>{{diag.value}}</p>
+                         <p>{{diag.categorie}}</p>
+                         <p>{{diag.message}}</p>
+                         <p>{{diag.messageSiFaux}}</p>
+                         <p>{{diag.messageSiVrai}}</p>
+                         <div v-if='diag.value == true' >
+                            <div class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border">
+                                        <p>{{diag.key}} - {{diag.categorie}}</p>
+                                        <p>{{diag.description}}</p>
+                                        <p>{{diag.messageSiVrai}}</p>
+                            </div>
+                         </div>
+                         <div v-else >
+                            <div class="w3-panel w3-pale-red w3-bottombar w3-border-red w3-border">
+                                        <p>{{diag.key}} - {{diag.categorie}}</p>
+                                        <p>{{diag.description}}</p>
+                                        <p>{{diag.messageSiFaux}}</p>
+                            </div>
+                         </div>
+                     </div>
+               </div>
         </div>
+    </div>
+</div>
 <div id="Historique"        class="w3-container city w3-animate-opacity"><h2>Historique</h2>
             <div><p><a target="_blank" href="https://www.insee.fr/fr/statistiques/2011101?geo=COM-06085">Dossier Insee
                 Complet Mougins</a></p>
@@ -546,120 +548,35 @@ function openTab(evt, cityName) {
                 </div>
             </div>
         </div>
-<div id="Diagnostics"       class="w3-container city w3-animate-opacity"><h2>Diagnostics</h2>
-            <div>
-                <div>
-                    <div>
-                        <div class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border"><p>VALIDATE - TEST</p>
-                            <p>Test Diagnostic</p>
-                            <p>Test Diagnostic OK</p></div>
-                    </div>
+<div id="Diagnostics"       class="w3-container city w3-animate-opacity">
+<h2>Diagnostics</h2>
+<div v-if="this.data_c != null">
+    <div v-for='diag in this.data_c.Diagnostics' >
+             <h2>{{diag.key}}</h2>
+             <p>{{diag.description}}</p>
+             <p>{{diag.test}}</p>
+             <p>{{diag.value}}</p>
+             <p>{{diag.categorie}}</p>
+             <p>{{diag.message}}</p>
+             <p>{{diag.messageSiFaux}}</p>
+             <p>{{diag.messageSiVrai}}</p>
+             <div v-if='diag.value == true' >
+                <div class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border">
+                            <p>{{diag.key}} - {{diag.categorie}}</p>
+                            <p>{{diag.description}}</p>
+                            <p>{{diag.messageSiVrai}}</p>
                 </div>
-                <div>
-                    <div>
-                        <div class="w3-panel w3-pale-red w3-bottombar w3-border-red"><p>TEST2 - TEST</p>
-                            <p>Test2 Diagnostic2</p>
-                            <p>Test Diagnostic Failed</p></div>
-                    </div>
+             </div>
+             <div v-else >
+                <div class="w3-panel w3-pale-red w3-bottombar w3-border-red w3-border">
+                            <p>{{diag.key}} - {{diag.categorie}}</p>
+                            <p>{{diag.description}}</p>
+                            <p>{{diag.messageSiFaux}}</p>
                 </div>
-                <div>
-                    <div>
-                        <div class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border"><p>TEST4 - TEST</p>
-                            <p>Test2 Diagnostic4</p>
-                            <p>C'est 11</p></div>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <div class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border"><p>TEST_REG - TEST</p>
-                            <p>Test Region</p>
-                            <p>En Paca</p></div>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <div class="w3-panel w3-pale-red w3-bottombar w3-border-red"><p>TEST_POP - TEST</p>
-                            <p>Test Population</p>
-                            <p>Commune de moins de 20000 Habitants</p></div>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <div class="w3-panel w3-pale-red w3-bottombar w3-border-red"><p>CARENCE_SRU - SRU</p>
-                            <p>Carence SRU</p>
-                            <p>Commune en Carence SRU</p></div>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <div class="w3-panel w3-pale-red w3-bottombar w3-border-red"><p>ARTIFICIALISATION - ART</p>
-                            <p>Artificialisation ces 10 dernieres annees</p>
-                            <p>Plus de 1% d'Artificialisation en 10 ans</p></div>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <div class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border"><p>LOG_VACANTS -
-                            LOG</p>
-                            <p>Logements Vacants</p>
-                            <p>Taux de Residences Vacantes - moins de 5%</p></div>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <div class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border"><p>LOG_SECONDAIRES -
-                            LOG</p>
-                            <p>Residences Secondaires</p>
-                            <p>Taux de Residences Secondaires - moins de 20%</p></div>
-                    </div>
-                </div>
-                <table class="w3-table-all w3-hoverable w3-card-4">
-                    <tbody>
-                    <tr class="w3-teal">
-                        <th>Diagnostics</th>
-                        <th class="w3-right-align">2017</th>
-                    </tr>
-                    <tr>
-                        <td>VALIDATE</td>
-                        <td class="w3-right-align">true</td>
-                    </tr>
-                    <tr>
-                        <td>TEST2</td>
-                        <td class="w3-right-align">false</td>
-                    </tr>
-                    <tr>
-                        <td>TEST4</td>
-                        <td class="w3-right-align">true</td>
-                    </tr>
-                    <tr>
-                        <td>TEST_REG</td>
-                        <td class="w3-right-align">true</td>
-                    </tr>
-                    <tr>
-                        <td>TEST_POP</td>
-                        <td class="w3-right-align">false</td>
-                    </tr>
-                    <tr>
-                        <td>CARENCE_SRU</td>
-                        <td class="w3-right-align">false</td>
-                    </tr>
-                    <tr>
-                        <td>ARTIFICIALISATION</td>
-                        <td class="w3-right-align">false</td>
-                    </tr>
-                    <tr>
-                        <td>LOG_VACANTS</td>
-                        <td class="w3-right-align">true</td>
-                    </tr>
-                    <tr>
-                        <td>LOG_SECONDAIRES</td>
-                        <td class="w3-right-align">true</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <div></div>
-            </div>
-        </div>
+             </div>
+   </div>
+</div>
+</div>
 <div id="Cartes"            class="w3-container city w3-animate-opacity"><h2>Cartes</h2>
             <div><br>
                 <h3>Carte Geoportail Parcelles</h3>

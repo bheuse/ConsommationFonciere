@@ -1603,7 +1603,7 @@ class DataStore():
                       data=(0 if (self["NB_LGT_TOT_COMMENCES_1721"] == 0) else round(self["NB_LGT_PRET_LOC_SOCIAL_1721"] / self["NB_LGT_TOT_COMMENCES_1721"], 4)))
         self.add_metric(key="LOG_NON_VENDUS_1320", meta="Logements Construits non encore vendus en 2020",
                       source=source_calc,  mode=mode_sum, type="INT",
-                      data=(self["NB_LGT_TOT_COMMENCES_1321"] - self["NOUV_LOG_1320"]))
+                      data=(self["EXCES_BESOINS_1320"] - self["NOUV_RESSEC_1318"] - self["NOUV_LOGVAC_1318"]))
 
         # Collected Data
         _line = 0
