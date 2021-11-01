@@ -2415,13 +2415,30 @@ def ftp_push_ds(ds : DataStore):
         ftp_filename = prefix + ext
         print_blue("FTP Push : "+ filename)
         ftp.storbinary('STOR ' + ftp_filename, open(filename, 'rb'))
+    ftp.close()
 
 def ftp_push_file(filename):
     ftp = ftplib.FTP("ftpupload.net")
     ftp.login("epiz_30239961", "oqEwtTaACCaANF")
     ftp.cwd("htdocs")
     print_blue("FTP Push : " + filename)
-    ftp.storbinary('STOR ' + filename, open(filename, 'rb'))
+    file = open(filename, 'rb')
+    ftp.storbinary('STOR ' + filename, file)
+    file.close()
+    ftp.close()
+
+def ftp_push_files():
+    ftp_push_file("output/france.json")
+    ftp_push_file("input/Configuration.xlsx")
+    ftp_push_file("input/Legend_Logements.png")
+    ftp_push_file("README.md")
+    ftp_push_file("README.html")
+    ftp_push_file("README.dillinger.html")
+    ftp_push_file("ConsommationFonciere.html")
+    ftp_push_file("ConsommationFonciere.py")
+    ftp_push_file("index.html")
+    ftp_push_file("Header.png")
+    ftp_push_file("Body.png")
 
 
 def report_commune(code_insee : str = None, code_postal: str = None, force=True, data_only : bool = False, ftp_push : bool = False):
@@ -2616,8 +2633,7 @@ def report_region_dict(region=None, filename=None, force=False, ftp_push=False) 
     report_france[str(region)] = france
     readme_to_html()
     if (ftp_push):
-        ftp_push_file("output/france.json")
-        ftp_push_file("README.html")
+        ftp_push_files()
     return france
 
 
@@ -2704,7 +2720,7 @@ class TestConsommation(unittest.TestCase):
         print_yellow("< Region Provence Alpes Cote d'Azur")
 
     def test_report_region_dict(self):
-        all = report_region_dict("93", filename=france_file, force=True)
+        all = report_region_dict("93", filename=france_file, force=True, ftp_push=True)
         print_blue(to_json(all, indent=4))
 
     def test_render_index(self):
@@ -2721,6 +2737,9 @@ class TestConsommation(unittest.TestCase):
     def testReportPaca(self):
         load_all_data()
         report_paca()
+
+    def testFTP_Push_Files(self):
+        ftp_push_files()
 
     def testData(self):
         load_min_data()

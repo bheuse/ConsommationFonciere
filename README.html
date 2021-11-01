@@ -1,6 +1,12 @@
 <h1>Consommation Foncière</h1>
 <p><a href="https://github.com/bheuse/ConsommationFonciere">Cet outil</a> consolide les données qui permettent un diagnostic de Consommation Foncière en France.</p>
-<p><a href="http://consommationfonciere.infinityfreeapp.com/ConsommationFonciere.html">Heberge sur Infinity Free - En Ligne Ici</a></p>
+<ul>
+<li><a href="https://fne.asso.fr/">En collaboration avec France Nature Environnement</a></li>
+<li><a href="https://www.gadseca.org">Powered by Gadesca</a></li>
+<li><a href="" title="mailto:gadceca06@gmail.com?subject=A%20propose%20de%20Consommation%20Fonciere">Contactez-nous / Information</a></li>
+<li><a href="http://consommationfonciere.infinityfreeapp.com/ConsommationFonciere.html">Heberge sur Infinity Free - En Ligne Ici</a></li>
+<li><a href="https://github.com/bheuse/ConsommationFonciere">Open Source Projet Github</a></li>
+</ul>
 <p><img alt="img.png" src="Header.png" /></p>
 <p><img alt="img.png" src="Body.png" /></p>
 <p>Il vise à mettre en œuvre l'objectif ZAN - Zéro Artificialisation Nette.</p>
@@ -167,9 +173,7 @@ Ces diagnostics sont ensuite disponibles pour générer le rapport.</p>
 <h3>Rapport CSV</h3>
 <p>Le rapport CSV ne contient que les métriques brutes, avec le total et les meta-données</p>
 <h3>Rapport JSON</h3>
-<p>Les rapports JSON ne contient que les métriques brutes, avec le total et les meta-données. Il y a trois fichiers:
-- Vue selon les communes (_c)  : une entree par commune(+ meta), avec les valeurs pour chaque métrique
-- Vue selon les metriques (_m) : une entree par métrique, avec les valeurs pour chaque commune (+ meta)</p>
+<p>Le rapport JSON (_s.json) ne contient que les métriques de total, les diagnostics et les meta-données. </p>
 <h3>Rapport Excel</h3>
 <p>Le rapport généré est considéré comme corrompu par Excel, mais il peut le réparer)).
 Il contient 3 TAB :
@@ -177,7 +181,7 @@ Il contient 3 TAB :
 - TAB <strong>Pivot</strong> : une transposition de ces données 
 - TAB <strong>Diagnotics</strong> : la liste des diagnostics et les valeurs calculées</p>
 <h3>Rapport HTML</h3>
-<p>Le rapport HTML est base sur un template, qui permet d'ajuster la présentation et les données a afficher.</p>
+<p>Le rapport HTML est base sur un template, qui permet d'ajuster la présentation et les données à afficher.</p>
 <p>Le fichier template de rapport par défaut est "<em>input/report_template.html</em>"</p>
 <p>Il utilise le moteur <a href="https://docs.makotemplates.org/en/latest/">MAKO</a>.</p>
 <p>Les balises pour les métriques qui peuvent etre utilisées sont listées dans le fichier "<em>output/context.yaml</em>"</p>
@@ -185,7 +189,8 @@ Il contient 3 TAB :
 <h2>Utilitaires</h2>
 <h3>Nice README</h3>
 <p><a href="https://dillinger.io/">https://dillinger.io/</a></p>
-<pre><code>http://consommationfonciere.infinityfreeapp.com/README.md
+<pre><code>DOCUMENT NAME : README.dillinger
+MARKDOWN : Copier / Coller le README.md
 </code></pre>
 <p>Export As Styled HTML into README.dillinger.html</p>
 <h2>Les sources de donnes</h2>

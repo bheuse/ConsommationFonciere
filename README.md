@@ -231,9 +231,7 @@ Le rapport CSV ne contient que les métriques brutes, avec le total et les meta-
 
 ### Rapport JSON
 
-Les rapports JSON ne contient que les métriques brutes, avec le total et les meta-données. Il y a trois fichiers:
-- Vue selon les communes (_c)  : une entree par commune(+ meta), avec les valeurs pour chaque métrique
-- Vue selon les metriques (_m) : une entree par métrique, avec les valeurs pour chaque commune (+ meta)
+Le rapport JSON (_s.json) ne contient que les métriques de total, les diagnostics et les meta-données. 
 
 ### Rapport Excel
 
@@ -245,7 +243,7 @@ Il contient 3 TAB :
 
 ### Rapport HTML
 
-Le rapport HTML est base sur un template, qui permet d'ajuster la présentation et les données a afficher.
+Le rapport HTML est base sur un template, qui permet d'ajuster la présentation et les données à afficher.
 
 Le fichier template de rapport par défaut est "_input/report_template.html_"
 
@@ -262,7 +260,8 @@ Le fichier de template à utiliser peut être spécifié en paramètre de la lig
 
 [https://dillinger.io/](https://dillinger.io/)
 
-    http://consommationfonciere.infinityfreeapp.com/README.md
+    DOCUMENT NAME : README.dillinger
+    MARKDOWN : Copier / Coller le README.md
 
 Export As Styled HTML into README.dillinger.html
 
