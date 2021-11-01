@@ -24,6 +24,7 @@ from importlib import reload
 import matplotlib
 from scipy.interpolate import make_interp_spline, BSpline
 import numpy as np
+import ftplib
 
 reload(matplotlib)
 matplotlib.use('Agg')
@@ -1861,7 +1862,7 @@ class DataStore():
                 self.add_diagnostic(_key, _description, test=_test, messageV=error, data=value, messageF=error, cat=_categorie, type=_type)
         return self
 
-    def report(self, force=True, data_only: bool = False):
+    def report(self, force=True, data_only: bool = False, ftp_push: bool = False):
         """ Generate report for DataStore. Force = True will re-calculate DataStore data from source. """
         load_min_data()
         print_yellow("Preparation Rapport "+self.store_type + " " + self.store_name + " (Code INSEE : "+self.store_code+")")
@@ -1890,7 +1891,7 @@ class DataStore():
                 self.store_index = 'total'
 
         self.run_diagnostic()
-        html_report_file = gen_report(ds=self, data_only=data_only)
+        html_report_file = gen_report(ds=self, data_only=data_only, ftp_push=ftp_push)
         # html_index_file  = gen_index()
         display_in_browser(html_report_file)
         return self
@@ -2194,7 +2195,6 @@ def plot_smooth(x_values : [], y_values : []):
     ysmooth = spl(xnew)
     return xnew, ysmooth
 
-
 def plot_logements(ds: DataStore):
     """ Graphique Logements en HTML et png. """
     data_dict = ds.get_row_as_dict(ds.store_index)
@@ -2373,25 +2373,51 @@ def gen_index(region="93"):
     return render_index()
 
 
-def gen_report(ds : DataStore, data_only : bool = False):
+def gen_report(ds : DataStore, data_only : bool = False, ftp_push : bool = False):
     """ Generates Report for DataStore """
     ds.save_data()
-    if (data_only) : return None
-    global_context["HTML_SOURCES"]                 = report_source(ds)
-    global_context["HTML_DIAGNOSTIC"]              = report_diagnostic(ds)
     global_context["HTML_PLOT_LOGEMENTS"]          = plot_logements(ds)
     global_context["HTML_PLOT_POPULATION"]         = plot_population(ds)
     global_context["HTML_PLOT_TAILLE_DES_MENAGES"] = plot_taille_menages(ds)
+    if (data_only) :
+        if (ftp_push):
+            ftp_push_ds(ds)
+        return None
+    global_context["HTML_SOURCES"]                 = report_source(ds)
+    global_context["HTML_DIAGNOSTIC"]              = report_diagnostic(ds)
     global_context["HTML_TABLE_HISTORIQUE"]        = report_historique(ds)
     global_context["HTML_TABLE_PROJECTIONS"]       = report_projection(ds)
     global_context["HTML_TABLE_ARTIFICIALISATION"] = report_artificialisation(ds)
     global_context["HTML_TABLE_SRU"]               = report_sru(ds)
     global_context["HTML_TABLE_SUMMARY"]           = report_summary_data(ds)
     global_context["HTML_FULL_DATA"]               = report_full_data(ds)
+    if (ftp_push) :
+        ftp_push_ds(ds)
     return ds.render_report()
 
+def ftp_push_ds(ds : DataStore):
+    ftp = ftplib.FTP("ftpupload.net")
+    ftp.login("epiz_30239961", "oqEwtTaACCaANF")
+    ftp.cwd("htdocs")
+    ftp.cwd("output")
+    # remote_files = ftp.nlst()
+    # print(remote_files)
+    prefix = ds.get_fullname()
+    for ext in { "_s.json" , ".xlsx" , ".csv" , "_Logements.png", "_Population.png", "_Taille_des_Menages.png" } :
+        filename = output_dir + prefix + ext
+        ftp_filename = prefix + ext
+        print_blue("FTP Push : "+ filename)
+        ftp.storbinary('STOR ' + ftp_filename, open(filename, 'rb'))
 
-def report_commune(code_insee : str = None, code_postal: str = None, force=True, data_only : bool = False):
+def ftp_push_file(filename):
+    ftp = ftplib.FTP("ftpupload.net")
+    ftp.login("epiz_30239961", "oqEwtTaACCaANF")
+    ftp.cwd("htdocs")
+    print_blue("FTP Push : " + filename)
+    ftp.storbinary('STOR ' + filename, open(filename, 'rb'))
+
+
+def report_commune(code_insee : str = None, code_postal: str = None, force=True, data_only : bool = False, ftp_push : bool = False):
     """ Generates Report for a COMMUNE identified by Code INSEE or Postal """
     commune = None
     if (code_insee):
@@ -2405,10 +2431,10 @@ def report_commune(code_insee : str = None, code_postal: str = None, force=True,
     entite = entite_commune
     name   = commune
     code   = code_insee
-    return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force, data_only=data_only)
+    return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force, data_only=data_only, ftp_push=ftp_push)
 
 
-def report_epci(epci_id: str = "200039915", force=True, with_communes=False, data_only : bool = False):
+def report_epci(epci_id: str = "200039915", force=True, with_communes=False, data_only : bool = False, ftp_push : bool = False):
     """ Generates Report for a EPCI identified by Code INSEE  """
     entite = entite_epci
     name   = nom_epci(epci_id, clean=True)
@@ -2418,11 +2444,11 @@ def report_epci(epci_id: str = "200039915", force=True, with_communes=False, dat
         return None
     if (with_communes):
         for commune in communes_epci(epci_id):
-            report_commune(code_insee=str(commune), force=force, data_only=data_only)
-    return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force, data_only=data_only)
+            report_commune(code_insee=str(commune), force=force, data_only=data_only, ftp_push=ftp_push)
+    return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force, data_only=data_only, ftp_push=ftp_push)
 
 
-def report_dept(dept_id: str = "06", force=True, with_communes=False, data_only : bool = False):
+def report_dept(dept_id: str = "06", force=True, with_communes=False, data_only : bool = False, ftp_push : bool = False):
     """ Generates Report for a Departement identified by Code INSEE  """
     entite = entite_dept
     name   = nom_dept(dept_id, clean=True)
@@ -2432,13 +2458,13 @@ def report_dept(dept_id: str = "06", force=True, with_communes=False, data_only 
         return None
     if (with_communes):
         for commune in communes_dept(dept_id):
-            report_commune(code_insee=str(commune), force=force, data_only=data_only)
+            report_commune(code_insee=str(commune), force=force, data_only=data_only, ftp_push=ftp_push)
         for epci in epci_dept(dept_id):
-            report_epci(str(epci), force, with_communes, data_only=data_only)
-    return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force, data_only=data_only)
+            report_epci(str(epci), force, with_communes, data_only=data_only, ftp_push=ftp_push)
+    return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force, data_only=data_only, ftp_push=ftp_push)
 
 
-def report_region(reg_id: str = "93", force=True, with_communes=False, data_only : bool = False):
+def report_region(reg_id: str = "93", force=True, with_communes=False, data_only : bool = False, ftp_push : bool = False):
     """ Generates Report for a Region identified by Code INSEE  """
     entite = "REGION"
     name   = nom_region(reg_id, clean=True)
@@ -2448,52 +2474,51 @@ def report_region(reg_id: str = "93", force=True, with_communes=False, data_only
         return None
     if (with_communes):
         for dept in list_dept(reg_id):
-            report_dept(str(dept), force, with_communes=True, data_only=data_only)
+            report_dept(str(dept), force, with_communes=True, data_only=data_only, ftp_push=ftp_push)
         for commune in communes_region(reg_id):
-            report_commune(code_insee=str(commune), force=force, data_only=data_only)
-    return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force, data_only=data_only)
+            report_commune(code_insee=str(commune), force=force, data_only=data_only, ftp_push=ftp_push)
+    return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force, data_only=data_only, ftp_push=ftp_push)
 
 
-def report_paca(force=True):
+def report_paca(force=True, data_only : bool = False, ftp_push : bool = False):
     """ Generates Report for PACA Region  """
     print_yellow("DEPT 06 - Alpes-Maritimes : ")
     for epci in epci_dept("06"):
-        report_epci(str(epci), force=force)
-    report_dept("06", force=force)
+        report_epci(str(epci), force=force, data_only=data_only, ftp_push=ftp_push)
+    report_dept("06", force=force, data_only=data_only, ftp_push=ftp_push)
 
     print_yellow("DEPT 04 - Alpes-de-Haute-Provence : ")
     for epci in epci_dept("04"):
-        report_epci(str(epci), force=force)
-    report_dept("04", force=force)
+        report_epci(str(epci), force=force, data_only=data_only, ftp_push=ftp_push)
+    report_dept("04", force=force, data_only=data_only, ftp_push=ftp_push)
 
     print_yellow("DEPT 05 - Hautes-Alpes : ")
     for epci in epci_dept("05"):
-        report_epci(str(epci), force=force)
-    report_dept("05", force=force)
+        report_epci(str(epci), force=force, data_only=data_only, ftp_push=ftp_push)
+    report_dept("05", force=force, data_only=data_only, ftp_push=ftp_push)
 
     print_yellow("DEPT 13 - Bouches-du-Rhone : ")
     for epci in epci_dept("13"):
-        report_epci(str(epci), force=force)
-    report_dept("13", force=force)
+        report_epci(str(epci), force=force, data_only=data_only, ftp_push=ftp_push)
+    report_dept("13", force=force, data_only=data_only, ftp_push=ftp_push)
 
     print_yellow("DEPT 83 - Var : ")
     for epci in epci_dept("83"):
-        report_epci(str(epci), force=force)
-    report_dept("83", force=force)
+        report_epci(str(epci), force=force, data_only=data_only, ftp_push=ftp_push)
+    report_dept("83", force=force, data_only=data_only, ftp_push=ftp_push)
 
     print_yellow("DEPT 84 - Vaucluse : ")
     for epci in epci_dept("84"):
-        report_epci(str(epci), force=force)
-    report_dept("84", force=force)
+        report_epci(str(epci), force=force, data_only=data_only, ftp_push=ftp_push)
+    report_dept("84", force=force, data_only=data_only, ftp_push=ftp_push)
 
     print_yellow("REGION 93 - Region PACA : ")
-    report_region("93", force=force)
-
+    report_region("93", force=force, data_only=data_only, ftp_push=ftp_push)
 
 report_france = {}
 
 
-def report_region_dict(region=None, filename=None, force=False) -> dict:
+def report_region_dict(region=None, filename=None, force=False, ftp_push=False) -> dict:
     global report_france
     if str(region) in report_france : return report_france[str(region)]
 
@@ -2582,6 +2607,8 @@ def report_region_dict(region=None, filename=None, force=False) -> dict:
     if (filename):
         save_file(to_json(france, indent=4),  filename)
     report_france[str(region)] = france
+    if (ftp_push):
+        ftp_push_file("output/france.json")
     return france
 
 
@@ -2834,16 +2861,16 @@ DEBUG              = False
 WITH_COMMUNES      = False
 LIST_COMMUNE       = False
 DATA_ONLY          = False
-
+FTP_PUSH           = False
 
 def read_command_line_args(argv):
     global DISPLAY_HTML, FORCE, DEBUG, WITH_COMMUNES, LIST_COMMUNE
-    global CONFIGURATION_FILE, TEMPLATE_FILE, DATA_ONLY
+    global CONFIGURATION_FILE, TEMPLATE_FILE, DATA_ONLY, FTP_PUSH
     global CODE_COMMUNE, CODE_EPCI, CODE_DEPT, CODE_REGION
     # print_yellow("Command Line Arguments : " + str(argv))
 
     usage = """
-    Usage: -f -a -n -b -l -c <commune_code> -e <epci_code> -d <dept_code> -r <region_code>   
+    Usage: -f -a -p -n -b -l -c <commune_code> -e <epci_code> -d <dept_code> -r <region_code>   
            -l --list    : List for all communes/epci/dept in Territory       
            -c --commune : Report for Code INSEE / Postal                 
            -e --ecpi    : Report for ECPI                                
@@ -2851,6 +2878,7 @@ def read_command_line_args(argv):
            -r --region  : Report for Region                              
            -a --all     : Report for all communes in Territory           
            -n --data    : No report - Generate only data           
+           -p --push    : FTP Push to Infinity Free Host           
            -f --force   : Report reading source data (cache ignored)     
            --browse     : Start Browser on generated report            
            --cxlsx        <ConfigurationFile.xlsx> : Use Configuration File  
@@ -2859,7 +2887,7 @@ def read_command_line_args(argv):
     """
 
     try:
-        opts, args = getopt.getopt(argv, "hanlbfc:e:d:r:", ["help", "list", "data" , "commune=", "epci=", "dep=", "reg=", "no_debug"])
+        opts, args = getopt.getopt(argv, "hanlbpfc:e:d:r:", ["help", "list", "data" , "push" , "commune=", "epci=", "dep=", "reg=", "no_debug"])
     except getopt.GetoptError:
         print(usage)
         sys.exit(2)
@@ -2872,6 +2900,9 @@ def read_command_line_args(argv):
             continue
         elif opt in ("-b", "-B"):
             DISPLAY_HTML = True
+            continue
+        elif opt in ("-p", "-P", "-push", "-PUSH", "-ftp", "-FTP"):
+            FTP_PUSH = True
             continue
         elif opt in ("-f", "-F"):
             FORCE = True
@@ -2910,7 +2941,7 @@ def read_command_line_args(argv):
         elif opt in ("-c", "--commune"):
             CODE_COMMUNE = arg
             print_yellow("> Commune "+str(CODE_COMMUNE))
-            report_commune(code_insee=CODE_COMMUNE, force=FORCE, data_only=DATA_ONLY)
+            report_commune(code_insee=CODE_COMMUNE, force=FORCE, data_only=DATA_ONLY, ftp_push=FTP_PUSH)
             print_yellow("< Commune "+str(CODE_COMMUNE))
             quit()
         elif opt in ("-e", "--epci"):
@@ -2920,7 +2951,7 @@ def read_command_line_args(argv):
             else:
                 print_yellow("> EPCI " + str(CODE_EPCI))
                 report_region_dict("93", filename=france_file, force=True)
-                report_epci(CODE_EPCI, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY)
+                report_epci(CODE_EPCI, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY, ftp_push=FTP_PUSH)
                 print_yellow("< EPCI " + str(CODE_EPCI))
                 quit()
         elif opt in ("-d", "--dept"):
@@ -2932,7 +2963,7 @@ def read_command_line_args(argv):
             else:
                 print_yellow("> Departement " + str(CODE_DEPT))
                 report_region_dict("93", filename=france_file, force=True)
-                report_dept(CODE_DEPT, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY)
+                report_dept(CODE_DEPT, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY, ftp_push=FTP_PUSH)
                 print_yellow("< Departement " + str(CODE_DEPT))
                 quit()
         elif opt in ("-r", "--reg"):
@@ -2944,8 +2975,8 @@ def read_command_line_args(argv):
                 quit()
             else:
                 print_yellow("> Region " + str(CODE_REGION))
-                report_region_dict(str(CODE_REGION), filename=france_file, force=True)
-                report_region(CODE_REGION, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY)
+                report_region_dict(str(CODE_REGION), filename=france_file, force=True, ftp_push=FTP_PUSH)
+                report_region(CODE_REGION, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY, ftp_push=FTP_PUSH)
                 print_yellow("< Region " + str(CODE_REGION))
                 quit()
 
@@ -2960,3 +2991,13 @@ if __name__ == '__main__':
     print_yellow("Consommation Fonciere - Test Suite > " + __name__)
     load_min_data()
     unittest.main()
+
+###
+###
+# https://app.infinityfree.net/accounts/epiz_30239961#
+#
+# FTP Username	epiz_30239961
+# FTP Password    oqEwtTaACCaANF
+# FTP Hostname	ftpupload.net
+# FTP Port (optional)	21
+###
