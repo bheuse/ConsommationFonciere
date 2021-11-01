@@ -16,5 +16,6 @@ jk_commentjson
 pyyaml
 requests
 scipy
+markdown
 
 

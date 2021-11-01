@@ -2,6 +2,16 @@
 
 [Cet outil](https://github.com/bheuse/ConsommationFonciere) consolide les données qui permettent un diagnostic de Consommation Foncière en France.
 
+- [En collaboration avec France Nature Environnement](https://fne.asso.fr/)
+- [Powered by Gadesca](https://www.gadseca.org)
+- [Contactez-nous / Information]("mailto:gadceca06@gmail.com?subject=A%20propose%20de%20Consommation%20Fonciere")
+- [Heberge sur Infinity Free - En Ligne Ici](http://consommationfonciere.infinityfreeapp.com/ConsommationFonciere.html)
+- [Open Source Projet Github](https://github.com/bheuse/ConsommationFonciere)
+
+![img.png](Header.png)
+
+![img.png](Body.png)
+
 Il vise à mettre en œuvre l'objectif ZAN - Zéro Artificialisation Nette.
 
 Les étapes sont les suivantes :
@@ -57,18 +67,20 @@ On peut ajuster :
 
 ## Utilisation
 
-    Usage: -f -a -b -l -c <commune_code> -e <epci_code> -d <dept_code> -r <region_code>   
-           --list    : List for all communes/epci/ in Territory       
-           --commune : Report for Code INSEE / Postal                 
-           --ecpi    : Report for ECPI                                
-           --dept    : Report for Departement                         
-           --region  : Report for Region                              
-           --all     : Report for all communes in Territory           
-           --force   : Report reading source data (cache ignored)     
-           --browse  : Start Browser on generated report            
-           --cxlsx     <ConfigurationFile.xlsx> : Use Configuration File  
-           --rhtml     <ReportTemplate.html>    : Use ReportTemplate   
-           --clean   : Delete Report files      
+    Usage: -f -a -p -n -b -l -c <commune_code> -e <epci_code> -d <dept_code> -r <region_code>   
+           -l --list         : List for all communes/epci/dept in Territory       
+           -c --commune <c> : Report for Commune Code INSEE 'c'                 
+           -e --ecpi    <e> : Report for ECPI Code INSEE 'e'                      
+           -d --dept    <d> : Report for Departement Code INSEE 'd'                 
+           -r --region  <r> : Report for Region Code INSEE 'r'          
+           -a --all         : Report for all communes in Territory           
+           -n --data        : No report - Generate only data & Graphics        
+           -p --push        : FTP Push Data to Infinity Free Host WebSite         
+           -f --force       : Report reading source data (cache ignored)     
+           --browse         : Start Browser on generated report (debug)  
+           --cxlsx            <ConfigurationFile.xlsx> : Use Configuration File  
+           --rhtml            <ReportTemplate.html>    : Use ReportTemplate      
+           --clean          : Delete Report files        
 
 
 **Exemples:**
@@ -84,6 +96,10 @@ Pour lister les codes des communes et EPCI du département 06 :
 Pour générer le rapport sur la CACPL (CA Cannes Pays de Lérins) :
 
     python ConsommationFonciere.py -e 200039915
+
+Pour générer et mettre a jour les donnees du département 06 sur le server :
+
+    python ConsommationFonciere.py -f -a -p -d 06
 
 Les rapports sont générés dans le repertoire "output".
 
@@ -112,7 +128,7 @@ Texte libre, par exemple :
 
 **Source**: La Source de la métrique
 
-Ce champ est indicatif.
+Ce champ est indicatif, mais il permet de classer les metriques dans l'interface.
 - "DATA" : Données de Base
 - "CODE" : Données Codes Postaux
 - "INTERCO" : Données Intercommunalités
@@ -172,6 +188,17 @@ Ces diagnostics sont ensuite disponibles pour générer le rapport.
 
     Exemple : LOG_SRU
 
+**Type** : Le type du Diagnostic
+
+Les possibilités sont :
+- "DIAG" : Vrai s'affiche en vert, Faux en rouge
+- "NOTE" : S'affiche en jaune, mais le message varie si Vrai ou Faux
+- "TEST" : Pour les tests et le debugging 
+
+Par exemple, pour un taux pondéré, la somme des taux n'est pas possible, mais on peut utiliser les sommes des autres totaux:
+
+    Exemple : NOTE, DIAG, TEST
+
 **Description** : La Description du Diagnostic 
 
     Exemple : Test si la commune a des obligations en matière de Logements Sociaux
@@ -180,9 +207,14 @@ Ces diagnostics sont ensuite disponibles pour générer le rapport.
 
     Exemple : SRU_TX_LLS_2020 > 0
 
-**Message** : Le message a affiché si la condition est fausse 
+**MessageSiVrai** : Le message a affiché si la condition est vraie 
 
     Exemple : Votre Commune doit construire des logements sociaux
+
+**MessageSiFaux** : Le message a affiché si la condition est fausse 
+
+    Exemple : Votre Commune n'est pas carencee en Logements sociaux
+
 
 Si le Test renvoi VRAI, le Message est affiche.
 
@@ -222,6 +254,17 @@ Il utilise le moteur [MAKO](https://docs.makotemplates.org/en/latest/).
 Les balises pour les métriques qui peuvent etre utilisées sont listées dans le fichier "_output/context.yaml_"
 
 Le fichier de template à utiliser peut être spécifié en paramètre de la ligne de commande.
+
+
+## Utilitaires 
+
+### Nice README
+
+[https://dillinger.io/](https://dillinger.io/)
+
+    http://consommationfonciere.infinityfreeapp.com/README.md
+
+Export As Styled HTML into README.dillinger.html
 
 ## Les sources de donnes
 
