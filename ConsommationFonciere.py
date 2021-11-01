@@ -2239,8 +2239,8 @@ def plot_logements(ds: DataStore):
 
     xsmooth, ysmooth = plot_smooth([2013, 2016, 2020],
                                    [data_dict["NOUV_LOG_0813"],
-                                    data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_TOT_COMMENCES_1316"],  # Logements Construits
-                                    data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_TOT_COMMENCES_1316"] + data_dict["NB_LGT_TOT_COMMENCES_1721"]])
+                                    data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_PRET_LOC_SOCIAL_1316"],  # Logements Sociaux Construits
+                                    data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_PRET_LOC_SOCIAL_1316"] + data_dict["NB_LGT_PRET_LOC_SOCIAL_1721"]])
     plt.plot(xsmooth, ysmooth, color='#006600', linestyle='dotted', linewidth=3, label="Logements Sociaux Construits")
 
     # Naming the axis
