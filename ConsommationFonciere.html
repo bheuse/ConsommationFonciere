@@ -30,7 +30,12 @@
       cursor: pointer;
       font-size: 18px;
     }
-
+    .center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 50%;
+    }
     /* Darker background on mouse-over */
     .btn:hover {
       background-color: Emerald;
@@ -46,7 +51,6 @@
 </head>
 
 <body onload="onPageLoaded()">
-
 
 <div id="app">
 
@@ -84,59 +88,64 @@
             <footer class="w3-container w3-theme-dark"><h4>France Nature Environnement</h4></footer>
         </div>
     </div>
-
 <hr>
 
-
-<!-- Departements de Paca Seulement ... -->
-<h2 class="w3-center">Region PACA</h2>
-<div><img class="w3-center"
+<!-- Departements (Paca Seulement) ... -->
+<div>
+    <h2 class="w3-center">Region PACA</h2>
+    <img class="w3-center"
           src="https://www.acted.org/wp-content/uploads/2018/09/region-paca.jpg"
           alt="Region Paca Logo"
-          style="display: block; margin-left: auto; margin-right: auto; max-width: 600px; height: auto;"></div>
-
-<h2 class="w3-center">{{ message }}</h2>
+          style="display: block; margin-left: auto; margin-right: auto; max-width: 600px; height: auto;">
+</div>
 
 <!-- Selection -->
-<div class="w3-cell-row w3-teal w3-mobile">
-        <div class="w3-container w3-teal w3-cell w3-mobile w3-cell-middle w3-quarter w3-padding-16">
-            <p class="w3-padding-8 w3-right-align"> Departement : </p>
-            <p class="w3-padding-8 w3-right-align"> EPCI : </p>
-            <p class="w3-padding-8 w3-right-align"> Commune : </p>
+<div>
+    <h2 class="w3-center">{{ message }}</h2>
+    <div class="w3-cell-row w3-teal w3-mobile">
+            <div class="w3-container w3-teal w3-cell w3-mobile w3-cell-middle w3-quarter w3-padding-16">
+                <p class="w3-padding-8 w3-right-align"> Departement : </p>
+                <p class="w3-padding-8 w3-right-align"> EPCI : </p>
+                <p class="w3-padding-8 w3-right-align"> Commune : </p>
+            </div>
+            <div class="w3-container w3-teal w3-cell w3-mobile w3-cell-middle w3-threequarter w3-padding-16">
+            <select class="w3-theme-dark w3-select w3-hover-green" searchable="w3-select Rechercher ici ..." @change="selectDept($event);"  autofocus>
+                <option disabled="" value="" disabled selected> Selectionner un Departement</option>
+                <div v-if="this.data_c !== null" >
+                    <option v-for='item in this.depts' :content="item.nom" >{{ item.nom }}</option>
+                </div>
+            </select>
+            <select class="w3-theme w3-select w3-hover-green" searchable="w3-select Rechercher ici ..." @change="selectEpci($event)">
+                <option disabled="" value="" disabled selected> Selectionner une EPCI</option>
+                <div v-if="this.data_c !== null">
+                    <option v-for='item in this.epcis' :content="item.nom" >{{ item.nom }}</option>
+                </div>
+            </select>
+            <select class="w3-theme w3-select w3-hover-green" searchable="w3-select Rechercher ici ..."@change="selectCommune($event)">
+                <option disabled="" value=""  disabled selected> Selectionner une Commune</option>
+                <div v-if="this.data_c !== null">
+                    <option v-for='item in this.communes' :content="item.nom" >{{ item.nom }}</option>
+                </div>
+            </select>
+            </div>
         </div>
-        <div class="w3-container w3-teal w3-cell w3-mobile w3-cell-middle w3-threequarter w3-padding-16">
-        <select class="w3-theme-dark w3-select w3-hover-green" searchable="w3-select Rechercher ici ..." @change="selectDept($event);"  autofocus>
-            <option disabled="" value="" disabled selected> Selectionner un Departement</option>
-            <div v-if="this.data_c !== null" >
-                <option v-for='item in this.depts' :content="item.nom" >{{ item.nom }}</option>
-            </div>
-        </select>
-        <select class="w3-theme w3-select w3-hover-green" searchable="w3-select Rechercher ici ..." @change="selectEpci($event)">
-            <option disabled="" value="" disabled selected> Selectionner une EPCI</option>
-            <div v-if="this.data_c !== null">
-                <option v-for='item in this.epcis' :content="item.nom" >{{ item.nom }}</option>
-            </div>
-        </select>
-        <select class="w3-theme w3-select w3-hover-green" searchable="w3-select Rechercher ici ..."@change="selectCommune($event)">
-            <option disabled="" value=""  disabled selected> Selectionner une Commune</option>
-            <div v-if="this.data_c !== null">
-                <option v-for='item in this.communes' :content="item.nom" >{{ item.nom }}</option>
-            </div>
-        </select>
-        </div>
-    </div>
-<hr>
+    <hr>
+</div>
 
 <!-- Rapport -->
-<div v-if="this.data_c == null">
-     <h2 class="w3-center">Rapport : Selectionner un Territoire</h2>
-     <h3 class="w3-container w3-padding-32 w3-theme">{{territoire}} {{code}} : {{nom}} </h3>
-</div>
-<div v-else>
-     <h2 class="w3-center">Rapport : {{nom}}</h2>
-     <h3 class="w3-container w3-padding-32 w3-theme">{{territoire}} {{code}} : {{nom}} - {{ds.CODE_POSTAL}}</h3>
+<div>
+    <div v-if="this.data_c == null">
+         <h2 class="w3-center">Rapport : Selectionner un Territoire</h2>
+         <h3 class="w3-container w3-padding-32 w3-theme">{{territoire}} {{code}} : {{nom}} </h3>
+    </div>
+    <div v-else>
+         <h2 class="w3-center">Rapport : {{nom}}</h2>
+         <h3 class="w3-container w3-padding-32 w3-theme">{{territoire}} {{code}} : {{nom}} - {{ds.CODE_POSTAL}}</h3>
+    </div>
 </div>
 
+<!-- Tabs -->
+<div>
 <script>
 // Tabs
 function openTab(evt, cityName) {
@@ -154,8 +163,6 @@ function openTab(evt, cityName) {
   evt.currentTarget.className += " w3-dark-grey";
 }
 </script>
-
-<!-- Tabs -->
 <div class="w3-border">
 <div class="w3-bar w3-theme">
 <button class="w3-bar-item w3-button testbtn w3-padding-16" onclick="openTab(event,'Logements')">         Logements </button>
@@ -174,7 +181,11 @@ function openTab(evt, cityName) {
 <div id="Logements"         class="w3-container city w3-animate-opacity">
     <h2>Logements</h2>
     <div v-if="this.data_c != null">
-         <img :src="ds.GRAPHIQUE_LOGEMENTS"           alt="Logements" >
+        <div class="w3-card-4">
+         <img :src="ds.GRAPHIQUE_LOGEMENTS"          alt="Logements" class="center">
+         <br>
+         <img src="input/Legend_Logements.png"       alt="Legende Logements" class="center">
+        </div>
          <br>
          <table class="w3-table-all w3-hoverable w3-card-4">
                     <tbody>
@@ -706,7 +717,7 @@ function openTab(evt, cityName) {
 </div>
 <div id="DonneesBrutes"     class="w3-container city w3-animate-opacity">
     <h2>Donnees Brutes</h2>
-    <div v-if="this.data_c != null">
+    <div v-if="data_c != null">
         <p><a target="_blank" :href="ds.DOSSIER_INSEE">Dossier Insee Complet {{ nom }}</a></p>
         <br>
         <div class="w3-cell-row">
@@ -720,7 +731,6 @@ function openTab(evt, cityName) {
                 <p><a class="btn w3-btn fa fa-download" :href="ds.DOWNLOAD_JSON"> Download JSON</a></p>
             </div>
         </div>
-        </div>
         <br>
         <table class="w3-table-all w3-hoverable w3-card-4" style="width: 100%;">
             <tr class="w3-teal">
@@ -728,13 +738,14 @@ function openTab(evt, cityName) {
                 <th class="w3-right-align" style="width: 20%;">Semantique</th>
                 <th class="w3-left-align"  style="width: 70%;">Valeur</th>
             </tr>
-            <tr  v-for="(item, key) in this.data_m" :key="key" >
+            <tr  v-for="(item, key) in this.data" :key="key" >
                 <td>{{ key }}</td>
                 <td class="w3-right-align">{{ item.meta }}</td>
                 <td class="w3-left-align"style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;"> {{ item.total }}</td>
             </tr>
         </table>
     </div>
+</div>
 <div id="Sources"           class="w3-container city w3-animate-opacity">
     <h2>Sources</h2>
     <div v-if="this.data_c != null">
@@ -807,7 +818,7 @@ function openTab(evt, cityName) {
          </div>
         </div>
         <div class="w3-container w3-section w3-teal"> <h2 class="w3-teal w3-padding-16">Donnees</h2></div>
-        <div v-for="(item, key) in this.data_m" :key="key" >
+        <div v-for="(item, key) in this.data" :key="key" >
                 <ul class="w3-ul w3-card-4">
                     <li><h3>{{ key }}</h3></li>
                     <li> Semantique : {{ item.meta   }}</li>
@@ -822,7 +833,7 @@ function openTab(evt, cityName) {
 
 
      <!--
-    <div v-for="(item, key) in this.data_m" :key="key">
+    <div v-for="(item, key) in this.data_c.Data" :key="key">
       <p>{{ key }}</p>
       <p> Semantique : {{ item.meta  }}</p>
       <p> Type : {{ item.type  }}</p>
@@ -840,7 +851,7 @@ function openTab(evt, cityName) {
       <th style="width:15%" class="w3-left-align" >Expression</th>
       <th style="width:55%" class="w3-left-align" >Data</th>
     </tr>
-    <tr v-for="(item, key) in this.data_m" :key="key">
+    <tr v-for="(item, key) in this.data_c.Data" :key="key">
       <td>{{ key }}</td>
       <td class="w3-right-align">{{ item.type  }}</td>
       <td class="w3-right-align">{{ item.mode  }}</td>
@@ -856,11 +867,13 @@ function openTab(evt, cityName) {
     <h2>Graphiques</h2>
     <div v-if="this.data_c != null">
         <div class="w3-container w3-section w3-teal"><h2 class="w3-teal w3-padding-16">Logements</h2></div>
-        <img :src="ds.GRAPHIQUE_LOGEMENTS"           alt="Logements" >
+        <img :src="ds.GRAPHIQUE_LOGEMENTS"           alt="Logements" class="center" >
+        <br>
+        <img src="input/Legend_Logements.png"       alt="Legende Logements" class="center">
         <div class="w3-container w3-section w3-teal"><h2 class="w3-teal w3-padding-16">Population</h2></div>
-        <img :src="ds.GRAPHIQUE_POPULATION"          alt="Population" >
+        <img :src="ds.GRAPHIQUE_POPULATION"          alt="Population" class="center">
         <div class="w3-container w3-section w3-teal"><h2 class="w3-teal w3-padding-16">Taille des Menages</h2></div>
-        <img :src="ds.GRAPHIQUE_TAILLE_DES_MENAGES"  alt="Taille des Menages" >
+        <img :src="ds.GRAPHIQUE_TAILLE_DES_MENAGES"  alt="Taille des Menages" class="center">
 
             <div >
             <canvas id="line-chart" width="200" height="50"></canvas>
@@ -911,44 +924,11 @@ function openTab(evt, cityName) {
     </div>
 </div>
 
-
-     <!--
-    <div v-for="(item, key) in this.data_m" :key="key">
-      <p>{{ key }}</p>
-      <p> Semantique : {{ item.meta  }}</p>
-      <p> Type : {{ item.type  }}</p>
-      <p> Mode : {{ item.mode  }}</p>
-      <p> Expression : {{ item.expr  }}</p>
-      <p> Valeur : {{ item.total  }}</p>
-    </div>
-    --><!--
-    <table class="w3-table-all w3-hoverable w3-card-4" style="width:100%">
-    <tr class="w3-teal">
-      <th style="width:5%" >Cle de Donnee</th>
-      <th style="width:5%" class="w3-right-align" >Type</th>
-      <th style="width:5%" class="w3-right-align" >Mode</th>
-      <th style="width:15%" class="w3-right-align">Semantique</th>
-      <th style="width:15%" class="w3-left-align" >Expression</th>
-      <th style="width:55%" class="w3-left-align" >Data</th>
-    </tr>
-    <tr v-for="(item, key) in this.data_m" :key="key">
-      <td>{{ key }}</td>
-      <td class="w3-right-align">{{ item.type  }}</td>
-      <td class="w3-right-align">{{ item.mode  }}</td>
-      <td class="w3-right-align">{{ item.meta  }}</td>
-      <td style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"  class="w3-left-align">{{ item.expr }}</td>
-      <td style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"  class="w3-left-align">{{ item.total }}</td>
-    </tr>
-    </table>
-    -->
-    </div>
 </div>
-
 </div>
-
-<br>
 
 <!-- Footer -->
+<br>
 <footer class="w3-container w3-theme-dark w3-padding-16">
 
 <!-- Contact & Counters -->
@@ -964,6 +944,20 @@ function openTab(evt, cityName) {
         <p><a class="w3-btn"
               href="mailto:gadceca06@gmail.com?subject=A%20propose%20de%20Consommation%20Fonciere">
               Contactez nous par email.
+        </a></p>
+    </div>
+    <div class="w3-container w3-cell w3-mobile">
+        <h3>Open Source</h3>
+        <p><a class="w3-btn"
+              href="https://github.com/bheuse/ConsommationFonciere">
+              Projet Github.
+        </a></p>
+    </div>
+    <div class="w3-container w3-cell w3-mobile">
+        <h3>Hosted by Infinity Free</h3>
+        <p><a class="w3-btn"
+              href="https://infinityfree.net/">
+              Free Hosting Here.
         </a></p>
     </div>
     <div class="w3-container w3-cell w3-mobile">
@@ -989,29 +983,29 @@ function openTab(evt, cityName) {
 <!-- Sources -->
 <div class="w3-container w3-theme-dark w3-padding-16">
      <h2>Sources de Donnees : </h2>
-<div v-if="this.data_c !== null" >
-    <div class="w3-container w3-cell w3-mobile">
-         <p>Statistiques INSEE:<br>    <a target="_blank" href="ds.URL_STATISTIQUES_INSEE">Dossiers Insee</a></p>
+     <div v-if="data_c != null">
+        <div class="w3-container w3-cell w3-mobile">
+             <p>Statistiques INSEE:<br>    <a target="_blank" :href="ds.URL_STATISTIQUES_INSEE">Dossiers Insee</a></p>
+        </div>
+        <div class="w3-container w3-cell w3-mobile">
+             <p>Artificialisation :<br>    <a target="_blank" :href="ds.URL_SOURCE_ARTIFICIALISATION"> Dossier Cerema </a></p>
+        </div>
+        <div class="w3-container w3-cell w3-mobile">
+             <p>Logements Sociaux :<br>   <a target="_blank" :href="ds.URL_SOURCE_SRU"> Dossier Dreal </a></p>
+        </div>
+        <div class="w3-container w3-cell w3-mobile">
+             <p>Logements Construits :<br> <a target="_blank" :href="ds.URL_SOURCE_SITADEL"> Dossier Sitadel </a></p>
+        </div>
+        <div class="w3-container w3-cell w3-mobile">
+             <p>Donnees Communes :<br>     <a target="_blank" :href="ds.URL_SOURCE_COMMUNES"> Dossier Insee </a></p>
+        </div>
+        <div class="w3-container w3-cell w3-mobile">
+             <p>Projections 2050 :<br>     <a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS"> Dossier Insee </a></p>
+        </div>
+        <div class="w3-container w3-cell w3-mobile">
+             <p>Projections Paca :<br>     <a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS_PACA"> Dossier Omphale </a></p>
+        </div>
     </div>
-    <div class="w3-container w3-cell w3-mobile">
-         <p>Artificialisation :<br>    <a target="_blank" :href="ds.URL_SOURCE_ARTIFICIALISATION"> Dossier Cerema </a></p>
-    </div>
-    <div class="w3-container w3-cell w3-mobile">
-         <p>Logements Sociaux :<br>   <a target="_blank" :href="ds.URL_SOURCE_SRU"> Dossier Dreal </a></p>
-    </div>
-    <div class="w3-container w3-cell w3-mobile">
-         <p>Logements Construits :<br> <a target="_blank" :href="ds.URL_SOURCE_SITADEL"> Dossier Sitadel </a></p>
-    </div>
-    <div class="w3-container w3-cell w3-mobile">
-         <p>Donnees Communes :<br>     <a target="_blank" :href="ds.URL_SOURCE_COMMUNES"> Dossier Insee </a></p>
-    </div>
-    <div class="w3-container w3-cell w3-mobile">
-         <p>Projections 2050 :<br>     <a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS"> Dossier Insee </a></p>
-    </div>
-    <div class="w3-container w3-cell w3-mobile">
-         <p>Projections Paca :<br>     <a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS_PACA"> Dossier Omphale </a></p>
-    </div>
-</div>
 </div>
 
 <!-- Rapport Complet
@@ -1020,8 +1014,9 @@ function openTab(evt, cityName) {
 </div>
 -->
 
-<script src="ConsommationFonciere.js"></script>
+</div>
 
+<script src="ConsommationFonciere.js"></script>
 
 
 </footer>

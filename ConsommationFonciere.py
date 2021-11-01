@@ -20,9 +20,10 @@ import mako.runtime
 import warnings
 import zipfile
 import shutil
-import matplotlib
 from importlib import reload
-
+import matplotlib
+from scipy.interpolate import make_interp_spline, BSpline
+import numpy as np
 
 reload(matplotlib)
 matplotlib.use('Agg')
@@ -974,7 +975,19 @@ class DataStore():
             # global_context["JSON_DATA_SET_C"] = to_json(jsonc.loads(self.data_frame.to_json(orient='index')), indent=4)
             # f.write(global_context["JSON_DATA_SET_C"])
             f.write(to_json(data_c, indent=4))
-
+        ## _s.json
+        all = {}
+        summary_data = self.clean_data().fillna('')
+        for name, values in summary_data.iteritems():
+            all[name] = {}
+            for name2, value2 in values.iteritems():
+                all[name][name2] = value2
+        with open(output_dir + self.get_fullname() + "_s.json", 'w') as f:
+            data_s = summary_data.to_dict(orient='index')
+            data_s["Data"] = all
+            data_s["Diagnostics"] = self.diagnostics
+            global_context["JSON_DATA_SET_S"] = summary_data.to_dict(orient='index')
+            f.write(to_json(data_s, indent=4))
 
     def load_data(self):
         """ Load DataStore data from xlsx file  """
@@ -1067,6 +1080,15 @@ class DataStore():
         if 'type'   in clean_data_frame.index : clean_data_frame.drop(labels="type",   axis=0, inplace=inplace)
         if 'source' in clean_data_frame.index : clean_data_frame.drop(labels="source", axis=0, inplace=inplace)
         if 'expr'   in clean_data_frame.index : clean_data_frame.drop(labels="expr",   axis=0, inplace=inplace)
+        return clean_data_frame
+
+    # Get Data Frame without Individual Data - Keep Total & Meta Data
+    def clean_data(self) :
+        """ Removes Individual data from DataStore """
+        clean_data_frame = self.data_frame
+        for index, row in clean_data_frame.iterrows():
+            if (index in ["meta", "total", "mode", "type", "source", "expr"] ) : continue
+            clean_data_frame = clean_data_frame.drop(index)
         return clean_data_frame
 
     def collect_data(self, code_postal=None, code_insee=None):
@@ -2156,7 +2178,6 @@ def report_full_data(ds: DataStore):
 
 index_figure = 0
 
-
 def new_figure():
     global index_figure
     index_figure += 1
@@ -2164,63 +2185,73 @@ def new_figure():
     plt.figure(index_figure)
     return plt
 
+def plot_smooth(x_values : [], y_values : []):
+    # 300 represents number of points to make between T.min and T.max
+    x_values = np.array(x_values)
+    y_values = np.array(y_values)
+    xnew = np.linspace(x_values.min(), x_values.max(), 300)
+    spl  = make_interp_spline(x_values, y_values, k=3, bc_type="natural")  # type: BSpline
+    ysmooth = spl(xnew)
+    return xnew, ysmooth
+
 
 def plot_logements(ds: DataStore):
     """ Graphique Logements en HTML et png. """
     data_dict = ds.get_row_as_dict(ds.store_index)
     label = "Logements"
 
-    df1 = pd.DataFrame({'x_values': (2008, 2013, 2018, 2020),  # Residences Principales - Historique
-                        'y_values': (data_dict["P08_RP"]   - data_dict["P08_RP"],
-                                     data_dict["P13_RP"]   - data_dict["P08_RP"],
-                                     data_dict["P18_RP"]   - data_dict["P08_RP"],
-                                     data_dict["LOG_2020"] - data_dict["P08_RP"])})
-    df11 = pd.DataFrame({'x_values': (2020, 2030),            # Residences Principales - Projection
-                         'y_values': (data_dict["LOG_2020"] - data_dict["P08_RP"],
-                                      data_dict["LOG_2030"] - data_dict["P08_RP"])})
-    df2 = pd.DataFrame({'x_values': (2008, 2013, 2018),  # Residences Principales + Secondaires
-                        'y_values': (data_dict["P08_RP"] - data_dict["P08_RP"] + data_dict["P08_RSECOCC"] - data_dict["P08_RSECOCC"] + data_dict["P08_LOGVAC"] - data_dict["P08_LOGVAC"],
-                                     data_dict["P13_RP"] - data_dict["P08_RP"] + data_dict["P13_RSECOCC"] - data_dict["P08_RSECOCC"] + data_dict["P13_LOGVAC"] - data_dict["P08_LOGVAC"],
-                                     data_dict["P18_RP"] - data_dict["P08_RP"] + data_dict["P18_RSECOCC"] - data_dict["P08_RSECOCC"] + data_dict["P18_LOGVAC"] - data_dict["P08_LOGVAC"])})
-    df21 = pd.DataFrame({'x_values': (2018, 2020),  # Residences Principales + Secondaires - Projection
-                         'y_values': (data_dict["P18_RP"] - data_dict["P08_RP"] + data_dict["P18_RSECOCC"] - data_dict["P08_RSECOCC"] + data_dict["P18_LOGVAC"] - data_dict["P08_LOGVAC"],
-                                      data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_TOT_COMMENCES_1316"] + data_dict["NB_LGT_TOT_COMMENCES_1721"])})
-    df3 = pd.DataFrame({'x_values': (2013, 2016, 2020),
-                        'y_values': (data_dict["NOUV_LOG_0813"],
-                                     data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_TOT_COMMENCES_1316"],  # Logements Construits
-                                     data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_TOT_COMMENCES_1316"] + data_dict["NB_LGT_TOT_COMMENCES_1721"])})
-    df31 = pd.DataFrame({'x_values': (2020, 2021),
-                        'y_values': (data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_TOT_COMMENCES_1316"] + data_dict["NB_LGT_TOT_COMMENCES_1721"],
-                                     data_dict["NOUV_LOG_0813"] + data_dict["PROJ_LOG_REALISES_2021"])})  # Projection de Logements Construits
-    df4 = pd.DataFrame({'x_values': (2013, 2016, 2020),
-                        'y_values': (data_dict["NOUV_LOG_0813"],
-                                     data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_PRET_LOC_SOCIAL_1316"],  # Logements Sociaux Construits
-                                     data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_PRET_LOC_SOCIAL_1316"] + data_dict["NB_LGT_PRET_LOC_SOCIAL_1721"])})
-
     # Draw plot
     plt = new_figure()
-    plt.plot('x_values', 'y_values', data=df1, color='blue',
-             linestyle='-',  linewidth=3, label="Residences Principales des menages - Historique")
-    plt.plot('x_values', 'y_values', data=df11, color='blue',
-             linestyle='--', linewidth=2, label="Residences Principales des menages - Projection des Besoins")
-    plt.plot('x_values', 'y_values', data=df2, color='purple',
-             linestyle='-', linewidth=3, label="Residences Principales + Secondaires + Vacants")
-    plt.plot('x_values', 'y_values', data=df21, color='purple',
-             linestyle='dotted', linewidth=3, label="Indeterminees (Principales / Secondaires / Non-Vendues)")
-    plt.plot('x_values', 'y_values', data=df3, color='black',
-             linestyle='-', linewidth=3, label="Logements Construits")
-    plt.plot('x_values', 'y_values', data=df31, color='black',
-             linestyle='dotted', linewidth=3, label="Projection Logements Construits")
-    plt.plot('x_values', 'y_values', data=df4, color='grey',
-             linestyle='--', linewidth=3, label="Logements Sociaux Construits")
+
+    xsmooth, ysmooth = plot_smooth([2008, 2013, 2018, 2020],
+                                   [data_dict["P08_RP"]   - data_dict["P08_RP"],
+                                    data_dict["P13_RP"]   - data_dict["P08_RP"],
+                                    data_dict["P18_RP"]   - data_dict["P08_RP"],
+                                    data_dict["LOG_2020"] - data_dict["P08_RP"]])
+    plt.plot(xsmooth, ysmooth, color=data_dict["THEME_COLOR"],  linestyle='-',       linewidth=3, label="Residences Principales des menages - Historique")
+
+    xsmooth, ysmooth = plot_smooth([2020, 2030],
+                                   [data_dict["LOG_2020"] - data_dict["P08_RP"],
+                                    data_dict["LOG_2030"] - data_dict["P08_RP"]])
+    plt.plot(xsmooth, ysmooth, color=data_dict["THEME_COLOR"],  linestyle='--',     linewidth=3, label="Residences Principales des menages - Projection des Besoins")
+
+    xsmooth, ysmooth = plot_smooth([2008, 2013, 2018],
+                                   [data_dict["P08_RP"] - data_dict["P08_RP"] + data_dict["P08_RSECOCC"] - data_dict["P08_RSECOCC"] + data_dict["P08_LOGVAC"] - data_dict["P08_LOGVAC"],
+                                    data_dict["P13_RP"] - data_dict["P08_RP"] + data_dict["P13_RSECOCC"] - data_dict["P08_RSECOCC"] + data_dict["P13_LOGVAC"] - data_dict["P08_LOGVAC"],
+                                    data_dict["P18_RP"] - data_dict["P08_RP"] + data_dict["P18_RSECOCC"] - data_dict["P08_RSECOCC"] + data_dict["P18_LOGVAC"] - data_dict["P08_LOGVAC"]])
+    plt.plot(xsmooth, ysmooth, color='#74248f', linestyle='-',      linewidth=3, label="Residences Principales + Secondaires + Vacants")
+
+    xsmooth, ysmooth = plot_smooth([2018, 2020],
+                                   [data_dict["P18_RP"] - data_dict["P08_RP"] + data_dict["P18_RSECOCC"] - data_dict["P08_RSECOCC"] + data_dict["P18_LOGVAC"] - data_dict["P08_LOGVAC"],
+                                    data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_TOT_COMMENCES_1316"] + data_dict["NB_LGT_TOT_COMMENCES_1721"]])
+    plt.plot(xsmooth, ysmooth, color='#74248f', linestyle='dotted', linewidth=3, label="Indeterminees (Principales / Secondaires / Non-Vendues)")
+
+    xsmooth, ysmooth = plot_smooth([2013, 2016, 2020],
+                                   [data_dict["NOUV_LOG_0813"],
+                                    data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_TOT_COMMENCES_1316"],  # Logements Construits
+                                    data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_TOT_COMMENCES_1316"] + data_dict["NB_LGT_TOT_COMMENCES_1721"]])
+    plt.plot(xsmooth, ysmooth, color='#663300', linestyle='-',      linewidth=3, label="Logements Construits")
+
+    xsmooth, ysmooth = plot_smooth([2020, 2021],
+                                   [data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_TOT_COMMENCES_1316"] + data_dict["NB_LGT_TOT_COMMENCES_1721"],
+                                    data_dict["NOUV_LOG_0813"] + data_dict["PROJ_LOG_REALISES_2021"]])
+    plt.plot(xsmooth, ysmooth, color='#663300', linestyle='dotted', linewidth=3, label="Projection Logements Construits")
+
+    xsmooth, ysmooth = plot_smooth([2013, 2016, 2020],
+                                   [data_dict["NOUV_LOG_0813"],
+                                    data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_TOT_COMMENCES_1316"],  # Logements Construits
+                                    data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_TOT_COMMENCES_1316"] + data_dict["NB_LGT_TOT_COMMENCES_1721"]])
+    plt.plot(xsmooth, ysmooth, color='#006600', linestyle='dotted', linewidth=3, label="Logements Sociaux Construits")
 
     # Naming the axis
     plt.xlabel('Annees')
     plt.ylabel('Logements')
 
     # Title & Legend
-    plt.title(label + " sur " + ds.store_name)
-    plt.legend(bbox_to_anchor=(1.0, 1.0))
+    plt.title(label + " sur " + ds.store_name, color=data_dict["THEME_COLOR"], weight='bold')
+    # plt.legend(bbox_to_anchor=(1.0, 1.0))
+    # plt.legend(loc='lower center', bbox_to_anchor=(0.5, -0.1), fancybox=True, shadow=True)
+    plt.plot(legend=None)
 
     ## Save Locally
     image_file_name = output_dir + ds.get_fullname() + "_" + label.replace(" ", "_") + ".png"
@@ -2247,37 +2278,34 @@ def plot_logements(ds: DataStore):
     global_context["HTML_PLOT_LOGEMENTS"] = browser_html
     return browser_html
 
-
 def plot_taille_menages(ds: DataStore):
     """ Graphique taille des menages en HTML et png. """
     data_dict = ds.get_row_as_dict(ds.store_index)
     label = "Taille des Menages"
-    df1 = pd.DataFrame({'x_values': (2008, 2013, 2018, 2020),
-                        'y_values': (data_dict["TM_2008"],
-                                     data_dict["TM_2013"],
-                                     data_dict["TM_2018"],
-                                     data_dict["TM_2020"]
-                                     )})
-    df2 = pd.DataFrame({'x_values': (2020, 2030, 2040, 2050),
-                        'y_values': (data_dict["TM_2020"],
-                                     data_dict["TM_2030"],
-                                     data_dict["TM_2040"],
-                                     data_dict["TM_2050"]
-                                     )})
 
     # Draw plot
     plt = new_figure()
-    plt.plot('x_values', 'y_values', data=df1,
-             color='blue',   linestyle='-',  linewidth=3, label=label + " Historique")
-    plt.plot('x_values', 'y_values', data=df2,
-             color='yellow', linestyle='--', linewidth=3, label=label + " Projetee")
+    xsmooth, ysmooth = plot_smooth([2008, 2013, 2018, 2020],
+                                   [data_dict["TM_2008"],
+                                    data_dict["TM_2013"],
+                                    data_dict["TM_2018"],
+                                    data_dict["TM_2020"]])
+    plt.plot(xsmooth, ysmooth, color=data_dict["THEME_COLOR"],  linestyle='-',       linewidth=3, label=label + " Historique")
+
+    xsmooth, ysmooth = plot_smooth([2020, 2030, 2040, 2050],
+                                   [data_dict["TM_2020"],
+                                    data_dict["TM_2030"],
+                                    data_dict["TM_2040"],
+                                    data_dict["TM_2050"]])
+    plt.plot(xsmooth, ysmooth, color=data_dict["THEME_COLOR"],  linestyle='dotted',  linewidth=3, label=label + " Projetee")
 
     # Naming the axis
-    plt.xlabel('Annees')
-    plt.ylabel('Taille des Menages')
+    plt.xlabel('Annees', color='grey')
+    plt.ylabel('Taille des Menages', color='grey')
+    plt.ylim((1, 3))
 
     # Title & Legend
-    plt.title(label + " sur " + ds.store_name)
+    plt.title(label + " sur " + ds.store_name, color=data_dict["THEME_COLOR"], weight='bold')
     plt.legend()
 
     ## Save Locally
@@ -2296,32 +2324,31 @@ def plot_population(ds: DataStore):
     """ Graphique Population en HTML et png."""
     data_dict = ds.get_row_as_dict(ds.store_index)
     label = "Population"
-    df1 = pd.DataFrame({'x_values': (2008, 2013, 2018, 2020),
-                        'y_values': (data_dict["P08_POP"],
-                                     data_dict["P13_POP"],
-                                     data_dict["P18_POP"],
-                                     data_dict["POP_2020"]
-                                     )})
-    df2 = pd.DataFrame({'x_values': (2020, 2030, 2040, 2050),
-                        'y_values': (data_dict["POP_2020"],
-                                     data_dict["POP_2030"],
-                                     data_dict["POP_2040"],
-                                     data_dict["POP_2050"]
-                                     )})
 
     # Draw plot
     plt = new_figure()
-    plt.plot('x_values', 'y_values', data=df1,
-             color='blue',   linestyle='-',  linewidth=3, label=label + " Historique")
-    plt.plot('x_values', 'y_values', data=df2,
-             color='yellow', linestyle='--', linewidth=3, label=label + " Projetee")
+
+    xsmooth, ysmooth = plot_smooth([2008, 2013, 2018, 2020],
+                                   [data_dict["P08_POP"],
+                                    data_dict["P13_POP"],
+                                    data_dict["P18_POP"],
+                                    data_dict["POP_2020"]])
+    plt.plot(xsmooth, ysmooth, color=data_dict["THEME_COLOR"],   linestyle='-',      linewidth=3, label=label + " Historique")
+
+    xsmooth, ysmooth = plot_smooth([2020, 2030, 2040, 2050],
+                                   [data_dict["POP_2020"],
+                                    data_dict["POP_2030"],
+                                    data_dict["POP_2040"],
+                                    data_dict["POP_2050"]])
+    plt.plot(xsmooth, ysmooth, color=data_dict["THEME_COLOR"],   linestyle='dotted', linewidth=3, label=label + " Projetee")
 
     # Naming the axis
-    plt.xlabel('Annees')
-    plt.ylabel('Population')
+    plt.xlabel('Annees', color='grey')
+    plt.ylabel('Population', color='grey')
+    # plt.ylim( (data_dict["POP_2050"]-500, data_dict["POP_2050"]+500) )
 
     # Title & Legend
-    plt.title(label + " sur " + ds.store_name)
+    plt.title(label + " sur " + ds.store_name + " (Base 2008)", color=data_dict["THEME_COLOR"], weight='bold')
     plt.legend()
 
     ## Save Locally
@@ -2368,6 +2395,7 @@ def report_commune(code_insee : str = None, code_postal: str = None, force=True,
     """ Generates Report for a COMMUNE identified by Code INSEE or Postal """
     commune = None
     if (code_insee):
+        commune = nom_commune(code_insee=code_insee, clean=True)
         commune = nom_commune(code_insee=code_insee, clean=True)
     elif (code_postal):
         code_insee, commune = get_code_insee_commune(code_postal)
@@ -2625,7 +2653,7 @@ class TestConsommation(unittest.TestCase):
     def testAlpesMaritimes(self):
         print_yellow("> Departement Alpes Maritimes")
         ds = report_dept(dept_id="06", force=False)
-        self.assertEqual(str(ds.get("NOM_COMMUNE")), "163")
+        self.assertEqual(str(ds.get("NOM_COMMUNE")), "Alpes-Maritimes")
         print_yellow("< Departement Alpes Maritimes")
 
     def testAlpesMaritimesReport(self):
@@ -2891,6 +2919,7 @@ def read_command_line_args(argv):
                 print_commune(communes_epci(CODE_EPCI))
             else:
                 print_yellow("> EPCI " + str(CODE_EPCI))
+                report_region_dict("93", filename=france_file, force=True)
                 report_epci(CODE_EPCI, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY)
                 print_yellow("< EPCI " + str(CODE_EPCI))
                 quit()
@@ -2902,6 +2931,7 @@ def read_command_line_args(argv):
                 quit()
             else:
                 print_yellow("> Departement " + str(CODE_DEPT))
+                report_region_dict("93", filename=france_file, force=True)
                 report_dept(CODE_DEPT, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY)
                 print_yellow("< Departement " + str(CODE_DEPT))
                 quit()
@@ -2914,6 +2944,7 @@ def read_command_line_args(argv):
                 quit()
             else:
                 print_yellow("> Region " + str(CODE_REGION))
+                report_region_dict(str(CODE_REGION), filename=france_file, force=True)
                 report_region(CODE_REGION, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY)
                 print_yellow("< Region " + str(CODE_REGION))
                 quit()

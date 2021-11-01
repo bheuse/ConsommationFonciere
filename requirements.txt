@@ -15,6 +15,6 @@ numpy
 jk_commentjson
 pyyaml
 requests
-
+scipy
 
 

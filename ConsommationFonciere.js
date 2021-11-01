@@ -1,12 +1,13 @@
 $.ajaxSetup({ async: false });
-data_m2 = null ;
-data_c2 = {};
-data_d2 = {};
+// data_m2 = null ;
+// data_d2 = {};
+data_c2 = null;
+data_s2 = null;
 
 // REGIONS / DEPARTEMENTS / EPCI / COMMUNES
 // REGIONS / DEPARTEMENTS / COMMUNES
 var france = {}; // Les Donnees des Communes, Dept, Etc
-$.getJSON("output/france.json", function(json) { france = json ; console.log(json); }); // show the info it in  console
+$.getJSON("output/france.json", function(json) { france = json ; console.log(json); }); // Info in console
 
 const vm = Vue.createApp({
     emits: ['updatePage'],
@@ -19,10 +20,12 @@ const vm = Vue.createApp({
             entity     : "DEPT_Alpes-Maritimes_06",             // Entity Base File Name
             page       : "output/DEPT_Alpes-Maritimes_06.html", // Page of entity (not used in the future)
             data_h     : null , // Data of Entity in France File (used for header)
-            data_m     : null , // Data of Entity in Metrics (not used, load fails ... ?!)
+            // data_m  : null , // Data of Entity in Metrics (not used, load fails ... ?!)
             data_c     : null , // Data of Entity in Columns
-            data_d     : null , // Diagnostic Data of Entity
+            data_s     : null , // Summary Data - Only Total and Meta
+            //data_d   : null , // Diagnostic Data of Entity
             ds         : null , // Data of Entity (Total)
+            data       : null , // Data of Entity (By Key)
             regions    : [ // Regions (Currently not used)
                { id: 1, num : '93' , nom : 'Provence Alpes Cote d Azur'        , entity : 'REGION_Provence_Alpes_Cote_d_Azur_93' }
                ],
@@ -43,35 +46,49 @@ const vm = Vue.createApp({
             console.log("loadData : "+this.entity);
             $.ajaxSetup({ async: false });
 
-            page_c2 = "output/"+this.entity+"_c.json";
+            page_c2 = "output/"+this.entity+"_s.json";
             console.log("page_c2 : "+page_c2);
             this.data_c = null ;
             data_c2     = null ;
             $.getJSON(page_c2, function(json) { data_c2 = json ; console.log(data_c2) });
+            console.log(data_c2)
             this.data_c = data_c2;
-            this.ds = this.data_c.total;
+            this.ds   = this.data_c.total;
+            this.data = this.data_c.Data;
             console.log("> this.data_c : ")
             console.log(this.data_c)
             console.log(this.ds)
             console.log(this.ds.LIBELLE)
 
-            page_m2 = "output/"+this.entity+"_m.json";
-            console.log("page_m2 : "+page_m2);
-            this.data_m = null ;
-            data_m2     = null ;
-            $.getJSON(page_m2, function(json) {  data_m2 = json ;  }); 
-            this.data_m = data_m2;
-            console.log("> this.data_m : ")
-            console.log(this.data_m)
+            // page_s2 = "output/"+this.entity+"_s.json";
+            // console.log("page_s2 : "+page_s2);
+            // this.data_s = null ;
+            // data_s2     = null ;
+            // $.getJSON(page_s2, function(json) { data_s2 = json ; console.log(data_s2) });
+            // this.data_s = data_s2;
+            // this.ds = this.data_s.total;
+            // console.log("> this.data_s : ")
+            // console.log(this.data_s)
+            // console.log(this.ds)
+            // console.log(this.ds.LIBELLE)
 
-            page_d2 = "output/"+this.entity+"_d.json";
-            console.log("page_d2 : "+page_d2);
-            this.data_d = null ;
-            page_d2     = null ;
-            $.getJSON(page_d2, function(json) { data_d2 = json ;  }); 
-            this.data_d = data_d2;
-            console.log("> this.data_m : ")
-            console.log(this.data_d)
+            // page_m2 = "output/"+this.entity+"_m.json";
+            // console.log("page_m2 : "+page_m2);
+            // this.data_m = null ;
+            // data_m2     = null ;
+            // $.getJSON(page_m2, function(json) {  data_m2 = json ;  });
+            // this.data_m = data_m2;
+            // console.log("> this.data_m : ")
+            // console.log(this.data_m)
+
+            // page_d2 = "output/"+this.entity+"_d.json";
+            // console.log("page_d2 : "+page_d2);
+            // this.data_d = null ;
+            // page_d2     = null ;
+            // $.getJSON(page_d2, function(json) { data_d2 = json ;  });
+            // this.data_d = data_d2;
+            // console.log("> this.data_m : ")
+            // console.log(this.data_d)
 
             console.log("Done loadData : "+this.entity);
             },
