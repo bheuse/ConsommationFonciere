@@ -1,8 +1,5 @@
 $.ajaxSetup({ async: false });
-// data_m2 = null ;
-// data_d2 = {};
-data_c2 = null;
-data_s2 = null;
+g_data_s = null;
 
 // REGIONS / DEPARTEMENTS / EPCI / COMMUNES
 // REGIONS / DEPARTEMENTS / COMMUNES
@@ -19,11 +16,8 @@ const vm = Vue.createApp({
             code       : "06" ,                 // INSEE Code of entity
             entity     : "DEPT_Alpes-Maritimes_06",             // Entity Base File Name
             page       : "output/DEPT_Alpes-Maritimes_06.html", // Page of entity (not used in the future)
-            data_h     : null , // Data of Entity in France File (used for header)
-            // data_m  : null , // Data of Entity in Metrics (not used, load fails ... ?!)
-            data_c     : null , // Data of Entity in Columns
-            data_s     : null , // Summary Data - Only Total and Meta
-            //data_d   : null , // Diagnostic Data of Entity
+            data_h     : null , // Data of Entities in France File (used for header / selection)
+            data_s     : null , // Data of Entity - Summary
             ds         : null , // Data of Entity (Total)
             data       : null , // Data of Entity (By Key)
             regions    : [ // Regions (Currently not used)
@@ -45,51 +39,23 @@ const vm = Vue.createApp({
         loadData(){
             console.log("loadData : "+this.entity);
             $.ajaxSetup({ async: false });
-
-            page_c2 = "output/"+this.entity+"_s.json";
-            console.log("page_c2 : "+page_c2);
-            this.data_c = null ;
-            data_c2     = null ;
-            $.getJSON(page_c2, function(json) { data_c2 = json ; console.log(data_c2) });
-            console.log(data_c2)
-            this.data_c = data_c2;
-            this.ds   = this.data_c.total;
-            this.data = this.data_c.Data;
-            console.log("> this.data_c : ")
-            console.log(this.data_c)
+            json_s = "output/"+this.entity+"_s.json";
+            console.log("json_s : "+json_s);
+            this.data_s  = null ;
+            this.ds      = null ;
+            this.data    = null ;
+            this.diag    = null ;
+            g_data_s     = null ;
+            $.getJSON(json_s, function(json) { g_data_s = json ; console.log(g_data_s) });
+            console.log(g_data_s)
+            this.data_s = g_data_s;
+            this.ds     = this.data_s.total;
+            this.data   = this.data_s.Data;
+            this.diag   = this.data_s.Diagnostics;
+            console.log("> this.data_s : ")
+            console.log(this.data_s)
             console.log(this.ds)
             console.log(this.ds.LIBELLE)
-
-            // page_s2 = "output/"+this.entity+"_s.json";
-            // console.log("page_s2 : "+page_s2);
-            // this.data_s = null ;
-            // data_s2     = null ;
-            // $.getJSON(page_s2, function(json) { data_s2 = json ; console.log(data_s2) });
-            // this.data_s = data_s2;
-            // this.ds = this.data_s.total;
-            // console.log("> this.data_s : ")
-            // console.log(this.data_s)
-            // console.log(this.ds)
-            // console.log(this.ds.LIBELLE)
-
-            // page_m2 = "output/"+this.entity+"_m.json";
-            // console.log("page_m2 : "+page_m2);
-            // this.data_m = null ;
-            // data_m2     = null ;
-            // $.getJSON(page_m2, function(json) {  data_m2 = json ;  });
-            // this.data_m = data_m2;
-            // console.log("> this.data_m : ")
-            // console.log(this.data_m)
-
-            // page_d2 = "output/"+this.entity+"_d.json";
-            // console.log("page_d2 : "+page_d2);
-            // this.data_d = null ;
-            // page_d2     = null ;
-            // $.getJSON(page_d2, function(json) { data_d2 = json ;  });
-            // this.data_d = data_d2;
-            // console.log("> this.data_m : ")
-            // console.log(this.data_d)
-
             console.log("Done loadData : "+this.entity);
             },
         selectDept(event){
@@ -158,12 +124,7 @@ const vm = Vue.createApp({
             console.log(this.nom + " : " + this.entity);
             console.log("Done selectCommune "+this.entity);
             },
-        loadJSON(file){
-            $.getJSON(file, function(json) { console.log(json); }); // show the info it in  console
-            },
         }
-
-
 })
 
 vm.component('rapport-iframe', {
@@ -189,10 +150,33 @@ function onPageLoaded() {
   console.log(queryString);
   const urlParams = new URLSearchParams(queryString);
   // "output/DEPT_Alpes-Maritimes_06.html"
-  var init_page = urlParams.get('ENTITE')
-  if (init_page == null) { init_page = "DEPT_Alpes-Maritimes_06" } ;
-  init_page =  "output/"+init_page+".html";
-  console.log(init_page);
+  var code_postal = urlParams.get('CODE_POSTAL')
+  var code_insee  = urlParams.get('CODE_INSEE')
+  var type_entity = urlParams.get('TYPE')
+  var commune     = urlParams.get('COMMUNE')
+  var dept        = urlParams.get('DEPT')
+  var epci        = urlParams.get('EPCI')
+  var region      = urlParams.get('REGION')
+
+  if (type_entity != null) { code_insee = code_insee ; type_entity=type_entity} ;
+  if (region != null)      { code_insee = region     ; type_entity="REGION"} ;
+  if (dept != null)        { code_insee = dept       ; type_entity="DEPT"} ;
+  if (epci != null)        { code_insee = epci       ; type_entity="EPCI"} ;
+  if (commune != null)     { code_insee = commune    ; type_entity="COMMUNE"} ;
+  if (code_postal != null) { code_insee = commune    ; type_entity="COMMUNE"} ;
+
+  if (type_entity != "DEPT") {
+        // Locate Dept in France JSON
+        depts            = france["REGIONS"][0]["DEPARTEMENTS"];
+        dept_index       = depts.findIndex(x => x.Nom === this.nom);
+        nom_dept         = depts[dept_index].Nom;
+        console.log(nom_dept);
+    } ;
+
+  var entity = urlParams.get('ENTITE')
+  if (entity == null) { init_page = "DEPT_Alpes-Maritimes_06" } ;
+  entity =  "output/"+init_page+".html";
+  console.log(entity);
   // alert("Page is loaded : " + init_page);
 }
 
