@@ -1039,7 +1039,7 @@ class DataStore():
         self.render_report()
         return self.html
 
-    def render_report(self, template=html_report_template):
+    def render_report(self, template=html_report_template, suffix = ""):
         """ Render Report with specific HTML Mako Template """
         # Building Mako Template Context
         context = {**self.get_row_as_dict(), **global_context}
@@ -1060,7 +1060,7 @@ class DataStore():
         temp = Template(filename=template)
         self.html = temp.render(**context)
         # Saving to File
-        p_html_file = output_dir + self.get_fullname() + ".html"
+        p_html_file = output_dir + self.get_fullname() + suffix + ".html"
         f = open(p_html_file, 'w')
         f.write(self.html)
         f.close()
@@ -2521,6 +2521,7 @@ def gen_report(ds : DataStore, data_only : bool = False, ftp_push : bool = False
     global_context["HTML_PLOT_LOGEMENTS_PIE"]      = plot_logements_pie(ds)
     global_context["HTML_PLOT_POPULATION"]         = plot_population(ds)
     global_context["HTML_PLOT_TAILLE_DES_MENAGES"] = plot_taille_menages(ds)
+    ds.render_report(input_dir  + "tracker_template.html", suffix="_tracker")
     if (data_only) :
         if (ftp_push):
             ftp_push_ds(ds)
@@ -2543,43 +2544,49 @@ def readme_to_html():
 
 
 def ftp_push_ds(ds : DataStore):
-    ftp = ftplib.FTP("ftpupload.net")
-    ftp.login("epiz_30239961", "oqEwtTaACCaANF")
-    ftp.cwd("htdocs")
-    ftp.cwd("output")
-    # remote_files = ftp.nlst()
-    # print(remote_files)
+    file_ext  = [ "_s.json" , ".xlsx" , ".csv" ,
+                  "_Logements.png", "_Population.png", "_tracker.html",
+                  "_Taille_des_Menages.png", "_Repartition_des_Logements.png"
+                ]
+    file_list = list()
     prefix = ds.get_fullname()
-    for ext in { "_s.json" , ".xlsx" , ".csv" , "_Logements.png", "_Population.png", "_Taille_des_Menages.png", "_Repartition_des_Logements.png" } :
-        filename = output_dir + prefix + ext
-        ftp_filename = prefix + ext
-        print_blue("FTP Push : "+ filename)
-        ftp.storbinary('STOR ' + ftp_filename, open(filename, 'rb'))
-    ftp.close()
+    for ext in file_ext :
+        file_list.append(output_dir + prefix + ext)
+    ftp_push_files(file_list)
+
 
 def ftp_push_file(filename):
-    ftp = ftplib.FTP("ftpupload.net")
-    ftp.login("epiz_30239961", "oqEwtTaACCaANF")
-    ftp.cwd("htdocs")
-    print_blue("FTP Push : " + filename)
-    file = open(filename, 'rb')
-    ftp.storbinary('STOR ' + filename, file)
-    file.close()
-    ftp.close()
+    if (isinstance(filename, str)):
+        filename = [filename]
+    if (isinstance(filename, list)):
+        ftp = ftplib.FTP("ftpupload.net")
+        ftp.login("epiz_30239961", "oqEwtTaACCaANF")
+        ftp.cwd("htdocs")
+        # remote_files = ftp.nlst()
+        # print(remote_files)
+        for file in filename:
+            print_blue("FTP Push : " + file)
+            ftp.storbinary('STOR ' + file, open(file, 'rb'))
+        ftp.close()
+
 
 def ftp_push_files():
-    ftp_push_file("output/france.json")
-    ftp_push_file("input/Configuration.xlsx")
-    ftp_push_file("input/Legend_Logements.png")
-    ftp_push_file("README.md")
-    ftp_push_file("README.html")
-    ftp_push_file("README.dillinger.html")
-    ftp_push_file("ConsommationFonciere.html")
-    ftp_push_file("ConsommationFonciere.js")
-    ftp_push_file("ConsommationFonciere.py")
-    ftp_push_file("index.html")
-    ftp_push_file("Header.png")
-    ftp_push_file("Body.png")
+    filelist = ["output/france.json",
+                "input/Configuration.xlsx",
+                "input/Legend_Logements.png",
+                "input/Gadseca-Logo-BIG.png", "input/Gadseca-Logo.png",
+                "input/Gadseca_50Ans.jpg",    "input/Gadseca_Logo.png",
+                "input/Logo2-Vert-FV.png",    "input/Logo2-Vert.png",
+                "input/Logo3-Color-FV.png",   "input/Logo3-Color.png", "msShophia-Logo.jpg",
+                "input/report_template.html", "input/tracker_template.html",
+                "input/CartePaca1.jpg",       "input/CartePaca2.png",       "input/CartePaca4.png", "input/CartoPaca4.png",
+                "input/CartoPaca3.png.png",   "input/CartoPaca3-Green.png", "input/CartoPaca3-Light-Green.png",
+                "README.md",  "README.html",   "README.dillinger.html",
+                "ConsommationFonciere.html",   "ConsommationFonciere.js", "ConsommationFonciere.py",
+                "index.html",
+                "Header.png", "Body.png"
+                ]
+    ftp_push_file(filelist)
 
 
 def report_commune(code_insee : str = None, code_postal: str = None, force=True, data_only : bool = False, ftp_push : bool = False):

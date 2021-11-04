@@ -48,6 +48,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
 <script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F6W0QF8E5V"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-F6W0QF8E5V');
+</script>
+
 </head>
 
 <body onload="onPageLoaded()">
@@ -149,6 +158,7 @@
             <p> Departement : {{ ds.DEP_NOM}} - {{ ds.DEP}} </p>
             <p> Region :      {{ ds.REG_NOM}} - {{ ds.REG }}  </p>
         </div>
+        <p class="w3-container w3-theme">Pour imprimer ou obtenir un fichier PDF: CTRL-P, Imprimer ou Sauver comme PDF - ne garder que les cinq premieres pages.</p>
     </div>
 </div>
 
@@ -186,6 +196,113 @@ function openTab(evt, cityName) {
 <button class="w3-bar-item w3-button databtn w3-padding-16 w3-grey" onclick="openTab(event,'Debug')">                   Debug </button>
 </div>
 
+<div id="Diagnostics"       class="w3-container city w3-animate-opacity">
+    <div v-if="this.data_s != null">
+        <h2>Diagnostics</h2>
+        <div v-for='diag in this.data_s.Diagnostics' >
+         <div v-if="diag.type == 'NOTE'" >
+             <div v-if='diag.value == true' class="w3-panel w3-pale-yellow w3-topbar w3-rightbar w3-border-yellow w3-border">
+                            <p>{{diag.key}} - {{diag.categorie}}</p>
+                            <p>{{diag.description}}</p>
+                            <p>{{diag.messageSiVrai}}</p>
+             </div>
+             <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-leftbar w3-border-yellow w3-border">
+                            <p>{{diag.key}} - {{diag.categorie}}</p>
+                            <p>{{diag.description}}</p>
+                            <p>{{diag.messageSiFaux}}</p>
+             </div>
+         </div>
+         <div v-if="diag.type == 'BLUE'" >
+             <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
+                            <p>{{diag.key}} - {{diag.categorie}}</p>
+                            <p>{{diag.description}}</p>
+                            <p>{{diag.messageSiVrai}}</p>
+             </div>
+             <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
+                            <p>{{diag.key}} - {{diag.categorie}}</p>
+                            <p>{{diag.description}}</p>
+                            <p>{{diag.messageSiFaux}}</p>
+             </div>
+         </div>
+         <div v-if="diag.type == 'DIAG'" >
+             <div v-if='diag.value == true' class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border">
+                            <p>{{diag.key}} - {{diag.categorie}}</p>
+                            <p>{{diag.description}}</p>
+                            <p>{{diag.messageSiVrai}}</p>
+             </div>
+             <div v-else class="w3-panel w3-pale-red w3-bottombar w3-border-red w3-border">
+                            <p>{{diag.key}} - {{diag.categorie}}</p>
+                            <p>{{diag.description}}</p>
+                            <p>{{diag.messageSiFaux}}</p>
+             </div>
+         </div>
+     </div>
+</div>
+</div>
+<div id="Graphiques"        class="w3-container city w3-animate-opacity">
+    <div v-if="this.data_s != null">
+        <h2>Graphiques</h2>
+        <div class="w3-container w3-section w3-teal"><h2 class="w3-teal w3-padding-16">Logements</h2></div>
+        <img :src="ds.GRAPHIQUE_LOGEMENTS"           alt="Logements" class="center" >
+        <br>
+        <img src="input/Legend_Logements.png"       alt="Legende Logements" class="center">
+
+        <div class="w3-container w3-section w3-teal"><h2 class="w3-teal w3-padding-16">Repartition des Logements</h2></div>
+        <img :src="ds.GRAPHIQUE_REPARTITION_DES_LOGEMENTS"          alt="Repartition" class="center">
+
+        <div class="w3-container w3-section w3-teal"><h2 class="w3-teal w3-padding-16">Population</h2></div>
+        <img :src="ds.GRAPHIQUE_POPULATION"          alt="Population" class="center">
+
+        <div class="w3-container w3-section w3-teal"><h2 class="w3-teal w3-padding-16">Taille des Menages</h2></div>
+        <img :src="ds.GRAPHIQUE_TAILLE_DES_MENAGES"  alt="Taille des Menages" class="center">
+
+        <div >
+            <canvas id="line-chart" width="200" height="50"></canvas>
+            <script>
+              new Chart(document.getElementById("line-chart"), {
+              type: 'line',
+              data: {
+                labels: [1500,1600,1700,1750,1800,1850,1900,1950,1999,2050],
+                datasets: [{
+                    data: [86,114,106,106,107,111,133,221,783,2478],
+                    label: "Africa",
+                    borderColor: "#3e95cd",
+                    fill: false
+                  }, {
+                    data: [282,350,411,502,635,809,947,1402,3700,5267],
+                    label: "Asia",
+                    borderColor: "#8e5ea2",
+                    fill: false
+                  }, {
+                    data: [168,170,178,190,203,276,408,547,675,734],
+                    label: "Europe",
+                    borderColor: "#3cba9f",
+                    fill: false
+                  }, {
+                    data: [40,20,10,16,24,38,74,167,508,784],
+                    label: "Latin America",
+                    borderColor: "#e8c3b9",
+                    fill: false
+                  }, {
+                    data: [6,3,2,2,7,26,82,172,312,433],
+                    label: "North America",
+                    borderColor: "#c45850",
+                    fill: false
+                  }
+                ]
+              },
+              options: {
+                title: {
+                  display: true,
+                  text: 'World population per region (in millions)'
+                }
+              }
+            });
+            </script>
+            </div>
+
+    </div>
+</div>
 <div id="Logements"         class="w3-container city w3-animate-opacity">
     <div v-if="this.data_s != null">
         <h2>Logements</h2>
@@ -296,6 +413,208 @@ function openTab(evt, cityName) {
                  </div>
              </div>
         </div>
+    </div>
+</div>
+<div id="Loi_SRU"           class="w3-container city w3-animate-opacity">
+    <div v-if="this.data_s != null">
+        <h2>Loi SRU</h2>
+        <p>Logements Sociaux : <a target="_blank" :href="ds.URL_SOURCE_SRU"> Dossier Dreal </a></p>
+        <table class="w3-table-all w3-hoverable w3-card-4">
+                    <tr class="w3-teal">
+                        <th>Donnees SRU</th>
+                        <th class="w3-right-align">2017</th>
+                        <th class="w3-right-align">2020</th>
+                    </tr>
+                    <tr>
+                        <td>Residences Principales</td>
+                        <td class="w3-right-align">{{ds.SRU_RP_2017}}</td>
+                        <td class="w3-right-align">{{ds.SRU_RP_2020}}</td>
+                    </tr>
+                    <tr>
+                        <td>Logements Sociaux :</td>
+                        <td class="w3-right-align">{{ds.SRU_LLS_2017}}</td>
+                        <td class="w3-right-align">{{ds.SRU_LLS_2020}}</td>
+                    </tr>
+                    <tr>
+                        <td>Taux Logements Sociaux :</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.SRU_TX_LLS_2017 * 10000).toFixed(4)) ) / 100  }}%</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.SRU_TX_LLS_2020 * 10000).toFixed(4)) ) / 100  }}%</td>
+                    </tr>
+                    <tr>
+                        <td>Carence :</td>
+                        <td class="w3-right-align">{{ds.SRU_CARENCE_2017}}</td>
+                        <td class="w3-right-align">{{ds.SRU_CARENCE_2020}}</td>
+                    </tr>
+                    <tr>
+                        <td>Objectifs Trienaux :</td>
+                        <td class="w3-right-align">{{ds.SRU_OBJ_2017_2019}}</td>
+                        <td class="w3-right-align">{{ds.SRU_OBJ_2020_2022}}</td>
+                    </tr>
+                    <tr>
+                        <td>Logements 35% / 65% Trienaux :</td>
+                        <td class="w3-right-align">{{ds.SRU_MOD3565_2017}}</td>
+                        <td class="w3-right-align">{{ds.SRU_MOD3565_2020}}</td>
+                    </tr>
+                </table>
+        <br>
+        <div> <h2>Logements Sociaux MOUGINS</h2>
+              <p>Evolution 2017-2020 des Residences Principales : {{ds.SRU_EVOLUTION_EN_RP}}</p>
+              <p>Evolution 2017-2020 Carence : {{ds.SRU_EVOLUTION_CARENCE}}</p>
+              <p>Logements Sociaux Realises en 2017-2020 (SRU) : {{ds.SRU_LOGEMENTS_SRU_CONSTRUITS}}</p>
+              <p>Logements Sociaux Realises en 2017-2021 (Sitadel): {{ds.NB_LGT_PRET_LOC_SOCIAL_1721}}</p>
+              <p>Logements Sociaux Realises en 2013-2016 (Sitadel): {{ds.NB_LGT_PRET_LOC_SOCIAL_1316}}</p>
+              <p>Logements Sociaux Realises en 2013-2021 (Sitadel): {{ds.NB_LGT_PRET_LOC_SOCIAL_1321}}</p>
+              <p>Total de logements a construire en 35% / 65% : {{ds.SRU_MOD3565_CARENCE}}</p>
+        </div>
+        <br>
+        <div><h2>Carte Geoportail Logement Social</h2>
+             <p>Sur <a target="_blank" :href="ds.URL_CARTE_LOGEMENT_SOCIAL"> Geoportail Logement Social </a></p>
+             <!-- <iframe height="500" width="900" class="framegeop" v-bind:src="ds.URL_CARTE_LOGEMENT_SOCIAL"></iframe>-->
+        </div>
+        <br>
+        <div v-for='diag in this.data_s.Diagnostics' >
+             <div v-if="diag.categorie == 'SRU'" >
+                 <div v-if="diag.type == 'NOTE'" >
+                     <div v-if='diag.value == true' class="w3-panel w3-pale-yellow w3-topbar w3-rightbar w3-border-yellow w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiVrai}}</p>
+                     </div>
+                     <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-leftbar w3-border-yellow w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiFaux}}</p>
+                     </div>
+                 </div>
+                 <div v-if="diag.type == 'BLUE'" >
+                     <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiVrai}}</p>
+                     </div>
+                     <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiFaux}}</p>
+                     </div>
+                 </div>
+                 <div v-if="diag.type == 'DIAG'" >
+                     <div v-if='diag.value == true' class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiVrai}}</p>
+                     </div>
+                     <div v-else class="w3-panel w3-pale-red w3-bottombar w3-border-red w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiFaux}}</p>
+                     </div>
+                 </div>
+             </div>
+         </div>
+    </div>
+</div>
+<div id="Artificialisation" class="w3-container city w3-animate-opacity">
+    <div v-if="this.data_s != null">
+        <h2>Artificialisation sur 10 ans (2009-2020)</h2>
+         <p>Artificialisation : <a target="_blank" :href="ds.URL_SOURCE_ARTIFICIALISATION"> Dossier Cerema </a></p>
+         <table class="w3-table-all w3-hoverable w3-card-4">
+                    <tbody>
+                    <tr class="w3-teal">
+                        <th>Donnees Cerema</th>
+                        <th class="w3-right-align">2009-2020</th>
+                    </tr>
+                    <tr>
+                        <td>Surface du Territoire</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.SURFACE_COMMUNE / 100 ).toFixed(2)) ) / 100  }} ha</td>
+                    </tr>
+                    <tr>
+                        <td>Artificialisation en 10 ans</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.ART_TOTAL / 100).toFixed(2)) ) / 100  }} ha</td>
+                    </tr>
+                    <tr>
+                        <td>Supplement en 10 ans</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.ART_POURCENT * 100).toFixed(2)) ) / 100  }}%</td>
+                    </tr>
+                    </tbody>
+                </table>
+         <br>
+         <div v-for='diag in this.data_s.Diagnostics' >
+             <div v-if="diag.categorie == 'ART'" >
+                 <div v-if="diag.type == 'NOTE'" >
+                     <div v-if='diag.value == true' class="w3-panel w3-pale-yellow w3-topbar w3-rightbar w3-border-yellow w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiVrai}}</p>
+                     </div>
+                     <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-leftbar w3-border-yellow w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiFaux}}</p>
+                     </div>
+                 </div>
+                 <div v-if="diag.type == 'BLUE'" >
+                     <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiVrai}}</p>
+                     </div>
+                     <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiFaux}}</p>
+                     </div>
+                 </div>
+                 <div v-if="diag.type == 'DIAG'" >
+                     <div v-if='diag.value == true' class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiVrai}}</p>
+                     </div>
+                     <div v-else class="w3-panel w3-pale-red w3-bottombar w3-border-red w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiFaux}}</p>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         <table class="w3-table-all w3-hoverable w3-card-4">
+                    <tbody>
+                    <tr class="w3-teal">
+                        <th>Donnees Sitadel</th>
+                        <th class="w3-right-align">2013-2021</th>
+                    </tr>
+                    <tr>
+                        <td>Surface du Territoire</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.SURFACE_COMMUNE / 100 ).toFixed(2)) ) / 100  }} ha</td>
+                    </tr>
+                    <tr>
+                        <td>NB_LGT_NOUVEAU</td>
+                        <td class="w3-right-align">{{ ds.NB_LGT_NOUVEAU  }} </td>
+                    </tr>
+                    <tr>
+                        <td>NB_LGT_RENOUVELLEMENT</td>
+                        <td class="w3-right-align">{{ ds.NB_LGT_RENOUVELLEMENT  }} </td>
+                    </tr>
+                    <tr>
+                        <td>SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN / 100 ).toFixed(2)) ) / 100  }} ha</td>
+                    </tr>
+                    <tr>
+                        <td>SITADEL_LOCAUX_NOUVEAUX</td>
+                        <td class="w3-right-align">{{ ds.SITADEL_LOCAUX_NOUVEAUX  }} </td>
+                    </tr>
+                    <tr>
+                        <td>SITADEL_LOCAUX_RENOUVELLEMENT</td>
+                        <td class="w3-right-align">{{ ds.SITADEL_LOCAUX_RENOUVELLEMENT  }} </td>
+                    </tr>
+                    <tr>
+                        <td>SITADEL_LOCAUX_SUPERFICIE_TERRAIN</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.SITADEL_LOCAUX_SUPERFICIE_TERRAIN / 100 ).toFixed(2)) ) / 100  }} ha</td>
+                    </tr>
+                    </tbody>
+                </table>
     </div>
 </div>
 <div id="Historique"        class="w3-container city w3-animate-opacity">
@@ -451,109 +770,6 @@ function openTab(evt, cityName) {
         </div>
     </div>
 </div>
-<div id="Artificialisation" class="w3-container city w3-animate-opacity">
-    <div v-if="this.data_s != null">
-        <h2>Artificialisation sur 10 ans (2009-2020)</h2>
-         <p>Artificialisation : <a target="_blank" :href="ds.URL_SOURCE_ARTIFICIALISATION"> Dossier Cerema </a></p>
-         <table class="w3-table-all w3-hoverable w3-card-4">
-                    <tbody>
-                    <tr class="w3-teal">
-                        <th>Donnees Cerema</th>
-                        <th class="w3-right-align">2009-2020</th>
-                    </tr>
-                    <tr>
-                        <td>Surface du Territoire</td>
-                        <td class="w3-right-align">{{ Math.round( ((ds.SURFACE_COMMUNE / 100 ).toFixed(2)) ) / 100  }} ha</td>
-                    </tr>
-                    <tr>
-                        <td>Artificialisation en 10 ans</td>
-                        <td class="w3-right-align">{{ Math.round( ((ds.ART_TOTAL / 100).toFixed(2)) ) / 100  }} ha</td>
-                    </tr>
-                    <tr>
-                        <td>Supplement en 10 ans</td>
-                        <td class="w3-right-align">{{ Math.round( ((ds.ART_POURCENT * 100).toFixed(2)) ) / 100  }}%</td>
-                    </tr>
-                    </tbody>
-                </table>
-         <br>
-         <div v-for='diag in this.data_s.Diagnostics' >
-             <div v-if="diag.categorie == 'ART'" >
-                 <div v-if="diag.type == 'NOTE'" >
-                     <div v-if='diag.value == true' class="w3-panel w3-pale-yellow w3-topbar w3-rightbar w3-border-yellow w3-border">
-                                    <p>{{diag.key}} - {{diag.categorie}}</p>
-                                    <p>{{diag.description}}</p>
-                                    <p>{{diag.messageSiVrai}}</p>
-                     </div>
-                     <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-leftbar w3-border-yellow w3-border">
-                                    <p>{{diag.key}} - {{diag.categorie}}</p>
-                                    <p>{{diag.description}}</p>
-                                    <p>{{diag.messageSiFaux}}</p>
-                     </div>
-                 </div>
-                 <div v-if="diag.type == 'BLUE'" >
-                     <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
-                                    <p>{{diag.key}} - {{diag.categorie}}</p>
-                                    <p>{{diag.description}}</p>
-                                    <p>{{diag.messageSiVrai}}</p>
-                     </div>
-                     <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
-                                    <p>{{diag.key}} - {{diag.categorie}}</p>
-                                    <p>{{diag.description}}</p>
-                                    <p>{{diag.messageSiFaux}}</p>
-                     </div>
-                 </div>
-                 <div v-if="diag.type == 'DIAG'" >
-                     <div v-if='diag.value == true' class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border">
-                                    <p>{{diag.key}} - {{diag.categorie}}</p>
-                                    <p>{{diag.description}}</p>
-                                    <p>{{diag.messageSiVrai}}</p>
-                     </div>
-                     <div v-else class="w3-panel w3-pale-red w3-bottombar w3-border-red w3-border">
-                                    <p>{{diag.key}} - {{diag.categorie}}</p>
-                                    <p>{{diag.description}}</p>
-                                    <p>{{diag.messageSiFaux}}</p>
-                     </div>
-                 </div>
-             </div>
-         </div>
-         <table class="w3-table-all w3-hoverable w3-card-4">
-                    <tbody>
-                    <tr class="w3-teal">
-                        <th>Donnees Sitadel</th>
-                        <th class="w3-right-align">2013-2021</th>
-                    </tr>
-                    <tr>
-                        <td>Surface du Territoire</td>
-                        <td class="w3-right-align">{{ Math.round( ((ds.SURFACE_COMMUNE / 100 ).toFixed(2)) ) / 100  }} ha</td>
-                    </tr>
-                    <tr>
-                        <td>NB_LGT_NOUVEAU</td>
-                        <td class="w3-right-align">{{ ds.NB_LGT_NOUVEAU  }} </td>
-                    </tr>
-                    <tr>
-                        <td>NB_LGT_RENOUVELLEMENT</td>
-                        <td class="w3-right-align">{{ ds.NB_LGT_RENOUVELLEMENT  }} </td>
-                    </tr>
-                    <tr>
-                        <td>SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN</td>
-                        <td class="w3-right-align">{{ Math.round( ((ds.SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN / 100 ).toFixed(2)) ) / 100  }} ha</td>
-                    </tr>
-                    <tr>
-                        <td>SITADEL_LOCAUX_NOUVEAUX</td>
-                        <td class="w3-right-align">{{ ds.SITADEL_LOCAUX_NOUVEAUX  }} </td>
-                    </tr>
-                    <tr>
-                        <td>SITADEL_LOCAUX_RENOUVELLEMENT</td>
-                        <td class="w3-right-align">{{ ds.SITADEL_LOCAUX_RENOUVELLEMENT  }} </td>
-                    </tr>
-                    <tr>
-                        <td>SITADEL_LOCAUX_SUPERFICIE_TERRAIN</td>
-                        <td class="w3-right-align">{{ Math.round( ((ds.SITADEL_LOCAUX_SUPERFICIE_TERRAIN / 100 ).toFixed(2)) ) / 100  }} ha</td>
-                    </tr>
-                    </tbody>
-                </table>
-    </div>
-</div>
 <div id="Projections"       class="w3-container city w3-animate-opacity">
     <div v-if="this.data_s != null">
          <h2>Projections</h2>
@@ -662,148 +878,6 @@ function openTab(evt, cityName) {
          </div>
     </div>
 </div>
-<div id="Loi_SRU"           class="w3-container city w3-animate-opacity">
-    <div v-if="this.data_s != null">
-        <h2>Loi SRU</h2>
-        <p>Logements Sociaux : <a target="_blank" :href="ds.URL_SOURCE_SRU"> Dossier Dreal </a></p>
-        <table class="w3-table-all w3-hoverable w3-card-4">
-                    <tr class="w3-teal">
-                        <th>Donnees SRU</th>
-                        <th class="w3-right-align">2017</th>
-                        <th class="w3-right-align">2020</th>
-                    </tr>
-                    <tr>
-                        <td>Residences Principales</td>
-                        <td class="w3-right-align">{{ds.SRU_RP_2017}}</td>
-                        <td class="w3-right-align">{{ds.SRU_RP_2020}}</td>
-                    </tr>
-                    <tr>
-                        <td>Logements Sociaux :</td>
-                        <td class="w3-right-align">{{ds.SRU_LLS_2017}}</td>
-                        <td class="w3-right-align">{{ds.SRU_LLS_2020}}</td>
-                    </tr>
-                    <tr>
-                        <td>Taux Logements Sociaux :</td>
-                        <td class="w3-right-align">{{ Math.round( ((ds.SRU_TX_LLS_2017 * 10000).toFixed(4)) ) / 100  }}%</td>
-                        <td class="w3-right-align">{{ Math.round( ((ds.SRU_TX_LLS_2020 * 10000).toFixed(4)) ) / 100  }}%</td>
-                    </tr>
-                    <tr>
-                        <td>Carence :</td>
-                        <td class="w3-right-align">{{ds.SRU_CARENCE_2017}}</td>
-                        <td class="w3-right-align">{{ds.SRU_CARENCE_2020}}</td>
-                    </tr>
-                    <tr>
-                        <td>Objectifs Trienaux :</td>
-                        <td class="w3-right-align">{{ds.SRU_OBJ_2017_2019}}</td>
-                        <td class="w3-right-align">{{ds.SRU_OBJ_2020_2022}}</td>
-                    </tr>
-                    <tr>
-                        <td>Logements 35% / 65% Trienaux :</td>
-                        <td class="w3-right-align">{{ds.SRU_MOD3565_2017}}</td>
-                        <td class="w3-right-align">{{ds.SRU_MOD3565_2020}}</td>
-                    </tr>
-                </table>
-        <br>
-        <div> <h2>Logements Sociaux MOUGINS</h2>
-              <p>Evolution 2017-2020 des Residences Principales : {{ds.SRU_EVOLUTION_EN_RP}}</p>
-              <p>Evolution 2017-2020 Carence : {{ds.SRU_EVOLUTION_CARENCE}}</p>
-              <p>Logements Sociaux Realises en 2017-2020 (SRU) : {{ds.SRU_LOGEMENTS_SRU_CONSTRUITS}}</p>
-              <p>Logements Sociaux Realises en 2017-2021 (Sitadel): {{ds.NB_LGT_PRET_LOC_SOCIAL_1721}}</p>
-              <p>Logements Sociaux Realises en 2013-2016 (Sitadel): {{ds.NB_LGT_PRET_LOC_SOCIAL_1316}}</p>
-              <p>Logements Sociaux Realises en 2013-2021 (Sitadel): {{ds.NB_LGT_PRET_LOC_SOCIAL_1321}}</p>
-              <p>Total de logements a construire en 35% / 65% : {{ds.SRU_MOD3565_CARENCE}}</p>
-        </div>
-        <br>
-        <div><h2>Carte Geoportail Logement Social</h2>
-             <p>Sur <a target="_blank" :href="ds.URL_CARTE_LOGEMENT_SOCIAL"> Geoportail Logement Social </a></p>
-             <!-- <iframe height="500" width="900" class="framegeop" v-bind:src="ds.URL_CARTE_LOGEMENT_SOCIAL"></iframe>-->
-        </div>
-        <br>
-        <div v-for='diag in this.data_s.Diagnostics' >
-             <div v-if="diag.categorie == 'SRU'" >
-                 <div v-if="diag.type == 'NOTE'" >
-                     <div v-if='diag.value == true' class="w3-panel w3-pale-yellow w3-topbar w3-rightbar w3-border-yellow w3-border">
-                                    <p>{{diag.key}} - {{diag.categorie}}</p>
-                                    <p>{{diag.description}}</p>
-                                    <p>{{diag.messageSiVrai}}</p>
-                     </div>
-                     <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-leftbar w3-border-yellow w3-border">
-                                    <p>{{diag.key}} - {{diag.categorie}}</p>
-                                    <p>{{diag.description}}</p>
-                                    <p>{{diag.messageSiFaux}}</p>
-                     </div>
-                 </div>
-                 <div v-if="diag.type == 'BLUE'" >
-                     <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
-                                    <p>{{diag.key}} - {{diag.categorie}}</p>
-                                    <p>{{diag.description}}</p>
-                                    <p>{{diag.messageSiVrai}}</p>
-                     </div>
-                     <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
-                                    <p>{{diag.key}} - {{diag.categorie}}</p>
-                                    <p>{{diag.description}}</p>
-                                    <p>{{diag.messageSiFaux}}</p>
-                     </div>
-                 </div>
-                 <div v-if="diag.type == 'DIAG'" >
-                     <div v-if='diag.value == true' class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border">
-                                    <p>{{diag.key}} - {{diag.categorie}}</p>
-                                    <p>{{diag.description}}</p>
-                                    <p>{{diag.messageSiVrai}}</p>
-                     </div>
-                     <div v-else class="w3-panel w3-pale-red w3-bottombar w3-border-red w3-border">
-                                    <p>{{diag.key}} - {{diag.categorie}}</p>
-                                    <p>{{diag.description}}</p>
-                                    <p>{{diag.messageSiFaux}}</p>
-                     </div>
-                 </div>
-             </div>
-         </div>
-    </div>
-</div>
-<div id="Diagnostics"       class="w3-container city w3-animate-opacity">
-    <div v-if="this.data_s != null">
-        <h2>Diagnostics</h2>
-        <div v-for='diag in this.data_s.Diagnostics' >
-         <div v-if="diag.type == 'NOTE'" >
-             <div v-if='diag.value == true' class="w3-panel w3-pale-yellow w3-topbar w3-rightbar w3-border-yellow w3-border">
-                            <p>{{diag.key}} - {{diag.categorie}}</p>
-                            <p>{{diag.description}}</p>
-                            <p>{{diag.messageSiVrai}}</p>
-             </div>
-             <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-leftbar w3-border-yellow w3-border">
-                            <p>{{diag.key}} - {{diag.categorie}}</p>
-                            <p>{{diag.description}}</p>
-                            <p>{{diag.messageSiFaux}}</p>
-             </div>
-         </div>
-         <div v-if="diag.type == 'BLUE'" >
-             <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
-                            <p>{{diag.key}} - {{diag.categorie}}</p>
-                            <p>{{diag.description}}</p>
-                            <p>{{diag.messageSiVrai}}</p>
-             </div>
-             <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
-                            <p>{{diag.key}} - {{diag.categorie}}</p>
-                            <p>{{diag.description}}</p>
-                            <p>{{diag.messageSiFaux}}</p>
-             </div>
-         </div>
-         <div v-if="diag.type == 'DIAG'" >
-             <div v-if='diag.value == true' class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border">
-                            <p>{{diag.key}} - {{diag.categorie}}</p>
-                            <p>{{diag.description}}</p>
-                            <p>{{diag.messageSiVrai}}</p>
-             </div>
-             <div v-else class="w3-panel w3-pale-red w3-bottombar w3-border-red w3-border">
-                            <p>{{diag.key}} - {{diag.categorie}}</p>
-                            <p>{{diag.description}}</p>
-                            <p>{{diag.messageSiFaux}}</p>
-             </div>
-         </div>
-     </div>
-</div>
-</div>
 <div id="Cartes"            class="w3-container city w3-animate-opacity">
     <div v-if="this.data_s != null">
         <h2>Cartes</h2>
@@ -834,6 +908,30 @@ function openTab(evt, cityName) {
         </div>
     </div>
 </div>
+<div id="Sources"           class="w3-container city w3-animate-opacity">
+    <div v-if="this.data_s != null">
+            <h2>Sources</h2>
+            <div>
+                <div class="w3-container w3-section w3-teal">
+                    <h2 class="w3-teal w3-padding-16">Sources de Donnees : </h2>
+                </div>
+                <ul class="w3-ul w3-card-4">
+                    <li><a target="_blank" :href="ds.DOSSIER_INSEE">Dossier Complet Insee : {{ nom }}</a></li>
+                    <li><a target="_blank" :href="ds.URL_SOURCE_ARTIFICIALISATION"> Artificialisation : Dossier Cerema </a></li>
+                    <li><a target="_blank" :href="ds.URL_SOURCE_SRU"> Logements Sociaux : Dossier Dreal </a></li>
+                    <li><a target="_blank" :href="ds.URL_SOURCE_SITADEL"> Logements Construits : Dossier Sitadel </a></li>
+                    <li><a target="_blank" :href="ds.URL_SOURCE_COMMUNES"> Donnees Communes :Dossier Insee </a></li>
+                    <li><a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS"> Projections 2050 : Dossier Insee </a></li>
+                    <li><a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS_PACA">Projections Paca : Dossier Omphale </a></li>
+                </ul>
+            </div>
+            <br>
+            <h2>Autres Sites</h2>
+            <p>Données sur Toutes les Villes de France : <a target="_blank" :href="ds.URL_VILLE_DATA">Ville Data</a></p>
+            <p>L'Encyclopédie des villes de France : <a target="_blank" :href="ds.URL_LINTERNAUTE">L'internaute</a></p>
+            <p>Google : <a target="_blank" :href="ds.URL_GOOGLE">Google Search</a></p>
+        </div>
+    </div>
 <div id="DonneesBrutes"     class="w3-container city w3-animate-opacity">
     <div v-if="data_s != null">
         <h2>Donnees Brutes</h2>
@@ -865,30 +963,6 @@ function openTab(evt, cityName) {
         </table>
     </div>
 </div>
-<div id="Sources"           class="w3-container city w3-animate-opacity">
-    <div v-if="this.data_s != null">
-            <h2>Sources</h2>
-            <div>
-                <div class="w3-container w3-section w3-teal">
-                    <h2 class="w3-teal w3-padding-16">Sources de Donnees : </h2>
-                </div>
-                <ul class="w3-ul w3-card-4">
-                    <li><a target="_blank" :href="ds.DOSSIER_INSEE">Dossier Complet Insee : {{ nom }}</a></li>
-                    <li><a target="_blank" :href="ds.URL_SOURCE_ARTIFICIALISATION"> Artificialisation : Dossier Cerema </a></li>
-                    <li><a target="_blank" :href="ds.URL_SOURCE_SRU"> Logements Sociaux : Dossier Dreal </a></li>
-                    <li><a target="_blank" :href="ds.URL_SOURCE_SITADEL"> Logements Construits : Dossier Sitadel </a></li>
-                    <li><a target="_blank" :href="ds.URL_SOURCE_COMMUNES"> Donnees Communes :Dossier Insee </a></li>
-                    <li><a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS"> Projections 2050 : Dossier Insee </a></li>
-                    <li><a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS_PACA">Projections Paca : Dossier Omphale </a></li>
-                </ul>
-            </div>
-            <br>
-            <h2>Autres Sites</h2>
-            <p>Données sur Toutes les Villes de France : <a target="_blank" :href="ds.URL_VILLE_DATA">Ville Data</a></p>
-            <p>L'Encyclopédie des villes de France : <a target="_blank" :href="ds.URL_LINTERNAUTE">L'internaute</a></p>
-            <p>Google : <a target="_blank" :href="ds.URL_GOOGLE">Google Search</a></p>
-        </div>
-    </div>
 <div id="Debug"             class="w3-container city w3-animate-opacity">
     <div v-if="this.data_s != null">
         <h2>Debug</h2>
@@ -966,70 +1040,6 @@ function openTab(evt, cityName) {
                     <li> Valeur :     {{ item.total  }}</li>
                 </ul>
         </div>
-
-    </div>
-</div>
-<div id="Graphiques"        class="w3-container city w3-animate-opacity">
-    <div v-if="this.data_s != null">
-        <h2>Graphiques</h2>
-        <div class="w3-container w3-section w3-teal"><h2 class="w3-teal w3-padding-16">Logements</h2></div>
-        <img :src="ds.GRAPHIQUE_LOGEMENTS"           alt="Logements" class="center" >
-        <br>
-        <img src="input/Legend_Logements.png"       alt="Legende Logements" class="center">
-
-        <div class="w3-container w3-section w3-teal"><h2 class="w3-teal w3-padding-16">Repartition des Logements</h2></div>
-        <img :src="ds.GRAPHIQUE_REPARTITION_DES_LOGEMENTS"          alt="Repartition" class="center">
-
-        <div class="w3-container w3-section w3-teal"><h2 class="w3-teal w3-padding-16">Population</h2></div>
-        <img :src="ds.GRAPHIQUE_POPULATION"          alt="Population" class="center">
-
-        <div class="w3-container w3-section w3-teal"><h2 class="w3-teal w3-padding-16">Taille des Menages</h2></div>
-        <img :src="ds.GRAPHIQUE_TAILLE_DES_MENAGES"  alt="Taille des Menages" class="center">
-
-        <div >
-            <canvas id="line-chart" width="200" height="50"></canvas>
-            <script>
-              new Chart(document.getElementById("line-chart"), {
-              type: 'line',
-              data: {
-                labels: [1500,1600,1700,1750,1800,1850,1900,1950,1999,2050],
-                datasets: [{
-                    data: [86,114,106,106,107,111,133,221,783,2478],
-                    label: "Africa",
-                    borderColor: "#3e95cd",
-                    fill: false
-                  }, {
-                    data: [282,350,411,502,635,809,947,1402,3700,5267],
-                    label: "Asia",
-                    borderColor: "#8e5ea2",
-                    fill: false
-                  }, {
-                    data: [168,170,178,190,203,276,408,547,675,734],
-                    label: "Europe",
-                    borderColor: "#3cba9f",
-                    fill: false
-                  }, {
-                    data: [40,20,10,16,24,38,74,167,508,784],
-                    label: "Latin America",
-                    borderColor: "#e8c3b9",
-                    fill: false
-                  }, {
-                    data: [6,3,2,2,7,26,82,172,312,433],
-                    label: "North America",
-                    borderColor: "#c45850",
-                    fill: false
-                  }
-                ]
-              },
-              options: {
-                title: {
-                  display: true,
-                  text: 'World population per region (in millions)'
-                }
-              }
-            });
-            </script>
-            </div>
 
     </div>
 </div>
@@ -1123,8 +1133,16 @@ function openTab(evt, cityName) {
         </div>
         <div class="w3-container w3-cell w3-mobile">
              <p>Projections Paca :<br>     <a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS_PACA"> Dossier Omphale </a></p>
+             <p>GOOGLE_TRACKER :<br>     <a target="_blank" :href="ds.GOOGLE_TRACKER"> {{ds.GOOGLE_TRACKER}} </a></p>
         </div>
     </div>
+</div>
+
+
+<div  v-if="this.data_s != null">
+        <div class="w3-container w3-theme-dark w3-mobile w3-center ">
+        <iframe frameBorder="0" height="190" width="700" :src="ds.GOOGLE_TRACKER"></iframe>
+</div>
 </div>
 
 </footer>
@@ -1132,8 +1150,10 @@ function openTab(evt, cityName) {
 <!-- Rapport Complet
 <h2 class="w3-center">Rapport Complet</h2>
 <iframe :src="page"  height="1200" width="1500"></iframe>
-</div>
 -->
+
+<!-- Tracker -->
+
 
 <script src="ConsommationFonciere.js?v=1"></script>
 
