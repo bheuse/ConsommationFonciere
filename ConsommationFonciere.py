@@ -2550,7 +2550,7 @@ def ftp_push_ds(ds : DataStore):
     # remote_files = ftp.nlst()
     # print(remote_files)
     prefix = ds.get_fullname()
-    for ext in { "_s.json" , ".xlsx" , ".csv" , "_Logements.png", "_Population.png", "_Taille_des_Menages.png" } :
+    for ext in { "_s.json" , ".xlsx" , ".csv" , "_Logements.png", "_Population.png", "_Taille_des_Menages.png", "_Repartition_des_Logements.png" } :
         filename = output_dir + prefix + ext
         ftp_filename = prefix + ext
         print_blue("FTP Push : "+ filename)
@@ -2575,6 +2575,7 @@ def ftp_push_files():
     ftp_push_file("README.html")
     ftp_push_file("README.dillinger.html")
     ftp_push_file("ConsommationFonciere.html")
+    ftp_push_file("ConsommationFonciere.js")
     ftp_push_file("ConsommationFonciere.py")
     ftp_push_file("index.html")
     ftp_push_file("Header.png")
