@@ -145,9 +145,15 @@ vm.component('rapport-iframe', {
 
 vm.mount('#app');
 
+
 function onPageLoaded() {
   const queryString = window.location.search;
-  console.log(queryString);
+  console.log("onPageLoaded : " + queryString);
+}
+
+function onPageLoadedBuggy() {
+  const queryString = window.location.search;
+  console.log("onPageLoaded : " + queryString);
   const urlParams = new URLSearchParams(queryString);
   // "output/DEPT_Alpes-Maritimes_06.html"
   var code_postal = urlParams.get('CODE_POSTAL')
@@ -165,18 +171,34 @@ function onPageLoaded() {
   if (commune != null)     { code_insee = commune    ; type_entity="COMMUNE"} ;
   if (code_postal != null) { code_insee = commune    ; type_entity="COMMUNE"} ;
 
-  if (type_entity != "DEPT") {
+  if (type_entity == "DEPT") {
         // Locate Dept in France JSON
         depts            = france["REGIONS"][0]["DEPARTEMENTS"];
-        dept_index       = depts.findIndex(x => x.Nom === this.nom);
+        dept_index       = depts.findIndex(x => x.INSEE === code_insee);
+        console.log("DEPT : " + depts[dept_index]);
         nom_dept         = depts[dept_index].Nom;
-        console.log(nom_dept);
+        console.log("DEPT : " + nom_dept);
+    } ;
+  if (type_entity == "EPCI") {
+        // Locate EPCI in France JSON
+        depts            = france["REGIONS"][0]["DEPARTEMENTS"];
+        for (let i = 0; i < france["REGIONS"][0]["DEPARTEMENTS"].length; i++) {
+            dept = france["REGIONS"][0]["DEPARTEMENTS"][i]
+            for (let j = 0; i < dept["EPCI"].length; j++) {
+                if (dept["EPCI"][j].INSEE === code_insee ) {
+                    }
+                    nom_epci = dept["EPCI"][j].Nom ;
+                }
+            this.communes.push(commune);
+            }
+        console.log("EPCI : " + nom_epci);
     } ;
 
   var entity = urlParams.get('ENTITE')
   if (entity == null) { init_page = "DEPT_Alpes-Maritimes_06" } ;
   entity =  "output/"+init_page+".html";
   console.log(entity);
+  console.log("Page is loaded");
   // alert("Page is loaded : " + init_page);
 }
 

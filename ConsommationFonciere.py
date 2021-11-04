@@ -375,7 +375,7 @@ def load_collectData(collect_file: str = collectDataFile):
 ### File Management
 ###
 
-def delete_patten(dir = output_dir, pattern = "*.bck"):
+def delete_pattern(dir = output_dir, pattern = "*.bck"):
     # Get a list of all the file paths that ends with .txt from in specified directory
     fileList = glob.glob(output_dir+pattern)
     # Iterate over the list of filepaths & remove each file.
@@ -454,8 +454,8 @@ def perCentStr(value, rounding=0) -> str :
     return round0str(value * 100, rounding)+"%"
 
 
-def clean_name(name: str) -> str:
-    return unidecode.unidecode(name).replace(" ", "_").replace("\\", "_").replace("'", "_")
+def clean_name(name: str,sep="_") -> str:
+    return unidecode.unidecode(name).replace(" ", sep).replace("\\", sep).replace("'", sep)
 
 
 ### Print
@@ -794,6 +794,7 @@ def get_art(key, code_insee, rounding=6):
 ### Data Collection and Consolidation
 ###
 
+"""
 int_insee_datas = [
                     "P08_POP",     "P13_POP",      "P18_POP",
                     "P08_LOG",     "P13_LOG",      "P18_LOG",
@@ -809,6 +810,7 @@ int_insee_datas = [
                     "NAIS0813",    "NAIS1318",
                     "DECE0813",    "DECE1318",
                   ]
+"""
 
 source_data    = "DATA"
 source_codes   = "CODE"
@@ -942,15 +944,16 @@ class DataStore():
 
     def save_data(self):
         """ Save raw DataStore data in various formats (xlsx, json, csv)  """
-        # DF TO EXCEL
+        self.data_frame = self.data_frame.fillna('')
         if ("__builtins__" in self.data_frame.columns):
             self.data_frame.drop("__builtins__", axis=1,inplace=True)
+        # DF TO EXCEL
         writer = pd.ExcelWriter(output_dir + self.get_fullname() + ".xlsx")
         self.data_frame.to_excel(writer, "Data")
         pivot = self.data_frame.transpose()
         pivot.to_excel(writer, "Pivot")
-        diagdf = self.data_frame.from_dict(self.diagnostics)
-        diagdf.to_excel(writer, "Diagnotics")
+        diag_df = self.data_frame.from_dict(self.diagnostics)
+        diag_df.to_excel(writer, "Diagnotics")
         writer.save()
         writer.close()
         # DF TO CSV
@@ -979,7 +982,7 @@ class DataStore():
             # f.write(global_context["JSON_DATA_SET_C"])
             f.write(to_json(data_c, indent=4))
         ## _s.json
-        all = {}
+        all = dict()
         summary_data = self.clean_data().fillna('')
         for name, values in summary_data.iteritems():
             all[name] = {}
@@ -1136,11 +1139,14 @@ class DataStore():
 
         # Donnees INSEE Commune
         load_communes()
+        """
         for data in int_insee_datas:
             donnee = dossierComplet[data][code_insee]
             self.add_metric(data,  metaDossier["LIB_VAR_LONG"][data],  source=source_insee,  mode=mode_sum, data=int(round0(donnee)), type="INT")
+        """
 
         # Donnees Commune Calculees
+        """
         self.add_metric("TXPOP_0818", "Taux de Croissance Annuel de la population de 2008 a 2018",
                       source=source_insee,  mode=mode_custom, type="PERCENT",
                       data=calc_taux(2008, self.get("P08_POP"), 2018, self.get("P18_POP")))
@@ -1168,9 +1174,11 @@ class DataStore():
         self.add_metric("TXTM_0818", "Taux de Croissance Annuel de la taille des menages de 2008 a 2018",
                       source=source_insee,  mode=mode_custom, type="PERCENT",
                       data=calc_taux(2008, self.get("TM_2008"), 2018, self.get("TM_2018")))
+        """
 
         # Donnees SRU
         load_sru()
+        """
         self.add_metric(key="SRU_OBJ_2017_2019", meta="Objectifs 2017-2019",
                       source=source_sru,  mode=mode_sum, type="INT",
                       data=get_sru2017("Objectifs SRU 2017-2019", code_insee, rounding=0))
@@ -1202,8 +1210,10 @@ class DataStore():
         self.add_metric(key="SRU_OBJ_TX", meta="Taux de LLS à atteindre",
                       source=source_sru,  mode=mode_ignore, type="TAUX",
                       data=get_sru2020("Taux de LLS à atteindre", code_insee, rounding=2))
+        """
 
         # Donnees SRU Calculees
+        """
         self.add_metric(key="SRU_CARENCE_2017", meta="Carence en 2017",
                       source=source_sru,  mode=mode_sum, type="INT",
                       data=round0(self.get("SRU_RP_2017") * (0.25 - self.get("SRU_TX_LLS_2017")), 4))
@@ -1235,9 +1245,11 @@ class DataStore():
         self.add_metric(key="SRU_LOG_CONSTRUITS", meta="Logements Sociaux Construits entre 2017 et 2020",
                       source=source_sru,  mode=mode_sum, type="INT",
                       data=round0(self.get("SRU_CARENCE_2017")  + self.get("SRU_EVOL_CARENCE")  - self.get("SRU_CARENCE_2020") , 0))
+        """
 
         # Donnee Artificialisation
         load_artificialisation()
+        """
         self.add_metric(key="ART_TOTAL", meta="Total des flux entre NAF et artificialisé sur la période 2009 2020",
                       source=source_art,  mode=mode_sum, type="INT",
                       data=get_art("nafart0920", code_insee))
@@ -1295,11 +1307,13 @@ class DataStore():
         self.add_metric(key="ART_POPULATION_1217", meta="Variation Population entre 2012 et 2017",
                       source=source_art,  mode=mode_sum, type="INT",
                       data=get_art("pop1217", code_insee))
+        """
 
         # Donnees Projections EPCI
         load_projections_paca()
         p_epci = projectionsPaca.loc[projectionsPaca["Unnamed: 1"] == int(self.get("EPCI"))]
         p_epci = p_epci.head(1)
+        """
         self.add_metric(key="PROJ_EPCI_NOM", meta="Nom EPCI",
                       source=source_proj,  mode=mode_equal, type="STR",
                       data=p_epci["Unnamed: 2"].iloc[0]  if (p_epci.shape[0] == 1) else self.get("EPCI"))
@@ -1314,16 +1328,18 @@ class DataStore():
                       data=p_epci["Unnamed: 12"].iloc[0]  if (p_epci.shape[0] == 1) else 0)
         self.add_metric(key="PROJ_EPCI_2040", meta="Projection Population EPCI 2040",
                       source=source_proj,  mode=mode_equal, type="INT",
-                      data=(self.get("PROJ_EPCI_2030") + self.get("PROJ_EPCI_2050")) / 2  if (p_epci.shape[0] == 1) else 0)
+                      data=(self.get("PROJ_EPCI_2030") / 2+ self.get("PROJ_EPCI_2050")) / 2  if (p_epci.shape[0] == 1) else 0)
         self.add_metric(key="PROJ_EPCI_2020", meta="Projection Population EPCI 2020",
                       source=source_proj,  mode=mode_equal, type="INT",
-                      data=(self.get("PROJ_EPCI_2013") + self.get("PROJ_EPCI_2030")) / 2  if (p_epci.shape[0] == 1) else 0)
+                      data=(self.get("PROJ_EPCI_2013") / 2+ self.get("PROJ_EPCI_2030")) / 2  if (p_epci.shape[0] == 1) else 0)
+        """
 
         # Donnees Projections SCOT
         load_projections_paca()
         p_scot = projectionsPaca.loc[projectionsPaca["Projection selon quatre scénarios à l'horizon 2030 et 2050  "] == "SCOT_50_000_ou_plus"]
         p_scot = p_scot.loc[p_scot["Unnamed: 1"].astype(str).str.contains(self.get("EPCI"))]
         p_scot = p_scot.head(1)
+        """
         self.add_metric(key="PROJ_SCOT_NOM", meta="Nom SCOT",
                       source=source_proj,  mode=mode_equal, type="STR",
                       data=p_scot["Unnamed: 2"].iloc[0]  if (p_epci.shape[0] == 1) else self.get("EPCI"))
@@ -1338,13 +1354,15 @@ class DataStore():
                       data=p_scot["Unnamed: 12"].iloc[0]  if (p_epci.shape[0] == 1) else 0)
         self.add_metric(key="PROJ_SCOT_2040", meta="Projection Population SCOT 2040",
                       source=source_proj,  mode=mode_equal, type="INT",
-                      data=(self.get("PROJ_SCOT_2030") + self.get("PROJ_SCOT_2050") / 2  if (p_epci.shape[0] == 1) else 0))
+                      data=(self.get("PROJ_SCOT_2030") / 2 + self.get("PROJ_SCOT_2050") / 2  if (p_epci.shape[0] == 1) else 0))
         self.add_metric(key="PROJ_SCOT_2020", meta="Projection Population SCOT 2020",
                       source=source_proj,  mode=mode_equal, type="INT",
-                      data=(self.get("PROJ_SCOT_2013") + self.get("PROJ_SCOT_2030") / 2  if (p_epci.shape[0] == 1) else 0))
+                      data=(self.get("PROJ_SCOT_2013") / 2 + self.get("PROJ_SCOT_2030") / 2  if (p_epci.shape[0] == 1) else 0))
+        """
 
         # Donnees Projections Departement 2013-2050
         load_projections()
+        """
         self.add_metric(key="PROJ_DPT_2013", meta="Projection Dept 2013",
                       source=source_proj,  mode=mode_equal, type="INT",
                       data=projectionsDPT["Unnamed: 2"][self.get("DEP")] * 1000)
@@ -1381,9 +1399,11 @@ class DataStore():
         self.add_metric(key="PROJ_DPT_TXPOP_4050", meta="Taux de Croissance Annuel de la population de 2040 a 2050",
                       source=source_proj,  mode=mode_equal, type="PERCENT",
                       data=calc_taux(2040, self.get("PROJ_DPT_2040"), 2050, self.get("PROJ_DPT_2050")))
+        """
 
         # Donnees Projections Region 2013-2050
         load_projections()
+        """
         self.add_metric(key="PROJ_REG_2013", meta="Projection Region 2013",
                       source=source_proj,  mode=mode_equal, type="INT",
                       data=projectionsREG["Unnamed: 2"][self.get("REG")] * 1000)
@@ -1402,9 +1422,11 @@ class DataStore():
         self.add_metric(key="PROJ_REG_2050", meta="Projection Region 2050", type="INT",
                       source=source_proj,  mode=mode_equal,
                       data=projectionsREG["Unnamed: 39"][self.get("REG")] * 1000)
+        """
 
-        # Donnees Evolution 2008-2021
+        # Donnees Evolution Departement 2008-2021
         load_evolution()
+        """
         self.add_metric(key="EVOL_DPT_POP08", meta="Population Dept en 2008",
                         source=source_proj,  mode=mode_equal, type="INT",
                         data=round(evolution0813["Unnamed: 1"][self.get("DEP_NOM")]))
@@ -1426,33 +1448,40 @@ class DataStore():
         self.add_metric(key="EVOL_DPT_POP21", meta="Population Dept en 2021",
                         source=source_proj,  mode=mode_equal, type="INT",
                         data=round(calc_after(2018, self.get("EVOL_DPT_POP18"), 2021, self.get("EVOL_DPT_1821"))))
+        """
 
         # Donnees Sitadel Logements
         load_sitadel()
-        com_sitadel1 = sitadel1316.loc[sitadel1316['COMM'] == str(code_insee)]
-        com_sitadel2 = sitadel1721.loc[sitadel1721['COMM'] == str(code_insee)]
-        com_sitadel  = pd.concat([com_sitadel1, com_sitadel2])
+        com_sitadel1316 = sitadel1316.loc[sitadel1316['COMM'] == str(code_insee)]
+        com_sitadel1721 = sitadel1721.loc[sitadel1721['COMM'] == str(code_insee)]
+        com_sitadel  = pd.concat([com_sitadel1316, com_sitadel1721])
+        log_commences = com_sitadel.loc[com_sitadel['Etat_DAU'] == 5]
+        log_termines  = com_sitadel.loc[com_sitadel['Etat_DAU'] == 6]
+        log_commences1316 = com_sitadel1316.loc[com_sitadel1316['Etat_DAU'] == 5]
+        log_termines1316  = com_sitadel1316.loc[com_sitadel1316['Etat_DAU'] == 6]
+        log_commences1721 = com_sitadel1721.loc[com_sitadel1721['Etat_DAU'] == 5]
+        log_termines1721  = com_sitadel1721.loc[com_sitadel1721['Etat_DAU'] == 6]
+        log_renouv = com_sitadel.loc[com_sitadel['NATURE_PROJET'] == 2]
+        log_nouveau = com_sitadel.loc[com_sitadel['NATURE_PROJET'] == 1]
+        log_principal = com_sitadel.loc[com_sitadel['RES_PRINCIP_OU_SECOND'] == 1]
+        log_secondaire = com_sitadel.loc[com_sitadel['NATURE_PROJET'] == 2]
+
+        """
         self.add_metric(key="NB_LGT_TOT_CREES", meta="Logements Autorises 2013 2021",
                         source=source_proj,  mode=mode_sum, type="INT",
                         data=com_sitadel['NB_LGT_TOT_CREES'].sum())
         self.add_metric(key="NB_LGT_TOT_CREES_1316", meta="Logements Autorises 2013 2016",
                         source=source_proj,  mode=mode_sum, type="INT",
-                        data=com_sitadel1['NB_LGT_TOT_CREES'].sum())
+                        data=com_sitadel1316['NB_LGT_TOT_CREES'].sum())
         self.add_metric(key="NB_LGT_TOT_CREES_1721", meta="Logements Autorises 2017 2021",
                         source=source_proj,  mode=mode_sum, type="INT",
-                        data=com_sitadel2['NB_LGT_TOT_CREES'].sum())
-        log_commences = com_sitadel.loc[com_sitadel['Etat_DAU'] == 5]
-        log_termines  = com_sitadel.loc[com_sitadel['Etat_DAU'] == 6]
+                        data=com_sitadel1721['NB_LGT_TOT_CREES'].sum())
         self.add_metric(key="NB_LGT_TOT_COMMENCES", meta="Logements Commences",
                         source=source_proj,  mode=mode_sum, type="INT",
                         data=log_commences['NB_LGT_TOT_CREES'].sum() + log_termines['NB_LGT_TOT_CREES'].sum())
-        log_commences1316 = com_sitadel1.loc[com_sitadel1['Etat_DAU'] == 5]
-        log_termines1316  = com_sitadel1.loc[com_sitadel1['Etat_DAU'] == 6]
         self.add_metric(key="NB_LGT_TOT_COMMENCES_1316", meta="Logements Commences entre 2013 et 2016",
                         source=source_proj,  mode=mode_sum, type="INT",
                         data=log_commences1316['NB_LGT_TOT_CREES'].sum() + log_termines1316['NB_LGT_TOT_CREES'].sum())
-        log_commences1721 = com_sitadel2.loc[com_sitadel2['Etat_DAU'] == 5]
-        log_termines1721  = com_sitadel2.loc[com_sitadel2['Etat_DAU'] == 6]
         self.add_metric(key="NB_LGT_TOT_COMMENCES_1721", meta="Logements Commences entre 2017 et 2021",
                         source=source_proj,  mode=mode_sum, type="INT",
                         data=log_commences1721['NB_LGT_TOT_CREES'].sum() + log_termines1721['NB_LGT_TOT_CREES'].sum())
@@ -1465,19 +1494,15 @@ class DataStore():
         self.add_metric(key="NB_LGT_TX_REALISATION_1721", meta="Taux de Logements Commences entre 2017 et 2021",
                         source=source_proj,  mode=mode_custom,  type="TAUX",
                         data=(0 if self.get("NB_LGT_TOT_CREES_1721") == 0 else self.get("NB_LGT_TOT_COMMENCES_1721") / self.get("NB_LGT_TOT_CREES_1721")))
-        log_renouv = com_sitadel.loc[com_sitadel['NATURE_PROJET'] == 2]
         self.add_metric(key="NB_LGT_RENOUVELLEMENT", meta="Logements en Renouvellement",
                         source=source_proj,  mode=mode_sum, type="INT",
                         data=log_renouv['NB_LGT_TOT_CREES'].sum())
-        log_nouveau = com_sitadel.loc[com_sitadel['NATURE_PROJET'] == 1]
         self.add_metric(key="NB_LGT_NOUVEAU", meta="Logements Nouveau",
                         source=source_proj,  mode=mode_sum, type="INT",
                         data=log_nouveau['NB_LGT_TOT_CREES'].sum())
-        log_principal = com_sitadel.loc[com_sitadel['RES_PRINCIP_OU_SECOND'] == 1]
         self.add_metric(key="NB_LGT_PRINCIPAL", meta="Logements Principal", type="INT",
                         source=source_proj,  mode=mode_sum,
                         data=log_principal['NB_LGT_TOT_CREES'].sum())
-        log_secondaire = com_sitadel.loc[com_sitadel['NATURE_PROJET'] == 2]
         self.add_metric(key="NB_LGT_SECONDAIRE", meta="Logements Secondaire",
                         source=source_proj,  mode=mode_sum, type="INT",
                         data=log_secondaire['NB_LGT_TOT_CREES'].sum())
@@ -1495,13 +1520,14 @@ class DataStore():
                         data=com_sitadel['NB_LGT_PRET_LOC_SOCIAL'].sum())
         self.add_metric(key="NB_LGT_PRET_LOC_SOCIAL_1316", meta="Logements Sociaux entre 2013 et 2016",
                         source=source_proj,  mode=mode_sum, type="INT",
-                        data=com_sitadel1['NB_LGT_PRET_LOC_SOCIAL'].sum())
+                        data=com_sitadel1316['NB_LGT_PRET_LOC_SOCIAL'].sum())
         self.add_metric(key="NB_LGT_PRET_LOC_SOCIAL_1721", meta="Logements Sociaux entre 2017 et 2021",
                         source=source_proj,  mode=mode_sum, type="INT",
-                        data=com_sitadel2['NB_LGT_PRET_LOC_SOCIAL'].sum())
+                        data=com_sitadel1721['NB_LGT_PRET_LOC_SOCIAL'].sum())
         self.add_metric(key="SITADEL_SUPERFICIE_TERRAIN", meta=sitadelMeta['Description de la variable']['SUPERFICIE_TERRAIN'],
                         source=source_proj,  mode=mode_sum, type="INT",
                         data=com_sitadel['SUPERFICIE_TERRAIN'].sum())
+        """
 
         # Donnees Sitadel Locaux
         load_sitadel_locaux()
@@ -1515,9 +1541,11 @@ class DataStore():
         loc_commences1721  = com_sitadelLocaux2.loc[com_sitadelLocaux2['Etat_DAU'] == 5]
         loc_termines1721   = com_sitadelLocaux2.loc[com_sitadelLocaux2['Etat_DAU'] == 6]
         loc_nouveau        = com_sitadelLocaux.loc[com_sitadelLocaux['NATURE_PROJET'] == 1]
-        # These will be loaded from Collect Excel
+        loc_renouv         = com_sitadelLocaux.loc[com_sitadelLocaux['NATURE_PROJET'] == 2]
+        # These will be loaded from Configuration Excel
 
         # Projections Calculees
+        """
         self.add_metric(key="TX_POP_2030", meta="Taux Evolution de la Population entre 2020 et 2030",
                       source=source_proj,  mode=mode_custom, type="PERCENT",
                       data=self.get("PROJ_DPT_TXPOP_2030"))
@@ -1547,7 +1575,7 @@ class DataStore():
                       data=calc_after(2020, self.get("TM_2020"), 2030, self.get("TXTM_1318") / 2))
         self.add_metric(key="TM_2040", meta="Taille des Menages en 2040",
                       source=source_proj,  mode=mode_custom, type="FLOAT",
-                      data=calc_after(2020, self.get("TM_2030"), 2030, self.get("TXTM_1318") / 3))
+                      data=calc_after(2030, self.get("TM_2030"), 2030, self.get("TXTM_1318") / 3))
         self.add_metric(key="TM_2050", meta="Taille des Menages en 2050",
                       source=source_proj,  mode=mode_custom, type="FLOAT",
                       data=calc_after(2040, self.get("TM_2040"), 2050, self.get("TXTM_1318") / 4))
@@ -1584,7 +1612,7 @@ class DataStore():
                       data=round((self["P18_RSECOCC"]  / self["P18_RP"]) * self["LOG_2020"], 0))
         self.add_metric(key="P30_LOGVAC", meta="Residences Vacantes en 2030",
                       source=source_calc,  mode=mode_sum, type="INT",
-                      data=round((self["P18_LOGVAC"]  / self["P18_RP"]) * self["LOG_2020"], 0))
+                      data=round((self["P18_LOGVAC"]  / self["P18_RP"]) * self["LOG_2030"], 0))
 
         self.add_metric(key="NOUV_LOG_0813", meta="Nouveaux Logements (RP+RS+VAC) entre 2008 et 2013 (5 ans)",
                       source=source_calc,  mode=mode_sum, type="INT",
@@ -1646,6 +1674,7 @@ class DataStore():
         self.add_metric(key="LOG_NON_VENDUS_1320", meta="Logements Construits non encore vendus en 2020",
                       source=source_calc,  mode=mode_sum, type="INT",
                       data=(self["EXCES_BESOINS_1320"] - self["NOUV_RESSEC_1318"] - self["NOUV_LOGVAC_1318"]))
+        """
 
         # Collected Data
         _line = 0
@@ -1659,14 +1688,15 @@ class DataStore():
             _expr        = str(metric["Data"])
             _total       = metric["Total"]
             if (str(_key) == "nan") : continue          # Empty Line
-            if (str(_key).startswith("#")) : continue   # Ignore key starting with #
+            if (str(_key) == "")    : continue          # Empty Line
+            if (str(_key).startswith("#")) : continue   # Ignore line / key starting with #
             # print_grey("Evaluating Metric " + str(_line) + ": " + str(_key) + " : " + str(_data))
             _data = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _data)    # Replace ${VAR} by VAR
             try:
                 value = eval(_data, self.get_row_as_dict(), {**globals(), **locals()})
                 self.add_metric(_key, _description, source=_source, mode=_total, data=value, type=_type, expr=_expr)
             except Exception as e :
-                error = "Error evaluating metrique : " + _key + " + eval : " + _data + " - Error : " + str(e)
+                error = "Error evaluating metrique : Line " + _line + " Key = " + _key + " + expr : " + _data + " - Error : " + str(e)
                 print_red(error)
                 self.add_metric(_key, _description, source=_source, mode=_total, data=error, type=_type, expr=_expr)
 
@@ -1709,6 +1739,19 @@ class DataStore():
             url_dossier = "https://www.insee.fr/fr/statistiques/2011101?geo=COM-" + str(self.store_code)
             total_dict["DOSSIER_INSEE"]          = url_dossier
             global_context["URL_SOURCE_DOSSIER"] = url_dossier
+            total_dict["EPCI"]          = epci_commune(self.store_code)
+            total_dict["LIBEPCI"]       = nom_epci(total_dict["EPCI"], clean=True)
+            total_dict["TYPE_EPCI"]     = "COMMUNE"
+            total_dict["EPCI_COMMUNES"] = 1
+            total_dict["DEP"]           = dept_epci(total_dict["EPCI"])
+            total_dict["DEP_NOM"]       = nom_dept(dept_epci(total_dict["EPCI"]), clean=True)
+            total_dict["REG"]           = region_epci(total_dict["EPCI"])
+            total_dict["REG_NOM"]       = nom_region(region_epci(total_dict["EPCI"]), clean=True)
+            URL_VILLE_DATA = "https://ville-data.com/"+clean_name(str(total_dict["LIBELLE"]),sep="-").title().replace("-Le-","-le-").replace("-La-","-la-")+"-"+str(total_dict["CODE_POSTAL"])+".html"
+            total_dict["URL_VILLE_DATA"]         = URL_VILLE_DATA
+            URL_LINTERNAUTE = "https://www.linternaute.com/ville/"+clean_name(str(total_dict["LIBELLE"]),sep="-").lower()+"/ville-"+str(self.store_code)
+            total_dict["URL_LINTERNAUTE"]        = URL_LINTERNAUTE
+            total_dict["URL_GOOGLE"]             = "https://www.google.com/search?q="+total_dict["LIBELLE"]
 
         if (self.store_type == "EPCI"):
             total_dict["BASE_NAME"]     = self.get_fullname()
@@ -1727,6 +1770,9 @@ class DataStore():
             url_dossier = "https://www.insee.fr/fr/statistiques/2011101?geo=EPCI-" + str(self.store_code)
             total_dict["DOSSIER_INSEE"]          = url_dossier
             global_context["URL_SOURCE_DOSSIER"] = url_dossier
+            total_dict["URL_VILLE_DATA"]         = "https://www.google.com/search?q="+total_dict["LIBELLE"]
+            total_dict["URL_LINTERNAUTE"]        = "https://www.google.com/search?q="+total_dict["LIBELLE"]
+            total_dict["URL_GOOGLE"]             = "https://www.google.com/search?q="+total_dict["LIBELLE"]
 
         if (self.store_type == "DEPT"):
             total_dict["BASE_NAME"]     = self.get_fullname()
@@ -1745,6 +1791,11 @@ class DataStore():
             url_dossier = "https://www.insee.fr/fr/statistiques/2011101?geo=DEP-" + str(self.store_code)
             total_dict["DOSSIER_INSEE"]          = url_dossier
             global_context["URL_SOURCE_DOSSIER"] = url_dossier
+            URL_VILLE_DATA = "https://ville-data.com/"+clean_name(str(total_dict["LIBELLE"]),sep="-").lower()+".html"
+            total_dict["URL_VILLE_DATA"]         = URL_VILLE_DATA
+            URL_LINTERNAUTE = "https://www.linternaute.com/ville/"+clean_name(str(total_dict["LIBELLE"]),sep="-").lower()+"/departement-"+str(self.store_code)
+            total_dict["URL_LINTERNAUTE"]        = URL_LINTERNAUTE
+            total_dict["URL_GOOGLE"]             = "https://www.google.com/search?q="+total_dict["LIBELLE"]
 
         if (self.store_type == "REGION"):
             total_dict["BASE_NAME"]     = self.get_fullname()
@@ -1763,36 +1814,41 @@ class DataStore():
             url_dossier = "https://www.insee.fr/fr/statistiques/2011101?geo=REG-" + str(self.store_code)
             total_dict["DOSSIER_INSEE"]          = url_dossier
             global_context["URL_SOURCE_DOSSIER"] = url_dossier
+            total_dict["URL_VILLE_DATA"]         = "https://ville-data.com/paca.html"
+            total_dict["URL_LINTERNAUTE"]        = "https://fr.wikipedia.org/wiki/Provence-Alpes-C%C3%B4te_d%27Azur"
+            total_dict["URL_GOOGLE"]             = "https://www.google.com/search?q="+total_dict["LIBELLE"]
 
-        # Custom
-        total_dict["SRU_TX_LLS_2017"] = 0 if total_dict["SRU_RP_2017"] == 0 else round(total_dict["SRU_LLS_2017"] / total_dict["SRU_RP_2017"] if "SRU_RP_2017" in total_dict else 0, 3)
-        total_dict["SRU_TX_LLS_2020"] = 0 if total_dict["SRU_RP_2020"] == 0 else round(total_dict["SRU_LLS_2020"] / total_dict["SRU_RP_2020"] if "SRU_RP_2020" in total_dict else 0, 3)
-        total_dict["TXPOP_0818"]  = calc_taux(2008, total_dict["P08_POP"], 2018, total_dict["P18_POP"], rounding=3)
-        total_dict["TXPOP_0813"]  = calc_taux(2008, total_dict["P08_POP"], 2013, total_dict["P13_POP"], rounding=3)
-        total_dict["TXPOP_1318"]  = calc_taux(2013, total_dict["P13_POP"], 2018, total_dict["P18_POP"], rounding=3)
-        total_dict["TM_2008"]     = round(total_dict["C08_PMEN"] / total_dict["C08_MEN"], 3)
-        total_dict["TM_2013"]     = round(total_dict["C13_PMEN"] / total_dict["C13_MEN"], 3)
-        total_dict["TM_2018"]     = round(total_dict["C18_PMEN"] / total_dict["C18_MEN"], 3)
-        total_dict["TXTM_0818"]   = calc_taux(2008, total_dict["TM_2008"], 2018, total_dict["TM_2018"], rounding=3)
-        total_dict["TXTM_0813"]   = calc_taux(2008, total_dict["TM_2008"], 2013, total_dict["TM_2013"], rounding=3)
-        total_dict["TXTM_1318"]   = calc_taux(2013, total_dict["TM_2013"], 2018, total_dict["TM_2018"], rounding=3)
-        total_dict["TM_2020"]     = round(total_dict["POP_2020"] / total_dict["LOG_2020"], 3)
-        total_dict["TM_2030"]     = round(total_dict["POP_2030"] / total_dict["LOG_2030"], 3)
-        total_dict["TM_2040"]     = round(total_dict["POP_2040"] / total_dict["LOG_2040"], 3)
-        total_dict["TM_2050"]     = round(total_dict["POP_2050"] / total_dict["LOG_2050"], 3)
-        total_dict["TX_POP_2030"] = calc_taux(2020, total_dict["POP_2020"], 2030, total_dict["POP_2030"], rounding=3)
-        total_dict["TX_POP_3040"] = calc_taux(2030, total_dict["POP_2030"], 2040, total_dict["POP_2040"], rounding=3)
-        total_dict["TX_POP_4050"] = calc_taux(2040, total_dict["POP_2040"], 2050, total_dict["POP_2050"], rounding=3)
+            # Custom
+        """
+        # total_dict["SRU_TX_LLS_2017"] = 0 if total_dict["SRU_RP_2017"] == 0 else round(total_dict["SRU_LLS_2017"] / total_dict["SRU_RP_2017"] if "SRU_RP_2017" in total_dict else 0, 3)
+        # total_dict["SRU_TX_LLS_2020"] = 0 if total_dict["SRU_RP_2020"] == 0 else round(total_dict["SRU_LLS_2020"] / total_dict["SRU_RP_2020"] if "SRU_RP_2020" in total_dict else 0, 3)
+        # total_dict["TXPOP_0818"]  = calc_taux(2008, total_dict["P08_POP"], 2018, total_dict["P18_POP"], rounding=3)
+        # total_dict["TXPOP_0813"]  = calc_taux(2008, total_dict["P08_POP"], 2013, total_dict["P13_POP"], rounding=3)
+        # total_dict["TXPOP_1318"]  = calc_taux(2013, total_dict["P13_POP"], 2018, total_dict["P18_POP"], rounding=3)
+        # total_dict["TM_2008"]     = round(total_dict["C08_PMEN"] / total_dict["C08_MEN"], 3)
+        # total_dict["TM_2013"]     = round(total_dict["C13_PMEN"] / total_dict["C13_MEN"], 3)
+        # total_dict["TM_2018"]     = round(total_dict["C18_PMEN"] / total_dict["C18_MEN"], 3)
+        # total_dict["TXTM_0818"]   = calc_taux(2008, total_dict["TM_2008"], 2018, total_dict["TM_2018"], rounding=3)
+        # total_dict["TXTM_0813"]   = calc_taux(2008, total_dict["TM_2008"], 2013, total_dict["TM_2013"], rounding=3)
+        # total_dict["TXTM_1318"]   = calc_taux(2013, total_dict["TM_2013"], 2018, total_dict["TM_2018"], rounding=3)
+        # total_dict["TM_2020"]     = round(total_dict["POP_2020"] / total_dict["LOG_2020"], 3)
+        # total_dict["TM_2030"]     = round(total_dict["POP_2030"] / total_dict["LOG_2030"], 3)
+        # total_dict["TM_2040"]     = round(total_dict["POP_2040"] / total_dict["LOG_2040"], 3)
+        # total_dict["TM_2050"]     = round(total_dict["POP_2050"] / total_dict["LOG_2050"], 3)
+        # total_dict["TX_POP_2030"] = calc_taux(2020, total_dict["POP_2020"], 2030, total_dict["POP_2030"], rounding=3)
+        # total_dict["TX_POP_3040"] = calc_taux(2030, total_dict["POP_2030"], 2040, total_dict["POP_2040"], rounding=3)
+        # total_dict["TX_POP_4050"] = calc_taux(2040, total_dict["POP_2040"], 2050, total_dict["POP_2050"], rounding=3)
 
-        total_dict["TX_RES_SEC_18"] = round((total_dict["P18_RSECOCC"]) / (total_dict["P18_RP"] + total_dict["P18_RSECOCC"] + total_dict["P18_LOGVAC"]), 4)
-        total_dict["TX_RES_VAC_18"] = round((total_dict["P18_LOGVAC"])  / (total_dict["P18_RP"] + total_dict["P18_RSECOCC"] + total_dict["P18_LOGVAC"]), 4)
+        # total_dict["TX_RES_SEC_18"] = round((total_dict["P18_RSECOCC"]) / (total_dict["P18_RP"] + total_dict["P18_RSECOCC"] + total_dict["P18_LOGVAC"]), 4)
+        # total_dict["TX_RES_VAC_18"] = round((total_dict["P18_LOGVAC"])  / (total_dict["P18_RP"] + total_dict["P18_RSECOCC"] + total_dict["P18_LOGVAC"]), 4)
 
-        total_dict["TX_LGT_PRET_LOC_SOCIAL_1321"] = round((total_dict["NB_LGT_PRET_LOC_SOCIAL_1321"]) / (total_dict["NB_LGT_TOT_COMMENCES_1321"]), 4)
-        total_dict["TX_LGT_PRET_LOC_SOCIAL_1316"] = round((total_dict["NB_LGT_PRET_LOC_SOCIAL_1316"]) / (total_dict["NB_LGT_TOT_COMMENCES_1316"]), 4)
+        # total_dict["TX_LGT_PRET_LOC_SOCIAL_1321"] = round((total_dict["NB_LGT_PRET_LOC_SOCIAL_1321"]) / (total_dict["NB_LGT_TOT_COMMENCES_1321"]), 4)
+        # total_dict["TX_LGT_PRET_LOC_SOCIAL_1316"] = round((total_dict["NB_LGT_PRET_LOC_SOCIAL_1316"]) / (total_dict["NB_LGT_TOT_COMMENCES_1316"]), 4)
 
-        total_dict["NB_LGT_TX_REALISATION"] = 0 if total_dict["NB_LGT_TOT_CREES"] == 0 else round(total_dict["NB_LGT_TOT_COMMENCES"] / total_dict["NB_LGT_TOT_CREES"], 3)
+        # total_dict["NB_LGT_TX_REALISATION"] = 0 if total_dict["NB_LGT_TOT_CREES"] == 0 else round(total_dict["NB_LGT_TOT_COMMENCES"] / total_dict["NB_LGT_TOT_CREES"], 3)
 
-        total_dict["ART_POURCENT"]          = 0 if total_dict["SURFACE_COMMUNE"]  == 0 else round(100 * total_dict["ART_TOTAL"] / total_dict["SURFACE_COMMUNE"], 3)
+        # total_dict["ART_POURCENT"]          = 0 if total_dict["SURFACE_COMMUNE"]  == 0 else round(100 * total_dict["ART_TOTAL"] / total_dict["SURFACE_COMMUNE"], 3)
+        """
 
         for key in self.key_datas:
             mode = self.mode_dict[key]
@@ -1809,7 +1865,7 @@ class DataStore():
                     mode = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', mode)    # Replace ${VAR} by VAR
                     total_dict[key] =eval(mode, total_dict, globals())
                 except Exception as e:
-                    error = "Error evaluating metrique total mode : " + key + " + eval : " + mode + " - Error : " + str(e)
+                    error = "Error evaluating metrique total mode  : " + key + " + expr : " + mode + " - Error : " + str(e)
                     print_red(error)
                     total_dict[key] = error
 
@@ -2239,11 +2295,12 @@ def plot_logements(ds: DataStore):
                                     data_dict["NOUV_LOG_0813"] + data_dict["PROJ_LOG_REALISES_2021"]])
     plt.plot(xsmooth, ysmooth, color='#663300', linestyle='dotted', linewidth=3, label="Projection Logements Construits")
 
-    xsmooth, ysmooth = plot_smooth([2013, 2016, 2020],
-                                   [data_dict["NOUV_LOG_0813"],
-                                    data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_PRET_LOC_SOCIAL_1316"],  # Logements Sociaux Construits
-                                    data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_PRET_LOC_SOCIAL_1316"] + data_dict["NB_LGT_PRET_LOC_SOCIAL_1721"]])
-    plt.plot(xsmooth, ysmooth, color='#006600', linestyle='dotted', linewidth=3, label="Logements Sociaux Construits")
+    if ((data_dict["SRU_CARENCE_2020"] != 0) or (data_dict["NB_LGT_PRET_LOC_SOCIAL_1316"] + data_dict["NB_LGT_PRET_LOC_SOCIAL_1721"]) != 0):
+        xsmooth, ysmooth = plot_smooth([2013, 2016, 2020],
+                                       [data_dict["NOUV_LOG_0813"],
+                                        data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_PRET_LOC_SOCIAL_1316"],  # Logements Sociaux Construits
+                                        data_dict["NOUV_LOG_0813"] + data_dict["NB_LGT_PRET_LOC_SOCIAL_1316"] + data_dict["NB_LGT_PRET_LOC_SOCIAL_1721"]])
+        plt.plot(xsmooth, ysmooth, color='#006600', linestyle='dotted', linewidth=3, label="Logements Sociaux Construits")
 
     # Naming the axis
     plt.xlabel('Annees')
@@ -2279,6 +2336,88 @@ def plot_logements(ds: DataStore):
     # email_html   = "<img alt=" + str(lKpi.get_data(c_name)) + " src=\"cid:" + image_file_name + "\" >"
     global_context["HTML_PLOT_LOGEMENTS"] = browser_html
     return browser_html
+
+
+def plot_logements_pie(ds: DataStore):
+
+    label = "Repartition des Logements"
+    data_dict = ds.get_row_as_dict(ds.store_index)
+
+    fig, ax = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))
+
+    ingredients = ["Principales", "Secondaires", "Vacantes"]
+    data =        [data_dict["P18_RP"],      data_dict["P18_RSECOCC"], data_dict["P18_LOGVAC"]]
+
+    def func(pct, allvals):
+        absolute = int(round(pct/100.*np.sum(allvals)))
+        return "{:.1f}%\n({:d})".format(pct, absolute)
+
+    wedges, texts, autotexts = ax.pie(data, autopct=lambda pct: func(pct, data), textprops=dict(color="w"))
+
+    ax.legend(wedges, ingredients,
+              title="Residences",
+              loc="center left",
+              bbox_to_anchor=(1, 0, 0.5, 1))
+
+    plt.setp(autotexts, size=8, weight="bold")
+
+    ax.set_title(label)
+
+    ## Save Locally
+    image_file_name = output_dir + ds.get_fullname() + "_" + label.replace(" ", "_") + ".png"
+    fig.savefig(image_file_name)
+
+    ## Save for HTML Format
+    encoded_fig = fig_to_base64(fig)
+    browser_html = '<h2>'+label+'</h2><p><img src="data:image/png;base64, {}"></p>'.format(encoded_fig.decode('utf-8'))
+    # email_html   = "<img alt=" + str(lKpi.get_data(c_name)) + " src=\"cid:" + image_file_name + "\" >"
+    global_context["HTML_PLOT_TAILLE_DES_MENAGES"] = browser_html
+    return browser_html
+
+
+def plot_logements_donuts(ds: DataStore):
+
+    label = "Repartition des Logements"
+    data_dict = ds.get_row_as_dict(ds.store_index)
+
+    # Draw plot
+    fig, ax = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))
+
+    recipe = ["Residences Principales :\n" + str(data_dict["TX_RES_PR_18"]*100+"%"),
+              "Residences Secondaires :\n" + str(data_dict["TX_RES_SEC_18"]*100+"%"),
+              "Logements Vacants :\n"      + str(data_dict["TX_RES_VAC_18"]*100)+"%"]
+
+    data = [data_dict["TX_RES_PR_18"], data_dict["TX_RES_SEC_18"], data_dict["TX_RES_VAC_18"]]
+
+    wedges, texts = ax.pie(data, wedgeprops=dict(width=0.5), startangle=-40)
+
+    bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec="k", lw=0.72)
+    kw = dict(arrowprops=dict(arrowstyle="-"),
+              bbox=bbox_props, zorder=0, va="center")
+
+    for i, p in enumerate(wedges):
+        ang = (p.theta2 - p.theta1)/2. + p.theta1
+        y = np.sin(np.deg2rad(ang))
+        x = np.cos(np.deg2rad(ang))
+        horizontalalignment = {-1: "right", 1: "left"}[int(np.sign(x))]
+        connectionstyle = "angle,angleA=0,angleB={}".format(ang)
+        kw["arrowprops"].update({"connectionstyle": connectionstyle})
+        ax.annotate(recipe[i], xy=(x, y), xytext=(1.35*np.sign(x), 1.4*y),
+                    horizontalalignment=horizontalalignment, **kw)
+
+    ax.set_title("Repartition des Logements")
+
+    ## Save Locally
+    image_file_name = output_dir + ds.get_fullname() + "_" + label.replace(" ", "_") + ".png"
+    fig.savefig(image_file_name)
+
+    ## Save for HTML Format
+    encoded_fig = fig_to_base64(fig)
+    browser_html = '<h2>'+label+'</h2><p><img src="data:image/png;base64, {}"></p>'.format(encoded_fig.decode('utf-8'))
+    # email_html   = "<img alt=" + str(lKpi.get_data(c_name)) + " src=\"cid:" + image_file_name + "\" >"
+    global_context["HTML_PLOT_TAILLE_DES_MENAGES"] = browser_html
+    return browser_html
+
 
 def plot_taille_menages(ds: DataStore):
     """ Graphique taille des menages en HTML et png. """
@@ -2379,6 +2518,7 @@ def gen_report(ds : DataStore, data_only : bool = False, ftp_push : bool = False
     """ Generates Report for DataStore """
     ds.save_data()
     global_context["HTML_PLOT_LOGEMENTS"]          = plot_logements(ds)
+    global_context["HTML_PLOT_LOGEMENTS_PIE"]      = plot_logements_pie(ds)
     global_context["HTML_PLOT_POPULATION"]         = plot_population(ds)
     global_context["HTML_PLOT_TAILLE_DES_MENAGES"] = plot_taille_menages(ds)
     if (data_only) :
@@ -2951,11 +3091,11 @@ def read_command_line_args(argv):
             CONFIGURATION_FILE = arg
             continue
         elif (opt == "--clean"):
-            delete_patten(output_dir, "*.png")
-            delete_patten(output_dir, "*.csv")
-            delete_patten(output_dir, "*.json")
-            delete_patten(output_dir, "*.xlsx")
-            delete_patten(output_dir, "*.html")
+            delete_pattern(output_dir, "*.png")
+            delete_pattern(output_dir, "*.csv")
+            delete_pattern(output_dir, "*_*.json")
+            delete_pattern(output_dir, "*.xlsx")
+            delete_pattern(output_dir, "*.html")
             quit()
         elif (opt == "--rhtml"):
             if (not os.path.isfile(arg)):

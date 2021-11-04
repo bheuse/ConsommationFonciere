@@ -4,7 +4,7 @@
 <head>
     <title>Consommation Fonciere</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width," initial-scale="1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="no-referrer">
     <meta property="og:title" content="VigiFoncier.fr">
     <meta property="og:description"
@@ -71,32 +71,34 @@
 <!-- Modal Pop Up -->
 <div id="id01" class="w3-modal">
     <div class="w3-modal-content w3-card-4 w3-animate-top">
-        <header class="w3-container w3-theme-dark w3-mobile">
-            <span onclick="document.getElementById('id01').style.display='none'"
-                  class="w3-button w3-display-topright">
-            </span>
-            <h4>A propos de Vigi Foncier</h4>
-        </header>
-            <div class="w3-center w3-mobile"><p></p>
-                <p>Objectif Zéro Artificialisation Nette !</p>
-                <img src="https://fne.asso.fr/sites/default/files/import/Logo_Horizontal_ROUGE-01.png" alt="FNE Logo" width="456" height="128">
-                <p><a class="w3-btn"
-                      href="mailto:gadceca06@gmail.com?subject=A%20propose%20de%20Consommation%20Fonciere">
-                      Information – Contactez nous pour en savoir plus
-                </a></p>
-                <p>Un site developé en collaboration avec le Gadseca et mySophiaAntipolis ! </p></div>
-            <footer class="w3-container w3-theme-dark"><h4>France Nature Environnement</h4></footer>
-        </div>
+      <header class="w3-container w3-theme-dark w3-mobile">
+        <span onclick="document.getElementById('id01').style.display='none'"
+        class="w3-button w3-display-topright">×</span>
+        <h4>A propos de Vigi Foncier</h4>
+      </header>
+      <div class="w3-center">
+        <p></p>
+        <p>Objectif Zéro Artificialisation Nette !</p>
+        <img src="https://www.mightyearth.org/wp-content/uploads/image003.png" alt="ASP Logo" width="456" height="128">
+        <p><a class="w3-btn" href="mailto:gadceca06@gmail.com?subject=A%20propose%20de%20Consommation%20Fonciere"> Information – Contactez nous pour en savoir plus </a></p>
+        <p>Un site developé en collaboration avec le Gadseca et mySophiaAntipolis ! </p>
+      </div>
+      <footer class="w3-container w3-theme-dark">
+        <h4>France Nature Environnement</h4>
+      </footer>
     </div>
+</div>
 <hr>
 
 <!-- Departements (Paca Seulement) ... -->
 <div>
     <h2 class="w3-center">Region PACA</h2>
+          <!-- src="https://www.acted.org/wp-content/uploads/2018/09/region-paca.jpg" -->
     <img class="w3-center w3-image"
-          src="https://www.acted.org/wp-content/uploads/2018/09/region-paca.jpg"
+          src="input/CartoPaca3-Green.png"
           alt="Region Paca Logo"
           style="display: block; margin-left: auto; margin-right: auto; width: 600px; height: auto;">
+</div>
 
 <!-- Selection -->
 <div>
@@ -139,7 +141,14 @@
     </div>
     <div v-else>
          <h2 class="w3-center">Rapport : {{nom}}</h2>
-         <h3 class="w3-container w3-padding-32 w3-theme">{{territoire}} {{code}} : {{nom}} - {{ds.CODE_POSTAL}}</h3>
+         <h3 class="w3-container w3-padding-32 w3-theme">{{territoire}} {{code}} : {{nom}} - {{ds.CODE_POSTAL}} - {{ ds.P18_POP }} habitants</h3>
+        <div class="w3-container">
+            <div v-if="ds.LIBEPCI != 'DEPT'">
+                <p> EPCI : {{ ds.LIBEPCI}} - {{ ds.EPCI}}  </p>
+            </div>
+            <p> Departement : {{ ds.DEP_NOM}} - {{ ds.DEP}} </p>
+            <p> Region :      {{ ds.REG_NOM}} - {{ ds.REG }}  </p>
+        </div>
     </div>
 </div>
 
@@ -255,7 +264,19 @@ function openTab(evt, cityName) {
                                     <p>{{diag.description}}</p>
                                     <p>{{diag.messageSiVrai}}</p>
                      </div>
-                     <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-lefttbar w3-border-yellow w3-border">
+                     <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-leftbar w3-border-yellow w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiFaux}}</p>
+                     </div>
+                 </div>
+                 <div v-if="diag.type == 'BLUE'" >
+                     <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiVrai}}</p>
+                     </div>
+                     <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
                                     <p>{{diag.key}} - {{diag.categorie}}</p>
                                     <p>{{diag.description}}</p>
                                     <p>{{diag.messageSiFaux}}</p>
@@ -396,7 +417,19 @@ function openTab(evt, cityName) {
                                     <p>{{diag.description}}</p>
                                     <p>{{diag.messageSiVrai}}</p>
                      </div>
-                     <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-lefttbar w3-border-yellow w3-border">
+                     <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-leftbar w3-border-yellow w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiFaux}}</p>
+                     </div>
+                 </div>
+                 <div v-if="diag.type == 'BLUE'" >
+                     <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiVrai}}</p>
+                     </div>
+                     <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
                                     <p>{{diag.key}} - {{diag.categorie}}</p>
                                     <p>{{diag.description}}</p>
                                     <p>{{diag.messageSiFaux}}</p>
@@ -451,7 +484,19 @@ function openTab(evt, cityName) {
                                     <p>{{diag.description}}</p>
                                     <p>{{diag.messageSiVrai}}</p>
                      </div>
-                     <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-lefttbar w3-border-yellow w3-border">
+                     <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-leftbar w3-border-yellow w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiFaux}}</p>
+                     </div>
+                 </div>
+                 <div v-if="diag.type == 'BLUE'" >
+                     <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiVrai}}</p>
+                     </div>
+                     <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
                                     <p>{{diag.key}} - {{diag.categorie}}</p>
                                     <p>{{diag.description}}</p>
                                     <p>{{diag.messageSiFaux}}</p>
@@ -471,6 +516,42 @@ function openTab(evt, cityName) {
                  </div>
              </div>
          </div>
+         <table class="w3-table-all w3-hoverable w3-card-4">
+                    <tbody>
+                    <tr class="w3-teal">
+                        <th>Donnees Sitadel</th>
+                        <th class="w3-right-align">2013-2021</th>
+                    </tr>
+                    <tr>
+                        <td>Surface du Territoire</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.SURFACE_COMMUNE / 100 ).toFixed(2)) ) / 100  }} ha</td>
+                    </tr>
+                    <tr>
+                        <td>NB_LGT_NOUVEAU</td>
+                        <td class="w3-right-align">{{ ds.NB_LGT_NOUVEAU  }} </td>
+                    </tr>
+                    <tr>
+                        <td>NB_LGT_RENOUVELLEMENT</td>
+                        <td class="w3-right-align">{{ ds.NB_LGT_RENOUVELLEMENT  }} </td>
+                    </tr>
+                    <tr>
+                        <td>SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN / 100 ).toFixed(2)) ) / 100  }} ha</td>
+                    </tr>
+                    <tr>
+                        <td>SITADEL_LOCAUX_NOUVEAUX</td>
+                        <td class="w3-right-align">{{ ds.SITADEL_LOCAUX_NOUVEAUX  }} </td>
+                    </tr>
+                    <tr>
+                        <td>SITADEL_LOCAUX_RENOUVELLEMENT</td>
+                        <td class="w3-right-align">{{ ds.SITADEL_LOCAUX_RENOUVELLEMENT  }} </td>
+                    </tr>
+                    <tr>
+                        <td>SITADEL_LOCAUX_SUPERFICIE_TERRAIN</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.SITADEL_LOCAUX_SUPERFICIE_TERRAIN / 100 ).toFixed(2)) ) / 100  }} ha</td>
+                    </tr>
+                    </tbody>
+                </table>
     </div>
 </div>
 <div id="Projections"       class="w3-container city w3-animate-opacity">
@@ -547,7 +628,19 @@ function openTab(evt, cityName) {
                                     <p>{{diag.description}}</p>
                                     <p>{{diag.messageSiVrai}}</p>
                      </div>
-                     <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-lefttbar w3-border-yellow w3-border">
+                     <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-leftbar w3-border-yellow w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiFaux}}</p>
+                     </div>
+                 </div>
+                 <div v-if="diag.type == 'BLUE'" >
+                     <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiVrai}}</p>
+                     </div>
+                     <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
                                     <p>{{diag.key}} - {{diag.categorie}}</p>
                                     <p>{{diag.description}}</p>
                                     <p>{{diag.messageSiFaux}}</p>
@@ -614,7 +707,10 @@ function openTab(evt, cityName) {
         <div> <h2>Logements Sociaux MOUGINS</h2>
               <p>Evolution 2017-2020 des Residences Principales : {{ds.SRU_EVOLUTION_EN_RP}}</p>
               <p>Evolution 2017-2020 Carence : {{ds.SRU_EVOLUTION_CARENCE}}</p>
-              <p>Logements Sociaux Realises en 2017-2020 : {{ds.SRU_LOGEMENTS_SRU_CONSTRUITS}}</p>
+              <p>Logements Sociaux Realises en 2017-2020 (SRU) : {{ds.SRU_LOGEMENTS_SRU_CONSTRUITS}}</p>
+              <p>Logements Sociaux Realises en 2017-2021 (Sitadel): {{ds.NB_LGT_PRET_LOC_SOCIAL_1721}}</p>
+              <p>Logements Sociaux Realises en 2013-2016 (Sitadel): {{ds.NB_LGT_PRET_LOC_SOCIAL_1316}}</p>
+              <p>Logements Sociaux Realises en 2013-2021 (Sitadel): {{ds.NB_LGT_PRET_LOC_SOCIAL_1321}}</p>
               <p>Total de logements a construire en 35% / 65% : {{ds.SRU_MOD3565_CARENCE}}</p>
         </div>
         <br>
@@ -631,7 +727,19 @@ function openTab(evt, cityName) {
                                     <p>{{diag.description}}</p>
                                     <p>{{diag.messageSiVrai}}</p>
                      </div>
-                     <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-lefttbar w3-border-yellow w3-border">
+                     <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-leftbar w3-border-yellow w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiFaux}}</p>
+                     </div>
+                 </div>
+                 <div v-if="diag.type == 'BLUE'" >
+                     <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiVrai}}</p>
+                     </div>
+                     <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
                                     <p>{{diag.key}} - {{diag.categorie}}</p>
                                     <p>{{diag.description}}</p>
                                     <p>{{diag.messageSiFaux}}</p>
@@ -663,7 +771,19 @@ function openTab(evt, cityName) {
                             <p>{{diag.description}}</p>
                             <p>{{diag.messageSiVrai}}</p>
              </div>
-             <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-lefttbar w3-border-yellow w3-border">
+             <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-leftbar w3-border-yellow w3-border">
+                            <p>{{diag.key}} - {{diag.categorie}}</p>
+                            <p>{{diag.description}}</p>
+                            <p>{{diag.messageSiFaux}}</p>
+             </div>
+         </div>
+         <div v-if="diag.type == 'BLUE'" >
+             <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
+                            <p>{{diag.key}} - {{diag.categorie}}</p>
+                            <p>{{diag.description}}</p>
+                            <p>{{diag.messageSiVrai}}</p>
+             </div>
+             <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
                             <p>{{diag.key}} - {{diag.categorie}}</p>
                             <p>{{diag.description}}</p>
                             <p>{{diag.messageSiFaux}}</p>
@@ -762,6 +882,11 @@ function openTab(evt, cityName) {
                     <li><a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS_PACA">Projections Paca : Dossier Omphale </a></li>
                 </ul>
             </div>
+            <br>
+            <h2>Autres Sites</h2>
+            <p>Données sur Toutes les Villes de France : <a target="_blank" :href="ds.URL_VILLE_DATA">Ville Data</a></p>
+            <p>L'Encyclopédie des villes de France : <a target="_blank" :href="ds.URL_LINTERNAUTE">L'internaute</a></p>
+            <p>Google : <a target="_blank" :href="ds.URL_GOOGLE">Google Search</a></p>
         </div>
     </div>
 <div id="Debug"             class="w3-container city w3-animate-opacity">
@@ -785,12 +910,25 @@ function openTab(evt, cityName) {
                             <p>{{diag.description}}</p>
                             <p>{{diag.messageSiVrai}}</p>
              </div>
-             <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-lefttbar w3-border-yellow w3-border">
+             <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-leftbar w3-border-yellow w3-border">
                             <p>{{diag.key}} - {{diag.categorie}}</p>
                             <p>{{diag.description}}</p>
                             <p>{{diag.messageSiFaux}}</p>
              </div>
-         </div>
+            </div>
+                 <div v-if="diag.type == 'BLUE'" >
+                     <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiVrai}}</p>
+                     </div>
+                     <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiFaux}}</p>
+                     </div>
+                 </div>
+
             <div v-if="diag.type == 'DIAG'" >
              <div v-if='diag.value == true' class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border">
                             <p>{{diag.key}} - {{diag.categorie}}</p>
@@ -825,7 +963,6 @@ function openTab(evt, cityName) {
                     <li> Type :       {{ item.type   }}</li>
                     <li> Mode :       {{ item.mode   }}</li>
                     <li> Source :     {{ item.source }}</li>
-                    <li> Expression : {{ item.expr   }}</li>
                     <li> Valeur :     {{ item.total  }}</li>
                 </ul>
         </div>
@@ -839,12 +976,17 @@ function openTab(evt, cityName) {
         <img :src="ds.GRAPHIQUE_LOGEMENTS"           alt="Logements" class="center" >
         <br>
         <img src="input/Legend_Logements.png"       alt="Legende Logements" class="center">
+
+        <div class="w3-container w3-section w3-teal"><h2 class="w3-teal w3-padding-16">Repartition des Logements</h2></div>
+        <img :src="ds.GRAPHIQUE_REPARTITION_DES_LOGEMENTS"          alt="Repartition" class="center">
+
         <div class="w3-container w3-section w3-teal"><h2 class="w3-teal w3-padding-16">Population</h2></div>
         <img :src="ds.GRAPHIQUE_POPULATION"          alt="Population" class="center">
+
         <div class="w3-container w3-section w3-teal"><h2 class="w3-teal w3-padding-16">Taille des Menages</h2></div>
         <img :src="ds.GRAPHIQUE_TAILLE_DES_MENAGES"  alt="Taille des Menages" class="center">
 
-            <div >
+        <div >
             <canvas id="line-chart" width="200" height="50"></canvas>
             <script>
               new Chart(document.getElementById("line-chart"), {
@@ -888,7 +1030,6 @@ function openTab(evt, cityName) {
             });
             </script>
             </div>
-
 
     </div>
 </div>
@@ -994,9 +1135,7 @@ function openTab(evt, cityName) {
 </div>
 -->
 
-</div>
-
-<script src="ConsommationFonciere.js"></script>
+<script src="ConsommationFonciere.js?v=1"></script>
 
 </div>
 </body>
