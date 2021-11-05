@@ -2544,7 +2544,7 @@ def readme_to_html():
 
 
 def ftp_push_ds(ds : DataStore):
-    file_ext  = [ "_s.json" , ".xlsx" , ".csv" ,
+    file_ext  = [  ".xlsx" , ".csv" , "_s.json" ,
                   "_Logements.png", "_Population.png", "_tracker.html",
                   "_Taille_des_Menages.png", "_Repartition_des_Logements.png"
                 ]
@@ -2552,7 +2552,7 @@ def ftp_push_ds(ds : DataStore):
     prefix = ds.get_fullname()
     for ext in file_ext :
         file_list.append(output_dir + prefix + ext)
-    ftp_push_files(file_list)
+    ftp_push_file(file_list)
 
 
 def ftp_push_file(filename):
@@ -2566,7 +2566,7 @@ def ftp_push_file(filename):
         # print(remote_files)
         for file in filename:
             print_blue("FTP Push : " + file)
-            ftp.storbinary('STOR ' + file, open(file, 'rb'))
+            ftp.storbinary('STOR ' + file.replace("\\","/"), open(file, 'rb'))
         ftp.close()
 
 
@@ -2577,10 +2577,12 @@ def ftp_push_files():
                 "input/Gadseca-Logo-BIG.png", "input/Gadseca-Logo.png",
                 "input/Gadseca_50Ans.jpg",    "input/Gadseca_Logo.png",
                 "input/Logo2-Vert-FV.png",    "input/Logo2-Vert.png",
-                "input/Logo3-Color-FV.png",   "input/Logo3-Color.png", "msShophia-Logo.jpg",
+                "input/Logo3-Color-FV.png",   "input/Logo3-Color.png",
                 "input/report_template.html", "input/tracker_template.html",
-                "input/CartePaca1.jpg",       "input/CartePaca2.png",       "input/CartePaca4.png", "input/CartoPaca4.png",
-                "input/CartoPaca3.png.png",   "input/CartoPaca3-Green.png", "input/CartoPaca3-Light-Green.png",
+                "input/CartePaca1.jpg",       "input/CartePaca2.png",
+                "input/CartePaca4.png",       "input/CartoPaca4.png",
+                "input/CartoPaca3.png",       "input/CartoPaca3-Green.png",
+                "input/myShophia-Logo.jpg",    "input/CartoPaca3-Light-Green.png",
                 "README.md",  "README.html",   "README.dillinger.html",
                 "ConsommationFonciere.html",   "ConsommationFonciere.js", "ConsommationFonciere.py",
                 "index.html",
