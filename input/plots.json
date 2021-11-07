@@ -1,0 +1,69 @@
+{
+  "Plots" : [
+  {
+    "Key" : "LOGEMENTS_2",
+    "Categorie" : "LOG",
+    "xLabel" : "Annees",
+    "yLabel" : "Logements",
+    "Type" : "LINES",
+    "yLimits" : "(POP_2020 / 2 - 5000, POP_2050 + 2000)",
+    "Title" :  "\"Logements \" + str(LIBELLE)",
+    "Legend" : "below",
+    "ColorTitle" : "Teal",
+    "ColorLabel" : "Teal",
+    "Series" : [
+      {
+            "Label" : "Projection Population",
+            "Smooth" : true,
+            "Color" : "Teal",
+            "Style" : "--",
+            "Width" : 3,
+            "xValues" : "[2020,2030,2040,2050]",
+            "yValues" : "[POP_2020,POP_2030,POP_2040,POP_2050]"
+      },
+      {
+            "Label" : "Projection Logements",
+            "Smooth" : true,
+            "Color" : "Yellow",
+            "Style" : "-",
+            "Width" : 3,
+            "xValues" : "[2020,2030,2040,2050]",
+            "yValues" : "[LOG_2020,LOG_2030,LOG_2040,LOG_2050]"
+      }
+      ]
+   },
+  {
+    "Key" : "LOGEMENTS_4",
+    "Categorie" : "LOG",
+    "Type" : "PIE",
+    "Title" :  "\"Repartition des Logements \" + str(LIBELLE)",
+    "ColorTitle" : "Teal",
+    "Legende" :  "'Residences'",
+    "Labels" : "[\"Principales\", \"Secondaires\", \"Vacantes\"]",
+    "Values" : "[P18_RP,P18_RSECOCC,P18_LOGVAC]",
+    "Colors" : "['Teal', 'Grey', 'Brown']"
+  },
+  {
+    "Key" : "LOGEMENTS_5",
+    "Categorie" : "LOG",
+    "Type" : "DONUT",
+    "Title" :  "'Repartition des Residences ' + str(LIBELLE)",
+    "ColorTitle" : "Teal",
+    "Legende" :  "'Residences'",
+    "Labels" : "['Principales', 'Secondaires', 'Vacantes']",
+    "Values" : "[TX_RES_PR_18,TX_RES_SEC_18,TX_RES_VAC_18]",
+    "Colors" : "['Teal', 'Grey', 'Brown']"
+  },
+  {
+    "Key" : "LOGEMENTS_6",
+    "Categorie" : "LOG",
+    "Type" : "DONUT2",
+    "Title" :  "'Repartition des Residences ' + str(LIBELLE)",
+    "ColorTitle" : "Teal",
+    "Legende" :  "'Residences'",
+    "Labels" : "['Principales', 'Secondaires', 'Vacantes']",
+    "Values" : "[TX_RES_PR_18,TX_RES_SEC_18,TX_RES_VAC_18]",
+    "Colors" : "['Teal', 'Grey', 'Brown']"
+  }
+ ]
+}

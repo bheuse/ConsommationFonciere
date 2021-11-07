@@ -82,7 +82,10 @@ On peut ajuster :
 <pre><code>python ConsommationFonciere.py -f -a -p -d 06
 </code></pre>
 <p>Les rapports sont générés dans le repertoire "output".</p>
-<h2>Configuration</h2>
+<h1>Configuration</h1>
+<p>Le fichier de configuration par défaut est "<em>input/Configuration.xlsx</em>"
+Le fichier de configuration à utiliser peut être spécifié en paramètre de la ligne de commande.</p>
+<h2>Collecte de Donnees</h2>
 <p>Les données sources, c'est plus de 1500 indicateurs (métriques) par communes. 
 Par défaut, un certain nombre de données sont collectées. 
 Par configuration, on peut ensuite demander la collecte de données supplémentaires.
@@ -136,7 +139,50 @@ SRU_CARENCE_2020                Taux de Carence en 2020               SRU      I
 </code></pre>
 <p>Le fichier de configuration par défaut est "<em>input/Configuration.xlsx</em>"
 Le fichier de configuration à utiliser peut être spécifié en paramètre de la ligne de commande.</p>
-<h2>Diagnostic</h2>
+<h2>Calculs</h2>
+<p><em>TAB</em> <strong>Calculs</strong></p>
+<p>Les calculs peuvent etre utilises pour definir des valeurs de variables supplementaires caluclees a partir des valeurs collectees.</p>
+<p>Ces variables sont ensuite disponibles pour générer le rapport.</p>
+<p>Pour calculer de nouvelles variables, ajouter des lignes dans le fichier de configuration, <em>TAB</em> <strong>Calculs</strong></p>
+<p><strong>Key</strong> : L'identifiant de la variable (donnée)</p>
+<p>Ce champ doit être unique, sans espaces ni caractères spéciaux. Exemple :</p>
+<pre><code>CALCUL_CARENCE
+</code></pre>
+<p><strong>Description</strong> : La Description de la variable (indicateur de la valeur)</p>
+<p>Texte libre, par exemple :</p>
+<pre><code>Taux de Carence Total
+</code></pre>
+<p><strong>Source</strong>: La Source de la variable</p>
+<p>Ce champ est indicatif, mais il permet de classer les variables dans l'interface.
+- "DATA" : Données de Base
+- "CODE" : Données Codes Postaux
+- "INTERCO" : Données Intercommunalités
+- "INSEE" : Données INSEE
+- "CALC" : Données calculées
+- "SRU" : Données SRU DREAL
+- "ART" : Données Artificialisation CEREMA
+- "PROJ" : Données Projection INSEE
+- "EVOL" : Données Evolution INSEE
+- "SIT" ; Données SITADEL</p>
+<p><strong>Type</strong>    : Le type de la variable</p>
+<p>Les types supportés sont :
+- "INT" : Entier sans décimale
+- "STR" : Chaine de caractères
+- "FLOAT" : Nombre décimal
+- "TAUX" : Taux. 0,1 représente 10 %
+- "PERCENT" : Pourcentage. 0,1 représente 0,1 %</p>
+<p><strong>Python</strong>  : Le calcul de la variable (une expression Python)</p>
+<pre><code>round0(RP_2020 * (0.25 - SRU_TX_LLS), 4)
+</code></pre>
+<p><strong>JavaScript</strong> : Le calcul de la variable (une expression JavaScript)</p>
+<pre><code>Math.round(RP_2020 * (0.25 - SRU_TX_LLS), 4)
+</code></pre>
+<p><strong>Exemple de Ligne de Configuration</strong>:</p>
+<pre><code>Key              Description                  Source   Type   Python                                              JavaScript                                      Commentaire
+CALCUL_CARENCE   Carence Total en 2002        SRU      INT    round0(SRU_RP_2020 * (0.25 - SRU_TX_LLS_2020), 4)   Math.round(RP_2020 * (0.25 - SRU_TX_LLS), 4)    Texte Libre
+</code></pre>
+<h2>Diagnostics</h2>
+<p><em>TAB</em> <strong>Diagnostic</strong></p>
 <p>Sur les données collectées, des vérifications peuvent être faites.
 Le fichier de configuration xls contient un Tab Diagnostic.
 Chaque ligne permet de vérifier une condition et d'afficher le diagnostic correspondant.

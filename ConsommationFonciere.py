@@ -42,6 +42,7 @@ input_dir  = "input"  + os.sep
 configurationFile    = input_dir  + "Configuration.xlsx"
 html_report_template = input_dir  + "report_template.html"
 html_index_template  = input_dir  + "index_template.html"
+plots_file           = input_dir  + "plots.json"
 context_file         = output_dir + "context.yaml"
 france_file          = output_dir + "france.json"
 
@@ -355,20 +356,57 @@ def load_artificialisation(dossier_artificialisation_file: str = dossierArtifici
 ###
 
 collectDataFile    = configurationFile
-collectDataMetrics = None
-collectDiagnostics = None
+collectDataMetrics  = None
+collectDiagnostics  = None
+collectCalculations = None
 
 # Key	Description	Source	Type	Data	Total
 # Key	Description	Test    Message
 
 
 def load_collectData(collect_file: str = collectDataFile):
-    global collectDataMetrics, collectDiagnostics
+    global collectDataMetrics, collectDiagnostics, collectCalculations
     if (collectDataMetrics is None) :
         print_blue("Lecture Data Metrics : " + collect_file + " ...")
         xls = pd.ExcelFile(collect_file)
-        collectDataMetrics = pd.read_excel(xls, 'Collect',    index_col=0, dtype=str)
-        collectDiagnostics = pd.read_excel(xls, 'Diagnostic', index_col=0, dtype=str)
+        collectDataMetrics  = pd.read_excel(xls, 'Collect',    index_col=0, dtype=str)
+        collectDiagnostics  = pd.read_excel(xls, 'Diagnostic', index_col=0, dtype=str)
+        collectCalculations = pd.read_excel(xls, 'Calculs',    index_col=0, dtype=str)
+
+        dm = pd.read_excel(xls, 'Collect', index_col=0, dtype=str).fillna('')
+        dm = dm[~dm.index.duplicated(keep='first')]
+        for index, row in dm.iterrows():
+            if str(index) == "nan" or str(index).startswith("#")  : dm.drop(index, inplace=True)
+        with open(output_dir + "datametrics.json", 'w') as f:
+            d = dict()
+            d["X"] = dm.to_dict(orient='index')
+            d["Y"] = dm.to_dict()
+            f.write(to_json(d, indent=4))
+            f.close()
+
+        dm = pd.read_excel(xls, 'Calculs', index_col=0, dtype=str).fillna('')
+        dm = dm[~dm.index.duplicated(keep='first')]
+        dm = dm[~dm.index.duplicated(keep='first')]
+        for index, row in dm.iterrows():
+            if str(index) == "nan" or str(index).startswith("#")  : dm.drop(index, inplace=True)
+        with open(output_dir + "calculations.json", 'w') as f:
+            d = dict()
+            d["X"] = dm.to_dict(orient='index')
+            d["Y"] = dm.to_dict()
+            f.write(to_json(d, indent=4))
+            f.close()
+
+        dm = pd.read_excel(xls, 'Diagnostic', index_col=0, dtype=str).fillna('')
+        dm = dm[~dm.index.duplicated(keep='first')]
+        for index, row in dm.iterrows():
+            if str(index) == "nan" or str(index).startswith("#")  : dm.drop(index, inplace=True)
+        with open(output_dir + "diagnostics.json", 'w') as f:
+            d = dict()
+            d["X"] = dm.to_dict(orient='index')
+            d["Y"] = dm.to_dict()
+            f.write(to_json(d, indent=4))
+            f.close()
+
     return collectDataMetrics
 
 ###
@@ -1069,6 +1107,7 @@ class DataStore():
     # Add Meta Data
     def add_meta_data(self):
         """ Adds Meta data to DataStore """
+        self.clean_meta_data(inplace=True)
         self.data_frame = self.data_frame.append(pd.Series(self.meta_dict,   name='meta'))
         self.data_frame = self.data_frame.sort_index(ascending=False)        # sorting by index
         self.data_frame = self.data_frame.append(pd.Series(self.mode_dict,   name='mode'))
@@ -1684,8 +1723,8 @@ class DataStore():
             _description = metric["Description"]
             _source      = metric["Source"]
             _type        = metric["Type"]
-            _data        = str(metric["Data"])
-            _expr        = str(metric["Data"])
+            _data        = str(metric["Expr"])
+            _expr        = str(metric["Expr"])
             _total       = metric["Total"]
             if (str(_key) == "nan") : continue          # Empty Line
             if (str(_key) == "")    : continue          # Empty Line
@@ -1696,7 +1735,7 @@ class DataStore():
                 value = eval(_data, self.get_row_as_dict(), {**globals(), **locals()})
                 self.add_metric(_key, _description, source=_source, mode=_total, data=value, type=_type, expr=_expr)
             except Exception as e :
-                error = "Error evaluating metrique : Line " + _line + " Key = " + _key + " + expr : " + _data + " - Error : " + str(e)
+                error = "Error evaluating metrique : Line " + _line + " Key = " + _key + " + expr : " + _expr + " - Error : " + str(e)
                 print_red(error)
                 self.add_metric(_key, _description, source=_source, mode=_total, data=error, type=_type, expr=_expr)
 
@@ -1886,9 +1925,47 @@ class DataStore():
         update_DataStoreCache(self)
         return self
 
+    def calculs(self, meta=True):
+
+        print_green("> Calculs Donnees : " + str(self.store_code) + " : " + self.store_name)
+
+        save_index       = self.store_index
+        self.store_index = "total"
+
+        # Calculated Data
+        _line = 0
+        for index, metric in collectCalculations.iterrows():
+            _line = _line + 1
+            _key         = index
+            _description = metric["Description"]
+            _source      = metric["Source"]
+            _type        = metric["Type"]
+            _data        = str(metric["Python"])
+            _python      = str(metric["Python"])
+            _javascript  = str(metric["JavaScript"])
+            if (str(_key) == "nan") : continue          # Empty Line
+            if (str(_key) == "")    : continue          # Empty Line
+            if (str(_key).startswith("#")) : continue   # Ignore line / key starting with #
+            # print_grey("Evaluating Calcul " + str(_line) + ": " + str(_key) + " : " + str(_data))
+            _data = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _python)    # Replace ${VAR} by VAR
+            try:
+                value = eval(_data, self.get_row_as_dict(), {**globals(), **locals()})
+                self.add_metric(_key, _description, source=_source, mode="$JS:"+_javascript, data=value, type=_type, expr=_python)
+            except Exception as e :
+                error = "Error evaluating Calcul : Line " + _line + " Key = " + _key + " + expr : " + _python + " - Error : " + str(e)
+                print_red(error)
+                self.add_metric(_key, _description, source=_source, mode=_python, data=error, type=_type, expr=_expr)
+        self.store_index = save_index
+        self.add_meta_data()
+        return self
+
+
     def run_diagnostic(self):
         """ Evaluate diagnostics on the total data """
+
         load_min_data()
+        self.calculs()
+        print_green("> Etablissement des diagnostics : " + str(self.store_code) + " : " + self.store_name)
         _line = 0
         for index, metric in collectDiagnostics.iterrows():
             _line = _line + 1
@@ -1901,7 +1978,6 @@ class DataStore():
             _type        = metric["Type"]
             if (str(_key) == "nan") : continue          # Ignore empty lines
             if (str(_key).startswith("#")) : continue   # Ignore key starting with #
-            # print_grey("Evaluating Diagnostic " + str(_line) + ": " + str(_key) + " : " + str(_test))
             _data = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _test)    # Replace ${VAR} by VAR
             try:
                 value = bool(eval(_test, self.get_row_as_dict(), {**globals(), **locals()}))
@@ -1949,6 +2025,7 @@ class DataStore():
                 self.store_index = 'total'
 
         self.run_diagnostic()
+        plots(self)
         html_report_file = gen_report(ds=self, data_only=data_only, ftp_push=ftp_push)
         # html_index_file  = gen_index()
         display_in_browser(html_report_file)
@@ -1970,6 +2047,7 @@ def render_index(template=html_index_template, region="93"):
     """" Building Mako Template Context """
     context = {**report_region_dict(region=region, filename=france_file), **global_context}
     # Rendering Template
+    mako.runtime.UNDEFINED = 'MISSING_CONTEXT'
     mako.runtime.UNDEFINED = 'MISSING_CONTEXT'
     temp = Template(filename=template)
     index_html = temp.render(**context)
@@ -2237,12 +2315,174 @@ def report_full_data(ds: DataStore):
 
 index_figure = 0
 
+
 def new_figure():
     global index_figure
     index_figure += 1
     plt.close('all')
     plt.figure(index_figure)
     return plt
+
+
+def plots(ds: DataStore):
+    with open(plots_file) as json_file:
+        desc = jsonc.load(json_file)
+    for plot in desc["Plots"] :
+        if (plot["Type"] == "LINES")  : plots_lines(plot, ds)
+        if (plot["Type"] == "PIE")    : plots_pie(plot, ds)
+        if (plot["Type"] == "DONUT")  : plots_donut2(plot, ds)
+        if (plot["Type"] == "DONUT2") : plots_donut1(plot, ds)
+
+
+def plots_donut1(plot, ds: DataStore):
+    # Draw plot
+    key = plot["Key"]
+    ctx1 = ds.get_row_as_dict()
+    ctx2 = {**globals(), **locals()}
+    # Title & Legend
+    titre = eval(plot["Title"], ctx1, ctx2)
+    fig, ax = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))
+
+    labels = eval(plot["Labels"], ctx1, ctx2)
+    data   = eval(plot["Values"], ctx1, ctx2)
+
+    """
+    def func(pct, allvals):
+        absolute = int(round(pct/100.*np.sum(allvals)))
+        return "{:.1f}%\n({:d})".format(pct, absolute)
+
+    recipe = ["Residences Principales :\n" + str(data_dict["TX_RES_PR_18"]*100+"%"),
+              "Residences Secondaires :\n" + str(data_dict["TX_RES_SEC_18"]*100+"%"),
+              "Logements Vacants :\n"      + str(data_dict["TX_RES_VAC_18"]*100)+"%"]
+    """
+
+    wedges, texts = ax.pie(data, wedgeprops=dict(width=0.5), startangle=-40)
+    bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec="k", lw=0.72)
+    kw = dict(arrowprops=dict(arrowstyle="-"),bbox=bbox_props, zorder=0, va="center")
+    for i, p in enumerate(wedges):
+        ang = (p.theta2 - p.theta1)/2. + p.theta1
+        y = np.sin(np.deg2rad(ang))
+        x = np.cos(np.deg2rad(ang))
+        horizontalalignment = {-1: "right", 1: "left"}[int(np.sign(x))]
+        connectionstyle = "angle,angleA=0,angleB={}".format(ang)
+        kw["arrowprops"].update({"connectionstyle": connectionstyle})
+        ax.annotate(labels[i], xy=(x, y), xytext=(1.35*np.sign(x), 1.4*y),horizontalalignment=horizontalalignment, **kw)
+
+    ax.set_title(titre, color=plot["ColorTitle"], weight='bold')
+
+    ## Save Locally
+    image_file_name = output_dir + ds.get_fullname() + "_" + key.replace(" ", "_") + ".png"
+    fig.savefig(image_file_name)
+    ds.add_metric(key="GRAPHIQUE_"+key.upper(),meta=titre,source="PLOT",mode="EQUAL",type="STR",data=image_file_name,expr=image_file_name)
+    return image_file_name
+
+
+def plots_donut2(plot, ds: DataStore):
+    # Draw plot
+    key = plot["Key"]
+    ctx1 = ds.get_row_as_dict()
+    ctx2 = {**globals(), **locals()}
+    # Title & Legend
+    titre = eval(plot["Title"], ctx1, ctx2)
+    fig, ax = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))
+
+    values   = eval(plot["Values"], ctx1, ctx2)
+    labels   = eval(plot["Labels"], ctx1, ctx2)
+    colors   = eval(plot["Colors"], ctx1, ctx2)
+
+    # Pie Chart
+    _, _, autotexts = plt.pie(values, colors=colors, labels=labels,
+                    autopct='%1.1f%%', pctdistance=0.75)
+    for autotext in autotexts:
+        autotext.set_color('white')
+
+    # Draw circle
+    centre_circle = plt.Circle((0, 0), 0.50, fc='white')
+    fig = plt.gcf()
+
+    # Adding Circle in Pie chart
+    fig.gca().add_artist(centre_circle)
+
+    # Add Legends
+    # plt.legend(labels, loc="upper right")
+
+    # Adding Title of chart
+    plt.title(titre, color=plot["ColorTitle"], weight='bold')
+
+    ## Save Locally
+    image_file_name = output_dir + ds.get_fullname() + "_" + key.replace(" ", "_") + ".png"
+    fig.savefig(image_file_name)
+    ds.add_metric(key="GRAPHIQUE_"+key.upper(),meta=titre,source="PLOT",mode="EQUAL",type="STR",data=image_file_name,expr=image_file_name)
+    return image_file_name
+
+
+def plots_pie(plot, ds: DataStore):
+    # Draw plot
+    plt = new_figure()
+    key = plot["Key"]
+    ctx1 = ds.get_row_as_dict()
+    ctx2 = {**globals(), **locals()}
+    # Title & Legend
+    titre = eval(plot["Title"], ctx1, ctx2)
+    legend = eval(plot["Legende"], ctx1, ctx2)
+    plt.title(titre, color=plot["ColorTitle"], weight='bold')
+    fig, ax = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))
+
+    labels  = eval(plot["Labels"], ctx1, ctx2)
+    data    = eval(plot["Values"], ctx1, ctx2)
+    colors  = eval(plot["Colors"], ctx1, ctx2)
+
+    def func(pct, allvals):
+        absolute = int(round(pct/100.*np.sum(allvals)))
+        return "{:.1f}%\n({:d})".format(pct, absolute)
+    # Pie Chart
+    wedges, texts, autotexts = ax.pie(data, autopct=lambda pct: func(pct, data), textprops=dict(color="w"), colors=colors)
+    ax.legend(wedges, labels, title=legend, loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
+    plt.setp(autotexts, size=8, weight="bold")
+    plt.title(titre, color=plot["ColorTitle"], weight='bold')
+
+    ## Save Locally
+    image_file_name = output_dir + ds.get_fullname() + "_" + key.replace(" ", "_") + ".png"
+    plt.savefig(image_file_name)
+    ds.add_metric(key="GRAPHIQUE_"+key.upper(),meta=titre,source="PLOT",mode="EQUAL",type="STR",data=image_file_name,expr=image_file_name)
+    return image_file_name
+
+
+def plots_lines(plot, ds: DataStore):
+    # Draw plot
+    plt = new_figure()
+    key = plot["Key"]
+    ctx1 = ds.get_row_as_dict()
+    ctx2 = {**globals(), **locals()}
+    # Naming the axis
+    plt.xlabel(plot["xLabel"], color=plot["ColorLabel"])
+    plt.ylabel(plot["yLabel"], color=plot["ColorLabel"])
+    if (("yLimits" in plot) and (plot["yLimits"] != "")):
+        plt.ylim(eval(plot["yLimits"], ctx1, ctx2))
+    # Draw Series
+    for serie in plot["Series"] :
+        if (serie["Smooth"] is True) :
+            xsmooth, ysmooth = plot_smooth(eval(serie["xValues"], ctx1, ctx2), eval(serie["yValues"], ctx1, ctx2))
+        else:
+            xsmooth, ysmooth = eval(serie["xValues"], ctx1, ctx2), eval(serie["yValues"], ctx1, ctx2)
+        plt.plot(xsmooth, ysmooth, color=serie["Color"], linestyle=serie["Style"], linewidth=serie["Width"], label=serie["Label"])
+    # Title & Legend
+    titre = eval(plot["Title"], ctx1, ctx2)
+    plt.title(titre, color=plot["ColorTitle"], weight='bold')
+    if (("Legend" in plot) and (plot["Legend"] != "")):
+        if (plot["Legend"] == "below") :
+            # plt.legend(bbox_to_anchor=(1.0, 1.0))
+            plt.legend(loc='lower center', bbox_to_anchor=(0.8, -0.1), fancybox=True, shadow=True)
+        else:
+            plt.legend(fancybox=True, shadow=True)
+    else:
+        plt.plot(legend=None)
+    ## Save Locally
+    image_file_name = output_dir + ds.get_fullname() + "_" + key.replace(" ", "_") + ".png"
+    plt.savefig(image_file_name)
+    ds.add_metric(key="GRAPHIQUE_"+key.upper(),meta=titre,source="PLOT",mode="EQUAL",type="STR",data=image_file_name,expr=image_file_name)
+    return image_file_name
+
 
 def plot_smooth(x_values : [], y_values : []):
     # 300 represents number of points to make between T.min and T.max
@@ -2252,6 +2492,7 @@ def plot_smooth(x_values : [], y_values : []):
     spl  = make_interp_spline(x_values, y_values, k=3, bc_type="natural")  # type: BSpline
     ysmooth = spl(xnew)
     return xnew, ysmooth
+
 
 def plot_logements(ds: DataStore):
     """ Graphique Logements en HTML et png. """
@@ -2544,14 +2785,17 @@ def readme_to_html():
 
 
 def ftp_push_ds(ds : DataStore):
-    file_ext  = [  ".xlsx" , ".csv" , "_s.json" ,
-                  "_Logements.png", "_Population.png", "_tracker.html",
-                  "_Taille_des_Menages.png", "_Repartition_des_Logements.png"
-                ]
+    file_ext  = [  ".xlsx" , ".csv" , "_s.json" , "_tracker.html"]
+    png_files1 = [f for f in os.listdir(output_dir) if re.match(ds.get_fullname().upper()+'.*\.png', f)]
+    png_files2 = [f for f in os.listdir(output_dir) if re.match(ds.get_fullname()+'.*\.png', f)]
     file_list = list()
     prefix = ds.get_fullname()
     for ext in file_ext :
         file_list.append(output_dir + prefix + ext)
+    for png_file in png_files1 :
+        file_list.append(output_dir + png_file)
+    for png_file in png_files2 :
+        file_list.append(output_dir + png_file)
     ftp_push_file(file_list)
 
 
@@ -2572,7 +2816,8 @@ def ftp_push_file(filename):
 
 def ftp_push_files():
     filelist = ["output/france.json",
-                "input/Configuration.xlsx",
+                "input/Configuration.xlsx", "input/plots.json",
+                "output/calculations.json", "output/datametrics.json", "output/diagnostics.json",
                 "input/Legend_Logements.png",
                 "input/Gadseca-Logo-BIG.png", "input/Gadseca-Logo.png",
                 "input/Gadseca_50Ans.jpg",    "input/Gadseca_Logo.png",
@@ -2584,7 +2829,8 @@ def ftp_push_files():
                 "input/CartoPaca3.png",       "input/CartoPaca3-Green.png",
                 "input/myShophia-Logo.jpg",    "input/CartoPaca3-Light-Green.png",
                 "README.md",  "README.html",   "README.dillinger.html",
-                "ConsommationFonciere.html",   "ConsommationFonciere.js", "ConsommationFonciere.py",
+                "ConsommationFonciere.html",   "ConsommationFonciere.js",   "ConsommationFonciere.py",
+                "ConsommationFonciereV2.html", "ConsommationFonciereV2.js",
                 "index.html",
                 "Header.png", "Body.png"
                 ]
@@ -2987,6 +3233,10 @@ class TestConsommation(unittest.TestCase):
         long = get_gps_long_insee("06222085")
         print(str(long))
         self.assertEqual("", long)
+
+    def testPlots(self):
+        ds = report_commune(code_postal="06250", force=False)
+        plots(ds)
 
     def testCalc(self):
         self.assertEqual("0",    round0str(0,   rounding=0))

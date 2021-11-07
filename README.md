@@ -64,7 +64,6 @@ On peut ajuster :
 - Le format et le contenu du rapport
 
 
-
 ## Utilisation
 
     Usage: -f -a -p -n -b -l -c <commune_code> -e <epci_code> -d <dept_code> -r <region_code>   
@@ -103,7 +102,12 @@ Pour générer et mettre a jour les donnees du département 06 sur le server :
 
 Les rapports sont générés dans le repertoire "output".
 
-## Configuration
+# Configuration
+
+Le fichier de configuration par défaut est "_input/Configuration.xlsx_"
+Le fichier de configuration à utiliser peut être spécifié en paramètre de la ligne de commande.
+
+## Collecte de Donnees
 
 Les données sources, c'est plus de 1500 indicateurs (métriques) par communes. 
 Par défaut, un certain nombre de données sont collectées. 
@@ -177,7 +181,68 @@ Par exemple, pour un taux pondéré, la somme des taux n'est pas possible, mais 
 Le fichier de configuration par défaut est "_input/Configuration.xlsx_"
 Le fichier de configuration à utiliser peut être spécifié en paramètre de la ligne de commande.
 
-## Diagnostic
+## Calculs
+
+_TAB_ **Calculs**
+
+Les calculs peuvent etre utilises pour definir des valeurs de variables supplementaires caluclees a partir des valeurs collectees.
+
+Ces variables sont ensuite disponibles pour générer le rapport.
+
+Pour calculer de nouvelles variables, ajouter des lignes dans le fichier de configuration, _TAB_ **Calculs**
+
+**Key**	: L'identifiant de la variable (donnée)
+
+Ce champ doit être unique, sans espaces ni caractères spéciaux. Exemple :
+
+    CALCUL_CARENCE
+
+**Description**	: La Description de la variable (indicateur de la valeur)
+
+Texte libre, par exemple :
+
+    Taux de Carence Total
+
+**Source**: La Source de la variable
+
+Ce champ est indicatif, mais il permet de classer les variables dans l'interface.
+- "DATA" : Données de Base
+- "CODE" : Données Codes Postaux
+- "INTERCO" : Données Intercommunalités
+- "INSEE" : Données INSEE
+- "CALC" : Données calculées
+- "SRU" : Données SRU DREAL
+- "ART" : Données Artificialisation CEREMA
+- "PROJ" : Données Projection INSEE
+- "EVOL" : Données Evolution INSEE
+- "SIT" ; Données SITADEL
+ 
+**Type**	: Le type de la variable
+
+Les types supportés sont :
+- "INT" : Entier sans décimale
+- "STR" : Chaine de caractères
+- "FLOAT" : Nombre décimal
+- "TAUX" : Taux. 0,1 représente 10 %
+- "PERCENT" : Pourcentage. 0,1 représente 0,1 %
+ 
+**Python**	: Le calcul de la variable (une expression Python)
+
+    round0(RP_2020 * (0.25 - SRU_TX_LLS), 4)
+
+**JavaScript** : Le calcul de la variable (une expression JavaScript)
+
+    Math.round(RP_2020 * (0.25 - SRU_TX_LLS), 4)
+
+**Exemple de Ligne de Configuration**:
+
+    Key              Description                  Source   Type   Python                                              JavaScript                                      Commentaire
+    CALCUL_CARENCE   Carence Total en 2002        SRU      INT    round0(SRU_RP_2020 * (0.25 - SRU_TX_LLS_2020), 4)	  Math.round(RP_2020 * (0.25 - SRU_TX_LLS), 4)    Texte Libre
+
+
+## Diagnostics
+
+_TAB_ **Diagnostic**
 
 Sur les données collectées, des vérifications peuvent être faites.
 Le fichier de configuration xls contient un Tab Diagnostic.
