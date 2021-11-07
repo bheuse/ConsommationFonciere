@@ -939,13 +939,13 @@ class DataStore():
                 self.error_dict[key] = "Invalid Type  [" + str(index) + "][" + str(key) + "] - Not a " + self.type_dict[key] + " :  " + str(data)
                 print_red(self.error_dict[key])
                 self.add_value(key, index, str(data))
-                quit()
+                # quit()
                 return None
         except Exception as e:
             self.error_dict[key] = "Type Error [" + str(index) + "][" + str(key) + "] - Not a " + self.type_dict[key] + " :  " + str(data) + " : " + str(e)
             print_red(self.error_dict[key])
             self.add_value(key, index, str(data))
-            quit()
+            # quit()
             return None
 
     def add_value(self, key : str, index : str, data):
@@ -1350,8 +1350,11 @@ class DataStore():
 
         # Donnees Projections EPCI
         load_projections_paca()
-        p_epci = projectionsPaca.loc[projectionsPaca["Unnamed: 1"] == int(self.get("EPCI"))]
-        p_epci = p_epci.head(1)
+        if (self.get("EPCI") == "ZZZZZZZZZ") :
+            p_epci = "Sans Objet"
+        else:
+            p_epci = projectionsPaca.loc[projectionsPaca["Unnamed: 1"] == int(self.get("EPCI"))]
+            p_epci = p_epci.head(1)
         """
         self.add_metric(key="PROJ_EPCI_NOM", meta="Nom EPCI",
                       source=source_proj,  mode=mode_equal, type="STR",
@@ -1735,7 +1738,7 @@ class DataStore():
                 value = eval(_data, self.get_row_as_dict(), {**globals(), **locals()})
                 self.add_metric(_key, _description, source=_source, mode=_total, data=value, type=_type, expr=_expr)
             except Exception as e :
-                error = "Error evaluating metrique : Line " + _line + " Key = " + _key + " + expr : " + _expr + " - Error : " + str(e)
+                error = "Error evaluating metrique : Line " + str(_line) + " Key = " + str(_key) + " + expr : " + str(_expr) + " - Error : " + str(e)
                 print_red(error)
                 self.add_metric(_key, _description, source=_source, mode=_total, data=error, type=_type, expr=_expr)
 
@@ -3070,6 +3073,7 @@ class TestConsommation(unittest.TestCase):
     def testMougins(self):
         print_yellow("> Mougins")
         ds = report_commune(code_postal="06250", force=True)
+        # ds = report_commune(code_insee="85113", force=True)
         self.assertEqual(ds.get("NOM_COMMUNE"), "MOUGINS")
         print_yellow("< Mougins")
 
