@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- saved from url=(0127)http://localhost:63342/ConsommationFonciere/ConsommationFonciere.html?_ijt=s3otpshjr8fq8t12u01p0l2ck4&_ij_reload=RELOAD_ON_SAVE -->
-<html lang="fr">
+<html lang="fr" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <title>Consommation Fonciere</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -13,6 +13,8 @@
     <link rel="shortcut icon" type="image/png" href="https://vigibati.fr/static/img/favicon.png">
     <script src="https://unpkg.com/vue@next"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.0/css/bulma.css'>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -42,11 +44,10 @@
       color: white;
     }
     </style>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
-<script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+    <script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6W0QF8E5V"></script>
@@ -125,13 +126,13 @@
                 <p class="w3-padding-8 w3-right-align"> Commune : </p>
             </div>
             <div class="w3-container w3-teal w3-cell w3-mobile w3-cell-middle w3-threequarter w3-padding-16">
-            <select class="w3-theme-dark w3-select w3-hover-green" searchable="w3-select Rechercher ici ..." @change="selectDept($event);"  autofocus>
+            <select class="w3-theme-dark w3-select w3-hover-green" searchable="w3-select Rechercher ici ..." @change="selectDept2($event);"  autofocus>
                 <option disabled="" value="" disabled selected> Selectionner un Departement</option>
                 <div v-if="this.data_s !== null" >
                     <option v-for='item in this.depts' :content="item.nom" >{{ item.nom }}</option>
                 </div>
             </select>
-            <select class="w3-theme w3-select w3-hover-green" searchable="w3-select Rechercher ici ..." @change="selectEpci($event)">
+            <select class="w3-theme w3-select w3-hover-green" searchable="w3-select Rechercher ici ..." @change="selectEpci2($event)">
                 <option disabled="" value="" disabled selected> Selectionner une EPCI</option>
                 <div v-if="this.data_s !== null">
                     <option v-for='item in this.epcis' :content="item.nom" >{{ item.nom }}</option>
@@ -1054,31 +1055,109 @@ function openTab(evt, cityName) {
     <div v-if="this.data_s != null">
         <h2>Calculettes</h2>
 
-            <p>Calcul d'Evolution, selon un taux.</p>
+<section class="hero is-info">
+<div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        Evaluez les besoins en logements de votre territoire !
+      </h1>
+      <h2 class="subtitle">
+        par France Nature Environement & le Gadseca
+      </h2>
+    </div>
+  </div>
+</section>
+<div class="container">
+    <p class="ins">
+    Enter your values to see your monthly payment, and grand total, and interest paid.
+    </p>
+      <div class="columns">
+        <div class="column">
+            <label>Principal Loan Amount</label>
+            <input class="input" type="number" v-on:blur="calc" v-model.number="loan.principal">
+        </div>
+        <div class="column">
+            <label>Interest Rate</label>
+            <input class="input" type="text" v-on:blur="calc" v-model.number="loan.interest">
+        </div>
+        <div class="column">
+            <label>Time in Years</label>
+            <input class="input" type="number" v-on:blur="calc" v-model.number="loan.timeYears">
+        </div>
+        <div class="column">
+            <label>Compounded (months)</label>
+            <input class="input" type="number" v-on:blur="calc" v-model.number="loan.compoundingEvery">
+        </div>
+      </div>
+    <button class="button is-info" v-on:click="calc">Compute</button>
 
+    <div class="columns">
+      <div class="column">
+        <div class="notification is-success">
+          <h3>Monthly Payment</h3>
+          <p>${{ formatPrice(loan.payment) }}</p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="notification is-warning">
+        <h3>Grand Total</h3>
+        <p>${{ formatPrice(loan.total) }}</p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="notification is-danger">
+        <h3>Total Interest</h3>
+        <p>${{ formatPrice(loan.totalInterest) }}</p>
+        </div>
+      </div>
+
+</div>
+
+
+<div class="notification">
+
+
+<h2 class="title">
+  Compound Interest Formula
+</h2>
+<p>
+    principal ( 1 + <sup>interest </sup> / <sub> compounded </sub>)
+    <sup>compounded * time </sup> =
+    <sup>payment [ ( 1 + <sup>interest</sup> / <sub> compounded </sub>) <sup>compounded * time</sup> - 1 ] </sup> / <sub> <sup>interest</sup> / <sub> compounded </sub> </sub>
+</p>
+<p>
+    {{ loan.principal }} ( 1 + <sup>{{ loan.interest }}</sup> / <sub> {{ loan.compoundingEvery }} </sub>)
+    <sup>{{ loan.compoundingEvery }} * {{ loan.timeYears }}</sup> =
+    <sup>payment [ ( 1 + <sup>{{ loan.interest }}</sup> / <sub> {{ loan.compoundingEvery }} </sub>) <sup>{{ loan.compoundingEvery }} * {{ loan.timeYears }}</sup> - 1 ] </sup> / <sub> <sup>{{ loan.interest }}</sup> / <sub> {{ loan.compoundingEvery }} </sub> </sub>
+    <br>
+    {{ loan.l }} = payment( {{ loan.r }} )
+    <br>
+    {{ loan.payment }} = payment
+</p>
+
+
+</div>
+</div>
+</div>
+
+            <h2>Calcul d'Evolution, selon un taux :</h2>
             <form onsubmit="return false">
-                Annee de Depart :  <input id="annee_depart"    name="annee_depart"    type="number" step="any" placeholder="Annee de Depart"  value="2020"> <br>
-                Valeur de Depart : <input id="val_depart"      name="val_depart"      type="number" step="any" placeholder="Valeur de Depart" v-model="val_depart" value="ds.POP_2020"> <br>
-                Annee d'Arrivee :  <input id="annee_arrivee"   name="annee_arrivee"   type="number" step="any" placeholder="Annee d'Arrivee" value="2030"><br>
-                Taux de Croissance Annuel (en %) : <input id="taux_croissance" name="taux_croissance" type="number" step="any" placeholder="Taux de Croissance" value="0.01"><br>
-                <button onclick="calc_after_form()">Valeur d'Arrivee : </button>
-                <p id="calc_after"></p>
+                Annee de Depart :  <input class="input" id="annee_depart"    name="annee_depart"    type="number" step="any" placeholder="Annee de Depart"  v-on:blur="recalc_evol"  v-model.number="calculette_evol.annee_depart"> <br>
+                Valeur de Depart : <input class="input" id="val_depart"      name="val_depart"      type="number" step="any" placeholder="Valeur de Depart" v-on:blur="recalc_evol"  v-model.number="calculette_evol.val_depart"> <br>
+                Annee d'Arrivee :  <input class="input" id="annee_arrivee"   name="annee_arrivee"   type="number" step="any" placeholder="Annee d'Arrivee"  v-on:blur="recalc_evol"  v-model.number="calculette_evol.annee_arrivee"><br>
+                Taux de Croissance Annuel (en %) : <input class="input" id="taux_croissance" name="taux_croissance" type="number" step="any" placeholder="Taux de Croissance" v-on:blur="recalc_evol" v-model.number="calculette_evol.taux_de_croissance"><br>
+                <button class="button is-info" v-on:click="recalc_evol()">Valeur d'Arrivee : {{ calculette_evol.val_arrivee }} </button>
             </form>
-
             <br>
-
-            <p>Calcul du Taux, selon l'evolution</p>
-
+            <h2>Calcul de Taux, selon l'evolution :</h2>
             <form onsubmit="return false">
-                Annee de Depart :  <input id="tx_annee_depart"   name="tx_annee_depart"    type="number" step="any" placeholder="Annee de Depart"  value="2020"> <br>
-                Valeur de Depart : <input id="tx_val_depart"     name="tx_val_depart"      type="number" step="any" placeholder="Valeur de Depart" v-model="val_depart"> <br>
-                Annee d'Arrivee :  <input id="tx_annee_arrivee"  name="tx_annee_arrivee"   type="number" step="any" placeholder="Annee d'Arrivee"  value="2030"><br>
-                Valeur d'Arrivee : <input id="tx_val_arrivee"    name="tx_val_arrivee"     type="number" step="any" placeholder="Valeur d'Arrivee" v-model="val_arrivee"><br>
-                <button onclick="calc_taux_form()">Taux de Croissance Annuel (en %): </button>
-                <p id="calc_taux"></p>
+                Annee de Depart :  <input class="input" id="tx_annee_depart"   name="tx_annee_depart"    type="number" step="any" placeholder="Annee de Depart"  v-on:blur="recalc_taux" v-model.number="calculette_taux.annee_depart"> <br>
+                Valeur de Depart : <input class="input" id="tx_val_depart"     name="tx_val_depart"      type="number" step="any" placeholder="Valeur de Depart" v-on:blur="recalc_taux" v-model.number="calculette_taux.val_depart"> <br>
+                Annee d'Arrivee :  <input class="input" id="tx_annee_arrivee"  name="tx_annee_arrivee"   type="number" step="any" placeholder="Annee d'Arrivee"  v-on:blur="recalc_taux" v-model.number="calculette_taux.annee_arrivee"><br>
+                Valeur d'Arrivee : <input class="input" id="tx_val_arrivee"    name="tx_val_arrivee"     type="number" step="any" placeholder="Valeur d'Arrivee" v-on:blur="recalc_taux" v-model.number="calculette_taux.val_arrivee"><br>
+                <button class="button is-info" v-on:click="recalc_taux()"> Taux de Croissance Annuel : {{ calculette_taux.taux_de_croissance }} % </button>
             </form>
     </div>
-
 </div>
 
 </div>
@@ -1190,8 +1269,6 @@ function openTab(evt, cityName) {
 
 <!-- Tracker -->
 
-
-<script >inport re</script>
 <script  src="ConsommationFonciereV2.js?v=1"></script>
 
 </div>

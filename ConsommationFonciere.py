@@ -45,6 +45,7 @@ html_index_template  = input_dir  + "index_template.html"
 plots_file           = input_dir  + "plots.json"
 context_file         = output_dir + "context.yaml"
 france_file          = output_dir + "france.json"
+selection_file       = output_dir + "select.json"
 
 global_context     = {}
 
@@ -2755,6 +2756,7 @@ def plot_population(ds: DataStore):
 def gen_index(region="93"):
     """ Generates Index for a Region or France (if region = None) """
     report_region_dict(region, filename=france_file)
+    report_select_dict(region, filename=selection_file)
     return render_index()
 
 
@@ -2818,9 +2820,9 @@ def ftp_push_file(filename):
 
 
 def ftp_push_files():
-    filelist = ["output/france.json",
-                "input/Configuration.xlsx", "input/plots.json",
-                "output/calculations.json", "output/datametrics.json", "output/diagnostics.json",
+    filelist = ["output/france.json",        "output/select.json",
+                "input/Configuration.xlsx",  "input/plots.json",
+                "output/calculations.json",  "output/datametrics.json", "output/diagnostics.json",
                 "input/Legend_Logements.png",
                 "input/Gadseca-Logo-BIG.png", "input/Gadseca-Logo.png",
                 "input/Gadseca_50Ans.jpg",    "input/Gadseca_Logo.png",
@@ -2938,6 +2940,86 @@ def report_paca(force=True, data_only : bool = False, ftp_push : bool = False):
     print_yellow("REGION 93 - Region PACA : ")
     report_region("93", force=force, data_only=data_only, ftp_push=ftp_push)
 
+
+report_select = {}
+
+"""
+Region
+List of Communes
+List of ECPI
+    [Communes]
+List of Dept
+    [Communes]
+    [ECPIS]
+"""
+
+def report_select_dict(region=None, filename=None, force=False, ftp_push=False) -> dict:
+        global report_select
+        if str(region) in report_select: return report_select[str(region)]
+
+        if ((force == False) and (os.path.isfile(filename))):
+            with open(filename, "r") as read_file:
+                print_grey("Converting JSON encoded data into Python dictionary : "+filename)
+                select = jsonc.load(read_file)
+                report_select[str(region)] = select
+                return select
+        select = {}
+        select["REGIONS"] = []
+        if (not region):
+            lr = list_region()
+        else:
+            lr = [str(region)]
+        for r in lr:
+            rd = {}
+            rd["TYPE"]   = "REGION"
+            rd["INSEE"]  = str(r)
+            rd["Nom"]    = nom_region(r, clean=True)
+            rd["Clean"]  = "REGION_" + nom_region(r, clean=False)
+            rd["Region"] = str(r)
+            rd["DEPARTEMENTS"] = []
+            rd["DEPARTEMENTS_CODES"] = list_dept(r)
+            rd["EPCIS"] = []
+            rd["EPCIS_CODES"] = epci_region(r)
+            rd["COMMUNES"] = []
+            rd["COMMUNES_CODES"] = communes_region(r)
+            for c in rd["COMMUNES_CODES"]  :
+                cd = {}
+                cd["TYPE"]     = "COMMUNE"
+                cd["INSEE"]    = str(c)
+                pos, lib       = get_code_postal_commune(c)
+                cd["Postal"]   = pos
+                cd["Libelle"]  = lib
+                cd["Nom"]      = nom_commune(code_insee=c, clean=True)
+                cd["Clean"]    = "COMMUNE_" + nom_commune(code_insee=c, clean=False)
+                rd["COMMUNES"].append(cd)
+            for d in rd["DEPARTEMENTS_CODES"]:
+                dd = {}
+                dd["TYPE"]     = "DEPT"
+                dd["INSEE"]    = str(d)
+                dd["Nom"]      = nom_dept(d, clean=True)
+                dd["Clean"]    = "DEPT_" + nom_dept(d, clean=False)
+                dd["COMMUNES_CODES"] = communes_dept(d)
+                dd["EPCIS_CODES"]    = epci_dept(d)
+                rd["DEPARTEMENTS"].append(dd)
+            for e in rd["EPCIS_CODES"]:
+                de = {}
+                de["TYPE"]     = "EPCI"
+                de["INSEE"]    = str(e)
+                de["Nom"]      = nom_epci(e, clean=True)
+                de["Clean"]    = "EPCI_" + nom_epci(e, clean=False)
+                de["COMMUNES_CODES"] = communes_epci(e)
+                rd["EPCIS"].append(de)
+        select["REGIONS"].append(rd)
+        if (filename):
+            save_file(to_json(select, indent=4), filename)
+            print_grey("Creating : " + filename)
+        report_select[str(region)] = select
+        readme_to_html()
+        if (ftp_push):
+            ftp_push_files()
+        return select
+
+
 report_france = {}
 
 
@@ -2947,7 +3029,7 @@ def report_region_dict(region=None, filename=None, force=False, ftp_push=False) 
 
     if ((force==False) and (os.path.isfile(filename))):
         with open(filename, "r") as read_file:
-            print("Converting JSON encoded data into Python dictionary")
+            print_grey("Converting JSON encoded data into Python dictionary : " + filename)
             france = jsonc.load(read_file)
             report_france[str(region)] = france
             return france
@@ -2963,7 +3045,6 @@ def report_region_dict(region=None, filename=None, force=False, ftp_push=False) 
         rd["INSEE"]  = str(r)
         rd["Nom"]    = nom_region(r, clean=True)
         rd["Clean"]  = "REGION_" + nom_region(r, clean=False)
-        rd["HTML"]   = rd["Clean"] + ".html"
         rd["Region"] = str(r)
         rd["DEPARTEMENTS"] = []
         france["REGIONS"].append(rd)
@@ -2973,7 +3054,6 @@ def report_region_dict(region=None, filename=None, force=False, ftp_push=False) 
             dd["INSEE"] = str(d)
             dd["Nom"]   = nom_dept(d, clean=True)
             dd["Clean"] = "DEPT_" + nom_dept(d, clean=False)
-            dd["HTML"]  = dd["Clean"] + ".html"
             dd["Departement"] = str(d)
             dd["Region"] = str(r)
             dd["Nom_Region"] = nom_region(r, clean=True)
@@ -2986,7 +3066,6 @@ def report_region_dict(region=None, filename=None, force=False, ftp_push=False) 
                 de["INSEE"]  = str(e)
                 de["Nom"]    = nom_epci(e,   clean=True)
                 de["Clean"]  = "EPCI_" + nom_epci(e, clean=False)
-                de["HTML"]   = de["Clean"] + ".html"
                 de["Departement"]     = str(d)
                 de["Nom_Departement"] = nom_dept(d, clean=True)
                 de["Region"]          = str(r)
@@ -3002,7 +3081,6 @@ def report_region_dict(region=None, filename=None, force=False, ftp_push=False) 
                     cd["Libelle"] = lib
                     cd["Nom"]     = nom_commune(code_insee=c, clean=True)
                     cd["Clean"]   = "COMMUNE_" + nom_commune(code_insee=c, clean=False)
-                    cd["HTML"]    = cd["Clean"] + ".html"
                     cd["Departement"]     = str(d)
                     cd["Nom_Departement"] = nom_dept(d, clean=True)
                     cd["Region"]          = str(r)
@@ -3019,7 +3097,6 @@ def report_region_dict(region=None, filename=None, force=False, ftp_push=False) 
                 cd["Libelle"] = lib 
                 cd["Nom"]     = nom_commune(code_insee=c,   clean=True)
                 cd["Clean"]   = "COMMUNE_" + nom_commune(code_insee=c, clean=False)
-                cd["HTML"]    = cd["Clean"] + ".html"
                 cd["Departement"]     = str(d)
                 cd["Nom_Departement"] = nom_dept(d, clean=True)
                 cd["Region"]          = str(r)
@@ -3029,6 +3106,7 @@ def report_region_dict(region=None, filename=None, force=False, ftp_push=False) 
                 dd["COMMUNES"].append(cd)
     if (filename):
         save_file(to_json(france, indent=4),  filename)
+        print_grey("Creating : " + filename)
     report_france[str(region)] = france
     readme_to_html()
     if (ftp_push):
@@ -3120,6 +3198,8 @@ class TestConsommation(unittest.TestCase):
         print_yellow("< Region Provence Alpes Cote d'Azur")
 
     def test_report_region_dict(self):
+        all = report_select_dict("93", filename=selection_file, force=True, ftp_push=False)
+        print_yellow(to_json(all, indent=4))
         all = report_region_dict("93", filename=france_file, force=True, ftp_push=True)
         print_blue(to_json(all, indent=4))
 
