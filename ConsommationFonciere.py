@@ -2890,7 +2890,7 @@ def report_dept(dept_id: str = "06", force=True, with_communes=False, data_only 
         for commune in communes_dept(dept_id):
             report_commune(code_insee=str(commune), force=force, data_only=data_only, ftp_push=ftp_push)
         for epci in epci_dept(dept_id):
-            report_epci(str(epci), force, with_communes, data_only=data_only, ftp_push=ftp_push)
+            report_epci(str(epci), force, with_communes=False, data_only=data_only, ftp_push=ftp_push)
     return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force, data_only=data_only, ftp_push=ftp_push)
 
 
@@ -3467,6 +3467,7 @@ def read_command_line_args(argv):
                 print_commune(communes_epci(CODE_EPCI))
             else:
                 print_yellow("> EPCI " + str(CODE_EPCI))
+                report_select_dict("93", filename=selection_file, force=True, ftp_push=FTP_PUSH)
                 report_region_dict("93", filename=france_file, force=True, ftp_push=FTP_PUSH)
                 report_epci(CODE_EPCI, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY, ftp_push=FTP_PUSH)
                 print_yellow("< EPCI " + str(CODE_EPCI))
@@ -3479,6 +3480,7 @@ def read_command_line_args(argv):
                 quit()
             else:
                 print_yellow("> Departement " + str(CODE_DEPT))
+                report_select_dict("93", filename=selection_file, force=True, ftp_push=FTP_PUSH)
                 report_region_dict("93", filename=france_file, force=True, ftp_push=FTP_PUSH)
                 report_dept(CODE_DEPT, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY, ftp_push=FTP_PUSH)
                 print_yellow("< Departement " + str(CODE_DEPT))
@@ -3492,6 +3494,7 @@ def read_command_line_args(argv):
                 quit()
             else:
                 print_yellow("> Region " + str(CODE_REGION))
+                report_select_dict("93", filename=selection_file, force=True, ftp_push=FTP_PUSH)
                 report_region_dict(str(CODE_REGION), filename=france_file, force=True, ftp_push=FTP_PUSH)
                 report_region(CODE_REGION, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY, ftp_push=FTP_PUSH)
                 print_yellow("< Region " + str(CODE_REGION))
