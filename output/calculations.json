@@ -1,0 +1,74 @@
+{
+    "X": {
+        "CALCUL_HELLO": {
+            "Description": "CALCUL_HELLO",
+            "Source": "CALCULS",
+            "Type": "STR",
+            "Python": "\"Hello Test\"",
+            "JavaScript": "\"Hello Test\"",
+            "Commentaire": "Salut"
+        },
+        "CALCUL_TEST": {
+            "Description": "CALCUL_TEST",
+            "Source": "CALCULS",
+            "Type": "INT",
+            "Python": "5",
+            "JavaScript": "5",
+            "Commentaire": "Bizes"
+        },
+        "CALCUL_TEST2": {
+            "Description": "CALCUL_TEST2",
+            "Source": "CALCULS",
+            "Type": "INT",
+            "Python": "CALCUL_TEST + 5",
+            "JavaScript": "CALCUL_TEST + 5",
+            "Commentaire": "Kisses"
+        },
+        "CALCUL_TEST3": {
+            "Description": "CALCUL_TEST3",
+            "Source": "CALCULS",
+            "Type": "INT",
+            "Python": "round0(CALCUL_TEST2 +2.5)",
+            "JavaScript": "Math.round(CALCUL_TEST2 +2.5)",
+            "Commentaire": "And Round"
+        }
+    },
+    "Y": {
+        "Description": {
+            "CALCUL_HELLO": "CALCUL_HELLO",
+            "CALCUL_TEST": "CALCUL_TEST",
+            "CALCUL_TEST2": "CALCUL_TEST2",
+            "CALCUL_TEST3": "CALCUL_TEST3"
+        },
+        "Source": {
+            "CALCUL_HELLO": "CALCULS",
+            "CALCUL_TEST": "CALCULS",
+            "CALCUL_TEST2": "CALCULS",
+            "CALCUL_TEST3": "CALCULS"
+        },
+        "Type": {
+            "CALCUL_HELLO": "STR",
+            "CALCUL_TEST": "INT",
+            "CALCUL_TEST2": "INT",
+            "CALCUL_TEST3": "INT"
+        },
+        "Python": {
+            "CALCUL_HELLO": "\"Hello Test\"",
+            "CALCUL_TEST": "5",
+            "CALCUL_TEST2": "CALCUL_TEST + 5",
+            "CALCUL_TEST3": "round0(CALCUL_TEST2 +2.5)"
+        },
+        "JavaScript": {
+            "CALCUL_HELLO": "\"Hello Test\"",
+            "CALCUL_TEST": "5",
+            "CALCUL_TEST2": "CALCUL_TEST + 5",
+            "CALCUL_TEST3": "Math.round(CALCUL_TEST2 +2.5)"
+        },
+        "Commentaire": {
+            "CALCUL_HELLO": "Salut",
+            "CALCUL_TEST": "Bizes",
+            "CALCUL_TEST2": "Kisses",
+            "CALCUL_TEST3": "And Round"
+        }
+    }
+}
