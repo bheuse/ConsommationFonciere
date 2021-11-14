@@ -6,34 +6,144 @@
     "xLabel" : "Annees",
     "yLabel" : "Logements",
     "Type" : "LINES",
-    "yLimits" : "(POP_2020 / 2 - 5000, POP_2050 + 2000)",
-    "Title" :  "\"Logements \" + str(LIBELLE)",
-    "Legend" : "below",
+    "no-yLimits" : "(POP_2020 / 2 - 5000, POP_2050 + 2000)",
+    "Title" :  "\"Logements sur \" + str(LIBELLE)",
+    "no-Legend" : "below",
     "ColorTitle" : "Teal",
     "ColorLabel" : "Teal",
     "Series" : [
       {
-            "Label" : "Projection Population",
+            "Label" : "Residences Principales des menages - Historique",
+            "Smooth" : true,
+            "Color" : "Teal",
+            "Style" : "-",
+            "Width" : 3,
+            "xValues" : "[2008, 2013, 2018, 2020]",
+            "yValues" : "[P08_RP-P08_RP,P13_RP-P08_RP,P18_RP-P08_RP,LOG_2020-P08_RP]"
+      },
+      {
+            "Label" : "Residences Principales des menages - Projection des Besoins",
             "Smooth" : true,
             "Color" : "Teal",
             "Style" : "--",
             "Width" : 3,
-            "xValues" : "[2020,2030,2040,2050]",
-            "yValues" : "[POP_2020,POP_2030,POP_2040,POP_2050]"
+            "xValues" : "[2020, 2030]",
+            "yValues" : "[LOG_2020-P08_RP,LOG_2030-P08_RP]"
       },
       {
-            "Label" : "Projection Logements",
+            "Label" : "Residences Principales + Secondaires + Vacants",
             "Smooth" : true,
-            "Color" : "Yellow",
+            "ColorC" : "74248f",
             "Style" : "-",
             "Width" : 3,
-            "xValues" : "[2020,2030,2040,2050]",
-            "yValues" : "[LOG_2020,LOG_2030,LOG_2040,LOG_2050]"
+            "xValues" : "[2008, 2013, 2018]",
+            "yValues" : "[P08_RP-P08_RP+P08_RSECOCC-P08_RSECOCC+P08_LOGVAC-P08_LOGVAC , P13_RP-P08_RP+P13_RSECOCC-P08_RSECOCC+P13_LOGVAC-P08_LOGVAC, P18_RP-P08_RP+P18_RSECOCC-P08_RSECOCC+P18_LOGVAC-P08_LOGVAC]"
+      },
+      {
+            "Label" : "Indeterminees (Principales / Secondaires / Non-Vendues)",
+            "Smooth" : true,
+            "ColorC" : "74248f",
+            "Style" : "dotted",
+            "Width" : 3,
+            "xValues" : "[2018, 2020]",
+            "yValues" : "[P18_RP-P08_RP+P18_RSECOCC-P08_RSECOCC+P18_LOGVAC-P08_LOGVAC , NOUV_LOG_0813+NB_LGT_TOT_COMMENCES_1316+NB_LGT_TOT_COMMENCES_1721]"
+      },
+      {
+            "Label" : "Logements Construits",
+            "Smooth" : true,
+            "ColorC" : "663300",
+            "Style" : "-",
+            "Width" : 3,
+            "xValues" : "[2013, 2016, 2020]",
+            "yValues" : "[NOUV_LOG_0813 , NOUV_LOG_0813+ NB_LGT_TOT_COMMENCES_1316, NOUV_LOG_0813+NB_LGT_TOT_COMMENCES_1316+NB_LGT_TOT_COMMENCES_1721]"
+      },
+      {
+            "Label" : "Projection Logements Construits",
+            "Smooth" : true,
+            "ColorC" : "663300",
+            "Style" : "dotted",
+            "Width" : 3,
+            "xValues" : "[2020, 2021]",
+            "yValues" : "[NOUV_LOG_0813+NB_LGT_TOT_COMMENCES_1316+NB_LGT_TOT_COMMENCES_1721, NOUV_LOG_0813+ PROJ_LOG_REALISES_2021]"
+      },
+      {
+            "Condition" : "(SRU_CARENCE_2020 != 0) or ((NB_LGT_PRET_LOC_SOCIAL_1316+ NB_LGT_PRET_LOC_SOCIAL_1721) != 0)",
+            "Label" : "Logements Sociaux Construits",
+            "Smooth" : true,
+            "ColorC" : "006600",
+            "Style" : "dotted",
+            "Width" : 3,
+            "xValues" : "[2013, 2016, 2020]",
+            "yValues" : "[NOUV_LOG_0813, NOUV_LOG_0813+NB_LGT_PRET_LOC_SOCIAL_1316, NOUV_LOG_0813+ NB_LGT_PRET_LOC_SOCIAL_1316+NB_LGT_PRET_LOC_SOCIAL_1721]"
       }
       ]
    },
   {
-    "Key" : "LOGEMENTS_4",
+    "Key" : "TAILLE_DES_MENAGES_2",
+    "Categorie" : "POP",
+    "xLabel" : "Annees",
+    "yLabel" : "Taille des Menages",
+    "Type" : "LINES",
+    "yLimits" : "(1, 3)",
+    "Title" :  "\"Taille des Menages sur \" + str(LIBELLE)",
+    "Legend" : "free",
+    "ColorTitle" : "Teal",
+    "ColorLabel" : "Teal",
+    "Series" : [
+      {
+            "Label" : "Taille des Menages - Historique",
+            "Smooth" : true,
+            "Color" : "Teal",
+            "Style" : "-",
+            "Width" : 3,
+            "xValues" : "[2008, 2013, 2018, 2020]",
+            "yValues" : "[TM_2008,TM_2013,TM_2018,TM_2020]"
+      },
+      {
+            "Label" : "Taille des Menages - Projetee",
+            "Smooth" : true,
+            "Color" : "Teal",
+            "Style" : "dotted",
+            "Width" : 3,
+            "xValues" : "[2020, 2030, 2040, 2050]",
+            "yValues" : "[TM_2020,TM_2030,TM_2040,TM_2050]"
+      }
+      ]
+   },
+  {
+    "Key" : "POPULATION_2",
+    "Categorie" : "POP",
+    "xLabel" : "Annees",
+    "yLabel" : "Population",
+    "Type" : "LINES",
+    "no-yLimits" : "(1, 3)",
+    "Title" :  "\"Population sur \" + str(LIBELLE)",
+    "Legend" : "free",
+    "ColorTitle" : "Teal",
+    "ColorLabel" : "Teal",
+    "Series" : [
+      {
+            "Label" : "Population - Historique",
+            "Smooth" : true,
+            "Color" : "Teal",
+            "Style" : "-",
+            "Width" : 3,
+            "xValues" : "[2008, 2013, 2018, 2020]",
+            "yValues" : "[P08_POP,P13_POP,P18_POP,POP_2020]"
+      },
+      {
+            "Label" : "Population - Projetee",
+            "Smooth" : true,
+            "Color" : "Teal",
+            "Style" : "dotted",
+            "Width" : 3,
+            "xValues" : "[2020, 2030, 2040, 2050]",
+            "yValues" : "[POP_2020,POP_2030,POP_2040,POP_2050]"
+      }
+      ]
+   },
+  {
+    "Key" : "REPARTITION_LOGEMENTS_2",
     "Categorie" : "LOG",
     "Type" : "PIE",
     "Title" :  "\"Repartition des Logements \" + str(LIBELLE)",

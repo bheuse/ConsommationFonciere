@@ -2465,11 +2465,16 @@ def plots_lines(plot, ds: DataStore):
         plt.ylim(eval(plot["yLimits"], ctx1, ctx2))
     # Draw Series
     for serie in plot["Series"] :
+        # if ("Condition"  in serie) :
+        #     if (not eval(serie["Condition"], ctx1, ctx2)) : continue
         if (serie["Smooth"] is True) :
             xsmooth, ysmooth = plot_smooth(eval(serie["xValues"], ctx1, ctx2), eval(serie["yValues"], ctx1, ctx2))
         else:
             xsmooth, ysmooth = eval(serie["xValues"], ctx1, ctx2), eval(serie["yValues"], ctx1, ctx2)
-        plt.plot(xsmooth, ysmooth, color=serie["Color"], linestyle=serie["Style"], linewidth=serie["Width"], label=serie["Label"])
+        color = "Teal"
+        if ("Color"  in serie) : color = serie["Color"]
+        if ("ColorC" in serie) : color = "#"+serie["ColorC"]
+        plt.plot(xsmooth, ysmooth, color=color, linestyle=serie["Style"], linewidth=serie["Width"], label=serie["Label"])
     # Title & Legend
     titre = eval(plot["Title"], ctx1, ctx2)
     plt.title(titre, color=plot["ColorTitle"], weight='bold')
