@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<!-- saved from url=(0127)http://localhost:63342/ConsommationFonciere/ConsommationFonciere.html?_ijt=s3otpshjr8fq8t12u01p0l2ck4&_ij_reload=RELOAD_ON_SAVE -->
+<html lang="fr" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Consommation Fonciere</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <meta property="og:title" content="VigiFoncier.fr">
+    <meta property="og:description"
+          content="Statistiques et Projections de Consommation Fonciere pour PLUs et SCoTs dans toute la France.">
+    <meta property="og:image" content="https://vigibati.fr/static/img/social-preview.jpg">
+    <link rel="shortcut icon" type="image/png" href="https://vigibati.fr/static/img/favicon.png">
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.0/css/bulma.css'>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-purple.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-teal.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-flat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+    .btn {
+      background-color: Teal;
+      border: none;
+      color: white;
+      padding: 10px 30px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    .center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 50%;
+    }
+    /* Darker background on mouse-over */
+    .btn:hover {
+      background-color: Emerald;
+      color: white;
+    }
+    </style>
+    <style>
+    .slidecontainer {
+      width: 100%;
+    }
+
+    .slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 15px;
+      border-radius: 5px;
+      background: #d3d3d3;
+      outline: none;
+      opacity: 0.7;
+      -webkit-transition: .2s;
+      transition: opacity .2s;
+    }
+
+    .slider:hover {
+      opacity: 1;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: #04AA6D;
+      cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: #04AA6D;
+      cursor: pointer;
+    }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+    <script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6W0QF8E5V"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-F6W0QF8E5V');
+    </script>
+
+</head>
+
+<body onload="onPageLoaded()">
+
+<div id="app">
+
+<!-- Header -->
+<header class="w3-container w3-theme w3-padding" id="myHeader">
+    <i onclick="w3_open()" class="fa fa-bars w3-xlarge w3-button w3-theme"></i>
+    <div class="w3-center"><h4>Vigi Foncier</h4>
+        <h1 class="w3-xxxlarge w3-animate-bottom">Consommation Fonciere par France Nature Environnement</h1>
+          <div class="columns">
+             <div class="column"></div>
+             <div class="column">
+                <div class="w3-padding-32">
+                    <button class="w3-btn w3-xlarge w3-theme-dark w3-hover-light-green w3-mobile"
+                            onclick="document.getElementById('id01').style.display='block'"
+                            style="font-weight: 900;">A Propos de Vigi Foncier
+                    </button>
+                </div>
+             </div>
+             <div class="column">
+                <div class="w3-padding-32">
+                    <button class="w3-btn w3-xlarge w3-theme-dark w3-hover-light-green w3-mobile"
+                            onclick="document.getElementById('id02').style.display='block'"
+                            style="font-weight: 900;">Comment ca marche ?
+                    </button>
+                </div>
+             </div>
+             <div class="column"></div>
+          </div>
+    </div>
+
+</header>
+
+<!-- Modal Pop Up -->
+<div id="id01" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-top">
+      <header class="w3-container w3-theme-dark w3-mobile">
+        <span onclick="document.getElementById('id01').style.display='none'"
+        class="w3-button w3-display-topright">×</span>
+        <h4>A propos de Vigi Foncier</h4>
+      </header>
+      <div class="w3-center">
+        <p></p>
+        <p>Objectif Zéro Artificialisation Nette !</p>
+        <a href="https://fne.asso.fr/" target="_blank" ><img src="https://www.mightyearth.org/wp-content/uploads/image003.png" alt="France Nature Environement" width="456" height="128"> </a>
+        <p><a class="w3-btn" href="mailto:gadceca06@gmail.com?subject=A%20propose%20de%20Consommation%20Fonciere"> Information – Contactez nous pour en savoir plus </a></p>
+        <p>Un site developé en collaboration avec le Gadseca et mySophiaAntipolis ! </p>
+      </div>
+      <footer class="w3-container w3-theme-dark">
+        <h4>France Nature Environnement</h4>
+      </footer>
+    </div>
+</div>
+<hr>
+
+<!-- Modal Pop Up -->
+<div id="id02" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-top">
+      <header class="w3-container w3-theme-dark w3-mobile">
+        <span onclick="document.getElementById('id02').style.display='none'"
+        class="w3-button w3-display-topright">×</span>
+        <h4>Citoyens pour le Climat.</h4>
+      </header>
+      <div class="w3-container">
+        <p></p>
+        <h3>Objectif Zéro Artificialisation Nette !</h3>
+        <p>A l'horizon 2030, diviser au moins par deux le rythme d'artificialisation des espaces naturels, agricoles et forestiers,
+            par rapport à la consommation d'espaces observée depuis 2010.</p>
+        <h3>La Loi Climat et Résilience</h3>
+        <p>L'objectif ZAN en 2050 fixé dans le cadre du "plan biodiversité" de 2018 a été confirmé par le vote solennel en première lecture
+           du projet de loi Climat et Résilience à l'Assemblée Nationale. Afin d’y parvenir, le projet de loi fixe un objectif de réduction
+           du rythme de l'artificialisation par tranches de 10 années. Pour la première tranche, le rythme de l’artificialisation est traduit
+           par un objectif de réduction d’au moins de moitié de la consommation des ENAF par rapport à la consommation réelle de ces espaces
+           observée sur les dix années précédentes. Ce simulateur a pour objectif de déterminer si, en optimisant la densification du tissu
+           urbain existant, l’objectif quantitatif de réduire par deux l’ouverture à l’urbanisation à l’échelle de votre territoire permettra
+           de répondre aux besoins en logements futurs.</p>
+        <h3>Consulter les donnees de votre territoire</h3>
+        <p>Cet site vous permet de consulter les donnees historiques d'evolution le la population, des constructions de logements, de
+           l'artificialisation, des besoins en logements sociaux, consolidees sur votre territoire, ainsi que les projections de l'INSEE.</p>
+        <h3>Mettez votre territoire sous contrainte ZAN</h3>
+        <p>Un outil de test vous permet de tester differents scenario d'urbanisation pour atteindre votre objectif ZAN.</p>
+        <img src="input/CommentCaMarche.png" alt="Comment Ca Marche ?" width="956" height="128">
+        <p></p>
+      </div>
+      <footer class="w3-container w3-theme-dark">
+        <h4>Citoyens pour le Climat.</h4>
+      </footer>
+    </div>
+</div>
+<hr>
+
+
+
+<!-- Departements (Paca Seulement) ... -->
+<div>
+    <h2 class="w3-center">Region PACA</h2>
+          <!-- src="https://www.acted.org/wp-content/uploads/2018/09/region-paca.jpg" -->
+    <img class="w3-center w3-image"
+          src="input/CartoPaca3-Green.png"
+          alt="Region Paca Logo"
+          style="display: block; margin-left: auto; margin-right: auto; width: 600px; height: auto;">
+</div>
+
+<!-- Selection -->
+<div>
+    <div v-if="this.data_s == null">
+        <h2 class="w3-center">{{ message }} </h2>
+    </div>
+    <div v-else>
+        <h2 class="w3-center">{{ message }}</h2>
+    </div>
+    <div class="w3-cell-row w3-teal w3-mobile">
+            <div class="w3-container w3-teal w3-cell w3-mobile w3-cell-middle w3-quarter w3-padding-16">
+                <p class="w3-padding-8 w3-right-align"> Departement : </p>
+                <p class="w3-padding-8 w3-right-align"> EPCI : </p>
+                <p class="w3-padding-8 w3-right-align"> Commune : </p>
+            </div>
+            <div class="w3-container w3-teal w3-cell w3-mobile w3-cell-middle w3-threequarter w3-padding-16">
+            <select class="w3-theme-dark w3-select w3-hover-green" searchable="w3-select Rechercher ici ..." v-model="selectedDepartement" @change="selectDeptEvent($event);"  autofocus>
+                <option disabled="" value="" disabled selected> Selectionner un Departement</option>
+                <div v-if="this.data_s !== null" >
+                    <option v-for='item in this.selectDepts' :content="item.nom" >{{ item.nom }}</option>
+                </div>
+            </select>
+            <select class="w3-theme w3-select w3-hover-green" searchable="w3-select Rechercher ici ..." v-model="selectedEPCI"   @change="selectEpciEvent($event)">
+                <option disabled="" value="" disabled selected> Selectionner une EPCI</option>
+                <div v-if="this.data_s !== null">
+                    <option v-for='item in this.selectEpcis' :content="item.nom" >{{ item.nom }}</option>
+                </div>
+            </select>
+            <select class="w3-theme w3-select w3-hover-green" searchable="w3-select Rechercher ici ..."v-model="selectedCommune" @change="selectCommuneEvent($event)">
+                <option disabled="" value=""  disabled selected> Selectionner une Commune</option>
+                <div v-if="this.data_s !== null">
+                    <option v-for='item in this.selectCommunes' :content="item.nom" >{{ item.nom }}</option>
+                </div>
+            </select>
+            </div>
+        </div>
+    <hr>
+</div>
+
+<!-- Rapport -->
+<div>
+    <div v-if="this.data_s == null">
+         <h2 class="w3-center">Rapport : {{ message }}</h2>
+         <h3 class="w3-container w3-padding-32 w3-theme"> {{ select_message }}</h3>
+    </div>
+    <div v-else>
+         <h2 class="w3-center">Rapport : {{nom}} </h2>
+            <div v-if="territoire == 'Commune'">
+                 <h3 class="w3-container w3-padding-32 w3-theme">{{territoire}} {{code}} : {{nom}} - {{ds.CODE_POSTAL}} - {{ ds.P18_POP }} habitants</h3>
+            </div>
+            <div v-else>
+                 <h3 class="w3-container w3-padding-32 w3-theme">{{territoire}} {{code}} : {{nom}} - {{ ds.P18_POP }} habitants</h3>
+            </div>
+
+        <div class="w3-container">
+            <div v-if="ds.LIBEPCI != 'DEPT'">
+                <p> EPCI : {{ ds.LIBEPCI}} - {{ ds.EPCI}}  </p>
+            </div>
+            <p> Departement : {{ ds.DEP_NOM}} - {{ ds.DEP}} </p>
+            <p> Region :      {{ ds.REG_NOM}} - {{ ds.REG }}  </p>
+        </div>
+        <p class="w3-container w3-theme">Pour imprimer ou obtenir un fichier PDF: CTRL-P, Imprimer ou Sauver comme PDF - ne garder que les cinq premieres pages.</p>
+    </div>
+</div>
+
+
+<!-- Tabs -->
+<div>
+<script>
+// Tabs
+function openTab(evt, cityName) {
+  console.log("openTab : "+cityName)
+  var i;
+  var x = document.getElementsByClassName("city");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  var activebtn = document.getElementsByClassName("databtn");
+  for (i = 0; i < x.length; i++) {
+    activebtn[i].className = activebtn[i].className.replace(" w3-dark-grey", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " w3-dark-grey";
+}
+</script>
+<div class="w3-border">
+<div class="w3-bar w3-theme">
+<button class="w3-bar-item w3-button databtn w3-padding-16" onclick="openTab(event,'Logements')">         Logements </button>
+<button class="w3-bar-item w3-button databtn w3-padding-16" onclick="openTab(event,'Historique')">        Historique </button>
+<button class="w3-bar-item w3-button databtn w3-padding-16" onclick="openTab(event,'Artificialisation')"> Artificialisation </button>
+<button class="w3-bar-item w3-button databtn w3-padding-16" onclick="openTab(event,'Projections')">       Projections </button>
+<button class="w3-bar-item w3-button databtn w3-padding-16" onclick="openTab(event,'Loi_SRU')">           Loi SRU  </button>
+<button class="w3-bar-item w3-button databtn w3-padding-16 w3-pink" onclick="openTab(event,'Diagnostics')">             Diagnostics </button>
+<button class="w3-bar-item w3-button databtn w3-padding-16 w3-grey" onclick="openTab(event,'Calculettes')">             Calculettes </button>
+<button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'Cartes')">         Cartes </button>
+<button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'Graphiques')">     Graphiques </button>
+<button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'Sources')">        Sources </button>
+<button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'DonneesBrutes')">  Donnees Brutes </button>
+<button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'BigTable')">       Table de Calcul</button>
+<button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'ObjectifZan')">    Objectif Zan</button>
+<button class="w3-bar-item w3-button databtn w3-padding-16 w3-grey" onclick="openTab(event,'Debug')">                   Debug </button>
+</div>
+</div>
+
+<div id="Diagnostics"       class="w3-container city w3-animate-opacity">
+    <div v-if="this.data_s != null">
+        <h2>Diagnostics</h2>
+        <diagnostics :diags=this.data_s.Diagnostics type="ALL" categorie="ALL"></diagnostics>
+     </div>
+</div>
+<div id="Graphiques"        class="w3-container city w3-animate-opacity">
+    <div v-if="this.data_s != null">
+        <h2>Graphiques</h2>
+
+        <div class="w3-container w3-section w3-teal">
+            <h2 class="w3-teal w3-padding-16">Logements</h2></div>
+            <img :src="ds.GRAPHIQUE_LOGEMENTS"          alt="Logements" class="center" >
+            <img src="input/Legend_Logements.png"       alt="Legende Logements" class="center">
+
+        <div class="w3-container w3-section w3-teal">
+            <h2 class="w3-teal w3-padding-16">Repartition des Logements</h2></div>
+            <img :src="ds.GRAPHIQUE_REPARTITION_DES_LOGEMENTS"          alt="Repartition" class="center">
+
+        <div class="w3-container w3-section w3-teal">
+            <h2 class="w3-teal w3-padding-16">Population</h2></div>
+            <img :src="ds.GRAPHIQUE_POPULATION"          alt="Population" class="center">
+
+        <div class="w3-container w3-section w3-teal">
+            <h2 class="w3-teal w3-padding-16">Taille des Menages</h2></div>
+            <img :src="ds.GRAPHIQUE_TAILLE_DES_MENAGES"  alt="Taille des Menages" class="center">
+    </div>
+</div>
+<div id="Logements"         class="w3-container city w3-animate-opacity">
+    <div v-if="this.data_s != null">
+        <h2>Logements</h2>
+        <div class="w3-card-4">
+         <img :src="ds.GRAPHIQUE_LOGEMENTS"          alt="Logements" class="center">
+         <br>
+         <img src="input/Legend_Logements.png"       alt="Legende Logements" class="center">
+        </div>
+         <br>
+         <table class="w3-table-all w3-hoverable w3-card-4">
+                    <tbody>
+                    <tr class="w3-teal">
+                        <th>Donnees INSEE</th>
+                        <th class="w3-right-align">2013 - 2021</th>
+                    </tr>
+                    <tr>
+                        <td>Taux de Residences Secondaires en 2018</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.TX_RES_SEC_18 * 10000).toFixed(4)) ) / 100  }}%</td>
+                    </tr>
+                    <tr>
+                        <td>Taux de Residences Vacantes en 2018</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.TX_RES_VAC_18 * 10000).toFixed(4)) ) / 100  }}%</td>
+                    </tr>
+                    <tr>
+                        <td>Periode 2013 - 2020 : Exces en Logements</td>
+                        <td class="w3-right-align">{{ds.EXCES_BESOINS_1320}}</td>
+                    </tr>
+                    <tr>
+                        <td> - Besoins en logements :</td>
+                        <td class="w3-right-align">{{ds.BESOINS_1320}}</td>
+                    </tr>
+                    <tr>
+                        <td> - Logements Construits :</td>
+                        <td class="w3-right-align">{{ds.NB_LGT_TOT_COMMENCES_1321}}</td>
+                    </tr>
+                    <tr>
+                        <td> - Exces de Logements Construits par rapport aux besoins :</td>
+                        <td class="w3-right-align">{{ds.EXCES_BESOINS_1320}}</td>
+                    </tr>
+                    <tr>
+                        <td> -&gt; Nouvelles Residences Secondaires :</td>
+                        <td class="w3-right-align">{{ds.NOUV_RESSEC_1318}}</td>
+                    </tr>
+                    <tr>
+                        <td> -&gt; Nouvelles Residences Vacantes :</td>
+                        <td class="w3-right-align">{{ds.NOUV_LOGVAC_1318}}</td>
+                    </tr>
+                    <tr>
+                        <td> -&gt; Indetermines / Non-Vendus :</td>
+                        <td class="w3-right-align">{{ds.LOG_NON_VENDUS_1320}}</td>
+                    </tr>
+                    <tr>
+                        <td> Periode 2013 - 2021 :</td>
+                        <td class="w3-right-align">940</td>
+                    </tr>
+                    <tr>
+                        <td> - Logements Construits :</td>
+                        <td class="w3-right-align">{{ds.NB_LGT_TOT_COMMENCES_1321}}</td>
+                    </tr>
+                    <tr>
+                        <td> - Logements Sociaux :</td>
+                        <td class="w3-right-align">{{ds.NB_LGT_PRET_LOC_SOCIAL_1321}}</td>
+                    </tr>
+                    <tr>
+                        <td> - Taux de Logements Sociaux Construits :</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.TX_LGT_PRET_LOC_SOCIAL_1321 * 10000).toFixed(4)) ) / 100  }}%</td>
+                    </tr>
+                    </tbody>
+                </table>
+         <br>
+        <h2>Diagnostics</h2>
+        <diagnostics :diags=this.data_s.Diagnostics type="ALL" categorie="LOG"></diagnostics>
+    </div>
+</div>
+<div id="Loi_SRU"           class="w3-container city w3-animate-opacity">
+    <div v-if="this.data_s != null">
+        <h2>Loi SRU</h2>
+        <p>Logements Sociaux : <a target="_blank" :href="ds.URL_SOURCE_SRU"> Dossier Dreal </a></p>
+        <table class="w3-table-all w3-hoverable w3-card-4">
+                    <tr class="w3-teal">
+                        <th>Donnees SRU</th>
+                        <th class="w3-right-align">2017</th>
+                        <th class="w3-right-align">2020</th>
+                    </tr>
+                    <tr>
+                        <td>Residences Principales</td>
+                        <td class="w3-right-align">{{ds.SRU_RP_2017}}</td>
+                        <td class="w3-right-align">{{ds.SRU_RP_2020}}</td>
+                    </tr>
+                    <tr>
+                        <td>Logements Sociaux :</td>
+                        <td class="w3-right-align">{{ds.SRU_LLS_2017}}</td>
+                        <td class="w3-right-align">{{ds.SRU_LLS_2020}}</td>
+                    </tr>
+                    <tr>
+                        <td>Taux Logements Sociaux :</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.SRU_TX_LLS_2017 * 10000).toFixed(4)) ) / 100  }}%</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.SRU_TX_LLS_2020 * 10000).toFixed(4)) ) / 100  }}%</td>
+                    </tr>
+                    <tr>
+                        <td>Carence :</td>
+                        <td class="w3-right-align">{{ds.SRU_CARENCE_2017}}</td>
+                        <td class="w3-right-align">{{ds.SRU_CARENCE_2020}}</td>
+                    </tr>
+                    <tr>
+                        <td>Objectifs Trienaux :</td>
+                        <td class="w3-right-align">{{ds.SRU_OBJ_2017_2019}}</td>
+                        <td class="w3-right-align">{{ds.SRU_OBJ_2020_2022}}</td>
+                    </tr>
+                    <tr>
+                        <td>Logements 35% / 65% Trienaux :</td>
+                        <td class="w3-right-align">{{ds.SRU_MOD3565_2017}}</td>
+                        <td class="w3-right-align">{{ds.SRU_MOD3565_2020}}</td>
+                    </tr>
+                </table>
+        <br>
+        <div> <h2>Logements Sociaux :</h2>
+              <p>Evolution 2017-2020 des Residences Principales : {{ds.SRU_EVOLUTION_EN_RP}}</p>
+              <p>Evolution 2017-2020 Carence : {{ds.SRU_EVOLUTION_CARENCE}}</p>
+              <p>Logements Sociaux Realises en 2017-2020 (SRU) : {{ds.SRU_LOGEMENTS_SRU_CONSTRUITS}}</p>
+              <p>Logements Sociaux Realises en 2017-2021 (Sitadel): {{ds.NB_LGT_PRET_LOC_SOCIAL_1721}}</p>
+              <p>Logements Sociaux Realises en 2013-2016 (Sitadel): {{ds.NB_LGT_PRET_LOC_SOCIAL_1316}}</p>
+              <p>Logements Sociaux Realises en 2013-2021 (Sitadel): {{ds.NB_LGT_PRET_LOC_SOCIAL_1321}}</p>
+              <p>Total de logements a construire en 35% / 65% : {{ds.SRU_MOD3565_CARENCE}}</p>
+        </div>
+        <br>
+        <div><h2>Carte Geoportail Logement Social</h2>
+             <p>Sur <a target="_blank" :href="ds.URL_CARTE_LOGEMENT_SOCIAL"> Geoportail Logement Social </a></p>
+             <!-- <iframe height="500" width="900" class="framegeop" v-bind:src="ds.URL_CARTE_LOGEMENT_SOCIAL"></iframe>-->
+        </div>
+        <br>
+        <diagnostics :diags=this.data_s.Diagnostics type="ALL" categorie="SRU"></diagnostics>
+    </div>
+</div>
+<div id="Artificialisation" class="w3-container city w3-animate-opacity">
+    <div v-if="this.data_s != null">
+        <h2>Artificialisation sur 10 ans (2009-2020)</h2>
+         <p>Artificialisation : <a target="_blank" :href="ds.URL_SOURCE_ARTIFICIALISATION"> Dossier Cerema </a></p>
+         <table class="w3-table-all w3-hoverable w3-card-4">
+                    <tbody>
+                    <tr class="w3-teal">
+                        <th>Donnees Cerema</th>
+                        <th class="w3-right-align">2009-2020</th>
+                    </tr>
+                    <tr>
+                        <td>Surface du Territoire</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.SURFACE_COMMUNE / 100 ).toFixed(2)) ) / 100  }} ha</td>
+                    </tr>
+                    <tr>
+                        <td>Artificialisation en 10 ans</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.ART_TOTAL / 100).toFixed(2)) ) / 100  }} ha</td>
+                    </tr>
+                    <tr>
+                        <td>Supplement en 10 ans</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.ART_POURCENT * 100).toFixed(2)) ) / 100  }}%</td>
+                    </tr>
+                    </tbody>
+                </table>
+         <br>
+        <diagnostics :diags=this.data_s.Diagnostics type="ALL" categorie="ART"></diagnostics>
+         <table class="w3-table-all w3-hoverable w3-card-4">
+                    <tbody>
+                    <tr class="w3-teal">
+                        <th>Donnees Sitadel</th>
+                        <th class="w3-right-align">2013-2021</th>
+                    </tr>
+                    <tr>
+                        <td>Surface du Territoire</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.SURFACE_COMMUNE / 100 ).toFixed(2)) ) / 100  }} ha</td>
+                    </tr>
+                    <tr>
+                        <td>NB_LGT_NOUVEAU</td>
+                        <td class="w3-right-align">{{ ds.NB_LGT_NOUVEAU  }} </td>
+                    </tr>
+                    <tr>
+                        <td>NB_LGT_RENOUVELLEMENT</td>
+                        <td class="w3-right-align">{{ ds.NB_LGT_RENOUVELLEMENT  }} </td>
+                    </tr>
+                    <tr>
+                        <td>SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN / 100 ).toFixed(2)) ) / 100  }} ha</td>
+                    </tr>
+                    <tr>
+                        <td>SITADEL_LOCAUX_NOUVEAUX</td>
+                        <td class="w3-right-align">{{ ds.SITADEL_LOCAUX_NOUVEAUX  }} </td>
+                    </tr>
+                    <tr>
+                        <td>SITADEL_LOCAUX_RENOUVELLEMENT</td>
+                        <td class="w3-right-align">{{ ds.SITADEL_LOCAUX_RENOUVELLEMENT  }} </td>
+                    </tr>
+                    <tr>
+                        <td>SITADEL_LOCAUX_SUPERFICIE_TERRAIN</td>
+                        <td class="w3-right-align">{{ Math.round( ((ds.SITADEL_LOCAUX_SUPERFICIE_TERRAIN / 100 ).toFixed(2)) ) / 100  }} ha</td>
+                    </tr>
+                    </tbody>
+                </table>
+    </div>
+</div>
+<div id="Historique"        class="w3-container city w3-animate-opacity">
+    <div v-if="this.data_s != null">
+        <h2>Historique</h2>
+        <p><a target="_blank" :href="ds.DOSSIER_INSEE">Dossier Insee Complet {{ nom }}</a></p>
+        <table class="w3-table-all w3-hoverable w3-card-4">
+            <tbody>
+            <tr class="w3-teal">
+                <th>Donnees INSEE</th>
+                <th class="w3-right-align">2008</th>
+                <th class="w3-right-align">2013</th>
+                <th class="w3-right-align">2018</th>
+            </tr>
+            <tr>
+                <td>Population</td>
+                <td class="w3-right-align">{{ds.P08_POP}}</td>
+                <td class="w3-right-align">{{ds.P13_POP}}</td>
+                <td class="w3-right-align">{{ds.P18_POP}}</td>
+            </tr>
+            <tr>
+                <td>- Evolution #</td>
+                <td class="w3-right-align">-</td>
+                <td class="w3-right-align">{{ds.POP_EVOL_0813}}</td>
+                <td class="w3-right-align">{{ds.POP_EVOL_1318}}</td>
+            </tr>
+            <tr>
+                <td>- Evolution % / an</td>
+                <td class="w3-right-align">-</td>
+                <td class="w3-right-align">{{ Math.round( ((ds.TXPOP_0813 * 100).toFixed(2)) ) / 100  }}%</td>
+                <td class="w3-right-align">{{ Math.round( ((ds.TXPOP_1318 * 100).toFixed(2)) ) / 100  }}%</td>
+            </tr>
+            <tr>
+                <td>Population des Menages</td>
+                <td class="w3-right-align">{{ds.C08_PMEN}}</td>
+                <td class="w3-right-align">{{ds.C13_PMEN}}</td>
+                <td class="w3-right-align">{{ds.C18_PMEN}}</td>
+            </tr>
+            <tr>
+                <td>Population Hors Menage</td>
+                <td class="w3-right-align">{{ds.C08_HORS_MEN}}</td>
+                <td class="w3-right-align">{{ds.C13_HORS_MEN}}</td>
+                <td class="w3-right-align">{{ds.C18_HORS_MEN}}</td>
+            </tr>
+            <tr>
+                <td>Menages</td>
+                <td class="w3-right-align">{{ds.C08_MEN}}</td>
+                <td class="w3-right-align">{{ds.C13_MEN}}</td>
+                <td class="w3-right-align">{{ds.C18_MEN}}</td>
+            </tr>
+            <tr>
+                <td>Taille des Menages</td>
+                <td class="w3-right-align">{{ds.TM_2008}}</td>
+                <td class="w3-right-align">{{ds.TM_2013}}</td>
+                <td class="w3-right-align">{{ds.TM_2018}}</td>
+            </tr>
+            <tr>
+                <td>- Evolution taille des Menages % / an</td>
+                <td class="w3-right-align">-</td>
+                <td class="w3-right-align">{{ Math.round( ((ds.TXTM_0813 * 100).toFixed(2)) ) / 100  }}%</td>
+                <td class="w3-right-align">{{ Math.round( ((ds.TXTM_1318 * 100).toFixed(2)) ) / 100  }}%</td>
+            </tr>
+            <tr>
+                <td>Logements</td>
+                <td class="w3-right-align">{{ds.P08_LOG}}</td>
+                <td class="w3-right-align">{{ds.P13_LOG}}</td>
+                <td class="w3-right-align">{{ds.P18_LOG}}</td>
+            </tr>
+            <tr>
+                <td>- Residences Principales</td>
+                <td class="w3-right-align">{{ds.P08_RP}}</td>
+                <td class="w3-right-align">{{ds.P13_RP}}</td>
+                <td class="w3-right-align">{{ds.P18_RP}}</td>
+            </tr>
+            <tr>
+                <td>- Residences Secondaires</td>
+                <td class="w3-right-align">{{ds.P08_RSECOCC}}</td>
+                <td class="w3-right-align">{{ds.P13_RSECOCC}}</td>
+                <td class="w3-right-align">{{ds.P18_RSECOCC}}</td>
+            </tr>
+            <tr>
+                <td>- Logements Vacants</td>
+                <td class="w3-right-align">{{ds.P08_LOGVAC}}</td>
+                <td class="w3-right-align">{{ds.P13_LOGVAC}}</td>
+                <td class="w3-right-align">{{ds.P18_LOGVAC}}</td>
+            </tr>
+            <tr>
+                <td>- Maisons</td>
+                <td class="w3-right-align">{{ds.P08_MAISON}}</td>
+                <td class="w3-right-align">{{ds.P13_MAISON}}</td>
+                <td class="w3-right-align">{{ds.P18_MAISON}}</td>
+            </tr>
+            <tr>
+                <td>- Appartements</td>
+                <td class="w3-right-align">{{ds.P08_APPART}}</td>
+                <td class="w3-right-align">{{ds.P13_APPART}}</td>
+                <td class="w3-right-align">{{ds.P18_APPART}}</td>
+            </tr>
+            <tr>
+                <td>Proprietaires en Residence Principale</td>
+                <td class="w3-right-align">{{ds.P08_RP_PROP}}</td>
+                <td class="w3-right-align">{{ds.P13_RP_PROP}}</td>
+                <td class="w3-right-align">{{ds.P18_RP_PROP}}</td>
+            </tr>
+            <tr>
+                <td>Locataires en Residence Principale</td>
+                <td class="w3-right-align">{{ds.P08_RP_LOC}}</td>
+                <td class="w3-right-align">{{ds.P13_RP_LOC}}</td>
+                <td class="w3-right-align">{{ds.P18_RP_LOC}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <diagnostics :diags=this.data_s.Diagnostics type="ALL" categorie="HIST"></diagnostics>
+    </div>
+</div>
+<div id="Projections"       class="w3-container city w3-animate-opacity">
+    <div v-if="this.data_s != null">
+         <h2>Projections</h2>
+         <p>Projections 2050 : <a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS"> Dossier Insee </a></p>
+         <p>Projections Paca : <a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS_PACA"> Dossier Omphale </a></p>
+         <table class="w3-table-all w3-hoverable w3-card-4">
+            <tbody>
+            <tr class="w3-teal">
+                <th>Donnees INSEE</th>
+                <th class="w3-right-align">2020</th>
+                <th class="w3-right-align">2030</th>
+                <th class="w3-right-align">2040</th>
+                <th class="w3-right-align">2050</th>
+            </tr>
+            <tr>
+                <td>Population</td>
+                <td class="w3-right-align">{{ds.POP_2020}}</td>
+                <td class="w3-right-align">{{ds.POP_2030}}</td>
+                <td class="w3-right-align">{{ds.POP_2040}}</td>
+                <td class="w3-right-align">{{ds.POP_2050}}</td>
+            </tr>
+            <tr>
+                <td>- Evolution #</td>
+                <td class="w3-right-align"> -</td>
+                <td class="w3-right-align">{{ds.POP_2030 - ds.POP_2020}}</td>
+                <td class="w3-right-align">{{ds.POP_2040 - ds.POP_2030}}</td>
+                <td class="w3-right-align">{{ds.POP_2050 - ds.POP_2040}}</td>
+            </tr>
+            <tr>
+                <td>- Evolution % / an</td>
+                <td class="w3-right-align">-</td>
+                <td class="w3-right-align">{{ds.TX_POP_2030}}</td>
+                <td class="w3-right-align">{{ds.TX_POP_3040}}</td>
+                <td class="w3-right-align">{{ds.TX_POP_4050}}</td>
+            </tr>
+            <tr>
+                <td>Taille des Menages</td>
+                <td class="w3-right-align">{{ds.TM_2020}}</td>
+                <td class="w3-right-align">{{ds.TM_2030}}</td>
+                <td class="w3-right-align">{{ds.TM_2040}}</td>
+                <td class="w3-right-align">{{ds.TM_2050}}</td>
+            </tr>
+            <tr>
+                <td>Besoins en Logements</td>
+                <td class="w3-right-align">{{ds.LOG_2020}}</td>
+                <td class="w3-right-align">{{ds.LOG_2030}}</td>
+                <td class="w3-right-align">{{ds.LOG_2040}}</td>
+                <td class="w3-right-align">{{ds.LOG_2050}}</td>
+            </tr>
+            <tr>
+                <td>Besoins en Logements sur 10 ans</td>
+                <td class="w3-right-align"> -</td>
+                <td class="w3-right-align">{{ds.LOG_2030 - ds.LOG_2020}}</td>
+                <td class="w3-right-align">{{ds.LOG_2040 - ds.LOG_2030}}</td>
+                <td class="w3-right-align">{{ds.LOG_2050 - ds.LOG_2040}}</td>
+            </tr>
+            <tr>
+                <td>Besoins en Logements par an</td>
+                <td class="w3-right-align"> -</td>
+                <td class="w3-right-align">{{(ds.LOG_2030 - ds.LOG_2020)/10}} </td>
+                <td class="w3-right-align">{{(ds.LOG_2040 - ds.LOG_2030)/10}}</td>
+                <td class="w3-right-align">{{(ds.LOG_2050 - ds.LOG_2040)/10}}</td>
+            </tr>
+            </tbody>
+        </table>
+         <br>
+        <diagnostics :diags=this.data_s.Diagnostics type="ALL" categorie="PROJ"></diagnostics>
+    </div>
+</div>
+<div id="Cartes"            class="w3-container city w3-animate-opacity">
+    <div v-if="this.data_s != null">
+        <h2>Cartes</h2>
+        <div>
+            <h3>Carte Geoportail Parcelles</h3>
+            <p>Sur <a target="_blank" :href="ds.URL_CARTE"> Geoportail Parcelles </a></p>
+            <iframe height="500" width="900" class="framegeop" :src="ds.URL_CARTE"></iframe>
+            <br>
+            <h3>Carte Geoportail Logement Social</h3>
+            <p>Sur <a target="_blank" :href="ds.URL_CARTE_LOGEMENT_SOCIAL">Geoportail Logement Social </a></p>
+            <!-- <iframe height="500" width="900" class="framegeop" v-bind:src="ds.URL_CARTE_LOGEMENT_SOCIAL"></iframe>-->
+            <br>
+            <h3>Carte Geoportail Administrative</h3>
+            <p>Sur <a target="_blank" :href="ds.URL_CARTE_ADMINISTRATIVE">Geoportail Administrative </a></p>
+            <!-- <iframe height="500" width="900" class="framegeop" v-bind:src="ds.URL_CARTE_ADMINISTRATIVE"></iframe> -->
+            <br>
+            <h3>Carte Geoportail Urbanisme</h3>
+            <p>Sur <a target="_blank" :href="ds.URL_CARTE_URBANISME">Geoportail Urbanisme </a></p>
+            <!-- <iframe height="500" width="900" class="framegeop" v-bind:src="ds.URL_CARTE_URBANISME"></iframe>-->
+            <br>
+            <h3>Carte Sitadel Koumoul</h3>
+            <p>Sur <a target="_blank" :href="ds.URL_CARTE_SITADEL"> Koumoul </a></p>
+            <!-- <iframe height="500" width="900" class="framegeop" v-bind:src="ds.URL_CARTE_SITADEL"></iframe>-->
+            <br>
+            <h3>Carte Sitadel Vigibati</h3>
+            <p>Sur <a target="_blank" :href="ds.URL_CARTE_VIGIBATI">Vigibati </a></p>
+            <!-- <iframe height="500" width="900" class="framegeop" v-bind:src="ds.URL_CARTE_VIGIBATI"></iframe> -->
+        </div>
+    </div>
+</div>
+<div id="Sources"           class="w3-container city w3-animate-opacity">
+    <div v-if="this.data_s != null">
+            <h2>Sources</h2>
+            <div>
+                <div class="w3-container w3-section w3-teal">
+                    <h2 class="w3-teal w3-padding-16">Sources de Donnees : </h2>
+                </div>
+                <ul class="w3-ul w3-card-4">
+                    <li><a target="_blank" :href="ds.DOSSIER_INSEE">Dossier Complet Insee : {{ nom }}</a></li>
+                    <li><a target="_blank" :href="ds.URL_SOURCE_ARTIFICIALISATION"> Artificialisation : Dossier Cerema </a></li>
+                    <li><a target="_blank" :href="ds.URL_SOURCE_SRU"> Logements Sociaux : Dossier Dreal </a></li>
+                    <li><a target="_blank" :href="ds.URL_SOURCE_SITADEL"> Logements Construits : Dossier Sitadel </a></li>
+                    <li><a target="_blank" :href="ds.URL_SOURCE_COMMUNES"> Donnees Communes :Dossier Insee </a></li>
+                    <li><a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS"> Projections 2050 : Dossier Insee </a></li>
+                    <li><a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS_PACA">Projections Paca : Dossier Omphale </a></li>
+                </ul>
+            </div>
+            <br>
+            <h2>Autres Sites</h2>
+            <p>Données sur Toutes les Villes de France : <a target="_blank" :href="ds.URL_VILLE_DATA">Ville Data</a></p>
+            <p>L'Encyclopédie des villes de France : <a target="_blank" :href="ds.URL_LINTERNAUTE">L'internaute</a></p>
+            <p>Google : <a target="_blank" :href="ds.URL_GOOGLE">Google Search</a></p>
+        </div>
+    </div>
+<div id="DonneesBrutes"     class="w3-container city w3-animate-opacity">
+    <div v-if="data_s != null">
+        <h2>Donnees Brutes</h2>
+        <p><a target="_blank" :href="ds.DOSSIER_INSEE">Dossier Insee Complet {{ nom }}</a></p>
+        <br>
+        <div class="w3-cell-row">
+            <div class="w3-container w3-cell w3-mobile">
+                <p><a class="btn w3-btn fa fa-download" :href="ds.DOWNLOAD_CSV"> Download CSV</a></p>
+            </div>
+            <div class="w3-container w3-cell w3-mobile">
+                <p><a class="btn w3-btn fa fa-download" :href="ds.DOWNLOAD_XLSX"> Download XLSX</a></p>
+            </div>
+            <div class="w3-container w3-cell w3-mobile">
+                <p><a class="btn w3-btn fa fa-download" :href="ds.DOWNLOAD_JSON"> Download JSON</a></p>
+            </div>
+        </div>
+        <br>
+        <table class="w3-table-all w3-hoverable w3-card-4" style="width: 100%;">
+            <tr class="w3-teal">
+                <th                        style="width: 10%;">Cle de Donnee</th>
+                <th class="w3-right-align" style="width: 20%;">Semantique</th>
+                <th class="w3-left-align"  style="width: 70%;">Valeur</th>
+            </tr>
+            <tr  v-for="(item, key) in this.data" :key="key" >
+                <td>{{ key }}</td>
+                <td class="w3-right-align">{{ item.meta }}</td>
+                <td class="w3-left-align"style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;"> {{ item.total }}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div id="Debug"             class="w3-container city w3-animate-opacity">
+    <div v-if="this.data_s != null">
+        <h2>Debug</h2>
+        <div class="w3-container w3-section w3-teal"><h2 class="w3-teal w3-padding-16">Diagnostics</h2></div>
+        <div v-for='diag in this.data_s.Diagnostics' >
+            <ul class="w3-ul w3-card-4">
+                <li><h3>{{diag.key}}</h3></li>
+                <li> Description : {{diag.description}}</li>
+                <li> Test : {{diag.test}}</li>
+                <li> Valeur : {{diag.value}}</li>
+                <li> Categorie : {{diag.categorie}}</li>
+                <li> Type : {{diag.type}}</li>
+                <li> Message Si Faux : {{diag.messageSiFaux}}</li>
+                <li> Message Si Vrai : {{diag.messageSiVrai}}</li>
+            </ul>
+            <div v-if="diag.type == 'NOTE'" >
+             <div v-if='diag.value == true' class="w3-panel w3-pale-yellow w3-topbar w3-rightbar w3-border-yellow w3-border">
+                            <p>{{diag.key}} - {{diag.categorie}}</p>
+                            <p>{{diag.description}}</p>
+                            <p>{{diag.messageSiVrai}}</p>
+             </div>
+             <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-leftbar w3-border-yellow w3-border">
+                            <p>{{diag.key}} - {{diag.categorie}}</p>
+                            <p>{{diag.description}}</p>
+                            <p>{{diag.messageSiFaux}}</p>
+             </div>
+            </div>
+                 <div v-if="diag.type == 'BLUE'" >
+                     <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiVrai}}</p>
+                     </div>
+                     <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
+                                    <p>{{diag.key}} - {{diag.categorie}}</p>
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.messageSiFaux}}</p>
+                     </div>
+                 </div>
+
+            <div v-if="diag.type == 'DIAG'" >
+             <div v-if='diag.value == true' class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border">
+                            <p>{{diag.key}} - {{diag.categorie}}</p>
+                            <p>{{diag.description}}</p>
+                            <p>{{diag.messageSiVrai}}</p>
+             </div>
+             <div v-else class="w3-panel w3-pale-red w3-bottombar w3-border-red w3-border">
+                            <p>{{diag.key}} - {{diag.categorie}}</p>
+                            <p>{{diag.description}}</p>
+                            <p>{{diag.messageSiFaux}}</p>
+             </div>
+         </div>
+            <div v-if="diag.type == 'TEST'" >
+             <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-border">
+                            <p>{{diag.key}} - {{diag.categorie}}</p>
+                            <p>{{diag.description}}</p>
+                            <p>{{diag.messageSiVrai}}</p>
+             </div>
+             <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-border-blue w3-border">
+                            <p>{{diag.key}} - {{diag.categorie}}</p>
+                            <p>{{diag.description}}</p>
+                            <p>{{diag.messageSiFaux}}</p>
+             </div>
+         </div>
+        </div>
+        <div class="w3-container w3-section w3-teal"> <h2 class="w3-teal w3-padding-16">Donnees</h2></div>
+        <div v-for="(item, key) in this.data" :key="key" >
+                <ul class="w3-ul w3-card-4">
+                    <li><h3>{{ key }}</h3></li>
+                    <li> Semantique : {{ item.meta   }}</li>
+                    <li> Expr :       {{ item.expr   }}</li>
+                    <li> Type :       {{ item.type   }}</li>
+                    <li> Mode :       {{ item.mode   }}</li>
+                    <li> Source :     {{ item.source }}</li>
+                    <li> Valeur :     {{ item.total  }}</li>
+                </ul>
+        </div>
+    </div>
+</div>
+<div id="Calculettes"       class="w3-container city w3-animate-opacity">
+        <h2>Calculettes</h2>
+        <!--
+        <calculette-color></calculette-color>
+        -->
+        <div class="w3-container">
+            <div class="w3-container w3-cell">
+                <calculette-evol ref="CalculetteEvolPopulation"
+                                 titre="Evolution de la Population selon le taux : "
+                                 valeur="Population"
+                                 rounding="0"
+                                 val_depart="0"
+                                 annee_depart="2020"
+                                 val_arrivee="0"
+                                 annee_arrivee="2030"
+                                 taux_de_croissance="0" >
+                </calculette-evol>
+            </div>
+            <div class="w3-container w3-cell">
+                <calculette-taux ref="CalculetteTauxPopulation"
+                                 titre="Calcul de Taux, selon l'evolution de la Population : "
+                                 valeur="Population"
+                                 rounding="3"
+                                 val_depart="0"
+                                 annee_depart="2020"
+                                 val_arrivee="0"
+                                 annee_arrivee="2030"
+                                 taux_de_croissance="0">
+                </calculette-taux>
+            </div>
+        </div>
+        <div class="w3-container">
+            <div class="w3-container w3-cell">
+                <calculette-evol ref="CalculetteEvolTailleMenages"
+                                 titre="Evolution de la Taille des Menages selon le taux : "
+                                 valeur="Taille des Menages"
+                                 rounding="3"
+                                 val_depart="0"
+                                 annee_depart="2020"
+                                 val_arrivee="0"
+                                 annee_arrivee="2030"
+                                 taux_de_croissance="0">
+                </calculette-evol>
+            </div>
+            <div class="w3-container w3-cell">
+                <calculette-taux ref="CalculetteTauxTailleMenages"
+                                 titre="Calcul de Taux, selon l'evolution de la Taille des Menages : "
+                                 valeur="Taille des Menages"
+                                 rounding="3"
+                                 val_depart="0"
+                                 annee_depart="2020"
+                                 val_arrivee="0"
+                                 annee_arrivee="2030"
+                                 taux_de_croissance="0">
+                </calculette-taux>
+            </div>
+        </div>
+    <br>
+</div>
+<div id="BigTable"          class="w3-container city w3-animate-opacity">
+     <h2>Table de Calcul - Version Beta</h2>
+     <div class="w3-container">
+        <table-stat ref="TableStat"> </table-stat>
+     </div>
+</div>
+<div id="ObjectifZan"          class="w3-container city w3-animate-opacity">
+     <h2>Outil de Calcul - Objectif Zan</h2>
+     <div class="w3-container">
+        <table-ozan ref="ObjectifZan"> </table-ozan>
+     </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<!-- Footer -->
+<br>
+<footer class="w3-container w3-theme-dark w3-padding-16">
+
+<!-- Contact & Counters -->
+<div>
+    <div class="w3-container w3-cell w3-mobile">
+        <h3>Vigi Foncier 2021</h3>
+        <p><a class="w3-btn"
+              href="https://www.gadseca.org/" target="_blank">
+              Powered by Gadesca</a></p>
+    </div>
+    <div class="w3-container w3-cell w3-mobile">
+        <h3>Contact / Information</h3>
+        <p><a class="w3-btn"
+              href="mailto:gadceca06@gmail.com?subject=A%20propose%20de%20Consommation%20Fonciere">
+              Contactez nous par email.
+        </a></p>
+    </div>
+    <div class="w3-container w3-cell w3-mobile">
+        <h3>Pour en savoir plus</h3>
+        <p><a class="w3-btn"
+              href="README.dillinger.html">
+              Lisez-moi.
+        </a></p>
+    </div>
+    <div class="w3-container w3-cell w3-mobile">
+        <h3>Open Source</h3>
+        <p><a class="w3-btn"
+              href="https://github.com/bheuse/ConsommationFonciere">
+              Projet Github.
+        </a></p>
+    </div>
+    <div class="w3-container w3-cell w3-mobile">
+        <h3>Hosted by Infinity Free</h3>
+        <p><a class="w3-btn"
+              href="https://infinityfree.net/">
+              Free Hosting Here.
+        </a></p>
+    </div>
+</div>
+<div>
+    <div class="w3-container w3-cell w3-mobile">
+        <br>Visiteurs
+             <div id="sfcdw41gx8hc14zxkkbm3eu7u38cu64puqy"></div>
+             <script type="text/javascript" src="https://counter7.stat.ovh/private/counter.js?c=dw41gx8hc14zxkkbm3eu7u38cu64puqy&down=async" async>
+             </script>
+    </div>
+    <div class="w3-container w3-cell w3-mobile">
+        <br>Visites
+            <div id="sfcyl7udu4q68pa87lccp7rqg97jnl49634"></div>
+            <script type="text/javascript" src="https://counter7.stat.ovh/private/counter.js?c=yl7udu4q68pa87lccp7rqg97jnl49634&down=async" async>
+            </script>
+    </div>
+</div>
+
+<!-- Sources -->
+<div class="w3-container w3-theme-dark w3-padding-16">
+     <h2>Sources de Donnees : </h2>
+     <div v-if="data_s != null">
+        <div class="w3-container w3-cell w3-mobile">
+             <p>Statistiques INSEE:<br>    <a target="_blank" :href="ds.URL_STATISTIQUES_INSEE">Dossiers Insee</a></p>
+        </div>
+        <div class="w3-container w3-cell w3-mobile">
+             <p>Artificialisation :<br>    <a target="_blank" :href="ds.URL_SOURCE_ARTIFICIALISATION"> Dossier Cerema </a></p>
+        </div>
+        <div class="w3-container w3-cell w3-mobile">
+             <p>Logements Sociaux :<br>   <a target="_blank" :href="ds.URL_SOURCE_SRU"> Dossier Dreal </a></p>
+        </div>
+        <div class="w3-container w3-cell w3-mobile">
+             <p>Logements Construits :<br> <a target="_blank" :href="ds.URL_SOURCE_SITADEL"> Dossier Sitadel </a></p>
+        </div>
+        <div class="w3-container w3-cell w3-mobile">
+             <p>Donnees Communes :<br>     <a target="_blank" :href="ds.URL_SOURCE_COMMUNES"> Dossier Insee </a></p>
+        </div>
+        <div class="w3-container w3-cell w3-mobile">
+             <p>Projections 2050 :<br>     <a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS"> Dossier Insee </a></p>
+        </div>
+        <div class="w3-container w3-cell w3-mobile">
+             <p>Projections Paca :<br>     <a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS_PACA"> Dossier Omphale </a></p>
+             <p>GOOGLE_TRACKER :<br>     <a target="_blank" :href="ds.GOOGLE_TRACKER"> {{ds.GOOGLE_TRACKER}} </a></p>
+        </div>
+    </div>
+</div>
+
+<div  v-if="this.data_s != null">
+        <div class="w3-container w3-theme-dark w3-mobile w3-center ">
+        <iframe frameBorder="0" height="190" width="700" :src="ds.GOOGLE_TRACKER"></iframe>
+</div>
+</div>
+
+</footer>
+
+<!-- Rapport Complet
+<h2 class="w3-center">Rapport Complet</h2>
+<iframe :src="page"  height="1200" width="1500"></iframe>
+-->
+
+<!-- Tracker -->
+
+<script  src="ConsommationFonciereV3.js?v=1"></script>
+
+</div>
+</body>
+</html>
