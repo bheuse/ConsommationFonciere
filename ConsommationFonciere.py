@@ -58,9 +58,6 @@ global_context     = {}
 ### Sitadel Logements
 ##########################
 
-sitadel1019SourcePage = "https://www.insee.fr/fr/statistiques/5395856?sommaire=5395912"
-sitadel1019SourceFile = "logements commences PACA 2010-2019.xls"
-
 sitadelSourcePage     = "https://www.data.gouv.fr/es/datasets/base-des-permis-de-construire-et-autres-autorisations-durbanisme-sitadel"
 global_context["URL_SOURCE_SITADEL"] = sitadelSourcePage
 
@@ -134,6 +131,24 @@ def load_sitadel_locaux(sitadelLocaux1316_file:  str = sitadelLocaux1316File,
         sitadel_locaux_Meta = pd.read_excel(xls, 'Variables_Locaux', index_col=0)
     return sitadel1316, sitadel1721, sitadelMeta
 
+############################
+### Logements Paca 2010-2019
+############################
+
+sitadel1019SourcePage = "https://www.insee.fr/fr/statistiques/5395856?sommaire=5395912"
+sitadel1019SourceFile = data_dir + "logements_commences_PACA_2010-2019.xls"
+
+
+sitadel1019 = None
+
+def load_logements_paca(sitadel1019S:  str = sitadel1019SourceFile):
+    global sitadel1019
+    if (sitadel1019 is None) :
+        print_blue("Lecture Logements Paca 2010-2019 : " + sitadel1019SourceFile + " ...")
+        xls = pd.ExcelFile(sitadel1019SourceFile)
+        sitadel1019 = pd.read_excel(xls, 'logements_commences_PACA_1019')
+    return sitadel1019
+
 ##########################
 ### Evolution 2008-2021
 ##########################
@@ -154,7 +169,7 @@ global_context["URL_SOURCE_EVOLUTION"] = evolutionSourcePage
 def load_evolution(evolution_file: str = evolutionFile):
     global evolution0813, evolution1318, evolution1821
     if (evolution0813 is None) or (evolution1318 is None)  or (evolution1821 is None):
-        print_blue("Lecture Evolution_file Dept : " + evolution_file + " ...")
+        print_blue("Lecture Evolution Dept : " + evolution_file + " ...")
         xls = pd.ExcelFile(evolution_file)
         evolution0813 = pd.read_excel(xls, '2008-2013', index_col=0, dtype={"Unnamed: 0": str})
         evolution1318 = pd.read_excel(xls, '2013-2018', index_col=0, dtype={"Unnamed: 0": str})
@@ -358,6 +373,24 @@ def load_artificialisation(dossier_artificialisation_file: str = dossierArtifici
         print_blue("Lecture Donnees Artificialisation : " + dossier_artificialisation_file + " ...")
         dossierArtificialisation = pd.read_csv(dossier_artificialisation_file, delimiter=',', index_col=0, dtype={"idcom": str, "iddep": str, "epci20": str, "aav2020" : str})
     return dossierArtificialisation
+
+
+##############
+### Flux 20218
+##############
+
+flux2018SourceFile = data_dir + "base-flux-mobilite-residentielle-2018.csv"
+
+flux2018 = None
+
+def load_flux_2018(flux2018SourceFile:  str = flux2018SourceFile):
+    global flux2018
+    if (flux2018 is None) :
+        print_blue("Lecture Flux Mobilite Residentielle 2018 : " + flux2018SourceFile + " ...")
+        flux2018 = pd.read_csv(flux2018SourceFile, delimiter=';', dtype={'CODGEO': str, 'LIBGEO': str,
+                                                                         'DCRAN': str, 'L_DCRAN': str,
+                                                                         'NBFLUX_C18_POP01P' : float })
+    return flux2018
 
 
 ###
@@ -1280,6 +1313,12 @@ class DataStore():
         loc_termines1721   = com_sitadelLocaux2.loc[com_sitadelLocaux2['Etat_DAU'] == 6]
         loc_nouveau        = com_sitadelLocaux.loc[com_sitadelLocaux['NATURE_PROJET'] == 1]
         loc_renouv         = com_sitadelLocaux.loc[com_sitadelLocaux['NATURE_PROJET'] == 2]
+
+        # Donnees Logements Paca 2010-2019
+        load_logements_paca()
+
+        # Donnees Flux 2018
+        load_flux_2018()
 
         # Collected Data
         _line = 0

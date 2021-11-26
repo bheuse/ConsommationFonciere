@@ -78,7 +78,39 @@
       }
       ]
    },
-  {
+{
+    "Key" : "LOGEMENTS_3",
+    "Categorie" : "LOG",
+    "xLabel" : "Annees",
+    "yLabel" : "Logements Construits",
+    "Type" : "LINES",
+    "no-yLimits" : "(0, LOG_COMMENCES_1019 + 100)",
+    "Title" :  "\"Logements Construits sur \" + str(LIBELLE)",
+    "Legend" : "below",
+    "ColorTitle" : "Teal",
+    "ColorLabel" : "Teal",
+    "Series" : [
+      {
+            "Label" : "Logements Construits - Par an",
+            "Smooth" : true,
+            "Color" : "Teal",
+            "Style" : "--",
+            "Width" : 1,
+            "xValues" : "[2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019]",
+            "yValues" : "[LOG_COMMENCES_2010, LOG_COMMENCES_2011, LOG_COMMENCES_2012, LOG_COMMENCES_2013, LOG_COMMENCES_2014,LOG_COMMENCES_2015, LOG_COMMENCES_2016, LOG_COMMENCES_2017, LOG_COMMENCES_2018, LOG_COMMENCES_2019]"
+      },
+      {
+            "Label" : "Logements Construits - Cumul",
+            "Smooth" : true,
+            "Color" : "Teal",
+            "Style" : "-",
+            "Width" : 3,
+            "xValues" : "[2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019]",
+            "yValues" : "[LOG_COMMENCES_2010 , LOG_COMMENCES_2010 + LOG_COMMENCES_2011, LOG_COMMENCES_2010 + LOG_COMMENCES_2011 + LOG_COMMENCES_2012, LOG_COMMENCES_2010 + LOG_COMMENCES_2011 + LOG_COMMENCES_2012 + LOG_COMMENCES_2013, LOG_COMMENCES_1014, LOG_COMMENCES_1014 + LOG_COMMENCES_2015, LOG_COMMENCES_1014 + LOG_COMMENCES_2015 + LOG_COMMENCES_2016, LOG_COMMENCES_1014 + LOG_COMMENCES_2015 + LOG_COMMENCES_2016 + LOG_COMMENCES_2017, LOG_COMMENCES_1014 + LOG_COMMENCES_2015 + LOG_COMMENCES_2016 + LOG_COMMENCES_2017+  LOG_COMMENCES_2018, LOG_COMMENCES_1019]"
+      }
+    ]
+   },
+    {
     "Key" : "TAILLE_DES_MENAGES_2",
     "Categorie" : "POP",
     "xLabel" : "Annees",

@@ -189,8 +189,6 @@
 </div>
 <hr>
 
-
-
 <!-- Departements (Paca Seulement) ... -->
 <div>
     <h2 class="w3-center">Region PACA</h2>
@@ -330,6 +328,11 @@ function openTab(evt, cityName) {
         <div class="w3-container w3-section w3-teal">
             <h2 class="w3-teal w3-padding-16">Taille des Menages</h2></div>
             <img :src="ds.GRAPHIQUE_TAILLE_DES_MENAGES"  alt="Taille des Menages" class="center">
+
+        <div class="w3-container w3-section w3-teal">
+            <h2 class="w3-teal w3-padding-16">Constructions de Logements 2010-2019</h2></div>
+            <img :src="ds.GRAPHIQUE_CONSTRUCTIONS_DES_LOGEMENTS"       alt="Constructions" class="center">
+
     </div>
 </div>
 <div id="Logements"         class="w3-container city w3-animate-opacity">
@@ -448,7 +451,7 @@ function openTab(evt, cityName) {
                     </tr>
                 </table>
         <br>
-        <div> <h2>Logements Sociaux :</h2>
+        <div> <h2>Logements Sociaux : </h2>
               <p>Evolution 2017-2020 des Residences Principales : {{ds.SRU_EVOLUTION_EN_RP}}</p>
               <p>Evolution 2017-2020 Carence : {{ds.SRU_EVOLUTION_CARENCE}}</p>
               <p>Logements Sociaux Realises en 2017-2020 (SRU) : {{ds.SRU_LOGEMENTS_SRU_CONSTRUITS}}</p>
@@ -641,7 +644,36 @@ function openTab(evt, cityName) {
             </tbody>
         </table>
         <br>
+        <h2>Flux</h2>
+        <p><a target="_blank" :href="ds.DOSSIER_INSEE">Dossier Insee Complet {{ nom }}</a></p>
+        <table class="w3-table-all w3-hoverable w3-card-4">
+            <tbody>
+            <tr class="w3-teal">
+                <th>Donnees INSEE 2018</th>
+                <th class="w3-right-align">Totale : </th>
+                <th class="w3-right-align">de / vers le Departement :</th>
+                <th class="w3-right-align">- dont de / vers l'EPCI :</th>
+                <th class="w3-right-align">En dehors du Departement :</th>
+            </tr>
+            <tr>
+                <td>Population Entrante</td>
+                <td class="w3-right-align">{{ds.FLUX_2018_ENTRANT}}</td>
+                <td class="w3-right-align">{{ds.FLUX_2018_ENTRANT_DPT}}</td>
+                <td class="w3-right-align">{{ds.FLUX_2018_ENTRANT_EPCI}}</td>
+                <td class="w3-right-align">{{ds.FLUX_2018_ENTRANT_FRANCE + ds.FLUX_2018_ENTRANT_INTERNATIONAL}}</td>
+            </tr>
+            <tr>
+                <td>Population Sortante</td>
+                <td class="w3-right-align">{{ds.FLUX_2018_SORTANT}}</td>
+                <td class="w3-right-align">{{ds.FLUX_2018_SORTANT_DPT}}</td>
+                <td class="w3-right-align">{{ds.FLUX_2018_SORTANT_EPCI}}</td>
+                <td class="w3-right-align">{{ds.FLUX_2018_SORTANT_FRANCE}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
         <diagnostics :diags=this.data_s.Diagnostics type="ALL" categorie="HIST"></diagnostics>
+        <br>
     </div>
 </div>
 <div id="Projections"       class="w3-container city w3-animate-opacity">
@@ -942,14 +974,13 @@ function openTab(evt, cityName) {
         <table-stat ref="TableStat"> </table-stat>
      </div>
 </div>
-<div id="ObjectifZan"          class="w3-container city w3-animate-opacity">
-     <h2>Outil de Calcul - Objectif Zan</h2>
+<div id="ObjectifZan"       class="w3-container city w3-animate-opacity">
+     <h2>Outil de Calcul - Objectif Zan}</h2>
      <div class="w3-container">
         <table-ozan ref="ObjectifZan"> </table-ozan>
      </div>
 </div>
 
-</div>
 </div>
 
 </div>
@@ -1034,7 +1065,7 @@ function openTab(evt, cityName) {
         </div>
         <div class="w3-container w3-cell w3-mobile">
              <p>Projections Paca :<br>     <a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS_PACA"> Dossier Omphale </a></p>
-             <p>GOOGLE_TRACKER :<br>     <a target="_blank" :href="ds.GOOGLE_TRACKER"> {{ds.GOOGLE_TRACKER}} </a></p>
+             <p>GOOGLE_TRACKER :<br>       <a target="_blank" :href="ds.GOOGLE_TRACKER"> {{ds.GOOGLE_TRACKER}} </a></p>
         </div>
     </div>
 </div>
@@ -1042,6 +1073,7 @@ function openTab(evt, cityName) {
 <div  v-if="this.data_s != null">
         <div class="w3-container w3-theme-dark w3-mobile w3-center ">
         <iframe frameBorder="0" height="190" width="700" :src="ds.GOOGLE_TRACKER"></iframe>
+        <iframe frameBorder="0" height="190" width="700" src="output/COMMUNE_MOUGINS_06085_tracker.html"></iframe>
 </div>
 </div>
 
@@ -1053,6 +1085,8 @@ function openTab(evt, cityName) {
 -->
 
 <!-- Tracker -->
+
+</div>
 
 <script  src="ConsommationFonciereV3.js?v=1"></script>
 
