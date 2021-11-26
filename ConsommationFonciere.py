@@ -27,8 +27,11 @@ import numpy as np
 import ftplib
 import markdown
 import logging
+import datetime
 
-logging.basicConfig(filename='ConsommationFonciere.log', filemode='w', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+timestamp = datetime.datetime.now().strftime("%y%m%d-%H%M%S")
+logFile = "output"+os.sep+"ConsommationFonciere_"+timestamp+".log"
+logging.basicConfig(filename=logFile, filemode='w', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
 reload(matplotlib)
 matplotlib.use('Agg')
@@ -2268,8 +2271,8 @@ def ftp_push_file(filename):
     if (isinstance(filename, str)):
         filename = [filename]
     if (isinstance(filename, list)):
+        ftp = ftplib.FTP("ftpupload.net")
         try:
-            ftp = ftplib.FTP("ftpupload.net")
             ftp.login("epiz_30239961", "oqEwtTaACCaANF")
             ftp.cwd("htdocs")
             # remote_files = ftp.nlst()
@@ -2280,7 +2283,7 @@ def ftp_push_file(filename):
             ftp.close()
         except Exception as e:
             logging.error("FTP Upload Failed for : "+str(filename))
-            logging.error(set(e))
+            logging.error(str(e))
             ftp.close()
 
 
