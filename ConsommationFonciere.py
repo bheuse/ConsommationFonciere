@@ -1610,9 +1610,9 @@ class DataStore():
                 self.total_data(meta=True)
                 self.store_index = 'total'
 
-        self.run_diagnostic()
         global FAST
         if (not FAST):
+            self.run_diagnostic()
             plots(self)
         html_report_file = gen_report(ds=self, data_only=data_only, ftp_push=ftp_push)
         # html_index_file  = gen_index()
@@ -2338,12 +2338,7 @@ def ftp_push_files():
     filelist = ["output/select.json",
                 "input/Configuration.xlsx",  "input/plots.json",
                 "output/calculations.json",  "output/datametrics.json", "output/diagnostics.json",
-                "ConsommationFonciere.html",   "ConsommationFonciere.js",   "ConsommationFonciere.py",
-                "ConsommationFonciereV2.html", "ConsommationFonciereV2.js",
-                "ConsommationFonciereV3.html", "ConsommationFonciereV3.js",
-                "ConsommationFoncierePlay.html", "ConsommationFonciereV3.js",
-                "index.html",
-                "Header.png", "Body.png"
+                "ConsommationFonciereV3.html", "ConsommationFonciereV3.js"
                 ]
     if (not FAST):
         filelist = ["output/france.json",        "output/select.json",
