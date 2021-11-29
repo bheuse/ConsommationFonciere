@@ -694,7 +694,7 @@ def f_round(value, rounding=0) -> str :
 
 
 ## Data Access
-def get_code_insee_commune(code_postal) -> [int, str]:
+def get_code_insee_commune(code_postal) -> Union[int, str]:
     """ Retourne le code insee et le nom de la commune """
     load_codes()
     the_list = codesPostaux.index[codesPostaux['Code_postal'] == code_postal].tolist()
@@ -706,7 +706,7 @@ def get_code_insee_commune(code_postal) -> [int, str]:
     return code_insee, commune
 
 
-def get_code_postal_commune(code_insee) -> [int, str]:
+def get_code_postal_commune(code_insee) -> Union[int, str]:
     """ Retourne le code postal et le nom de la commune """
     load_codes()
     try:
@@ -723,7 +723,7 @@ def get_code_postal_commune(code_insee) -> [int, str]:
     return code_postal, commune
 
 
-def get_code_postal(code_insee) -> [int, str]:
+def get_code_postal(code_insee) -> Union[int, str]:
     code, comm = get_code_postal_commune(code_insee)
     return code
 
@@ -738,7 +738,7 @@ def get_code_insee(code_postal : Union[int, str]) -> int:
     return code_insee
 
 
-def get_gps_insee(code_insee : Union[int, str]) -> [str, str]:
+def get_gps_insee(code_insee : Union[int, str]) -> Union[str, str]:
     """ Le GPS Coord INSEE du Code Postal """
     load_codes()
     if (code_insee not in codesPostaux["Code_postal"]) :  return "", ""
@@ -1509,7 +1509,7 @@ class DataStore():
         self.store_index = "total"
 
         # Calculated Data
-        _line = 0
+        _line = 1
         for index, metric in collectCalculations.iterrows():
             _line = _line + 1
             _key         = index
@@ -1992,7 +1992,7 @@ def plots_lines(plot, ds: DataStore):
     return image_file_name
 
 
-def plot_smooth(x_values : [], y_values : []):
+def plot_smooth(x_values : list[int], y_values : list[int]):
     # 300 represents number of points to make between T.min and T.max
     x_values = np.array(x_values)
     y_values = np.array(y_values)

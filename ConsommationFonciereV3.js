@@ -232,7 +232,8 @@ const vm = Vue.createApp({
             }
       },
     mounted(){
-        this.selectDeptCode("06")
+        // this.selectDeptCode("06")
+        this.selectCommuneMougins()
      },
     methods : {
         loadData(){
@@ -274,6 +275,7 @@ const vm = Vue.createApp({
            this.$refs.CalculetteTauxPopulation.update(this.ds.POP_2020, 2020, this.ds.POP_2030, 2030, this.ds.TX_POP_2030);
            this.$refs.TableStat.update(this.data_s);
            this.$refs.ObjectifZan.update(this.data_s);
+           this.$refs.MichelZan.update(this.data_s);
         },
         selectDeptEvent(event){
             console.log("selectDeptEvent : "+event.target.value);
@@ -344,7 +346,11 @@ const vm = Vue.createApp({
             },
         selectCommuneEvent(event){
             console.log("selectCommune : "+event.target.value);
-            comm_index       = this.selectCommunes.findIndex(x => x.nom === event.target.value);
+            selectCommuneName(event.target.value);
+            },
+        selectCommuneName(name){
+            console.log("selectCommuneName : "+name);
+            comm_index       = this.selectCommunes.findIndex(x => x.nom === name);
             this.territoire  = "Commune";
             this.nom         = this.selectCommunes[comm_index].nom;
             this.code        = this.selectCommunes[comm_index].code ;
@@ -353,6 +359,17 @@ const vm = Vue.createApp({
             this.loadData()
             console.log("Done selectCommune "+this.entity);
             },
+        selectCommuneMougins(name){
+            console.log("selectCommuneMougins");
+            this.territoire  = "Commune";
+            this.nom         ="Mougins"
+            this.code        = "06085" ;
+            this.entity      = "COMMUNE_MOUGINS_06085";
+            console.log(this.nom + " entity : " + this.entity);
+            this.loadData()
+            console.log("Done selectCommune "+this.entity);
+            },
+
   },
 })
 
@@ -591,7 +608,7 @@ vm.component('table-ozan', {
         return {
             dataset : g_data_s,
             loaded : 0 ,
-            titre : "Test Objectif Zero Artificialisation Nette." ,
+            titre : "Testez votre Territoire sur l'Objectif Zero Artificialisation Nette." ,
             scen   : "scen0" ,
             scen0 : {
                evol_pop : 0 ,
@@ -676,93 +693,248 @@ vm.component('table-ozan', {
     <div  v-if="this.dataset != null">
         <h3 v-if="titre"> {{titre}}</h3>
         <br>
-        <h3>Les Formules de la Federation des SCoTs (objectif-zan.com) avec les donnees les plus recentes, et pertinentes au territoire.</p>
-
-        <div class="columns">
-             <div class="column">
-                <h3 v-if="titre"> Votre Scenario :</h3>
-                <form>
-                    Lutte en % / 10 ans contre la Vacance :                  <input class="input" id="lutte_vacance"    name="lutte_vacance"    type="number" step="any" placeholder="Diminution Vacance en % sur 10 ans"                    v-on:blur="recalc"  v-model.number="scen1.lutte_vacance"> <br>
-                    Lutte en % / 10 ans contre les Residences Secondaires :  <input class="input" id="lutte_secondaire" name="lutte_secondaire" type="number" step="any" placeholder="Diminution Des Residences Secondaire en % sur 10 ans"  v-on:blur="recalc"  v-model.number="scen1.lutte_secondaire"> <br>
-                    Evolution de la Taille de Menages, en % / an :           <input class="input" id="evol_tm"          name="evol_tm"          type="number" step="any" placeholder="Evolution de la Taille de Menages, en % / an"          v-on:blur="recalc"  v-model.number="scen1.evol_tm"> <br>
-                    Evolution de la Population, en % / an  :                 <input class="input" id="evol_pop"         name="evol_pop"         type="number" step="any" placeholder="Evolution de la Population, en % / an"                 v-on:blur="recalc"  v-model.number="scen1.evol_pop"> <br>
-                    Logements par Hectares  :                                <input class="input" id="log_ha"           name="log_ha"           type="number" step="any" placeholder="Logements par Hectare"                                 v-on:blur="recalc"  v-model.number="scen1.log_ha"> <br>
-                    Objectif de Conversion en LLS :                          <input class="input" id="conv_logsru"      name="conv_logsru"      type="number" step="any" placeholder="Logements converti en social"                          v-on:blur="recalc"  v-model.number="scen1.conv_logsru"> <br>
-                    Part de Logement Sociaux  :                              <input class="input" id="part_logsru"      name="part_logsru"      type="number" step="any" placeholder="Part de Logements Sociaux dans les programmes"         v-on:blur="recalc"  v-model.number="scen1.part_logsru"> <br>
-                    <br>
-                </form>
-                <br>
-                <button class="button is-info" v-on:click="set_scen1()">Calcul du Scenario</button>
-                <div class="w3-container w3-text-teal">
-                    <h2>Historique</h2>
-                </div>
-             </div>
-             <div class="column">
-             <h3> Les Hypotheses :</h3>
-            <div class="notification is-success">
-                  <p>{{this.dataset.total.LIBELLE}} </p>
-            </div>
-                <p> Diminution Des Residences Vacantes en % sur 10 ans :   -{{this.ds.scen_lutte_vacance}}%    </p>
-                <p> Diminution Des Residences Secondaire en % sur 10 ans : -{{this.ds.scen_lutte_secondaire}}% </p>
-                <p> Evolution de la Taille de Menages, en % / an :          {{this.ds.scen_evol_tm}}% </p>
-                <p> Evolution de la Population, en % / an :                 {{this.ds.scen_evol_pop}}% </p>
-                <p> Logements par Hectares  :                               {{this.ds.scen_log_ha}} </p>
-                <p> Objectif de Conversion en LLS (Logement Sociaux) :      {{this.ds.scen_conv_logsru}} Logements</p>
-                <p> Part de Logement Sociaux :                              {{this.ds.scen_part_logsru}} % </p>
-            <h3> Les Resultats :</h3>
-            <div class="notification is-warning">
-                  <p>Consommation Fonciere Lies aux hypotheses :  </p>
-                  <p>2030 :    {{this.ds.f_conso_2030}} ha </p>
-                  <p>2050 :    {{this.ds.f_conso_2030 + this.ds.f_conso_3040 + this.ds.f_conso_4050}} ha </p>
-            </div>
-            <div class="notification is-danger">
-                  <p>Consommation Fonciere Lies aux contraintes SRU :  </p>
-                  <p>2030 :    {{this.ds.proj_excd_conso_rp_rs_rv}} ha </p>
-            </div>
-
-             </div>
-             <div class="column">
-                <h3 v-if="titre"> Le Scenario Standard :</h3>
-                <form>
-                    Lutte en % / 10 ans contre la Vacance :                  <input readonly class="input" id="lutte_vacance"    name="lutte_vacance"    type="number" step="any" placeholder="Diminution Vacance en % sur 10 ans"                    v-on:blur="recalc"  v-model.number="scen0.lutte_vacance"> <br>
-                    Lutte en % / 10 ans contre les Residences Secondaires :  <input readonly class="input" id="lutte_secondaire" name="lutte_secondaire" type="number" step="any" placeholder="Diminution Des Residences Secondaire en % sur 10 ans"  v-on:blur="recalc"  v-model.number="scen0.lutte_secondaire"> <br>
-                    Evolution de la Taille de Menages, en % / an :           <input readonly class="input" id="evol_tm"          name="evol_tm"          type="number" step="any" placeholder="Evolution de la Taille de Menages, en % / an"          v-on:blur="recalc"  v-model.number="scen0.evol_tm"> <br>
-                    Evolution de la Population, en % / an  :                 <input readonly class="input" id="evol_pop"         name="evol_pop"         type="number" step="any" placeholder="Evolution de la Population, en % / an"                 v-on:blur="recalc"  v-model.number="scen0.evol_pop"> <br>
-                    Logements par Hectares  :                                <input readonly class="input" id="log_ha"           name="log_ha"           type="number" step="any" placeholder="Logements par Hectare"                                 v-on:blur="recalc"  v-model.number="scen0.log_ha"> <br>
-                    Objectif de Conversion en LLS :                          <input readonly class="input" id="conv_logsru"      name="conv_logsru"      type="number" step="any" placeholder="Logements convertis en social"                         v-on:blur="recalc"  v-model.number="scen0.conv_logsru"> <br>
-                    Part de Logement Sociaux  :                              <input readonly class="input" id="part_logsru"      name="part_logsru"      type="number" step="any" placeholder="Part de Logements Sociaux dans les programmes"         v-on:blur="recalc"  v-model.number="scen0.part_logsru"> <br>
-                    <br>
-                </form>
-                <br>
-                <button class="button is-info" v-on:click="set_scen0()">Calcul du Scenario de Base</button>
-                <div class="w3-container w3-text-orange">
-                    <h2>Projections</h2>
-                </div>
-             </div>
-        </div>
+        <h3 class="w3-center" >Les Formules de la Federation des SCoTs (objectif-zan.com) avec les donnees les plus recentes, et pertinentes au territoire.</p>
         <br>
-
         <div class="columns">
-             <div class="column">
+            <div class="column">
+                <br>
+                <div class="w3-panel w3-hoverable w3-card-4 w3-teal">
+                <h2>Estimations basées sur les chiffres de l'Insee :</h2>
+                </div>
+
         <table class="w3-table-all w3-hoverable w3-card-4">
             <tbody>
             <tr class="w3-teal">
-                <th>Période d'étude</th>
+                <th height="50" class="w3-left-align  w3-teal">Période d'étude</th>
                 <th class="w3-right-align w3-teal">2018</th>
                 <th class="w3-right-align w3-teal">2030</th>
                 <th class="w3-right-align w3-grey">Variation</th>
             </tr>
             <tr>
-                <td>Population</td>
+                <td height="50" >Population</td>
                 <td class="w3-right-align">{{this.ds.oz_population_2018}}</td>
                 <td class="w3-right-align">{{this.ds.oz_population_2030}}</td>
                 <td class="w3-right-align">{{this.ds.oz_population_variation}}</td>
             </tr>
             <tr>
-                <td>Nombre de personnes par ménage</td>
+                <td height="50"> Nombre de personnes par ménage</td>
                 <td class="w3-right-align">{{this.ds.oz_tm_2018}}</td>
                 <td class="w3-right-align">{{this.ds.oz_tm_2030}}</td>
                 <td class="w3-right-align">{{this.ds.oz_tm_variation}}</td>
+            </tr>
+            <tr>
+                <td height="50">Demande potentielle liée : </td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+            </tr>
+            <tr>
+                <td height="50"><i>- à la croissance démographique</td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align">{{this.ds.oz_dde_croissance_demo}}</td>
+            </tr>
+            <tr>
+                <td height="50"><i>- au desserrement des ménages</i></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align">{{this.ds.oz_dde_diminution_tm}}</td>
+            </tr>
+            <tr>
+                <td height="50">Parc de logements vacants</td>
+                <td class="w3-right-align">{{this.ds.oz_parc_res_vac_2018}}</td>
+                <td class="w3-right-align">{{this.ds.oz_parc_res_vac_2030}}</td>
+                <td class="w3-right-align">{{this.ds.oz_parc_res_vac_variation}}</td>
+            </tr>
+            <tr>
+                <td height="50">Parc de résidences secondaires</td>
+                <td class="w3-right-align">{{this.ds.oz_parc_res_sec_2018}}</td>
+                <td class="w3-right-align">{{this.ds.oz_parc_res_sec_2030}}</td>
+                <td class="w3-right-align">{{this.ds.oz_parc_res_sec_variation}}</td>
+            </tr>
+            <tr>
+                <td height="50">Désaffectations</td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align">{{this.ds.oz_desaffectations}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <div class="w3-panel w3-card-4 w3-teal">
+            <br>
+            <p>Demande potentielle à l'horizon 2030 : {{ this.ds.oz_demande_potentielle }}</p>
+            <h2>Votre besoin annuel en logements :     {{ this.ds.oz_demande_annuelle_de_logements }}</h2>
+            <br>
+        </div>
+
+        <div class="slidecontainer">
+          <h1>Objectif de renouvellement urbain</h1>
+          <p>Taux en pourcentage : {{this.ds.scen_taux_renouvellement}} %</p>
+          <input type="range" min="0" max="100"  class="slider" id="myRange" v-on:blur="recalc" v-on:change="recalc" v-model.value="this.ds.scen_taux_renouvellement">
+          <p>Reconversion de friches, dents creuses, transformation de l'existant, sur-élévation...</p>
+        </div>
+        <div class="slidecontainer">
+          <h1>Densité réalisable en extension</h1>
+          <p>Logements par hectare :  {{this.ds.scen_log_ha}} </p>
+          <input type="range" min="1" max="100"  class="slider" id="myRange" v-on:blur="recalc" v-on:change="recalc" v-model.value="this.ds.scen_log_ha">
+          <p>Sélectionnez le niveau de densité représentatif de votre territoire</p>
+        </div>
+
+            <div v-if="this.ds.oz_ha_manquant_pour_logements > 0" >
+                <div class="w3-red w3-hover-shadow w3-center">
+                    <br>
+                    <h1>Objectif non atteint sur 10 ans.</h1>
+                    <h2>Deficit pour les logements par rapport a l'Objectif ZAN : {{ Math.round(this.ds.oz_ha_manquant_pour_logements*10)/10 }} hectares.</h2>
+                    <h2>Densifiez ou Renouvellez plus !</h2>
+                    <br>
+                </div>
+            </div>
+            <div v-else class="w3-center">
+                <div class="w3-green w3-hover-shadow w3-center">
+                    <br>
+                    <h1>Objectif atteint sur 10 ans !</h1>
+                    <h2>Gain sur l'Objectif ZAN : {{ Math.round(-this.ds.oz_ha_manquant_pour_logements*10)/10 }} hectares.</h2>
+                    <h2>Territoire Vertueux !</h2>
+                    <br>
+                </div>
+            </div>
+
+        <br>
+        <img src="input/Densite.png" alt="Examples de Densite" class="center" height="250">
+        <br>
+        <br>
+        <div class="columns">
+             <div class="column">
+                    <table class="w3-table-all w3-hoverable w3-card-4">
+                        <tbody>
+                        <tr class="w3-teal">
+                            <th class="w3-right-align w3-grey">Consommation foncière</th>
+                            <th class="w3-right-align w3-grey">Hectares</th>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align">2009-2018 :</td>
+                            <td class="w3-right-align">{{Math.round(this.ds.oz_ha_consommes_ha_zan_historique*10)/10}}</td>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align">Moyenne Annuelle :</td>
+                            <td class="w3-right-align">{{ Math.round(this.ds.oz_ha_consommes_ha_zan_historique)/10 }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            <div class="column">
+                  <table class="w3-table-all w3-hoverable w3-card-4">
+                        <tbody>
+                        <tr class="w3-teal">
+                            <th class="w3-right-align w3-teal">Objectif ZAN</th>
+                            <th class="w3-right-align w3-teal">Hectares</th>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align" >2020-2030 :</td>
+                            <td class="w3-right-align" >{{Math.round(this.ds.oz_ha_consommes_ha_zan_2030*10)/10}}</td>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align" style="text-shadow:1px 1px 0 #444">Moyenne Annuelle :</td>
+                            <td class="w3-right-align" style="text-shadow:1px 1px 0 #444">{{ Math.round(this.ds.oz_ha_consommes_ha_zan_par_an*10)/10}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+
+
+        <div v-if="this.ds.oz_ha_manquant_pour_logements > 0" >
+              <table class="w3-table-all w3-hoverable w3-card-4">
+                    <tbody>
+                    <tr class="w3-orange">
+                        <th class="w3-right-align ">Objectif non atteint sur 10 ans</th>
+                        <th class="w3-right-align ">Ha en 2030</th>
+                    </tr>
+                    <tr>
+                        <td class="w3-right-align" >Enveloppe ZAN disponible :</td>
+                        <td class="w3-right-align" >{{Math.round(this.ds.oz_ha_consommes_ha_zan_2030*10)/10}}</td>
+                    </tr>
+                    <tr>
+                        <td class="w3-right-align" >Enveloppe ZAN utilisée :</td>
+                        <td class="w3-right-align" >{{Math.round(this.ds.oz_ha_consommes_en_extension*10)/10}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            <br>
+            <div class="w3-red w3-hover-shadow w3-center">
+                <br>
+                <h1>Objectif non atteint sur 10 ans.</h1>
+                <h2>Deficit pour les logements par rapport a l'Objectif ZAN : {{ Math.round(this.ds.oz_ha_manquant_pour_logements*10)/10 }} hectares.</h2>
+                <h2>Densifiez ou Renouvellez plus !</h2>
+                <br>
+            </div>
+        </div>
+        <div v-else class="w3-center">
+              <table class="w3-table-all w3-hoverable w3-card-4">
+                    <tbody>
+                    <tr class="w3-teal">
+                        <th class="w3-right-align w3-teal">Objectif atteint sur 10 ans !</th>
+                        <th class="w3-right-align w3-teal">Ha en 2030</th>
+                    </tr>
+                    <tr>
+                        <td class="w3-right-align" >Enveloppe ZAN disponible :</td>
+                        <td class="w3-right-align" >{{Math.round(this.ds.oz_ha_consommes_ha_zan_2030*10)/10}}</td>
+                    </tr>
+                    <tr>
+                        <td class="w3-right-align" >Enveloppe ZAN utilisée :</td>
+                        <td class="w3-right-align" >{{Math.round(this.ds.oz_ha_consommes_en_extension*10)/10}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            <br>
+            <div class="w3-green w3-hover-shadow w3-center">
+                <br>
+                <h1>Objectif atteint sur 10 ans !</h1>
+                <h2>Gain sur l'Objectif ZAN : {{ Math.round(-this.ds.oz_ha_manquant_pour_logements*10)/10 }} hectares.</h2>
+                <h2>Territoire Vertueux !</h2>
+                <br>
+            </div>
+        </div>
+
+
+        <div class="w3-panel w3-card-4 w3-teal" style="text-align:justify">
+            <br>
+            <p>Hectares consommes ces 10 dernieres annees : {{ this.ds.oz_ha_consommes_ha_zan_historique }}</p>
+            <p>Hectares disponibles les 10 prochaines annees : {{ this.ds.oz_ha_consommes_ha_zan_2030 }}</p>
+            <p>Logements Construits en Renouvellement : {{ this.ds.oz_logement_en_renouvellement }}</p>
+            <p>Logements Construits en Extension : {{ this.ds.oz_logement_en_extension }}</p>
+            <p>Hectares necessaires en Extension : {{ this.ds.oz_ha_consommes_en_extension }}</p>
+            <p>Difference par rapport aux besoins : {{ Math.round(this.ds.oz_ha_manquant_pour_logements*10)/10 }}</p>
+            <br>
+        </div>
+
+      </div>
+         <div class="column">
+                <br>
+                <div class="w3-panel w3-hoverable w3-card-4 w3-2021-french-blue">
+                <h2>Saisir les besoins en logements sur votre territoire :</h2>
+                </div>
+
+        <table class="w3-table-all w3-hoverable w3-card-4">
+            <tbody>
+            <tr class="w3-2021-french-blue">
+                <th class="w3-left-align w3-2021-french-blue">Période d'étude</th>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="2000" max="99999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.oz_scen_an_depart"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="2000" max="99999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.oz_scen_an_arrivee"></td>
+                <th class="w3-right-align w3-grey">Variation</th>
+            </tr>
+            <tr>
+                <td>Population</td>
+                <td class="w3-right-align"> <input  type="number" min="0" max="99999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.oz_scen_pop_depart"></td>
+                <td class="w3-right-align"> <input  type="number" min="0" max="99999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.oz_scen_pop_arrivee"></td>
+                <td class="w3-right-align">{{this.ds.oz_scen_population_variation}}</td>
+            </tr>
+            <tr>
+                <td>Personnes par ménage</td>
+                <td><input type="number" style="text-align: right;" min="0" max="99999" step="0.01" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.oz_scen_tm_depart"></td>
+                <td><input type="number" style="text-align: right;" min="0" max="99999" step="0.01" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.oz_scen_tm_arrivee"></td>
+                <td class="w3-right-align">{{this.ds.oz_scen_tm_variation}}</td>
             </tr>
             <tr>
                 <td>Demande potentielle liée : </td>
@@ -771,95 +943,196 @@ vm.component('table-ozan', {
                 <td class="w3-right-align"></td>
             </tr>
             <tr>
-                <td><i>- à la croissance démographique</td>
+                <td><i>- à la démographique</td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
-                <td class="w3-right-align">{{this.ds.oz_dde_croissance_demo}}</td>
+                <td class="w3-right-align">{{this.ds.oz_scen_dde_croissance_demo}}</td>
             </tr>
             <tr>
-                <td><i>- au desserrement des ménages</i></td>
+                <td><i>- au desserrement </i></td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
-                <td class="w3-right-align">{{this.ds.oz_dde_diminution_tm}}</td>
+                <td class="w3-right-align">{{this.ds.oz_scen_dde_diminution_tm}}</td>
             </tr>
             <tr>
-                <td>Parc de logements vacants</td>
-                <td class="w3-right-align">{{this.ds.oz_parc_res_vac_2018}}</td>
-                <td class="w3-right-align">{{this.ds.oz_parc_res_vac_2030}}</td>
-                <td class="w3-right-align">{{this.ds.oz_parc_res_vac_variation}}</td>
+                <td>Logements vacants</td>
+                <td><input type="number" style="text-align: right;" min="0" max="99999999" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_vac_depart"></td>
+                <td><input type="number" style="text-align: right;" min="0" max="99999999" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_vac_arrivee"></td>
+                <td class="w3-right-align">{{this.ds.oz_scen_parc_res_vac_variation}}</td>
             </tr>
             <tr>
-                <td>Parc de résidences secondaires</td>
-                <td class="w3-right-align">{{this.ds.oz_parc_res_sec_2018}}</td>
-                <td class="w3-right-align">{{this.ds.oz_parc_res_sec_2030}}</td>
-                <td class="w3-right-align">{{this.ds.oz_parc_res_sec_variation}}</td>
+                <td>Résidences secondaires</td>
+                <td><input type="number" style="text-align: right;" min="0" max="99999999" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_sec_depart"></td>
+                <td><input type="number" style="text-align: right;" min="0" max="99999999" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_sec_arrivee"></td>
+                <td class="w3-right-align">{{this.ds.oz_scen_parc_res_sec_variation}}</td>
             </tr>
             <tr>
                 <td>Désaffectations</td>
                 <td class="w3-right-align"></td>
-                <td class="w3-right-align"></td>
-                <td class="w3-right-align">{{this.ds.oz_parc_res_vac_variation}}</td>
-            </tr>
-            <tr>
-                <td>Demande potentielle à l'horizon 2030 :</td>
-                <td class="w3-right-align"></td>
-                <td class="w3-right-align"></td>
-                <td class="w3-right-align">{{this.ds.oz_demande_potentielle}}</td>
-            </tr>
-            <tr>
-                <td>Votre besoin annuel en logements : </td>
-                <td class="w3-right-align"></td>
-                <td class="w3-right-align"></td>
-                <td class="w3-right-align">{{this.ds.oz_demande_annuelle_de_logements}}</td>
+                <td><input type="number" style="text-align: right;" min="0" max="99999999" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_desaffectations"></td>
+                <td class="w3-right-align">{{this.ds.oz_scen_desaffectations}}</td>
             </tr>
             </tbody>
         </table>
-      </div>
-         <div class="column">
+        <br>
+        <div class="w3-panel w3-card-4 w3-2021-french-blue">
+            <br>
+            <p>Demande potentielle à l'horizon {{this.ds.oz_scen_an_arrivee}} : {{ this.ds.oz_scen_demande_potentielle }}</p>
+            <h2>Votre besoin annuel en logements :     {{ this.ds.oz_scen_demande_annuelle_de_logements }}</h2>
+            <br>
+        </div>
+
+        <div class="slidecontainer ">
+          <h1>Objectif de renouvellement urbain</h1>
+          <p>Taux en pourcentage : {{this.ds.oz_scen_renouvellement}} %</p>
+          <input type="range" min="0" max="100"  class="slider" id="myRange" v-on:blur="recalc" v-on:change="recalc" v-model.value="this.ds.oz_scen_renouvellement">
+          <p>Reconversion de friches, dents creuses, transformation de l'existant, sur-élévation...</p>
+        </div>
+        <div class="slidecontainer ">
+          <h1>Densité réalisable en extension</h1>
+          <p>Logements par hectare :  {{this.ds.oz_scen_log_ha}} </p>
+          <input type="range" min="1" max="100"  class="slider" id="myRange" v-on:blur="recalc" v-on:change="recalc" v-model.value="this.ds.oz_scen_log_ha">
+          <p>Sélectionnez le niveau de densité représentatif de votre territoire</p>
+        </div>
+
+            <div v-if="this.ds.oz_scen_ha_manquant_pour_logements > 0" >
+                <div class="w3-red w3-hover-shadow w3-center">
+                    <br>
+                    <h1>Objectif non atteint sur 10 ans.</h1>
+                    <h2>Deficit pour les logements par rapport a l'Objectif ZAN : {{ Math.round(this.ds.oz_scen_ha_manquant_pour_logements*10)/10 }} hectares.</h2>
+                    <h2>Densifiez ou Renouvellez plus !</h2>
+                    <br>
+                </div>
+            </div>
+            <div v-else class="w3-center">
+                <div class="w3-green w3-hover-shadow w3-center">
+                    <br>
+                    <h1>Objectif atteint sur 10 ans !</h1>
+                    <h2>Gain sur l'Objectif ZAN : {{ Math.round(-this.ds.oz_scen_ha_manquant_pour_logements*10)/10 }} hectares.</h2>
+                    <h2>Territoire Vertueux !</h2>
+                    <br>
+                </div>
+            </div>
+        <br>
+
+
+        <p align-text="left" ><b>A titre d'exemple : </b></p>
+        <img src="input/Densite_3.jpg" alt="Examples de Densite" class="center"  >
+        <br>
+        <br>
+
+        <div class="columns">
+             <div class="column">
+                    <table class="w3-table-all w3-hoverable w3-card-4">
+                        <tbody>
+                        <tr class="w3-teal">
+                            <th class="w3-right-align w3-grey">Consommation foncière</th>
+                            <th class="w3-right-align w3-grey">Hectares</th>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align">2009-2018 :</td>
+                            <td class="w3-right-align">{{Math.round(this.ds.oz_ha_consommes_ha_zan_historique*10)/10}}</td>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align">Moyenne Annuelle :</td>
+                            <td class="w3-right-align">{{ Math.round(this.ds.oz_ha_consommes_ha_zan_historique)/10 }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            <div class="column">
+                  <table class="w3-table-all w3-hoverable w3-card-4">
+                        <tbody>
+                        <tr class="w3-teal">
+                            <th class="w3-right-align w3-teal">Objectif ZAN</th>
+                            <th class="w3-right-align w3-teal">Hectares</th>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align" >2020-2030 :</td>
+                            <td class="w3-right-align" >{{Math.round(this.ds.oz_scen_ha_consommes_ha_zan_2030*10)/10}}</td>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align" style="text-shadow:1px 1px 0 #444">Moyenne Annuelle :</td>
+                            <td class="w3-right-align" style="text-shadow:1px 1px 0 #444">{{ Math.round(this.ds.oz_scen_ha_consommes_ha_zan_par_an*10)/10}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+
+
+            <div v-if="this.ds.oz_scen_ha_manquant_pour_logements > 0" >
+                  <table class="w3-table-all w3-hoverable w3-card-4">
+                        <tbody>
+                        <tr class="w3-orange">
+                            <th class="w3-right-align ">Objectif non atteint sur 10 ans</th>
+                            <th class="w3-right-align ">Ha en 2030</th>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align" >Enveloppe ZAN disponible :</td>
+                            <td class="w3-right-align" >{{Math.round(this.ds.oz_scen_ha_consommes_ha_zan_2030*10)/10}}</td>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align" >Enveloppe ZAN utilisée :</td>
+                            <td class="w3-right-align" >{{Math.round(this.ds.oz_scen_ha_consommes_en_extension*10)/10}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                <br>
+                <div class="w3-red w3-hover-shadow w3-center">
+                    <br>
+                    <h1>Objectif non atteint sur 10 ans.</h1>
+                    <h2>Deficit pour les logements par rapport a l'Objectif ZAN : {{ Math.round(this.ds.oz_scen_ha_manquant_pour_logements*10)/10 }} hectares.</h2>
+                    <h2>Densifiez ou Renouvellez plus !</h2>
+                    <br>
+                </div>
+            </div>
+            <div v-else class="w3-center">
+                  <table class="w3-table-all w3-hoverable w3-card-4">
+                        <tbody>
+                        <tr class="w3-teal">
+                            <th class="w3-right-align w3-2021-french-blue">Objectif atteint sur 10 ans !</th>
+                            <th class="w3-right-align w3-2021-french-blue">Ha en 2030</th>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align" >Enveloppe ZAN disponible :</td>
+                            <td class="w3-right-align" >{{Math.round(this.ds.oz_scen_ha_consommes_ha_zan_2030*10)/10}}</td>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align" >Enveloppe ZAN utilisée :</td>
+                            <td class="w3-right-align" >{{Math.round(this.ds.oz_scen_ha_consommes_en_extension*10)/10}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                <br>
+                <div class="w3-green w3-hover-shadow w3-center">
+                    <br>
+                    <h1>Objectif atteint sur 10 ans !</h1>
+                    <h2>Gain sur l'Objectif ZAN : {{ Math.round(-this.ds.oz_scen_ha_manquant_pour_logements*10)/10 }} hectares.</h2>
+                    <h2>Territoire Vertueux !</h2>
+                    <br>
+                </div>
+            </div>
+
+        <div class="w3-panel w3-card-4 w3-2021-french-blue" style="text-align:justify">
+            <br>
+            <p>Hectares consommes ces 10 dernieres annees : {{ this.ds.oz_ha_consommes_ha_zan_historique }}</p>
+            <p>Hectares disponibles les 10 prochaines annees : {{ this.ds.oz_ha_consommes_ha_zan_2030 }}</p>
+            <p>Logements Construits en Renouvellement : {{ this.ds.oz_scen_logement_en_renouvellement }}</p>
+            <p>Logements Construits en Extension : {{ this.ds.oz_scen_logement_en_extension }}</p>
+            <p>Hectares necessaires en Extension : {{ this.ds.oz_scen_ha_consommes_en_extension }}</p>
+            <p>Difference par rapport aux besoins : {{ Math.round(this.ds.oz_scen_ha_manquant_pour_logements*10)/10 }} hectares</p>
+            <br>
+        </div>
+
+
          </div>
       </div>
         <br>
 
-        <div class="columns">
-             <div class="column">
-                <div class="slidecontainer">
-                  <h1>Objectif de renouvellement urbain</h1>
-                  <p>Taux en pourcentage : {{this.ds.scen_taux_renouvellement}} %</p>
-                  <input type="range" min="0" max="100"  class="slider" id="myRange" v-on:blur="recalc" v-model.value="this.ds.scen_taux_renouvellement">
-                  <p>Reconversion de friches, dents creuses, transformation de l'existant, sur-élévation...</p>
-                </div>
-            </div>
-             <div class="column">
-                <div class="slidecontainer">
-                  <h1>Densité réalisable en extension</h1>
-                  <p>Logements par hectare :  {{this.ds.scen_log_ha}} </p>
-                  <input type="range" min="1" max="100"  class="slider" id="myRange" v-on:blur="recalc" v-model.value="this.ds.scen_log_ha">
-                  <p>Sélectionnez le niveau de densité représentatif de votre territoire</p>
-                </div>
-            </div>
-        </div>
-        <img src="input/Densite.png" alt="Examples de Densite" class="center">
-        <br>
 
         <div class="columns">
              <div class="column">
-        <p>Demande potentielle à l'horizon 2030 : {{ this.ds.oz_demande_potentielle }}</p>
-        <p>Votre besoin annuel en logements : {{ this.ds.oz_demande_annuelle_de_logements }}</p>
-        <br>
-        <div class="w3-panel w3-card-4 w3-teal">
-            <p>Logements Construits en Renouvellement : {{ this.ds.oz_logement_en_renouvellement }}</p>
-            <p>Logements Construits en Extension : {{ this.ds.oz_logement_en_extension }}</p>
-            <p>Hectares necessaires en Extension : {{ this.ds.oz_ha_consommes_en_extension }}</p>
-            <p>Hectares consommes ces 10 dernieres annees : {{ this.ds.oz_ha_consommes_ha_zan_historique }}</p>
-            <p>Hectares disponibles les 10 prochaines annees : {{ this.ds.oz_ha_consommes_ha_zan_2030 }}</p>
-            <p>Hectares disponibes par an : {{ this.ds.oz_ha_consommes_ha_zan_par_an }}</p>
-            <div v-if="this.ds.oz_ha_manquant_pour_logements > 0">
-                <h2 class="w3-center">Manquant pour les logements par rapport a l'Objectif ZAN : {{ this.ds.oz_ha_manquant_pour_logements }} hectares.</h2>
-            </div>
-            <div v-else>
-                <h2 class="w3-center">Reserve par rapport a l'Objectif ZAN : {{ -this.ds.oz_ha_manquant_pour_logements }} hectares.</h2>
-            </div>
-        </div>
         </div>
              <div class="column">
             </div>
@@ -869,6 +1142,333 @@ vm.component('table-ozan', {
   `
 })
 
+vm.component('michel-ozan', {
+    data() {
+        console.log("michel-ozan data")
+        return {
+            dataset : g_data_s,
+            loaded : 0 ,
+            titre : "L'outil ultime pour valider l'Objectif Zero Artificialisation Nette sur votre Territoire." ,
+            scen   : "scen0" ,
+            scen0 : {
+               evol_pop : 0 ,
+               evol_tm  : 0 ,
+               log_ha  : 70 ,
+               lutte_vacance : 0 ,
+               lutte_secondaire : 0 ,
+               conv_logsru  : 0 ,
+               part_logsru : 35 ,
+               taux_desaffectation : 0.0013 ,
+               taux_renouvellement : 0.42,
+            },
+            scen1 : {
+               evol_pop : 0 ,
+               evol_tm  : 0 ,
+               log_ha  : 70 ,
+               lutte_vacance : 0 ,
+               lutte_secondaire : 0 ,
+               conv_logsru  : 0 ,
+               part_logsru : 35 ,
+               taux_desaffectation : 0.0013 ,
+               taux_renouvellement : 0.42,
+            },
+            }
+      },
+    methods : {
+        reset(){
+              console.log("reset scen0")
+              this.ds.scen_evol_pop             = this.scen0.evol_pop
+              this.ds.scen_evol_tm              = this.scen0.evol_tm
+              this.ds.scen_log_ha               = this.scen0.log_ha
+              this.ds.scen_lutte_vacance        = this.scen0.lutte_vacance
+              this.ds.scen_lutte_secondaire     = this.scen0.lutte_secondaire
+              this.ds.scen_conv_logsru          = this.scen0.conv_logsru
+              this.ds.scen_part_logsru          = this.scen0.part_logsru
+              this.ds.scen_taux_desaffectation  = this.scen0.taux_desaffectation
+              this.ds.scen_taux_renouvellement  = this.scen0.taux_renouvellement
+              this.ds.scen                      = "scen0"
+              this.recalc()
+        },
+        update(dataset){
+              console.log("table-stat update")
+              this.dataset    = dataset
+              this.ds         = this.dataset.total
+              this.recalc()
+        },
+        set_scen0(){
+              console.log("table-stat scen0")
+              this.reset()
+        },
+        set_scen1(){
+              console.log("table-stat scen1")
+              this.ds.scen_evol_pop             = this.scen1.evol_pop
+              this.ds.scen_evol_tm              = this.scen1.evol_tm
+              this.ds.scen_log_ha               = this.scen1.log_ha
+              this.ds.scen_lutte_vacance        = this.scen1.lutte_vacance
+              this.ds.scen_lutte_secondaire     = this.scen1.lutte_secondaire
+              this.ds.scen_conv_logsru          = this.scen1.conv_logsru
+              this.ds.scen_part_logsru          = this.scen1.part_logsru
+              this.ds.scen_taux_desaffectation  = this.scen1.taux_desaffectation
+              this.ds.scen_taux_renouvellement  = this.scen1.taux_renouvellement
+              this.ds.scen                      = "scen1"
+              this.recalc()
+        },
+        recalc(){
+            console.log("table-stat recalc")
+            if (this.loaded ==0 ) {
+                this.scen0.lutte_secondaire = 0
+                this.scen0.lutte_vacance = 0
+                this.scen0.evol_pop = this.ds.TXPOP_1318
+                this.scen0.evol_tm  = this.ds.txtmen_1318
+                this.scen0.lutte_secondaire = 0
+                this.scen0.lutte_vacance = 0
+                this.scen0.evol_pop = this.ds.TXPOP_1318
+                this.scen0.evol_tm  = this.ds.txtmen_1318
+                this.loaded = 1
+            }
+            this.dataset = run_calculs(this.dataset)
+        },
+      },
+  template: `
+    <div  v-if="this.dataset != null">
+        <h3 v-if="titre"> {{titre}}</h3>
+        <br>
+        <h1 class="w3-center" >Les Formules de Michel !</h1>
+        <br>
+
+        <table class="w3-table-all w3-hoverable w3-card-4">
+            <tbody>
+            <tr class="w3-teal">
+                <th height="50" class="w3-left-align  w3-teal">Etapes</th>
+                <th height="50" class="w3-right-align  w3-teal">Taux</th>
+                <th height="50" class="w3-right-align  w3-teal">{{this.ds.michel_an_donnee}}</th>
+                <th class="w3-right-align w3-teal">{{this.ds.michel_an_depart}}</th>
+                <th class="w3-right-align w3-teal">{{this.ds.michel_an_arrivee}}</th>
+                <th class="w3-right-align w3-grey">Variation</th>
+            </tr>
+            <tr>
+                <td height="50" >0 - Dates</td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align">{{this.ds.michel_an_donnee}}</td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="2000" max="2050" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_an_depart"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="2050" max="2050" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_an_arrivee"></td>
+                <td class="w3-right-align">{{this.ds.michel_duree}}</td>
+            </tr>
+            <tr>
+                <td height="50" >1 - Population</td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="-10" max="10" step="0.001"  style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_pop_taux"></td>
+                <td class="w3-right-align">{{this.ds.P18_POP}}</td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="9999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_pop_depart"></td>
+                <td class="w3-right-align">{{this.ds.michel_pop_arrivee}}</td>
+                <td class="w3-right-align">{{this.ds.michel_pop_arrivee - this.ds.michel_pop_depart}}</td>
+            </tr>
+            <tr>
+                <td height="50" >2- Besoins en RP</td>
+            </tr>
+            <tr>
+                <td height="50" >2.1 - Population hors Ménages</td>
+                <td class="w3-right-align">{{((this.ds.C18_HORS_MEN/this.ds.P18_POP)*100).toFixed(1)}}%</td>
+                <td class="w3-right-align">{{this.ds.C18_HORS_MEN}}</td>
+                <td class="w3-right-align w3-2021-french-blue"> {{((this.ds.michel_pop_hm_depart/this.ds.michel_pop_depart)*100).toFixed(1)}}% - <input  type="number" min="0" max="9999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_pop_hm_depart"></td>
+                <td class="w3-right-align w3-2021-french-blue"> {{((this.ds.michel_pop_hm_arrivee/this.ds.michel_pop_arrivee)*100).toFixed(1)}}% - <input  type="number" min="0" max="9999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_pop_hm_arrivee"></td>
+                <td class="w3-right-align">{{this.ds.michel_pop_hm_delta}}</td>
+            </tr>
+            <tr>
+                <td height="50" >2.2 - Population des Ménages</td>
+                <td class="w3-right-align">{{this.ds.michel_pop_taux}}</td>
+                <td class="w3-right-align">{{this.ds.C18_MEN}}</td>
+                <td class="w3-right-align">{{this.ds.michel_pop_men_depart}}</td>
+                <td class="w3-right-align">{{this.ds.michel_pop_men_arrivee}}</td>
+                <td class="w3-right-align">{{this.ds.michel_pop_men_delta}}</td>
+            </tr>
+            <tr>
+                <td height="50" >2.3 - Taille des Ménages</td>
+                <td class="w3-right-align">{{this.ds.michel_tm_tendance_5_ans}}</td>
+                <td class="w3-right-align">{{this.ds.TM_2018}}</td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="1" max="5" step="0.001" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_tm_depart"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="1" max="5" step="0.001" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_tm_arrivee"></td>
+                <td class="w3-right-align">{{this.ds.michel_tm_delta}}</td>
+            </tr>
+            <tr>
+                <td height="50" >2.4 - Residences Principales</td>
+                <td class="w3-right-align">{{this.ds.michel_tx_rp_an_donnee *100}}%</td>
+                <td class="w3-right-align">{{this.ds.C18_MEN}}</td>
+                <td class="w3-right-align">{{((this.ds.michel_rp_depart/this.ds.michel_log_depart)*100).toFixed(1)}}% - {{this.ds.michel_rp_depart}}</td>
+                <td class="w3-right-align">{{((this.ds.michel_rp_arrivee/this.ds.michel_log_arrivee)*100).toFixed(1)}}% - {{this.ds.michel_rp_arrivee}}</td>
+                <td class="w3-right-align">{{this.ds.michel_rp_delta}}</td>
+            </tr>
+            <tr>
+                <td height="50" >3 - Residences Secondaires</td>
+                <td class="w3-right-align">{{this.ds.michel_tx_rs_an_donnee *100}}%</td>
+                <td class="w3-right-align">{{this.ds.P18_RSECOCC}}</td>
+                <td class="w3-right-align w3-2021-french-blue"> {{((this.ds.michel_rs_depart/this.ds.michel_log_depart)*100).toFixed(1)}}% <input  type="number" min="0" max="9999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_rs_depart"></td>
+                <td class="w3-right-align w3-2021-french-blue"> {{((this.ds.michel_rs_arrivee/this.ds.michel_log_arrivee)*100).toFixed(1)}}% <input  type="number" min="0" max="9999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_rs_arrivee"></td>
+                <td class="w3-right-align">{{this.ds.michel_rs_delta}}</td>
+            </tr>
+            <tr>
+                <td height="50" >4 - Residences Vacantes</td>
+                <td class="w3-right-align">{{this.ds.michel_tx_rv_an_donnee *100}}% </td>
+                <td class="w3-right-align">{{this.ds.P18_LOGVAC}}</td>
+                <td class="w3-right-align w3-2021-french-blue"> {{((this.ds.michel_rv_depart/this.ds.michel_log_depart)*100).toFixed(1)}}% <input  type="number" min="0" max="9999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_rv_depart"></td>
+                <td class="w3-right-align w3-2021-french-blue"> {{((this.ds.michel_rv_arrivee/this.ds.michel_log_arrivee)*100).toFixed(1)}}% <input  type="number" min="0" max="9999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_rv_arrivee"></td>
+                <td class="w3-right-align">{{this.ds.michel_rv_delta}}</td>
+            </tr>
+            <tr>
+                <td height="50" >4.1- Parc Total</td>
+                <td class="w3-right-align">100.0%</td>
+                <td class="w3-right-align">{{this.ds.log_2018}}</td>
+                <td class="w3-right-align">{{this.ds.michel_log_depart}}</td>
+                <td class="w3-right-align">{{this.ds.michel_log_arrivee}}</td>
+                <td class="w3-right-align">{{this.ds.michel_log_delta}}</td>
+            </tr>
+            <tr>
+                <td height="50" >5 - Renouvellement du Parc (sur 2013-2018)</td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align">Evolution {{this.ds.michel_evolution_parc_5_ans}}</td>
+                <td class="w3-right-align">Construits {{this.ds.michel_construits_5_ans}}</td>
+                <td class="w3-right-align">{{this.ds.michel_renouvellement_5_ans}}</td>
+            </tr>
+            <tr>
+                <td height="50" >5.1 - Renouvellement Annuel</td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_renouvellement_taux"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align">{{this.ds.michel_renouvellement_an}}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table class="w3-table-all w3-hoverable w3-card-4">
+            <tbody>
+            <tr class="w3-teal">
+                <th height="50" class="w3-left-align  w3-teal">Zonage</th>
+                <th class="w3-right-align w3-teal">Zone 1</th>
+                <th class="w3-right-align w3-teal">Zone 2</th>
+                <th class="w3-right-align w3-teal">Zone 3</th>
+                <th class="w3-right-align w3-teal">Zone 4</th>
+                <th class="w3-right-align w3-teal">Zone 5</th>
+                <th class="w3-right-align w3-teal">Zone 6</th>
+                <th class="w3-right-align w3-teal">Total</th>
+            </tr>
+            <tr>
+                <td height="50" >6a - Répartition des logts au depart</td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6a_repartition_log_N1"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6a_repartition_log_N2"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6a_repartition_log_N3"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6a_repartition_log_N4"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6a_repartition_log_N5"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6a_repartition_log_N6"></td>
+                <td class="w3-right-align">{{this.ds.michel_6a_repartition_log_Total}}</td>
+            </tr>
+            <tr>
+                <td height="50" >6b - Répartition des nouveaux logts</td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6b_repartition_nouv_log_N1"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6b_repartition_nouv_log_N2"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6b_repartition_nouv_log_N3"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6b_repartition_nouv_log_N4"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6b_repartition_nouv_log_N5"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6b_repartition_nouv_log_N6"></td>
+                <td class="w3-right-align">{{this.ds.michel_6b_repartition_nouv_log_Total}}</td>
+            </tr>
+            <tr>
+                <td height="50" >6c - Répartition des besoins en logts</td>
+                <td class="w3-right-align">{{this.ds.michel_6c_repartition_besoins_log_N1}}</td>
+                <td class="w3-right-align">{{this.ds.michel_6c_repartition_besoins_log_N2}}</td>
+                <td class="w3-right-align">{{this.ds.michel_6c_repartition_besoins_log_N3}}</td>
+                <td class="w3-right-align">{{this.ds.michel_6c_repartition_besoins_log_N4}}</td>
+                <td class="w3-right-align">{{this.ds.michel_6c_repartition_besoins_log_N5}}</td>
+                <td class="w3-right-align">{{this.ds.michel_6c_repartition_besoins_log_N6}}</td>
+                <td class="w3-right-align">{{this.ds.michel_6c_repartition_besoins_log_Total}}</td>
+            </tr>
+            <tr>
+                <td height="50" >7a - Possibilité de Densification (en nombre) </td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_7a_densification_N1"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_7a_densification_N2"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_7a_densification_N3"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_7a_densification_N4"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_7a_densification_N5"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_7a_densification_N6"></td>
+                <td class="w3-right-align">{{this.ds.michel_7a_densification_Total}}</td>
+            </tr>
+            <tr>
+                <td height="50" >7b - Constructions en Extension (en nombre)</td>
+                <td class="w3-right-align">{{this.ds.michel_7b_extension_N1}}</td>
+                <td class="w3-right-align">{{this.ds.michel_7b_extension_N2}}</td>
+                <td class="w3-right-align">{{this.ds.michel_7b_extension_N3}}</td>
+                <td class="w3-right-align">{{this.ds.michel_7b_extension_N4}}</td>
+                <td class="w3-right-align">{{this.ds.michel_7b_extension_N5}}</td>
+                <td class="w3-right-align">{{this.ds.michel_7b_extension_N6}}</td>
+                <td class="w3-right-align">{{this.ds.michel_7b_extension_Total}}</td>
+            </tr>
+            <tr>
+                <td height="50" >8a - Densite Nette en Log/Ha</td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_8a_densite_nette_N1"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_8a_densite_nette_N2"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_8a_densite_nette_N3"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_8a_densite_nette_N4"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_8a_densite_nette_N5"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_8a_densite_nette_N6"></td>
+                <td class="w3-right-align">{{this.ds.michel_8a_densite_nette_Total}}</td>
+            </tr>
+            <tr>
+                <td height="50" >8b - Surface Nette en extension</td>
+                <td class="w3-right-align">{{this.ds.michel_8b_surface_nette_N1}}</td>
+                <td class="w3-right-align">{{this.ds.michel_8b_surface_nette_N2}}</td>
+                <td class="w3-right-align">{{this.ds.michel_8b_surface_nette_N3}}</td>
+                <td class="w3-right-align">{{this.ds.michel_8b_surface_nette_N4}}</td>
+                <td class="w3-right-align">{{this.ds.michel_8b_surface_nette_N5}}</td>
+                <td class="w3-right-align">{{this.ds.michel_8b_surface_nette_N6}}</td>
+                <td class="w3-right-align">{{this.ds.michel_8b_surface_nette_Total}}</td>
+            </tr>
+            <tr>
+                <td height="50" >8c - Rajout Equipements en pourcent</td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_8c_surface_equipements_N1"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_8c_surface_equipements_N2"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_8c_surface_equipements_N3"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_8c_surface_equipements_N4"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_8c_surface_equipements_N5"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_8c_surface_equipements_N6"></td>
+                <td class="w3-right-align">{{this.ds.michel_8c_surface_equipements_Total}}</td>
+            </tr>
+            <tr>
+                <td height="50" >8c - Rajout Equipements en surface</td>
+                <td class="w3-right-align">{{this.ds.michel_8c2_surface_equipements_N1}}</td>
+                <td class="w3-right-align">{{this.ds.michel_8c2_surface_equipements_N1}}</td>
+                <td class="w3-right-align">{{this.ds.michel_8c2_surface_equipements_N3}}</td>
+                <td class="w3-right-align">{{this.ds.michel_8c2_surface_equipements_N4}}</td>
+                <td class="w3-right-align">{{this.ds.michel_8c2_surface_equipements_N5}}</td>
+                <td class="w3-right-align">{{this.ds.michel_8c2_surface_equipements_N6}}</td>
+                <td class="w3-right-align">{{this.ds.michel_8c2_surface_equipements_Total}}</td>
+            </tr>
+            <tr>
+                <td height="50" >8d - Hectares Necessaires</td>
+                <td class="w3-right-align">{{this.ds.michel_8d_hectares_necessaires_N1}}</td>
+                <td class="w3-right-align">{{this.ds.michel_8d_hectares_necessaires_N2}}</td>
+                <td class="w3-right-align">{{this.ds.michel_8d_hectares_necessaires_N3}}</td>
+                <td class="w3-right-align">{{this.ds.michel_8d_hectares_necessaires_N4}}</td>
+                <td class="w3-right-align">{{this.ds.michel_8d_hectares_necessaires_N5}}</td>
+                <td class="w3-right-align">{{this.ds.michel_8d_hectares_necessaires_N6}}</td>
+                <td class="w3-right-align">{{this.ds.michel_8d_hectares_necessaires_Total}}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="w3-panel w3-card-4 w3-teal">
+            <br>
+            <p>Consommation Fonciere passee en 10 ans : {{ this.ds.michel_8a_consomation_cerema_10_ans }}</p>
+            <p>Consommation Fonciere passee annuelle :  {{ this.ds.michel_8b_consomation_cerema_annuelle }}</p>
+            <p>Consommation Fonciere future prevue   :  {{ this.ds.michel_8c_consomation_prevue_annuelle }}</p>
+            <h2>Votre niveau de sobriete fonciere    :  {{ this.ds.michel_8d_niveau_sobriete }}</h2>
+            <h1>{{ this.ds.michel_8e_message_sobriete }}</h1>
+            <br>
+        </div>
+
+
+    </div>
+  `
+})
 
 vm.component('table-stat', {
     data() {
