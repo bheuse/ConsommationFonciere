@@ -1611,7 +1611,9 @@ class DataStore():
                 self.store_index = 'total'
 
         self.run_diagnostic()
-        plots(self)
+        global FAST
+        if (not FAST):
+            plots(self)
         html_report_file = gen_report(ds=self, data_only=data_only, ftp_push=ftp_push)
         # html_index_file  = gen_index()
         display_in_browser(html_report_file)
@@ -2292,17 +2294,22 @@ def readme_to_html():
 
 
 def ftp_push_ds(ds : DataStore):
-    file_ext  = [  ".xlsx" , ".csv" , "_s.json" , "_tracker.html"]
-    png_files1 = [f for f in os.listdir(output_dir) if re.match(ds.get_fullname().upper()+'.*\.png', f)]
-    png_files2 = [f for f in os.listdir(output_dir) if re.match(ds.get_fullname()+'.*\.png', f)]
+    global FAST
     file_list = list()
     prefix = ds.get_fullname()
+    if (not FAST):
+        file_ext  = [".xlsx", ".csv", "_s.json", "_tracker.html"]
+    else:
+        file_ext = ["_s.json"]
     for ext in file_ext :
         file_list.append(output_dir + prefix + ext)
-    for png_file in png_files1 :
-        file_list.append(output_dir + png_file)
-    for png_file in png_files2 :
-        file_list.append(output_dir + png_file)
+    if (not FAST):
+        png_files1 = [f for f in os.listdir(output_dir) if re.match(ds.get_fullname().upper()+'.*\.png', f)]
+        png_files2 = [f for f in os.listdir(output_dir) if re.match(ds.get_fullname()+'.*\.png', f)]
+        for png_file in png_files1 :
+            file_list.append(output_dir + png_file)
+        for png_file in png_files2 :
+            file_list.append(output_dir + png_file)
     ftp_push_file(file_list)
 
 
@@ -2327,26 +2334,38 @@ def ftp_push_file(filename):
 
 
 def ftp_push_files():
-    filelist = ["output/france.json",        "output/select.json",
+    global FAST
+    filelist = ["output/select.json",
                 "input/Configuration.xlsx",  "input/plots.json",
                 "output/calculations.json",  "output/datametrics.json", "output/diagnostics.json",
-                "input/Legend_Logements.png",
-                "input/Gadseca-Logo-BIG.png", "input/Gadseca-Logo.png",
-                "input/Gadseca_50Ans.jpg",    "input/Gadseca_Logo.png",
-                "input/Logo2-Vert-FV.png",    "input/Logo2-Vert.png",
-                "input/Logo3-Color-FV.png",   "input/Logo3-Color.png",
-                "input/report_template.html", "input/tracker_template.html",
-                "input/CartePaca1.jpg",       "input/CartePaca2.png",
-                "input/CartePaca4.png",       "input/CartoPaca4.png",
-                "input/CartoPaca3.png",       "input/CartoPaca3-Green.png",
-                "input/myShophia-Logo.jpg",    "input/CartoPaca3-Light-Green.png",
-                "README.md",  "README.html",   "README.dillinger.html",
                 "ConsommationFonciere.html",   "ConsommationFonciere.js",   "ConsommationFonciere.py",
                 "ConsommationFonciereV2.html", "ConsommationFonciereV2.js",
                 "ConsommationFonciereV3.html", "ConsommationFonciereV3.js",
+                "ConsommationFoncierePlay.html", "ConsommationFonciereV3.js",
                 "index.html",
                 "Header.png", "Body.png"
                 ]
+    if (not FAST):
+        filelist = ["output/france.json",        "output/select.json",
+                    "input/Configuration.xlsx",  "input/plots.json",
+                    "output/calculations.json",  "output/datametrics.json", "output/diagnostics.json",
+                    "input/Legend_Logements.png",
+                    "input/Gadseca-Logo-BIG.png", "input/Gadseca-Logo.png",
+                    "input/Gadseca_50Ans.jpg",    "input/Gadseca_Logo.png",
+                    "input/Logo2-Vert-FV.png",    "input/Logo2-Vert.png",
+                    "input/Logo3-Color-FV.png",   "input/Logo3-Color.png",
+                    "input/report_template.html", "input/tracker_template.html",
+                    "input/CartePaca1.jpg",       "input/CartePaca2.png",
+                    "input/CartePaca4.png",       "input/CartoPaca4.png",
+                    "input/CartoPaca3.png",       "input/CartoPaca3-Green.png",
+                    "input/myShophia-Logo.jpg",    "input/CartoPaca3-Light-Green.png",
+                    "README.md",  "README.html",   "README.dillinger.html",
+                    "ConsommationFonciere.html",   "ConsommationFonciere.js",   "ConsommationFonciere.py",
+                    "ConsommationFonciereV2.html", "ConsommationFonciereV2.js",
+                    "ConsommationFonciereV3.html", "ConsommationFonciereV3.js",
+                    "index.html",
+                    "Header.png", "Body.png"
+                    ]
     ftp_push_file(filelist)
 
 
@@ -2883,16 +2902,17 @@ WITH_COMMUNES      = False
 LIST_COMMUNE       = False
 DATA_ONLY          = False
 FTP_PUSH           = False
+FAST               = False
 
 
 def read_command_line_args(argv):
     global DISPLAY_HTML, FORCE, DEBUG, WITH_COMMUNES, LIST_COMMUNE
-    global CONFIGURATION_FILE, TEMPLATE_FILE, DATA_ONLY, FTP_PUSH
+    global CONFIGURATION_FILE, TEMPLATE_FILE, DATA_ONLY, FTP_PUSH, FAST
     global CODE_COMMUNE, CODE_EPCI, CODE_DEPT, CODE_REGION
     # print_yellow("Command Line Arguments : " + str(argv))
 
     usage = """
-    Usage: -f -a -p -n -b -l -c <commune_code> -e <epci_code> -d <dept_code> -r <region_code>   
+    Usage: -f -a -p -n -b -l -c -t <commune_code> -e <epci_code> -d <dept_code> -r <region_code>   
            -l --list         : List for all communes/epci/dept in Territory       
            -c --commune <c> : Report for Commune Code INSEE 'c'                 
            -e --ecpi    <e> : Report for ECPI Code INSEE 'e'                      
@@ -2902,6 +2922,7 @@ def read_command_line_args(argv):
            -n --data        : No report - Generate only data & Graphics        
            -p --push        : FTP Push Data to Infinity Free Host WebSite         
            -f --force       : Report reading source data (cache ignored)     
+           -t --fast        : Fast      
            --browse         : Start Browser on generated report (debug)  
            --cxlsx            <ConfigurationFile.xlsx> : Use Configuration File  
            --rhtml            <ReportTemplate.html>    : Use ReportTemplate      
@@ -2909,7 +2930,7 @@ def read_command_line_args(argv):
     """
 
     try:
-        opts, args = getopt.getopt(argv, "hanlbpfc:e:d:r:", ["help", "list", "data" , "push" , "commune=", "epci=", "dep=", "reg=", "no_debug"])
+        opts, args = getopt.getopt(argv, "hanlbptfc:e:d:r:", ["help", "list", "data" , "fast" ,"push" , "commune=", "epci=", "dep=", "reg=", "no_debug"])
     except getopt.GetoptError:
         print(usage)
         sys.exit(2)
@@ -2925,6 +2946,9 @@ def read_command_line_args(argv):
             continue
         elif opt in ("-p", "-P", "-push", "-PUSH", "-ftp", "-FTP"):
             FTP_PUSH = True
+            continue
+        elif opt in ("-t", "-T", "-fast", "-FAST"):
+            FAST = True
             continue
         elif opt in ("-f", "-F"):
             FORCE = True
