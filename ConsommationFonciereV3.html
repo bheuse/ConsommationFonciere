@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-purple.css">
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-teal.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-2021.css">
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-flat.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
@@ -298,6 +299,7 @@ function openTab(evt, cityName) {
 <button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'DonneesBrutes')">  Donnees Brutes </button>
 <button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'BigTable')">       Table de Calcul</button>
 <button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'ObjectifZan')">    Objectif Zan</button>
+<button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'MichelZan')">      Michel Zan</button>
 <button class="w3-bar-item w3-button databtn w3-padding-16 w3-grey" onclick="openTab(event,'Debug')">                   Debug </button>
 </div>
 </div>
@@ -975,12 +977,16 @@ function openTab(evt, cityName) {
      </div>
 </div>
 <div id="ObjectifZan"       class="w3-container city w3-animate-opacity">
-     <h2>Outil de Calcul - Objectif Zan}</h2>
+     <h2>Test - Objectif Zero Artificialisation Nette.</h2>
      <div class="w3-container">
         <table-ozan ref="ObjectifZan"> </table-ozan>
      </div>
 </div>
-
+<div id="MichelZan"         class="w3-container city w3-animate-opacity">
+     <h2>Michel - Objectif Zero Artificialisation Nette.</h2>
+     <div class="w3-container">
+        <michel-ozan ref="MichelZan"> </michel-ozan>
+     </div>
 </div>
 
 </div>
@@ -1065,16 +1071,24 @@ function openTab(evt, cityName) {
         </div>
         <div class="w3-container w3-cell w3-mobile">
              <p>Projections Paca :<br>     <a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS_PACA"> Dossier Omphale </a></p>
-             <p>GOOGLE_TRACKER :<br>       <a target="_blank" :href="ds.GOOGLE_TRACKER"> {{ds.GOOGLE_TRACKER}} </a></p>
         </div>
     </div>
 </div>
 
+
 <div  v-if="this.data_s != null">
         <div class="w3-container w3-theme-dark w3-mobile w3-center ">
         <iframe frameBorder="0" height="190" width="700" :src="ds.GOOGLE_TRACKER"></iframe>
-        <iframe frameBorder="0" height="190" width="700" src="output/COMMUNE_MOUGINS_06085_tracker.html"></iframe>
+        </div>
 </div>
+
+
+<div class="w3-teal w3-center">
+    <h2 class="w3-teal w3-center">Vigi Foncier - Un site du Gadseca</h2>
+    <img class="w3-center w3-image"
+          src="input/Gadseca_50Ans.jpg"
+          alt="Gadseca Logo"
+          style="display: block; margin-left: auto; margin-right: auto; width: 600px; height: auto;">
 </div>
 
 </footer>
@@ -1085,6 +1099,8 @@ function openTab(evt, cityName) {
 -->
 
 <!-- Tracker -->
+
+</div>
 
 </div>
 
