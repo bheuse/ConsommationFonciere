@@ -738,101 +738,20 @@ HTML_FULL_DATA: "<h3>Toutes les Donnees - Details : MOUGINS</h3><table border=\"
     \      <td>140.0</td>\n      <td>211.0</td>\n      <td>211.0</td>\n      <td>421.0</td>\n\
     \      <td>281.0</td>\n      <td>1404.0</td>\n      <td>20.0</td>\n      <td>30.0</td>\n\
     \      <td>40.0</td>\n      <td>15.0</td>\n      <td>60.0</td>\n      <td>70.0</td>\n\
-    \      <td></td>\n      <td>Error evaluating Calcul : Line 571 Key = michel_8b_surface_nette_N1\
-    \ + expr : roundNumber(michel_7b_extension_N1 / michel_8a_densite_nette_N1,2)\
-    \  if (michel_8a_densite_nette_N1!=0) : 0 - Error : invalid syntax (&lt;string&gt;,\
-    \ line 1)</td>\n      <td>Error evaluating Calcul : Line 572 Key = michel_8b_surface_nette_N2\
-    \ + expr : roundNumber(michel_7b_extension_N2 / michel_8a_densite_nette_N2,2)\
-    \ if (michel_8a_densite_nette_N2!=0) : 0 - Error : invalid syntax (&lt;string&gt;,\
-    \ line 1)</td>\n      <td>Error evaluating Calcul : Line 573 Key = michel_8b_surface_nette_N3\
-    \ + expr : roundNumber(michel_7b_extension_N3 / michel_8a_densite_nette_N3,2)\
-    \ if (michel_8a_densite_nette_N3!=0) : 0 - Error : invalid syntax (&lt;string&gt;,\
-    \ line 1)</td>\n      <td>Error evaluating Calcul : Line 574 Key = michel_8b_surface_nette_N4\
-    \ + expr : roundNumber(michel_7b_extension_N4 / michel_8a_densite_nette_N4,2)\
-    \ if (michel_8a_densite_nette_N4!=0) : 0 - Error : invalid syntax (&lt;string&gt;,\
-    \ line 1)</td>\n      <td>Error evaluating Calcul : Line 575 Key = michel_8b_surface_nette_N5\
-    \ + expr : roundNumber(michel_7b_extension_N5 / michel_8a_densite_nette_N5,2)\
-    \ if (michel_8a_densite_nette_N5!=0) : 0 - Error : invalid syntax (&lt;string&gt;,\
-    \ line 1)</td>\n      <td>Error evaluating Calcul : Line 576 Key = michel_8b_surface_nette_N6\
-    \ + expr : roundNumber(michel_7b_extension_N6 / michel_8a_densite_nette_N6,2)\
-    \ if (michel_8a_densite_nette_N6!=0) : 0 - Error : invalid syntax (&lt;string&gt;,\
-    \ line 1)</td>\n      <td>Error evaluating Calcul : Line 577 Key = michel_8b_surface_nette_Total\
-    \ + expr : roundNumber(michel_8b_surface_nette_N6 + michel_8b_surface_nette_N5\
-    \ + michel_8b_surface_nette_N4 + michel_8b_surface_nette_N3 + michel_8b_surface_nette_N2\
-    \ + michel_8b_surface_nette_N1,2) - Error : type str doesn't define __round__\
-    \ method</td>\n      <td>5.0</td>\n      <td>5.0</td>\n      <td>5.0</td>\n  \
-    \    <td>5.0</td>\n      <td>10.0</td>\n      <td>10.0</td>\n      <td>0.0</td>\n\
-    \      <td>Error evaluating Calcul : Line 585 Key = michel_8c2_surface_equipements_N1\
-    \ + expr : roundNumber(michel_8b_surface_nette_N1 * michel_8c_surface_equipements_N1\
-    \ / 100,2) - Error : can't multiply sequence by non-int of type 'numpy.float64'</td>\n\
-    \      <td>Error evaluating Calcul : Line 586 Key = michel_8c2_surface_equipements_N2\
-    \ + expr : roundNumber(michel_8b_surface_nette_N2 * michel_8c_surface_equipements_N2\
-    \ / 100,2) - Error : can't multiply sequence by non-int of type 'numpy.float64'</td>\n\
-    \      <td>Error evaluating Calcul : Line 587 Key = michel_8c2_surface_equipements_N3\
-    \ + expr : roundNumber(michel_8b_surface_nette_N3 * michel_8c_surface_equipements_N3\
-    \ / 100,2) - Error : can't multiply sequence by non-int of type 'numpy.float64'</td>\n\
-    \      <td>Error evaluating Calcul : Line 588 Key = michel_8c2_surface_equipements_N4\
-    \ + expr : roundNumber(michel_8b_surface_nette_N4 * michel_8c_surface_equipements_N4\
-    \ / 100,2) - Error : can't multiply sequence by non-int of type 'numpy.float64'</td>\n\
-    \      <td>Error evaluating Calcul : Line 589 Key = michel_8c2_surface_equipements_N5\
-    \ + expr : roundNumber(michel_8b_surface_nette_N5 * michel_8c_surface_equipements_N5\
-    \ / 100,2) - Error : can't multiply sequence by non-int of type 'numpy.float64'</td>\n\
-    \      <td>Error evaluating Calcul : Line 590 Key = michel_8c2_surface_equipements_N6\
-    \ + expr : roundNumber(michel_8b_surface_nette_N6 * michel_8c_surface_equipements_N6\
-    \ / 100,2) - Error : can't multiply sequence by non-int of type 'numpy.float64'</td>\n\
-    \      <td>Error evaluating Calcul : Line 591 Key = michel_8c2_surface_equipements_Total\
-    \ + expr : roundNumber(michel_8c2_surface_equipements_N6 + michel_8c2_surface_equipements_N5\
-    \ + michel_8c2_surface_equipements_N4 + michel_8c2_surface_equipements_N3 + michel_8c2_surface_equipements_N2\
-    \ + michel_8c2_surface_equipements_N1,2) - Error : type str doesn't define __round__\
-    \ method</td>\n      <td>Error evaluating Calcul : Line 592 Key = michel_8d_hectares_necessaires_N1\
-    \ + expr : roundNumber(michel_8b_surface_nette_N1 * ( 1 + michel_8c_surface_equipements_N1\
-    \ / 100),2) - Error : can't multiply sequence by non-int of type 'numpy.float64'</td>\n\
-    \      <td>Error evaluating Calcul : Line 593 Key = michel_8d_hectares_necessaires_N2\
-    \ + expr : roundNumber(michel_8b_surface_nette_N2 * ( 1 + michel_8c_surface_equipements_N2/\
-    \ 100),2) - Error : can't multiply sequence by non-int of type 'numpy.float64'</td>\n\
-    \      <td>Error evaluating Calcul : Line 594 Key = michel_8d_hectares_necessaires_N3\
-    \ + expr : roundNumber(michel_8b_surface_nette_N3 * ( 1 + michel_8c_surface_equipements_N3/\
-    \ 100),2) - Error : can't multiply sequence by non-int of type 'numpy.float64'</td>\n\
-    \      <td>Error evaluating Calcul : Line 595 Key = michel_8d_hectares_necessaires_N4\
-    \ + expr : roundNumber(michel_8b_surface_nette_N4 * ( 1 + michel_8c_surface_equipements_N4/\
-    \ 100),2) - Error : can't multiply sequence by non-int of type 'numpy.float64'</td>\n\
-    \      <td>Error evaluating Calcul : Line 596 Key = michel_8d_hectares_necessaires_N5\
-    \ + expr : roundNumber(michel_8b_surface_nette_N5 * ( 1 + michel_8c_surface_equipements_N5/\
-    \ 100),2) - Error : can't multiply sequence by non-int of type 'numpy.float64'</td>\n\
-    \      <td>Error evaluating Calcul : Line 597 Key = michel_8d_hectares_necessaires_N6\
-    \ + expr : roundNumber(michel_8b_surface_nette_N6 * ( 1 + michel_8c_surface_equipements_N6/\
-    \ 100),2) - Error : can't multiply sequence by non-int of type 'numpy.float64'</td>\n\
-    \      <td>Error evaluating Calcul : Line 598 Key = michel_8d_hectares_necessaires_Total\
-    \ + expr : roundNumber(michel_8d_hectares_necessaires_N6 + michel_8d_hectares_necessaires_N5\
-    \ + michel_8d_hectares_necessaires_N4 + michel_8d_hectares_necessaires_N3 + michel_8d_hectares_necessaires_N2\
-    \ + michel_8d_hectares_necessaires_N1,2) - Error : type str doesn't define __round__\
-    \ method</td>\n      <td>43.0</td>\n      <td>4.3</td>\n      <td>Error evaluating\
-    \ Calcul : Line 602 Key = michel_8c_consomation_prevue_annuelle + expr : roundNumber\
-    \ (michel_8d_hectares_necessaires_Total / michel_duree,2) if (michel_duree!=0)\
-    \ : 0 - Error : invalid syntax (&lt;string&gt;, line 1)</td>\n      <td>Error\
-    \ evaluating Calcul : Line 603 Key = michel_8d_niveau_sobriete + expr : roundNumber((michel_8c_consomation_prevue_annuelle\
-    \ / michel_8b_consomation_cerema_annuelle) * 100,0) if (michel_8b_consomation_cerema_annuelle!=0)\
-    \ : 0 - Error : invalid syntax (&lt;string&gt;, line 1)</td>\n      <td>Error\
-    \ evaluating Calcul : Line 604 Key = michel_8e_message_sobriete0 + expr : \"Territoire\
-    \ de reconquete\"  if  (michel_8d_niveau_sobriete &lt; 0 ) else \"Consommation\
-    \ Exemplaire\" - Error : '&lt;' not supported between instances of 'str' and 'int'</td>\n\
-    \      <td>Error evaluating Calcul : Line 605 Key = michel_8e_message_sobriete1\
-    \ + expr : \"Objectif ZAN atteint\"  if  (michel_8d_niveau_sobriete &gt; 25 )\
-    \ else michel_8e_message_sobriete0 - Error : '&gt;' not supported between instances\
-    \ of 'str' and 'int'</td>\n      <td>Error evaluating Calcul : Line 606 Key =\
-    \ michel_8e_message_sobriete2 + expr : \"Consommation Excessive\"  if  (michel_8d_niveau_sobriete\
-    \ &gt;= 51 ) else michel_8e_message_sobriete1 - Error : '&gt;=' not supported\
-    \ between instances of 'str' and 'int'</td>\n      <td>Error evaluating Calcul\
-    \ : Line 607 Key = michel_8e_message_sobriete3 + expr : \"Consommation Abusive\"\
-    \  if  (michel_8d_niveau_sobriete &gt;= 100 ) else michel_8e_message_sobriete3\
-    \ - Error : '&gt;=' not supported between instances of 'str' and 'int'</td>\n\
-    \      <td>Error evaluating Calcul : Line 607 Key = michel_8e_message_sobriete3\
-    \ + expr : \"Consommation Abusive\"  if  (michel_8d_niveau_sobriete &gt;= 100\
-    \ ) else michel_8e_message_sobriete3 - Error : '&gt;=' not supported between instances\
-    \ of 'str' and 'int'</td>\n      <td></td>\n      <td></td>\n      <td></td>\n\
-    \      <td></td>\n      <td></td>\n      <td></td>\n      <td></td>\n    </tr>\n\
-    \    <tr>\n      <th>meta</th>\n      <td>Code INSEE Commune</td>\n      <td>Code\
-    \ Postal Commune</td>\n      <td>Nom de Commune</td>\n      <td>Libelle</td>\n\
+    \      <td></td>\n      <td>7.0</td>\n      <td>5.0</td>\n      <td>5.0</td>\n\
+    \      <td>14.0</td>\n      <td>7.0</td>\n      <td>4.0</td>\n      <td>42.0</td>\n\
+    \      <td>5.0</td>\n      <td>5.0</td>\n      <td>5.0</td>\n      <td>5.0</td>\n\
+    \      <td>10.0</td>\n      <td>10.0</td>\n      <td>0.0</td>\n      <td>0.35</td>\n\
+    \      <td>0.25</td>\n      <td>0.25</td>\n      <td>0.7</td>\n      <td>0.7</td>\n\
+    \      <td>0.4</td>\n      <td>2.65</td>\n      <td>7.35</td>\n      <td>5.25</td>\n\
+    \      <td>5.25</td>\n      <td>14.7</td>\n      <td>7.7</td>\n      <td>4.4</td>\n\
+    \      <td>44.65</td>\n      <td>43.0</td>\n      <td>4.3</td>\n      <td>4.96</td>\n\
+    \      <td>115.0</td>\n      <td>Consommation Exemplaire</td>\n      <td>Objectif\
+    \ ZAN atteint</td>\n      <td>Consommation Excessive</td>\n      <td>Consommation\
+    \ Abusive</td>\n      <td>Consommation Abusive</td>\n      <td></td>\n      <td></td>\n\
+    \      <td></td>\n      <td></td>\n      <td></td>\n      <td></td>\n      <td></td>\n\
+    \    </tr>\n    <tr>\n      <th>meta</th>\n      <td>Code INSEE Commune</td>\n\
+    \      <td>Code Postal Commune</td>\n      <td>Nom de Commune</td>\n      <td>Libelle</td>\n\
     \      <td>Nom Unique (Prefixe de Fichiers)</td>\n      <td>Code EPCI - Metropole</td>\n\
     \      <td>Libelle de l'EPCI / Metropole</td>\n      <td>Nature d'EPCI</td>\n\
     \      <td>Nombre communes EPCI</td>\n      <td>Departement</td>\n      <td>Nom\
@@ -2106,47 +2025,47 @@ HTML_FULL_DATA: "<h3>Toutes les Donnees - Details : MOUGINS</h3><table border=\"
     \ + michel_7b_extension_N5 + michel_7b_extension_N4 + michel_7b_extension_N3 +\
     \ michel_7b_extension_N2 + michel_7b_extension_N1,2)</td>\n      <td>$JS:20</td>\n\
     \      <td>$JS:30</td>\n      <td>$JS:40</td>\n      <td>$JS:15</td>\n      <td>$JS:60</td>\n\
-    \      <td>$JS:70</td>\n      <td>$JS:\"\"</td>\n      <td>roundNumber(michel_7b_extension_N1\
-    \ / michel_8a_densite_nette_N1,2)  if (michel_8a_densite_nette_N1!=0) : 0</td>\n\
-    \      <td>roundNumber(michel_7b_extension_N2 / michel_8a_densite_nette_N2,2)\
-    \ if (michel_8a_densite_nette_N2!=0) : 0</td>\n      <td>roundNumber(michel_7b_extension_N3\
-    \ / michel_8a_densite_nette_N3,2) if (michel_8a_densite_nette_N3!=0) : 0</td>\n\
-    \      <td>roundNumber(michel_7b_extension_N4 / michel_8a_densite_nette_N4,2)\
-    \ if (michel_8a_densite_nette_N4!=0) : 0</td>\n      <td>roundNumber(michel_7b_extension_N5\
-    \ / michel_8a_densite_nette_N5,2) if (michel_8a_densite_nette_N5!=0) : 0</td>\n\
-    \      <td>roundNumber(michel_7b_extension_N6 / michel_8a_densite_nette_N6,2)\
-    \ if (michel_8a_densite_nette_N6!=0) : 0</td>\n      <td>roundNumber(michel_8b_surface_nette_N6\
+    \      <td>$JS:70</td>\n      <td>$JS:\"\"</td>\n      <td>$JS:(michel_8a_densite_nette_N1==0)\
+    \ ? 0 : roundNumber(michel_7b_extension_N1 / michel_8a_densite_nette_N1,2)</td>\n\
+    \      <td>$JS:(michel_8a_densite_nette_N2==0) ? 0 :roundNumber(michel_7b_extension_N2\
+    \ / michel_8a_densite_nette_N2,2)</td>\n      <td>$JS:(michel_8a_densite_nette_N3==0)\
+    \ ? 0 :roundNumber(michel_7b_extension_N3 / michel_8a_densite_nette_N3,2)</td>\n\
+    \      <td>$JS:(michel_8a_densite_nette_N4==0) ? 0 :roundNumber(michel_7b_extension_N4\
+    \ / michel_8a_densite_nette_N4,2)</td>\n      <td>$JS:(michel_8a_densite_nette_N5==0)\
+    \ ? 0 :roundNumber(michel_7b_extension_N5 / michel_8a_densite_nette_N5,2)</td>\n\
+    \      <td>$JS:(michel_8a_densite_nette_N6==0) ? 0 :roundNumber(michel_7b_extension_N6\
+    \ / michel_8a_densite_nette_N6,2)</td>\n      <td>$JS:roundNumber(michel_8b_surface_nette_N6\
     \ + michel_8b_surface_nette_N5 + michel_8b_surface_nette_N4 + michel_8b_surface_nette_N3\
     \ + michel_8b_surface_nette_N2 + michel_8b_surface_nette_N1,2)</td>\n      <td>$JS:5</td>\n\
     \      <td>$JS:5</td>\n      <td>$JS:5</td>\n      <td>$JS:5</td>\n      <td>$JS:10</td>\n\
-    \      <td>$JS:10</td>\n      <td>$JS:0</td>\n      <td>roundNumber(michel_8b_surface_nette_N1\
-    \ * michel_8c_surface_equipements_N1 / 100,2)</td>\n      <td>roundNumber(michel_8b_surface_nette_N2\
-    \ * michel_8c_surface_equipements_N2 / 100,2)</td>\n      <td>roundNumber(michel_8b_surface_nette_N3\
-    \ * michel_8c_surface_equipements_N3 / 100,2)</td>\n      <td>roundNumber(michel_8b_surface_nette_N4\
-    \ * michel_8c_surface_equipements_N4 / 100,2)</td>\n      <td>roundNumber(michel_8b_surface_nette_N5\
-    \ * michel_8c_surface_equipements_N5 / 100,2)</td>\n      <td>roundNumber(michel_8b_surface_nette_N6\
-    \ * michel_8c_surface_equipements_N6 / 100,2)</td>\n      <td>roundNumber(michel_8c2_surface_equipements_N6\
+    \      <td>$JS:10</td>\n      <td>$JS:0</td>\n      <td>$JS:roundNumber(michel_8b_surface_nette_N1\
+    \ * michel_8c_surface_equipements_N1 / 100,2)</td>\n      <td>$JS:roundNumber(michel_8b_surface_nette_N2\
+    \ * michel_8c_surface_equipements_N2 / 100,2)</td>\n      <td>$JS:roundNumber(michel_8b_surface_nette_N3\
+    \ * michel_8c_surface_equipements_N3 / 100,2)</td>\n      <td>$JS:roundNumber(michel_8b_surface_nette_N4\
+    \ * michel_8c_surface_equipements_N4 / 100,2)</td>\n      <td>$JS:roundNumber(michel_8b_surface_nette_N5\
+    \ * michel_8c_surface_equipements_N5 / 100,2)</td>\n      <td>$JS:roundNumber(michel_8b_surface_nette_N6\
+    \ * michel_8c_surface_equipements_N6 / 100,2)</td>\n      <td>$JS:roundNumber(michel_8c2_surface_equipements_N6\
     \ + michel_8c2_surface_equipements_N5 + michel_8c2_surface_equipements_N4 + michel_8c2_surface_equipements_N3\
     \ + michel_8c2_surface_equipements_N2 + michel_8c2_surface_equipements_N1,2)</td>\n\
-    \      <td>roundNumber(michel_8b_surface_nette_N1 * ( 1 + michel_8c_surface_equipements_N1\
-    \ / 100),2)</td>\n      <td>roundNumber(michel_8b_surface_nette_N2 * ( 1 + michel_8c_surface_equipements_N2/\
-    \ 100),2)</td>\n      <td>roundNumber(michel_8b_surface_nette_N3 * ( 1 + michel_8c_surface_equipements_N3/\
-    \ 100),2)</td>\n      <td>roundNumber(michel_8b_surface_nette_N4 * ( 1 + michel_8c_surface_equipements_N4/\
-    \ 100),2)</td>\n      <td>roundNumber(michel_8b_surface_nette_N5 * ( 1 + michel_8c_surface_equipements_N5/\
-    \ 100),2)</td>\n      <td>roundNumber(michel_8b_surface_nette_N6 * ( 1 + michel_8c_surface_equipements_N6/\
-    \ 100),2)</td>\n      <td>roundNumber(michel_8d_hectares_necessaires_N6 + michel_8d_hectares_necessaires_N5\
-    \ + michel_8d_hectares_necessaires_N4 + michel_8d_hectares_necessaires_N3 + michel_8d_hectares_necessaires_N2\
-    \ + michel_8d_hectares_necessaires_N1,2)</td>\n      <td>$JS:roundNumber(ART_TOTAL\
-    \ / 10000,1)</td>\n      <td>$JS:roundNumber(michel_8a_consomation_cerema_10_ans\
-    \ / 10,2)</td>\n      <td>roundNumber (michel_8d_hectares_necessaires_Total /\
-    \ michel_duree,2) if (michel_duree!=0) : 0</td>\n      <td>roundNumber((michel_8c_consomation_prevue_annuelle\
-    \ / michel_8b_consomation_cerema_annuelle) * 100,0) if (michel_8b_consomation_cerema_annuelle!=0)\
-    \ : 0</td>\n      <td>\"Territoire de reconquete\"  if  (michel_8d_niveau_sobriete\
-    \ &lt; 0 ) else \"Consommation Exemplaire\"</td>\n      <td>\"Objectif ZAN atteint\"\
-    \  if  (michel_8d_niveau_sobriete &gt; 25 ) else michel_8e_message_sobriete0</td>\n\
-    \      <td>\"Consommation Excessive\"  if  (michel_8d_niveau_sobriete &gt;= 51\
-    \ ) else michel_8e_message_sobriete1</td>\n      <td>\"Consommation Abusive\"\
-    \  if  (michel_8d_niveau_sobriete &gt;= 100 ) else michel_8e_message_sobriete3</td>\n\
+    \      <td>$JS:roundNumber(michel_8b_surface_nette_N1 * ( 1 + michel_8c_surface_equipements_N1\
+    \ / 100),2)</td>\n      <td>$JS:roundNumber(michel_8b_surface_nette_N2 * ( 1 +\
+    \ michel_8c_surface_equipements_N2/ 100),2)</td>\n      <td>$JS:roundNumber(michel_8b_surface_nette_N3\
+    \ * ( 1 + michel_8c_surface_equipements_N3/ 100),2)</td>\n      <td>$JS:roundNumber(michel_8b_surface_nette_N4\
+    \ * ( 1 + michel_8c_surface_equipements_N4/ 100),2)</td>\n      <td>$JS:roundNumber(michel_8b_surface_nette_N5\
+    \ * ( 1 + michel_8c_surface_equipements_N5/ 100),2)</td>\n      <td>$JS:roundNumber(michel_8b_surface_nette_N6\
+    \ * ( 1 + michel_8c_surface_equipements_N6/ 100),2)</td>\n      <td>$JS:roundNumber(michel_8d_hectares_necessaires_N6\
+    \ + michel_8d_hectares_necessaires_N5 + michel_8d_hectares_necessaires_N4 + michel_8d_hectares_necessaires_N3\
+    \ + michel_8d_hectares_necessaires_N2 + michel_8d_hectares_necessaires_N1,2)</td>\n\
+    \      <td>$JS:roundNumber(ART_TOTAL / 10000,1)</td>\n      <td>$JS:roundNumber(michel_8a_consomation_cerema_10_ans\
+    \ / 10,2)</td>\n      <td>$JS:(michel_duree==0) : 0 ? roundNumber (michel_8d_hectares_necessaires_Total\
+    \ / michel_duree,2)</td>\n      <td>$JS:(michel_8b_consomation_cerema_annuelle==0)\
+    \ ? 0  : roundNumber((michel_8c_consomation_prevue_annuelle / michel_8b_consomation_cerema_annuelle)\
+    \ * 100,0)</td>\n      <td>$JS: (michel_8d_niveau_sobriete &lt; 0 ) ?  \"Territoire\
+    \ de reconquete\" :  \"Consommation Exemplaire\"</td>\n      <td>$JS: (michel_8d_niveau_sobriete\
+    \ &gt;= 25 ) ?  \"Objectif ZAN atteint\" :  michel_8e_message_sobriete0</td>\n\
+    \      <td>$JS: (michel_8d_niveau_sobriete &gt;= 51 ) ?  \"Consommation Excessive\"\
+    \ :  michel_8e_message_sobriete1</td>\n      <td>$JS: (michel_8d_niveau_sobriete\
+    \ &gt;= 100 ) ?  \"Consommation Abusive\" :  michel_8e_message_sobriete2</td>\n\
     \      <td>$JS:michel_8e_message_sobriete3</td>\n      <td></td>\n      <td></td>\n\
     \      <td></td>\n      <td></td>\n      <td></td>\n      <td></td>\n      <td></td>\n\
     \    </tr>\n    <tr>\n      <th>expr</th>\n      <td>code_insee</td>\n      <td>code_postal</td>\n\
@@ -2683,15 +2602,15 @@ HTML_FULL_DATA: "<h3>Toutes les Donnees - Details : MOUGINS</h3><table border=\"
     \ + michel_7b_extension_N3 + michel_7b_extension_N2 + michel_7b_extension_N1,2)</td>\n\
     \      <td>20</td>\n      <td>30</td>\n      <td>40</td>\n      <td>15</td>\n\
     \      <td>60</td>\n      <td>70</td>\n      <td>\"\"</td>\n      <td>roundNumber(michel_7b_extension_N1\
-    \ / michel_8a_densite_nette_N1,2)  if (michel_8a_densite_nette_N1!=0) : 0</td>\n\
+    \ / michel_8a_densite_nette_N1,2)  if (michel_8a_densite_nette_N1!=0) else 0</td>\n\
     \      <td>roundNumber(michel_7b_extension_N2 / michel_8a_densite_nette_N2,2)\
-    \ if (michel_8a_densite_nette_N2!=0) : 0</td>\n      <td>roundNumber(michel_7b_extension_N3\
-    \ / michel_8a_densite_nette_N3,2) if (michel_8a_densite_nette_N3!=0) : 0</td>\n\
+    \ if (michel_8a_densite_nette_N2!=0) else 0</td>\n      <td>roundNumber(michel_7b_extension_N3\
+    \ / michel_8a_densite_nette_N3,2) if (michel_8a_densite_nette_N3!=0) else 0</td>\n\
     \      <td>roundNumber(michel_7b_extension_N4 / michel_8a_densite_nette_N4,2)\
-    \ if (michel_8a_densite_nette_N4!=0) : 0</td>\n      <td>roundNumber(michel_7b_extension_N5\
-    \ / michel_8a_densite_nette_N5,2) if (michel_8a_densite_nette_N5!=0) : 0</td>\n\
+    \ if (michel_8a_densite_nette_N4!=0) else 0</td>\n      <td>roundNumber(michel_7b_extension_N5\
+    \ / michel_8a_densite_nette_N5,2) if (michel_8a_densite_nette_N5!=0) else 0</td>\n\
     \      <td>roundNumber(michel_7b_extension_N6 / michel_8a_densite_nette_N6,2)\
-    \ if (michel_8a_densite_nette_N6!=0) : 0</td>\n      <td>roundNumber(michel_8b_surface_nette_N6\
+    \ if (michel_8a_densite_nette_N6!=0) else 0</td>\n      <td>roundNumber(michel_8b_surface_nette_N6\
     \ + michel_8b_surface_nette_N5 + michel_8b_surface_nette_N4 + michel_8b_surface_nette_N3\
     \ + michel_8b_surface_nette_N2 + michel_8b_surface_nette_N1,2)</td>\n      <td>5</td>\n\
     \      <td>5</td>\n      <td>5</td>\n      <td>5</td>\n      <td>10</td>\n   \
@@ -2715,9 +2634,9 @@ HTML_FULL_DATA: "<h3>Toutes les Donnees - Details : MOUGINS</h3><table border=\"
     \ + michel_8d_hectares_necessaires_N1,2)</td>\n      <td>roundNumber(ART_TOTAL\
     \ / 10000,1)</td>\n      <td>roundNumber(michel_8a_consomation_cerema_10_ans /\
     \ 10,2)</td>\n      <td>roundNumber (michel_8d_hectares_necessaires_Total / michel_duree,2)\
-    \ if (michel_duree!=0) : 0</td>\n      <td>roundNumber((michel_8c_consomation_prevue_annuelle\
+    \ if (michel_duree!=0) else 0</td>\n      <td>roundNumber((michel_8c_consomation_prevue_annuelle\
     \ / michel_8b_consomation_cerema_annuelle) * 100,0) if (michel_8b_consomation_cerema_annuelle!=0)\
-    \ : 0</td>\n      <td>\"Territoire de reconquete\"  if  (michel_8d_niveau_sobriete\
+    \ else 0</td>\n      <td>\"Territoire de reconquete\"  if  (michel_8d_niveau_sobriete\
     \ &lt; 0 ) else \"Consommation Exemplaire\"</td>\n      <td>\"Objectif ZAN atteint\"\
     \  if  (michel_8d_niveau_sobriete &gt; 25 ) else michel_8e_message_sobriete0</td>\n\
     \      <td>\"Consommation Excessive\"  if  (michel_8d_niveau_sobriete &gt;= 51\
@@ -6358,18 +6277,18 @@ JSON_DATA_SET_C:
         michel_8a_densite_nette_Total: '""'
         michel_8b_consomation_cerema_annuelle: roundNumber(michel_8a_consomation_cerema_10_ans
             / 10,2)
-        michel_8b_surface_nette_N1: 'roundNumber(michel_7b_extension_N1 / michel_8a_densite_nette_N1,2)  if
-            (michel_8a_densite_nette_N1!=0) : 0'
-        michel_8b_surface_nette_N2: 'roundNumber(michel_7b_extension_N2 / michel_8a_densite_nette_N2,2)
-            if (michel_8a_densite_nette_N2!=0) : 0'
-        michel_8b_surface_nette_N3: 'roundNumber(michel_7b_extension_N3 / michel_8a_densite_nette_N3,2)
-            if (michel_8a_densite_nette_N3!=0) : 0'
-        michel_8b_surface_nette_N4: 'roundNumber(michel_7b_extension_N4 / michel_8a_densite_nette_N4,2)
-            if (michel_8a_densite_nette_N4!=0) : 0'
-        michel_8b_surface_nette_N5: 'roundNumber(michel_7b_extension_N5 / michel_8a_densite_nette_N5,2)
-            if (michel_8a_densite_nette_N5!=0) : 0'
-        michel_8b_surface_nette_N6: 'roundNumber(michel_7b_extension_N6 / michel_8a_densite_nette_N6,2)
-            if (michel_8a_densite_nette_N6!=0) : 0'
+        michel_8b_surface_nette_N1: roundNumber(michel_7b_extension_N1 / michel_8a_densite_nette_N1,2)  if
+            (michel_8a_densite_nette_N1!=0) else 0
+        michel_8b_surface_nette_N2: roundNumber(michel_7b_extension_N2 / michel_8a_densite_nette_N2,2)
+            if (michel_8a_densite_nette_N2!=0) else 0
+        michel_8b_surface_nette_N3: roundNumber(michel_7b_extension_N3 / michel_8a_densite_nette_N3,2)
+            if (michel_8a_densite_nette_N3!=0) else 0
+        michel_8b_surface_nette_N4: roundNumber(michel_7b_extension_N4 / michel_8a_densite_nette_N4,2)
+            if (michel_8a_densite_nette_N4!=0) else 0
+        michel_8b_surface_nette_N5: roundNumber(michel_7b_extension_N5 / michel_8a_densite_nette_N5,2)
+            if (michel_8a_densite_nette_N5!=0) else 0
+        michel_8b_surface_nette_N6: roundNumber(michel_7b_extension_N6 / michel_8a_densite_nette_N6,2)
+            if (michel_8a_densite_nette_N6!=0) else 0
         michel_8b_surface_nette_Total: roundNumber(michel_8b_surface_nette_N6 + michel_8b_surface_nette_N5
             + michel_8b_surface_nette_N4 + michel_8b_surface_nette_N3 + michel_8b_surface_nette_N2
             + michel_8b_surface_nette_N1,2)
@@ -6389,8 +6308,8 @@ JSON_DATA_SET_C:
             + michel_8c2_surface_equipements_N5 + michel_8c2_surface_equipements_N4
             + michel_8c2_surface_equipements_N3 + michel_8c2_surface_equipements_N2
             + michel_8c2_surface_equipements_N1,2)
-        michel_8c_consomation_prevue_annuelle: 'roundNumber (michel_8d_hectares_necessaires_Total
-            / michel_duree,2) if (michel_duree!=0) : 0'
+        michel_8c_consomation_prevue_annuelle: roundNumber (michel_8d_hectares_necessaires_Total
+            / michel_duree,2) if (michel_duree!=0) else 0
         michel_8c_surface_equipements_N1: '5'
         michel_8c_surface_equipements_N2: '5'
         michel_8c_surface_equipements_N3: '5'
@@ -6414,9 +6333,9 @@ JSON_DATA_SET_C:
             + michel_8d_hectares_necessaires_N5 + michel_8d_hectares_necessaires_N4
             + michel_8d_hectares_necessaires_N3 + michel_8d_hectares_necessaires_N2
             + michel_8d_hectares_necessaires_N1,2)
-        michel_8d_niveau_sobriete: 'roundNumber((michel_8c_consomation_prevue_annuelle
+        michel_8d_niveau_sobriete: roundNumber((michel_8c_consomation_prevue_annuelle
             / michel_8b_consomation_cerema_annuelle) * 100,0) if (michel_8b_consomation_cerema_annuelle!=0)
-            : 0'
+            else 0
         michel_8e_message_sobriete: michel_8e_message_sobriete3
         michel_8e_message_sobriete0: '"Territoire de reconquete"  if  (michel_8d_niveau_sobriete
             < 0 ) else "Consommation Exemplaire"'
@@ -8384,39 +8303,39 @@ JSON_DATA_SET_C:
         michel_8a_densite_nette_Total: $JS:""
         michel_8b_consomation_cerema_annuelle: $JS:roundNumber(michel_8a_consomation_cerema_10_ans
             / 10,2)
-        michel_8b_surface_nette_N1: 'roundNumber(michel_7b_extension_N1 / michel_8a_densite_nette_N1,2)  if
-            (michel_8a_densite_nette_N1!=0) : 0'
-        michel_8b_surface_nette_N2: 'roundNumber(michel_7b_extension_N2 / michel_8a_densite_nette_N2,2)
-            if (michel_8a_densite_nette_N2!=0) : 0'
-        michel_8b_surface_nette_N3: 'roundNumber(michel_7b_extension_N3 / michel_8a_densite_nette_N3,2)
-            if (michel_8a_densite_nette_N3!=0) : 0'
-        michel_8b_surface_nette_N4: 'roundNumber(michel_7b_extension_N4 / michel_8a_densite_nette_N4,2)
-            if (michel_8a_densite_nette_N4!=0) : 0'
-        michel_8b_surface_nette_N5: 'roundNumber(michel_7b_extension_N5 / michel_8a_densite_nette_N5,2)
-            if (michel_8a_densite_nette_N5!=0) : 0'
-        michel_8b_surface_nette_N6: 'roundNumber(michel_7b_extension_N6 / michel_8a_densite_nette_N6,2)
-            if (michel_8a_densite_nette_N6!=0) : 0'
-        michel_8b_surface_nette_Total: roundNumber(michel_8b_surface_nette_N6 + michel_8b_surface_nette_N5
-            + michel_8b_surface_nette_N4 + michel_8b_surface_nette_N3 + michel_8b_surface_nette_N2
-            + michel_8b_surface_nette_N1,2)
-        michel_8c2_surface_equipements_N1: roundNumber(michel_8b_surface_nette_N1
+        michel_8b_surface_nette_N1: '$JS:(michel_8a_densite_nette_N1==0) ? 0 : roundNumber(michel_7b_extension_N1
+            / michel_8a_densite_nette_N1,2)'
+        michel_8b_surface_nette_N2: $JS:(michel_8a_densite_nette_N2==0) ? 0 :roundNumber(michel_7b_extension_N2
+            / michel_8a_densite_nette_N2,2)
+        michel_8b_surface_nette_N3: $JS:(michel_8a_densite_nette_N3==0) ? 0 :roundNumber(michel_7b_extension_N3
+            / michel_8a_densite_nette_N3,2)
+        michel_8b_surface_nette_N4: $JS:(michel_8a_densite_nette_N4==0) ? 0 :roundNumber(michel_7b_extension_N4
+            / michel_8a_densite_nette_N4,2)
+        michel_8b_surface_nette_N5: $JS:(michel_8a_densite_nette_N5==0) ? 0 :roundNumber(michel_7b_extension_N5
+            / michel_8a_densite_nette_N5,2)
+        michel_8b_surface_nette_N6: $JS:(michel_8a_densite_nette_N6==0) ? 0 :roundNumber(michel_7b_extension_N6
+            / michel_8a_densite_nette_N6,2)
+        michel_8b_surface_nette_Total: $JS:roundNumber(michel_8b_surface_nette_N6
+            + michel_8b_surface_nette_N5 + michel_8b_surface_nette_N4 + michel_8b_surface_nette_N3
+            + michel_8b_surface_nette_N2 + michel_8b_surface_nette_N1,2)
+        michel_8c2_surface_equipements_N1: $JS:roundNumber(michel_8b_surface_nette_N1
             * michel_8c_surface_equipements_N1 / 100,2)
-        michel_8c2_surface_equipements_N2: roundNumber(michel_8b_surface_nette_N2
+        michel_8c2_surface_equipements_N2: $JS:roundNumber(michel_8b_surface_nette_N2
             * michel_8c_surface_equipements_N2 / 100,2)
-        michel_8c2_surface_equipements_N3: roundNumber(michel_8b_surface_nette_N3
+        michel_8c2_surface_equipements_N3: $JS:roundNumber(michel_8b_surface_nette_N3
             * michel_8c_surface_equipements_N3 / 100,2)
-        michel_8c2_surface_equipements_N4: roundNumber(michel_8b_surface_nette_N4
+        michel_8c2_surface_equipements_N4: $JS:roundNumber(michel_8b_surface_nette_N4
             * michel_8c_surface_equipements_N4 / 100,2)
-        michel_8c2_surface_equipements_N5: roundNumber(michel_8b_surface_nette_N5
+        michel_8c2_surface_equipements_N5: $JS:roundNumber(michel_8b_surface_nette_N5
             * michel_8c_surface_equipements_N5 / 100,2)
-        michel_8c2_surface_equipements_N6: roundNumber(michel_8b_surface_nette_N6
+        michel_8c2_surface_equipements_N6: $JS:roundNumber(michel_8b_surface_nette_N6
             * michel_8c_surface_equipements_N6 / 100,2)
-        michel_8c2_surface_equipements_Total: roundNumber(michel_8c2_surface_equipements_N6
+        michel_8c2_surface_equipements_Total: $JS:roundNumber(michel_8c2_surface_equipements_N6
             + michel_8c2_surface_equipements_N5 + michel_8c2_surface_equipements_N4
             + michel_8c2_surface_equipements_N3 + michel_8c2_surface_equipements_N2
             + michel_8c2_surface_equipements_N1,2)
-        michel_8c_consomation_prevue_annuelle: 'roundNumber (michel_8d_hectares_necessaires_Total
-            / michel_duree,2) if (michel_duree!=0) : 0'
+        michel_8c_consomation_prevue_annuelle: '$JS:(michel_duree==0) : 0 ? roundNumber
+            (michel_8d_hectares_necessaires_Total / michel_duree,2) '
         michel_8c_surface_equipements_N1: $JS:5
         michel_8c_surface_equipements_N2: $JS:5
         michel_8c_surface_equipements_N3: $JS:5
@@ -8424,34 +8343,34 @@ JSON_DATA_SET_C:
         michel_8c_surface_equipements_N5: $JS:10
         michel_8c_surface_equipements_N6: $JS:10
         michel_8c_surface_equipements_Total: $JS:0
-        michel_8d_hectares_necessaires_N1: roundNumber(michel_8b_surface_nette_N1
+        michel_8d_hectares_necessaires_N1: $JS:roundNumber(michel_8b_surface_nette_N1
             * ( 1 + michel_8c_surface_equipements_N1 / 100),2)
-        michel_8d_hectares_necessaires_N2: roundNumber(michel_8b_surface_nette_N2
+        michel_8d_hectares_necessaires_N2: $JS:roundNumber(michel_8b_surface_nette_N2
             * ( 1 + michel_8c_surface_equipements_N2/ 100),2)
-        michel_8d_hectares_necessaires_N3: roundNumber(michel_8b_surface_nette_N3
+        michel_8d_hectares_necessaires_N3: $JS:roundNumber(michel_8b_surface_nette_N3
             * ( 1 + michel_8c_surface_equipements_N3/ 100),2)
-        michel_8d_hectares_necessaires_N4: roundNumber(michel_8b_surface_nette_N4
+        michel_8d_hectares_necessaires_N4: $JS:roundNumber(michel_8b_surface_nette_N4
             * ( 1 + michel_8c_surface_equipements_N4/ 100),2)
-        michel_8d_hectares_necessaires_N5: roundNumber(michel_8b_surface_nette_N5
+        michel_8d_hectares_necessaires_N5: $JS:roundNumber(michel_8b_surface_nette_N5
             * ( 1 + michel_8c_surface_equipements_N5/ 100),2)
-        michel_8d_hectares_necessaires_N6: roundNumber(michel_8b_surface_nette_N6
+        michel_8d_hectares_necessaires_N6: $JS:roundNumber(michel_8b_surface_nette_N6
             * ( 1 + michel_8c_surface_equipements_N6/ 100),2)
-        michel_8d_hectares_necessaires_Total: roundNumber(michel_8d_hectares_necessaires_N6
+        michel_8d_hectares_necessaires_Total: $JS:roundNumber(michel_8d_hectares_necessaires_N6
             + michel_8d_hectares_necessaires_N5 + michel_8d_hectares_necessaires_N4
             + michel_8d_hectares_necessaires_N3 + michel_8d_hectares_necessaires_N2
             + michel_8d_hectares_necessaires_N1,2)
-        michel_8d_niveau_sobriete: 'roundNumber((michel_8c_consomation_prevue_annuelle
-            / michel_8b_consomation_cerema_annuelle) * 100,0) if (michel_8b_consomation_cerema_annuelle!=0)
-            : 0'
+        michel_8d_niveau_sobriete: '$JS:(michel_8b_consomation_cerema_annuelle==0)
+            ? 0  : roundNumber((michel_8c_consomation_prevue_annuelle / michel_8b_consomation_cerema_annuelle)
+            * 100,0)'
         michel_8e_message_sobriete: $JS:michel_8e_message_sobriete3
-        michel_8e_message_sobriete0: '"Territoire de reconquete"  if  (michel_8d_niveau_sobriete
-            < 0 ) else "Consommation Exemplaire"'
-        michel_8e_message_sobriete1: '"Objectif ZAN atteint"  if  (michel_8d_niveau_sobriete
-            > 25 ) else michel_8e_message_sobriete0'
-        michel_8e_message_sobriete2: '"Consommation Excessive"  if  (michel_8d_niveau_sobriete
-            >= 51 ) else michel_8e_message_sobriete1'
-        michel_8e_message_sobriete3: '"Consommation Abusive"  if  (michel_8d_niveau_sobriete
-            >= 100 ) else michel_8e_message_sobriete3'
+        michel_8e_message_sobriete0: '$JS: (michel_8d_niveau_sobriete < 0 ) ?  "Territoire
+            de reconquete" :  "Consommation Exemplaire"'
+        michel_8e_message_sobriete1: '$JS: (michel_8d_niveau_sobriete >= 25 ) ?  "Objectif
+            ZAN atteint" :  michel_8e_message_sobriete0'
+        michel_8e_message_sobriete2: '$JS: (michel_8d_niveau_sobriete >= 51 ) ?  "Consommation
+            Excessive" :  michel_8e_message_sobriete1'
+        michel_8e_message_sobriete3: '$JS: (michel_8d_niveau_sobriete >= 100 ) ?  "Consommation
+            Abusive" :  michel_8e_message_sobriete2'
         michel_an_arrivee: $JS:2030
         michel_an_depart: $JS:2021
         michel_an_donnee: $JS:2018
@@ -10182,69 +10101,21 @@ JSON_DATA_SET_C:
         michel_8a_densite_nette_N6: 70.0
         michel_8a_densite_nette_Total: ''
         michel_8b_consomation_cerema_annuelle: 4.3
-        michel_8b_surface_nette_N1: 'Error evaluating Calcul : Line 571 Key = michel_8b_surface_nette_N1
-            + expr : roundNumber(michel_7b_extension_N1 / michel_8a_densite_nette_N1,2)  if
-            (michel_8a_densite_nette_N1!=0) : 0 - Error : invalid syntax (<string>,
-            line 1)'
-        michel_8b_surface_nette_N2: 'Error evaluating Calcul : Line 572 Key = michel_8b_surface_nette_N2
-            + expr : roundNumber(michel_7b_extension_N2 / michel_8a_densite_nette_N2,2)
-            if (michel_8a_densite_nette_N2!=0) : 0 - Error : invalid syntax (<string>,
-            line 1)'
-        michel_8b_surface_nette_N3: 'Error evaluating Calcul : Line 573 Key = michel_8b_surface_nette_N3
-            + expr : roundNumber(michel_7b_extension_N3 / michel_8a_densite_nette_N3,2)
-            if (michel_8a_densite_nette_N3!=0) : 0 - Error : invalid syntax (<string>,
-            line 1)'
-        michel_8b_surface_nette_N4: 'Error evaluating Calcul : Line 574 Key = michel_8b_surface_nette_N4
-            + expr : roundNumber(michel_7b_extension_N4 / michel_8a_densite_nette_N4,2)
-            if (michel_8a_densite_nette_N4!=0) : 0 - Error : invalid syntax (<string>,
-            line 1)'
-        michel_8b_surface_nette_N5: 'Error evaluating Calcul : Line 575 Key = michel_8b_surface_nette_N5
-            + expr : roundNumber(michel_7b_extension_N5 / michel_8a_densite_nette_N5,2)
-            if (michel_8a_densite_nette_N5!=0) : 0 - Error : invalid syntax (<string>,
-            line 1)'
-        michel_8b_surface_nette_N6: 'Error evaluating Calcul : Line 576 Key = michel_8b_surface_nette_N6
-            + expr : roundNumber(michel_7b_extension_N6 / michel_8a_densite_nette_N6,2)
-            if (michel_8a_densite_nette_N6!=0) : 0 - Error : invalid syntax (<string>,
-            line 1)'
-        michel_8b_surface_nette_Total: 'Error evaluating Calcul : Line 577 Key = michel_8b_surface_nette_Total
-            + expr : roundNumber(michel_8b_surface_nette_N6 + michel_8b_surface_nette_N5
-            + michel_8b_surface_nette_N4 + michel_8b_surface_nette_N3 + michel_8b_surface_nette_N2
-            + michel_8b_surface_nette_N1,2) - Error : type str doesn''t define __round__
-            method'
-        michel_8c2_surface_equipements_N1: 'Error evaluating Calcul : Line 585 Key
-            = michel_8c2_surface_equipements_N1 + expr : roundNumber(michel_8b_surface_nette_N1
-            * michel_8c_surface_equipements_N1 / 100,2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8c2_surface_equipements_N2: 'Error evaluating Calcul : Line 586 Key
-            = michel_8c2_surface_equipements_N2 + expr : roundNumber(michel_8b_surface_nette_N2
-            * michel_8c_surface_equipements_N2 / 100,2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8c2_surface_equipements_N3: 'Error evaluating Calcul : Line 587 Key
-            = michel_8c2_surface_equipements_N3 + expr : roundNumber(michel_8b_surface_nette_N3
-            * michel_8c_surface_equipements_N3 / 100,2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8c2_surface_equipements_N4: 'Error evaluating Calcul : Line 588 Key
-            = michel_8c2_surface_equipements_N4 + expr : roundNumber(michel_8b_surface_nette_N4
-            * michel_8c_surface_equipements_N4 / 100,2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8c2_surface_equipements_N5: 'Error evaluating Calcul : Line 589 Key
-            = michel_8c2_surface_equipements_N5 + expr : roundNumber(michel_8b_surface_nette_N5
-            * michel_8c_surface_equipements_N5 / 100,2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8c2_surface_equipements_N6: 'Error evaluating Calcul : Line 590 Key
-            = michel_8c2_surface_equipements_N6 + expr : roundNumber(michel_8b_surface_nette_N6
-            * michel_8c_surface_equipements_N6 / 100,2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8c2_surface_equipements_Total: 'Error evaluating Calcul : Line 591
-            Key = michel_8c2_surface_equipements_Total + expr : roundNumber(michel_8c2_surface_equipements_N6
-            + michel_8c2_surface_equipements_N5 + michel_8c2_surface_equipements_N4
-            + michel_8c2_surface_equipements_N3 + michel_8c2_surface_equipements_N2
-            + michel_8c2_surface_equipements_N1,2) - Error : type str doesn''t define
-            __round__ method'
-        michel_8c_consomation_prevue_annuelle: 'Error evaluating Calcul : Line 602
-            Key = michel_8c_consomation_prevue_annuelle + expr : roundNumber (michel_8d_hectares_necessaires_Total
-            / michel_duree,2) if (michel_duree!=0) : 0 - Error : invalid syntax (<string>,
-            line 1)'
+        michel_8b_surface_nette_N1: 7.0
+        michel_8b_surface_nette_N2: 5.0
+        michel_8b_surface_nette_N3: 5.0
+        michel_8b_surface_nette_N4: 14.0
+        michel_8b_surface_nette_N5: 7.0
+        michel_8b_surface_nette_N6: 4.0
+        michel_8b_surface_nette_Total: 42.0
+        michel_8c2_surface_equipements_N1: 0.35
+        michel_8c2_surface_equipements_N2: 0.25
+        michel_8c2_surface_equipements_N3: 0.25
+        michel_8c2_surface_equipements_N4: 0.7
+        michel_8c2_surface_equipements_N5: 0.7
+        michel_8c2_surface_equipements_N6: 0.4
+        michel_8c2_surface_equipements_Total: 2.65
+        michel_8c_consomation_prevue_annuelle: 4.96
         michel_8c_surface_equipements_N1: 5.0
         michel_8c_surface_equipements_N2: 5.0
         michel_8c_surface_equipements_N3: 5.0
@@ -10252,60 +10123,19 @@ JSON_DATA_SET_C:
         michel_8c_surface_equipements_N5: 10.0
         michel_8c_surface_equipements_N6: 10.0
         michel_8c_surface_equipements_Total: 0.0
-        michel_8d_hectares_necessaires_N1: 'Error evaluating Calcul : Line 592 Key
-            = michel_8d_hectares_necessaires_N1 + expr : roundNumber(michel_8b_surface_nette_N1
-            * ( 1 + michel_8c_surface_equipements_N1 / 100),2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8d_hectares_necessaires_N2: 'Error evaluating Calcul : Line 593 Key
-            = michel_8d_hectares_necessaires_N2 + expr : roundNumber(michel_8b_surface_nette_N2
-            * ( 1 + michel_8c_surface_equipements_N2/ 100),2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8d_hectares_necessaires_N3: 'Error evaluating Calcul : Line 594 Key
-            = michel_8d_hectares_necessaires_N3 + expr : roundNumber(michel_8b_surface_nette_N3
-            * ( 1 + michel_8c_surface_equipements_N3/ 100),2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8d_hectares_necessaires_N4: 'Error evaluating Calcul : Line 595 Key
-            = michel_8d_hectares_necessaires_N4 + expr : roundNumber(michel_8b_surface_nette_N4
-            * ( 1 + michel_8c_surface_equipements_N4/ 100),2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8d_hectares_necessaires_N5: 'Error evaluating Calcul : Line 596 Key
-            = michel_8d_hectares_necessaires_N5 + expr : roundNumber(michel_8b_surface_nette_N5
-            * ( 1 + michel_8c_surface_equipements_N5/ 100),2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8d_hectares_necessaires_N6: 'Error evaluating Calcul : Line 597 Key
-            = michel_8d_hectares_necessaires_N6 + expr : roundNumber(michel_8b_surface_nette_N6
-            * ( 1 + michel_8c_surface_equipements_N6/ 100),2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8d_hectares_necessaires_Total: 'Error evaluating Calcul : Line 598
-            Key = michel_8d_hectares_necessaires_Total + expr : roundNumber(michel_8d_hectares_necessaires_N6
-            + michel_8d_hectares_necessaires_N5 + michel_8d_hectares_necessaires_N4
-            + michel_8d_hectares_necessaires_N3 + michel_8d_hectares_necessaires_N2
-            + michel_8d_hectares_necessaires_N1,2) - Error : type str doesn''t define
-            __round__ method'
-        michel_8d_niveau_sobriete: 'Error evaluating Calcul : Line 603 Key = michel_8d_niveau_sobriete
-            + expr : roundNumber((michel_8c_consomation_prevue_annuelle / michel_8b_consomation_cerema_annuelle)
-            * 100,0) if (michel_8b_consomation_cerema_annuelle!=0) : 0 - Error : invalid
-            syntax (<string>, line 1)'
-        michel_8e_message_sobriete: 'Error evaluating Calcul : Line 607 Key = michel_8e_message_sobriete3
-            + expr : "Consommation Abusive"  if  (michel_8d_niveau_sobriete >= 100
-            ) else michel_8e_message_sobriete3 - Error : ''>='' not supported between
-            instances of ''str'' and ''int'''
-        michel_8e_message_sobriete0: 'Error evaluating Calcul : Line 604 Key = michel_8e_message_sobriete0
-            + expr : "Territoire de reconquete"  if  (michel_8d_niveau_sobriete <
-            0 ) else "Consommation Exemplaire" - Error : ''<'' not supported between
-            instances of ''str'' and ''int'''
-        michel_8e_message_sobriete1: 'Error evaluating Calcul : Line 605 Key = michel_8e_message_sobriete1
-            + expr : "Objectif ZAN atteint"  if  (michel_8d_niveau_sobriete > 25 )
-            else michel_8e_message_sobriete0 - Error : ''>'' not supported between
-            instances of ''str'' and ''int'''
-        michel_8e_message_sobriete2: 'Error evaluating Calcul : Line 606 Key = michel_8e_message_sobriete2
-            + expr : "Consommation Excessive"  if  (michel_8d_niveau_sobriete >= 51
-            ) else michel_8e_message_sobriete1 - Error : ''>='' not supported between
-            instances of ''str'' and ''int'''
-        michel_8e_message_sobriete3: 'Error evaluating Calcul : Line 607 Key = michel_8e_message_sobriete3
-            + expr : "Consommation Abusive"  if  (michel_8d_niveau_sobriete >= 100
-            ) else michel_8e_message_sobriete3 - Error : ''>='' not supported between
-            instances of ''str'' and ''int'''
+        michel_8d_hectares_necessaires_N1: 7.35
+        michel_8d_hectares_necessaires_N2: 5.25
+        michel_8d_hectares_necessaires_N3: 5.25
+        michel_8d_hectares_necessaires_N4: 14.7
+        michel_8d_hectares_necessaires_N5: 7.7
+        michel_8d_hectares_necessaires_N6: 4.4
+        michel_8d_hectares_necessaires_Total: 44.65
+        michel_8d_niveau_sobriete: 115.0
+        michel_8e_message_sobriete: Consommation Abusive
+        michel_8e_message_sobriete0: Consommation Exemplaire
+        michel_8e_message_sobriete1: Objectif ZAN atteint
+        michel_8e_message_sobriete2: Consommation Excessive
+        michel_8e_message_sobriete3: Consommation Abusive
         michel_an_arrivee: 2030.0
         michel_an_depart: 2021.0
         michel_an_donnee: 2018.0
@@ -14946,74 +14776,57 @@ JSON_DATA_SET_M: "{\n    \"CODE_INSEE\": {\n        \"total\": \"06085\",\n     
     : {\n        \"total\": \"\",\n        \"meta\": \"Densite Nette en Log/Ha - Total\"\
     ,\n        \"06085\": \"\",\n        \"mode\": \"$JS:\\\"\\\"\",\n        \"expr\"\
     : \"\\\"\\\"\",\n        \"type\": \"STR\",\n        \"source\": \"MICHEL\"\n\
-    \    },\n    \"michel_8b_surface_nette_N1\": {\n        \"total\": \"Error evaluating\
-    \ Calcul : Line 571 Key = michel_8b_surface_nette_N1 + expr : roundNumber(michel_7b_extension_N1\
-    \ / michel_8a_densite_nette_N1,2)  if (michel_8a_densite_nette_N1!=0) : 0 - Error\
-    \ : invalid syntax (<string>, line 1)\",\n        \"meta\": \"Surface Nette en\
-    \ extension - Zone 1\",\n        \"06085\": \"\",\n        \"mode\": \"roundNumber(michel_7b_extension_N1\
-    \ / michel_8a_densite_nette_N1,2)  if (michel_8a_densite_nette_N1!=0) : 0\",\n\
-    \        \"expr\": \"roundNumber(michel_7b_extension_N1 / michel_8a_densite_nette_N1,2)\
-    \  if (michel_8a_densite_nette_N1!=0) : 0\",\n        \"type\": \"INT\",\n   \
-    \     \"source\": \"MICHEL\"\n    },\n    \"michel_8b_surface_nette_N2\": {\n\
-    \        \"total\": \"Error evaluating Calcul : Line 572 Key = michel_8b_surface_nette_N2\
-    \ + expr : roundNumber(michel_7b_extension_N2 / michel_8a_densite_nette_N2,2)\
-    \ if (michel_8a_densite_nette_N2!=0) : 0 - Error : invalid syntax (<string>, line\
-    \ 1)\",\n        \"meta\": \"Surface Nette en extension - Zone 2\",\n        \"\
-    06085\": \"\",\n        \"mode\": \"roundNumber(michel_7b_extension_N2 / michel_8a_densite_nette_N2,2)\
-    \ if (michel_8a_densite_nette_N2!=0) : 0\",\n        \"expr\": \"roundNumber(michel_7b_extension_N2\
-    \ / michel_8a_densite_nette_N2,2) if (michel_8a_densite_nette_N2!=0) : 0\",\n\
-    \        \"type\": \"INT\",\n        \"source\": \"MICHEL\"\n    },\n    \"michel_8b_surface_nette_N3\"\
-    : {\n        \"total\": \"Error evaluating Calcul : Line 573 Key = michel_8b_surface_nette_N3\
-    \ + expr : roundNumber(michel_7b_extension_N3 / michel_8a_densite_nette_N3,2)\
-    \ if (michel_8a_densite_nette_N3!=0) : 0 - Error : invalid syntax (<string>, line\
-    \ 1)\",\n        \"meta\": \"Surface Nette en extension - Zone 3\",\n        \"\
-    06085\": \"\",\n        \"mode\": \"roundNumber(michel_7b_extension_N3 / michel_8a_densite_nette_N3,2)\
-    \ if (michel_8a_densite_nette_N3!=0) : 0\",\n        \"expr\": \"roundNumber(michel_7b_extension_N3\
-    \ / michel_8a_densite_nette_N3,2) if (michel_8a_densite_nette_N3!=0) : 0\",\n\
-    \        \"type\": \"INT\",\n        \"source\": \"MICHEL\"\n    },\n    \"michel_8b_surface_nette_N4\"\
-    : {\n        \"total\": \"Error evaluating Calcul : Line 574 Key = michel_8b_surface_nette_N4\
-    \ + expr : roundNumber(michel_7b_extension_N4 / michel_8a_densite_nette_N4,2)\
-    \ if (michel_8a_densite_nette_N4!=0) : 0 - Error : invalid syntax (<string>, line\
-    \ 1)\",\n        \"meta\": \"Surface Nette en extension - Zone 4\",\n        \"\
-    06085\": \"\",\n        \"mode\": \"roundNumber(michel_7b_extension_N4 / michel_8a_densite_nette_N4,2)\
-    \ if (michel_8a_densite_nette_N4!=0) : 0\",\n        \"expr\": \"roundNumber(michel_7b_extension_N4\
-    \ / michel_8a_densite_nette_N4,2) if (michel_8a_densite_nette_N4!=0) : 0\",\n\
-    \        \"type\": \"INT\",\n        \"source\": \"MICHEL\"\n    },\n    \"michel_8b_surface_nette_N5\"\
-    : {\n        \"total\": \"Error evaluating Calcul : Line 575 Key = michel_8b_surface_nette_N5\
-    \ + expr : roundNumber(michel_7b_extension_N5 / michel_8a_densite_nette_N5,2)\
-    \ if (michel_8a_densite_nette_N5!=0) : 0 - Error : invalid syntax (<string>, line\
-    \ 1)\",\n        \"meta\": \"Surface Nette en extension - Zone 5\",\n        \"\
-    06085\": \"\",\n        \"mode\": \"roundNumber(michel_7b_extension_N5 / michel_8a_densite_nette_N5,2)\
-    \ if (michel_8a_densite_nette_N5!=0) : 0\",\n        \"expr\": \"roundNumber(michel_7b_extension_N5\
-    \ / michel_8a_densite_nette_N5,2) if (michel_8a_densite_nette_N5!=0) : 0\",\n\
-    \        \"type\": \"INT\",\n        \"source\": \"MICHEL\"\n    },\n    \"michel_8b_surface_nette_N6\"\
-    : {\n        \"total\": \"Error evaluating Calcul : Line 576 Key = michel_8b_surface_nette_N6\
-    \ + expr : roundNumber(michel_7b_extension_N6 / michel_8a_densite_nette_N6,2)\
-    \ if (michel_8a_densite_nette_N6!=0) : 0 - Error : invalid syntax (<string>, line\
-    \ 1)\",\n        \"meta\": \"Surface Nette en extension - Zone 6\",\n        \"\
-    06085\": \"\",\n        \"mode\": \"roundNumber(michel_7b_extension_N6 / michel_8a_densite_nette_N6,2)\
-    \ if (michel_8a_densite_nette_N6!=0) : 0\",\n        \"expr\": \"roundNumber(michel_7b_extension_N6\
-    \ / michel_8a_densite_nette_N6,2) if (michel_8a_densite_nette_N6!=0) : 0\",\n\
-    \        \"type\": \"INT\",\n        \"source\": \"MICHEL\"\n    },\n    \"michel_8b_surface_nette_Total\"\
-    : {\n        \"total\": \"Error evaluating Calcul : Line 577 Key = michel_8b_surface_nette_Total\
-    \ + expr : roundNumber(michel_8b_surface_nette_N6 + michel_8b_surface_nette_N5\
+    \    },\n    \"michel_8b_surface_nette_N1\": {\n        \"total\": 7.0,\n    \
+    \    \"meta\": \"Surface Nette en extension - Zone 1\",\n        \"06085\": \"\
+    \",\n        \"mode\": \"$JS:(michel_8a_densite_nette_N1==0) ? 0 : roundNumber(michel_7b_extension_N1\
+    \ / michel_8a_densite_nette_N1,2)\",\n        \"expr\": \"roundNumber(michel_7b_extension_N1\
+    \ / michel_8a_densite_nette_N1,2)  if (michel_8a_densite_nette_N1!=0) else 0\"\
+    ,\n        \"type\": \"INT\",\n        \"source\": \"MICHEL\"\n    },\n    \"\
+    michel_8b_surface_nette_N2\": {\n        \"total\": 5.0,\n        \"meta\": \"\
+    Surface Nette en extension - Zone 2\",\n        \"06085\": \"\",\n        \"mode\"\
+    : \"$JS:(michel_8a_densite_nette_N2==0) ? 0 :roundNumber(michel_7b_extension_N2\
+    \ / michel_8a_densite_nette_N2,2)\",\n        \"expr\": \"roundNumber(michel_7b_extension_N2\
+    \ / michel_8a_densite_nette_N2,2) if (michel_8a_densite_nette_N2!=0) else 0\"\
+    ,\n        \"type\": \"INT\",\n        \"source\": \"MICHEL\"\n    },\n    \"\
+    michel_8b_surface_nette_N3\": {\n        \"total\": 5.0,\n        \"meta\": \"\
+    Surface Nette en extension - Zone 3\",\n        \"06085\": \"\",\n        \"mode\"\
+    : \"$JS:(michel_8a_densite_nette_N3==0) ? 0 :roundNumber(michel_7b_extension_N3\
+    \ / michel_8a_densite_nette_N3,2)\",\n        \"expr\": \"roundNumber(michel_7b_extension_N3\
+    \ / michel_8a_densite_nette_N3,2) if (michel_8a_densite_nette_N3!=0) else 0\"\
+    ,\n        \"type\": \"INT\",\n        \"source\": \"MICHEL\"\n    },\n    \"\
+    michel_8b_surface_nette_N4\": {\n        \"total\": 14.0,\n        \"meta\": \"\
+    Surface Nette en extension - Zone 4\",\n        \"06085\": \"\",\n        \"mode\"\
+    : \"$JS:(michel_8a_densite_nette_N4==0) ? 0 :roundNumber(michel_7b_extension_N4\
+    \ / michel_8a_densite_nette_N4,2)\",\n        \"expr\": \"roundNumber(michel_7b_extension_N4\
+    \ / michel_8a_densite_nette_N4,2) if (michel_8a_densite_nette_N4!=0) else 0\"\
+    ,\n        \"type\": \"INT\",\n        \"source\": \"MICHEL\"\n    },\n    \"\
+    michel_8b_surface_nette_N5\": {\n        \"total\": 7.0,\n        \"meta\": \"\
+    Surface Nette en extension - Zone 5\",\n        \"06085\": \"\",\n        \"mode\"\
+    : \"$JS:(michel_8a_densite_nette_N5==0) ? 0 :roundNumber(michel_7b_extension_N5\
+    \ / michel_8a_densite_nette_N5,2)\",\n        \"expr\": \"roundNumber(michel_7b_extension_N5\
+    \ / michel_8a_densite_nette_N5,2) if (michel_8a_densite_nette_N5!=0) else 0\"\
+    ,\n        \"type\": \"INT\",\n        \"source\": \"MICHEL\"\n    },\n    \"\
+    michel_8b_surface_nette_N6\": {\n        \"total\": 4.0,\n        \"meta\": \"\
+    Surface Nette en extension - Zone 6\",\n        \"06085\": \"\",\n        \"mode\"\
+    : \"$JS:(michel_8a_densite_nette_N6==0) ? 0 :roundNumber(michel_7b_extension_N6\
+    \ / michel_8a_densite_nette_N6,2)\",\n        \"expr\": \"roundNumber(michel_7b_extension_N6\
+    \ / michel_8a_densite_nette_N6,2) if (michel_8a_densite_nette_N6!=0) else 0\"\
+    ,\n        \"type\": \"INT\",\n        \"source\": \"MICHEL\"\n    },\n    \"\
+    michel_8b_surface_nette_Total\": {\n        \"total\": 42.0,\n        \"meta\"\
+    : \"Surface Nette en extension - Total\",\n        \"06085\": \"\",\n        \"\
+    mode\": \"$JS:roundNumber(michel_8b_surface_nette_N6 + michel_8b_surface_nette_N5\
     \ + michel_8b_surface_nette_N4 + michel_8b_surface_nette_N3 + michel_8b_surface_nette_N2\
-    \ + michel_8b_surface_nette_N1,2) - Error : type str doesn't define __round__\
-    \ method\",\n        \"meta\": \"Surface Nette en extension - Total\",\n     \
-    \   \"06085\": \"\",\n        \"mode\": \"roundNumber(michel_8b_surface_nette_N6\
+    \ + michel_8b_surface_nette_N1,2)\",\n        \"expr\": \"roundNumber(michel_8b_surface_nette_N6\
     \ + michel_8b_surface_nette_N5 + michel_8b_surface_nette_N4 + michel_8b_surface_nette_N3\
     \ + michel_8b_surface_nette_N2 + michel_8b_surface_nette_N1,2)\",\n        \"\
-    expr\": \"roundNumber(michel_8b_surface_nette_N6 + michel_8b_surface_nette_N5\
-    \ + michel_8b_surface_nette_N4 + michel_8b_surface_nette_N3 + michel_8b_surface_nette_N2\
-    \ + michel_8b_surface_nette_N1,2)\",\n        \"type\": \"INT\",\n        \"source\"\
-    : \"MICHEL\"\n    },\n    \"michel_8c_surface_equipements_N1\": {\n        \"\
-    total\": 5.0,\n        \"meta\": \"Rajout Equipements en pourcent - Zone 1\",\n\
-    \        \"06085\": \"\",\n        \"mode\": \"$JS:5\",\n        \"expr\": \"\
-    5\",\n        \"type\": \"TAUX\",\n        \"source\": \"MICHEL\"\n    },\n  \
-    \  \"michel_8c_surface_equipements_N2\": {\n        \"total\": 5.0,\n        \"\
-    meta\": \"Rajout Equipements en pourcent - Zone 2\",\n        \"06085\": \"\"\
-    ,\n        \"mode\": \"$JS:5\",\n        \"expr\": \"5\",\n        \"type\": \"\
-    TAUX\",\n        \"source\": \"MICHEL\"\n    },\n    \"michel_8c_surface_equipements_N3\"\
+    type\": \"INT\",\n        \"source\": \"MICHEL\"\n    },\n    \"michel_8c_surface_equipements_N1\"\
+    : {\n        \"total\": 5.0,\n        \"meta\": \"Rajout Equipements en pourcent\
+    \ - Zone 1\",\n        \"06085\": \"\",\n        \"mode\": \"$JS:5\",\n      \
+    \  \"expr\": \"5\",\n        \"type\": \"TAUX\",\n        \"source\": \"MICHEL\"\
+    \n    },\n    \"michel_8c_surface_equipements_N2\": {\n        \"total\": 5.0,\n\
+    \        \"meta\": \"Rajout Equipements en pourcent - Zone 2\",\n        \"06085\"\
+    : \"\",\n        \"mode\": \"$JS:5\",\n        \"expr\": \"5\",\n        \"type\"\
+    : \"TAUX\",\n        \"source\": \"MICHEL\"\n    },\n    \"michel_8c_surface_equipements_N3\"\
     : {\n        \"total\": 5.0,\n        \"meta\": \"Rajout Equipements en pourcent\
     \ - Zone 3\",\n        \"06085\": \"\",\n        \"mode\": \"$JS:5\",\n      \
     \  \"expr\": \"5\",\n        \"type\": \"TAUX\",\n        \"source\": \"MICHEL\"\
@@ -15031,201 +14844,140 @@ JSON_DATA_SET_M: "{\n    \"CODE_INSEE\": {\n        \"total\": \"06085\",\n     
     : {\n        \"total\": 0.0,\n        \"meta\": \"Rajout Equipements  - Total\"\
     ,\n        \"06085\": \"\",\n        \"mode\": \"$JS:0\",\n        \"expr\": \"\
     0\",\n        \"type\": \"FLOAT\",\n        \"source\": \"MICHEL\"\n    },\n \
-    \   \"michel_8c2_surface_equipements_N1\": {\n        \"total\": \"Error evaluating\
-    \ Calcul : Line 585 Key = michel_8c2_surface_equipements_N1 + expr : roundNumber(michel_8b_surface_nette_N1\
-    \ * michel_8c_surface_equipements_N1 / 100,2) - Error : can't multiply sequence\
-    \ by non-int of type 'numpy.float64'\",\n        \"meta\": \"Rajout Equipements\
-    \ en surface - Zone 1\",\n        \"06085\": \"\",\n        \"mode\": \"roundNumber(michel_8b_surface_nette_N1\
-    \ * michel_8c_surface_equipements_N1 / 100,2)\",\n        \"expr\": \"roundNumber(michel_8b_surface_nette_N1\
-    \ * michel_8c_surface_equipements_N1 / 100,2)\",\n        \"type\": \"FLOAT\"\
-    ,\n        \"source\": \"MICHEL\"\n    },\n    \"michel_8c2_surface_equipements_N2\"\
-    : {\n        \"total\": \"Error evaluating Calcul : Line 586 Key = michel_8c2_surface_equipements_N2\
-    \ + expr : roundNumber(michel_8b_surface_nette_N2 * michel_8c_surface_equipements_N2\
-    \ / 100,2) - Error : can't multiply sequence by non-int of type 'numpy.float64'\"\
-    ,\n        \"meta\": \"Rajout Equipements en surface - Zone 2\",\n        \"06085\"\
-    : \"\",\n        \"mode\": \"roundNumber(michel_8b_surface_nette_N2 * michel_8c_surface_equipements_N2\
+    \   \"michel_8c2_surface_equipements_N1\": {\n        \"total\": 0.35,\n     \
+    \   \"meta\": \"Rajout Equipements en surface - Zone 1\",\n        \"06085\":\
+    \ \"\",\n        \"mode\": \"$JS:roundNumber(michel_8b_surface_nette_N1 * michel_8c_surface_equipements_N1\
+    \ / 100,2)\",\n        \"expr\": \"roundNumber(michel_8b_surface_nette_N1 * michel_8c_surface_equipements_N1\
+    \ / 100,2)\",\n        \"type\": \"FLOAT\",\n        \"source\": \"MICHEL\"\n\
+    \    },\n    \"michel_8c2_surface_equipements_N2\": {\n        \"total\": 0.25,\n\
+    \        \"meta\": \"Rajout Equipements en surface - Zone 2\",\n        \"06085\"\
+    : \"\",\n        \"mode\": \"$JS:roundNumber(michel_8b_surface_nette_N2 * michel_8c_surface_equipements_N2\
     \ / 100,2)\",\n        \"expr\": \"roundNumber(michel_8b_surface_nette_N2 * michel_8c_surface_equipements_N2\
     \ / 100,2)\",\n        \"type\": \"FLOAT\",\n        \"source\": \"MICHEL\"\n\
-    \    },\n    \"michel_8c2_surface_equipements_N3\": {\n        \"total\": \"Error\
-    \ evaluating Calcul : Line 587 Key = michel_8c2_surface_equipements_N3 + expr\
-    \ : roundNumber(michel_8b_surface_nette_N3 * michel_8c_surface_equipements_N3\
-    \ / 100,2) - Error : can't multiply sequence by non-int of type 'numpy.float64'\"\
-    ,\n        \"meta\": \"Rajout Equipements en surface - Zone 3\",\n        \"06085\"\
-    : \"\",\n        \"mode\": \"roundNumber(michel_8b_surface_nette_N3 * michel_8c_surface_equipements_N3\
+    \    },\n    \"michel_8c2_surface_equipements_N3\": {\n        \"total\": 0.25,\n\
+    \        \"meta\": \"Rajout Equipements en surface - Zone 3\",\n        \"06085\"\
+    : \"\",\n        \"mode\": \"$JS:roundNumber(michel_8b_surface_nette_N3 * michel_8c_surface_equipements_N3\
     \ / 100,2)\",\n        \"expr\": \"roundNumber(michel_8b_surface_nette_N3 * michel_8c_surface_equipements_N3\
     \ / 100,2)\",\n        \"type\": \"FLOAT\",\n        \"source\": \"MICHEL\"\n\
-    \    },\n    \"michel_8c2_surface_equipements_N4\": {\n        \"total\": \"Error\
-    \ evaluating Calcul : Line 588 Key = michel_8c2_surface_equipements_N4 + expr\
-    \ : roundNumber(michel_8b_surface_nette_N4 * michel_8c_surface_equipements_N4\
-    \ / 100,2) - Error : can't multiply sequence by non-int of type 'numpy.float64'\"\
-    ,\n        \"meta\": \"Rajout Equipements en surface - Zone 4\",\n        \"06085\"\
-    : \"\",\n        \"mode\": \"roundNumber(michel_8b_surface_nette_N4 * michel_8c_surface_equipements_N4\
+    \    },\n    \"michel_8c2_surface_equipements_N4\": {\n        \"total\": 0.7,\n\
+    \        \"meta\": \"Rajout Equipements en surface - Zone 4\",\n        \"06085\"\
+    : \"\",\n        \"mode\": \"$JS:roundNumber(michel_8b_surface_nette_N4 * michel_8c_surface_equipements_N4\
     \ / 100,2)\",\n        \"expr\": \"roundNumber(michel_8b_surface_nette_N4 * michel_8c_surface_equipements_N4\
     \ / 100,2)\",\n        \"type\": \"FLOAT\",\n        \"source\": \"MICHEL\"\n\
-    \    },\n    \"michel_8c2_surface_equipements_N5\": {\n        \"total\": \"Error\
-    \ evaluating Calcul : Line 589 Key = michel_8c2_surface_equipements_N5 + expr\
-    \ : roundNumber(michel_8b_surface_nette_N5 * michel_8c_surface_equipements_N5\
-    \ / 100,2) - Error : can't multiply sequence by non-int of type 'numpy.float64'\"\
-    ,\n        \"meta\": \"Rajout Equipements en surface - Zone 5\",\n        \"06085\"\
-    : \"\",\n        \"mode\": \"roundNumber(michel_8b_surface_nette_N5 * michel_8c_surface_equipements_N5\
+    \    },\n    \"michel_8c2_surface_equipements_N5\": {\n        \"total\": 0.7,\n\
+    \        \"meta\": \"Rajout Equipements en surface - Zone 5\",\n        \"06085\"\
+    : \"\",\n        \"mode\": \"$JS:roundNumber(michel_8b_surface_nette_N5 * michel_8c_surface_equipements_N5\
     \ / 100,2)\",\n        \"expr\": \"roundNumber(michel_8b_surface_nette_N5 * michel_8c_surface_equipements_N5\
     \ / 100,2)\",\n        \"type\": \"FLOAT\",\n        \"source\": \"MICHEL\"\n\
-    \    },\n    \"michel_8c2_surface_equipements_N6\": {\n        \"total\": \"Error\
-    \ evaluating Calcul : Line 590 Key = michel_8c2_surface_equipements_N6 + expr\
-    \ : roundNumber(michel_8b_surface_nette_N6 * michel_8c_surface_equipements_N6\
-    \ / 100,2) - Error : can't multiply sequence by non-int of type 'numpy.float64'\"\
-    ,\n        \"meta\": \"Rajout Equipements en surface - Zone 6\",\n        \"06085\"\
-    : \"\",\n        \"mode\": \"roundNumber(michel_8b_surface_nette_N6 * michel_8c_surface_equipements_N6\
+    \    },\n    \"michel_8c2_surface_equipements_N6\": {\n        \"total\": 0.4,\n\
+    \        \"meta\": \"Rajout Equipements en surface - Zone 6\",\n        \"06085\"\
+    : \"\",\n        \"mode\": \"$JS:roundNumber(michel_8b_surface_nette_N6 * michel_8c_surface_equipements_N6\
     \ / 100,2)\",\n        \"expr\": \"roundNumber(michel_8b_surface_nette_N6 * michel_8c_surface_equipements_N6\
     \ / 100,2)\",\n        \"type\": \"FLOAT\",\n        \"source\": \"MICHEL\"\n\
-    \    },\n    \"michel_8c2_surface_equipements_Total\": {\n        \"total\": \"\
-    Error evaluating Calcul : Line 591 Key = michel_8c2_surface_equipements_Total\
-    \ + expr : roundNumber(michel_8c2_surface_equipements_N6 + michel_8c2_surface_equipements_N5\
-    \ + michel_8c2_surface_equipements_N4 + michel_8c2_surface_equipements_N3 + michel_8c2_surface_equipements_N2\
-    \ + michel_8c2_surface_equipements_N1,2) - Error : type str doesn't define __round__\
-    \ method\",\n        \"meta\": \"Rajout Equipements en surface - Total\",\n  \
-    \      \"06085\": \"\",\n        \"mode\": \"roundNumber(michel_8c2_surface_equipements_N6\
+    \    },\n    \"michel_8c2_surface_equipements_Total\": {\n        \"total\": 2.65,\n\
+    \        \"meta\": \"Rajout Equipements en surface - Total\",\n        \"06085\"\
+    : \"\",\n        \"mode\": \"$JS:roundNumber(michel_8c2_surface_equipements_N6\
     \ + michel_8c2_surface_equipements_N5 + michel_8c2_surface_equipements_N4 + michel_8c2_surface_equipements_N3\
     \ + michel_8c2_surface_equipements_N2 + michel_8c2_surface_equipements_N1,2)\"\
     ,\n        \"expr\": \"roundNumber(michel_8c2_surface_equipements_N6 + michel_8c2_surface_equipements_N5\
     \ + michel_8c2_surface_equipements_N4 + michel_8c2_surface_equipements_N3 + michel_8c2_surface_equipements_N2\
     \ + michel_8c2_surface_equipements_N1,2)\",\n        \"type\": \"FLOAT\",\n  \
     \      \"source\": \"MICHEL\"\n    },\n    \"michel_8d_hectares_necessaires_N1\"\
-    : {\n        \"total\": \"Error evaluating Calcul : Line 592 Key = michel_8d_hectares_necessaires_N1\
-    \ + expr : roundNumber(michel_8b_surface_nette_N1 * ( 1 + michel_8c_surface_equipements_N1\
-    \ / 100),2) - Error : can't multiply sequence by non-int of type 'numpy.float64'\"\
-    ,\n        \"meta\": \"Hectares Necessaires - Zone 1\",\n        \"06085\": \"\
-    \",\n        \"mode\": \"roundNumber(michel_8b_surface_nette_N1 * ( 1 + michel_8c_surface_equipements_N1\
-    \ / 100),2)\",\n        \"expr\": \"roundNumber(michel_8b_surface_nette_N1 * (\
-    \ 1 + michel_8c_surface_equipements_N1 / 100),2)\",\n        \"type\": \"FLOAT\"\
-    ,\n        \"source\": \"MICHEL\"\n    },\n    \"michel_8d_hectares_necessaires_N2\"\
-    : {\n        \"total\": \"Error evaluating Calcul : Line 593 Key = michel_8d_hectares_necessaires_N2\
-    \ + expr : roundNumber(michel_8b_surface_nette_N2 * ( 1 + michel_8c_surface_equipements_N2/\
-    \ 100),2) - Error : can't multiply sequence by non-int of type 'numpy.float64'\"\
-    ,\n        \"meta\": \"Hectares Necessaires - Zone 2\",\n        \"06085\": \"\
-    \",\n        \"mode\": \"roundNumber(michel_8b_surface_nette_N2 * ( 1 + michel_8c_surface_equipements_N2/\
+    : {\n        \"total\": 7.35,\n        \"meta\": \"Hectares Necessaires - Zone\
+    \ 1\",\n        \"06085\": \"\",\n        \"mode\": \"$JS:roundNumber(michel_8b_surface_nette_N1\
+    \ * ( 1 + michel_8c_surface_equipements_N1 / 100),2)\",\n        \"expr\": \"\
+    roundNumber(michel_8b_surface_nette_N1 * ( 1 + michel_8c_surface_equipements_N1\
+    \ / 100),2)\",\n        \"type\": \"FLOAT\",\n        \"source\": \"MICHEL\"\n\
+    \    },\n    \"michel_8d_hectares_necessaires_N2\": {\n        \"total\": 5.25,\n\
+    \        \"meta\": \"Hectares Necessaires - Zone 2\",\n        \"06085\": \"\"\
+    ,\n        \"mode\": \"$JS:roundNumber(michel_8b_surface_nette_N2 * ( 1 + michel_8c_surface_equipements_N2/\
     \ 100),2)\",\n        \"expr\": \"roundNumber(michel_8b_surface_nette_N2 * ( 1\
     \ + michel_8c_surface_equipements_N2/ 100),2)\",\n        \"type\": \"FLOAT\"\
     ,\n        \"source\": \"MICHEL\"\n    },\n    \"michel_8d_hectares_necessaires_N3\"\
-    : {\n        \"total\": \"Error evaluating Calcul : Line 594 Key = michel_8d_hectares_necessaires_N3\
-    \ + expr : roundNumber(michel_8b_surface_nette_N3 * ( 1 + michel_8c_surface_equipements_N3/\
-    \ 100),2) - Error : can't multiply sequence by non-int of type 'numpy.float64'\"\
-    ,\n        \"meta\": \"Hectares Necessaires - Zone 3\",\n        \"06085\": \"\
-    \",\n        \"mode\": \"roundNumber(michel_8b_surface_nette_N3 * ( 1 + michel_8c_surface_equipements_N3/\
-    \ 100),2)\",\n        \"expr\": \"roundNumber(michel_8b_surface_nette_N3 * ( 1\
-    \ + michel_8c_surface_equipements_N3/ 100),2)\",\n        \"type\": \"FLOAT\"\
+    : {\n        \"total\": 5.25,\n        \"meta\": \"Hectares Necessaires - Zone\
+    \ 3\",\n        \"06085\": \"\",\n        \"mode\": \"$JS:roundNumber(michel_8b_surface_nette_N3\
+    \ * ( 1 + michel_8c_surface_equipements_N3/ 100),2)\",\n        \"expr\": \"roundNumber(michel_8b_surface_nette_N3\
+    \ * ( 1 + michel_8c_surface_equipements_N3/ 100),2)\",\n        \"type\": \"FLOAT\"\
     ,\n        \"source\": \"MICHEL\"\n    },\n    \"michel_8d_hectares_necessaires_N4\"\
-    : {\n        \"total\": \"Error evaluating Calcul : Line 595 Key = michel_8d_hectares_necessaires_N4\
-    \ + expr : roundNumber(michel_8b_surface_nette_N4 * ( 1 + michel_8c_surface_equipements_N4/\
-    \ 100),2) - Error : can't multiply sequence by non-int of type 'numpy.float64'\"\
-    ,\n        \"meta\": \"Hectares Necessaires - Zone 4\",\n        \"06085\": \"\
-    \",\n        \"mode\": \"roundNumber(michel_8b_surface_nette_N4 * ( 1 + michel_8c_surface_equipements_N4/\
-    \ 100),2)\",\n        \"expr\": \"roundNumber(michel_8b_surface_nette_N4 * ( 1\
-    \ + michel_8c_surface_equipements_N4/ 100),2)\",\n        \"type\": \"FLOAT\"\
+    : {\n        \"total\": 14.7,\n        \"meta\": \"Hectares Necessaires - Zone\
+    \ 4\",\n        \"06085\": \"\",\n        \"mode\": \"$JS:roundNumber(michel_8b_surface_nette_N4\
+    \ * ( 1 + michel_8c_surface_equipements_N4/ 100),2)\",\n        \"expr\": \"roundNumber(michel_8b_surface_nette_N4\
+    \ * ( 1 + michel_8c_surface_equipements_N4/ 100),2)\",\n        \"type\": \"FLOAT\"\
     ,\n        \"source\": \"MICHEL\"\n    },\n    \"michel_8d_hectares_necessaires_N5\"\
-    : {\n        \"total\": \"Error evaluating Calcul : Line 596 Key = michel_8d_hectares_necessaires_N5\
-    \ + expr : roundNumber(michel_8b_surface_nette_N5 * ( 1 + michel_8c_surface_equipements_N5/\
-    \ 100),2) - Error : can't multiply sequence by non-int of type 'numpy.float64'\"\
-    ,\n        \"meta\": \"Hectares Necessaires - Zone 5\",\n        \"06085\": \"\
-    \",\n        \"mode\": \"roundNumber(michel_8b_surface_nette_N5 * ( 1 + michel_8c_surface_equipements_N5/\
-    \ 100),2)\",\n        \"expr\": \"roundNumber(michel_8b_surface_nette_N5 * ( 1\
-    \ + michel_8c_surface_equipements_N5/ 100),2)\",\n        \"type\": \"FLOAT\"\
+    : {\n        \"total\": 7.7,\n        \"meta\": \"Hectares Necessaires - Zone\
+    \ 5\",\n        \"06085\": \"\",\n        \"mode\": \"$JS:roundNumber(michel_8b_surface_nette_N5\
+    \ * ( 1 + michel_8c_surface_equipements_N5/ 100),2)\",\n        \"expr\": \"roundNumber(michel_8b_surface_nette_N5\
+    \ * ( 1 + michel_8c_surface_equipements_N5/ 100),2)\",\n        \"type\": \"FLOAT\"\
     ,\n        \"source\": \"MICHEL\"\n    },\n    \"michel_8d_hectares_necessaires_N6\"\
-    : {\n        \"total\": \"Error evaluating Calcul : Line 597 Key = michel_8d_hectares_necessaires_N6\
-    \ + expr : roundNumber(michel_8b_surface_nette_N6 * ( 1 + michel_8c_surface_equipements_N6/\
-    \ 100),2) - Error : can't multiply sequence by non-int of type 'numpy.float64'\"\
-    ,\n        \"meta\": \"Hectares Necessaires - Zone 6\",\n        \"06085\": \"\
-    \",\n        \"mode\": \"roundNumber(michel_8b_surface_nette_N6 * ( 1 + michel_8c_surface_equipements_N6/\
-    \ 100),2)\",\n        \"expr\": \"roundNumber(michel_8b_surface_nette_N6 * ( 1\
-    \ + michel_8c_surface_equipements_N6/ 100),2)\",\n        \"type\": \"FLOAT\"\
+    : {\n        \"total\": 4.4,\n        \"meta\": \"Hectares Necessaires - Zone\
+    \ 6\",\n        \"06085\": \"\",\n        \"mode\": \"$JS:roundNumber(michel_8b_surface_nette_N6\
+    \ * ( 1 + michel_8c_surface_equipements_N6/ 100),2)\",\n        \"expr\": \"roundNumber(michel_8b_surface_nette_N6\
+    \ * ( 1 + michel_8c_surface_equipements_N6/ 100),2)\",\n        \"type\": \"FLOAT\"\
     ,\n        \"source\": \"MICHEL\"\n    },\n    \"michel_8d_hectares_necessaires_Total\"\
-    : {\n        \"total\": \"Error evaluating Calcul : Line 598 Key = michel_8d_hectares_necessaires_Total\
-    \ + expr : roundNumber(michel_8d_hectares_necessaires_N6 + michel_8d_hectares_necessaires_N5\
-    \ + michel_8d_hectares_necessaires_N4 + michel_8d_hectares_necessaires_N3 + michel_8d_hectares_necessaires_N2\
-    \ + michel_8d_hectares_necessaires_N1,2) - Error : type str doesn't define __round__\
-    \ method\",\n        \"meta\": \"Hectares Necessaires - Total\",\n        \"06085\"\
-    : \"\",\n        \"mode\": \"roundNumber(michel_8d_hectares_necessaires_N6 + michel_8d_hectares_necessaires_N5\
-    \ + michel_8d_hectares_necessaires_N4 + michel_8d_hectares_necessaires_N3 + michel_8d_hectares_necessaires_N2\
-    \ + michel_8d_hectares_necessaires_N1,2)\",\n        \"expr\": \"roundNumber(michel_8d_hectares_necessaires_N6\
+    : {\n        \"total\": 44.65,\n        \"meta\": \"Hectares Necessaires - Total\"\
+    ,\n        \"06085\": \"\",\n        \"mode\": \"$JS:roundNumber(michel_8d_hectares_necessaires_N6\
     \ + michel_8d_hectares_necessaires_N5 + michel_8d_hectares_necessaires_N4 + michel_8d_hectares_necessaires_N3\
     \ + michel_8d_hectares_necessaires_N2 + michel_8d_hectares_necessaires_N1,2)\"\
-    ,\n        \"type\": \"FLOAT\",\n        \"source\": \"MICHEL\"\n    },\n    \"\
-    michel_8a_consomation_cerema_10_ans\": {\n        \"total\": 43.0,\n        \"\
-    meta\": \"Consommation Fonciere en 10 ans\",\n        \"06085\": \"\",\n     \
-    \   \"mode\": \"$JS:roundNumber(ART_TOTAL / 10000,1)\",\n        \"expr\": \"\
-    roundNumber(ART_TOTAL / 10000,1)\",\n        \"type\": \"FLOAT\",\n        \"\
-    source\": \"MICHEL\"\n    },\n    \"michel_8b_consomation_cerema_annuelle\": {\n\
-    \        \"total\": 4.3,\n        \"meta\": \"Consommation Fonciere annuelle\"\
+    ,\n        \"expr\": \"roundNumber(michel_8d_hectares_necessaires_N6 + michel_8d_hectares_necessaires_N5\
+    \ + michel_8d_hectares_necessaires_N4 + michel_8d_hectares_necessaires_N3 + michel_8d_hectares_necessaires_N2\
+    \ + michel_8d_hectares_necessaires_N1,2)\",\n        \"type\": \"FLOAT\",\n  \
+    \      \"source\": \"MICHEL\"\n    },\n    \"michel_8a_consomation_cerema_10_ans\"\
+    : {\n        \"total\": 43.0,\n        \"meta\": \"Consommation Fonciere en 10\
+    \ ans\",\n        \"06085\": \"\",\n        \"mode\": \"$JS:roundNumber(ART_TOTAL\
+    \ / 10000,1)\",\n        \"expr\": \"roundNumber(ART_TOTAL / 10000,1)\",\n   \
+    \     \"type\": \"FLOAT\",\n        \"source\": \"MICHEL\"\n    },\n    \"michel_8b_consomation_cerema_annuelle\"\
+    : {\n        \"total\": 4.3,\n        \"meta\": \"Consommation Fonciere annuelle\"\
     ,\n        \"06085\": \"\",\n        \"mode\": \"$JS:roundNumber(michel_8a_consomation_cerema_10_ans\
     \ / 10,2)\",\n        \"expr\": \"roundNumber(michel_8a_consomation_cerema_10_ans\
     \ / 10,2)\",\n        \"type\": \"FLOAT\",\n        \"source\": \"MICHEL\"\n \
-    \   },\n    \"michel_8c_consomation_prevue_annuelle\": {\n        \"total\": \"\
-    Error evaluating Calcul : Line 602 Key = michel_8c_consomation_prevue_annuelle\
-    \ + expr : roundNumber (michel_8d_hectares_necessaires_Total / michel_duree,2)\
-    \ if (michel_duree!=0) : 0 - Error : invalid syntax (<string>, line 1)\",\n  \
-    \      \"meta\": \"Consommation annuelle prevue\",\n        \"06085\": \"\",\n\
-    \        \"mode\": \"roundNumber (michel_8d_hectares_necessaires_Total / michel_duree,2)\
-    \ if (michel_duree!=0) : 0\",\n        \"expr\": \"roundNumber (michel_8d_hectares_necessaires_Total\
-    \ / michel_duree,2) if (michel_duree!=0) : 0\",\n        \"type\": \"FLOAT\",\n\
-    \        \"source\": \"MICHEL\"\n    },\n    \"michel_8d_niveau_sobriete\": {\n\
-    \        \"total\": \"Error evaluating Calcul : Line 603 Key = michel_8d_niveau_sobriete\
-    \ + expr : roundNumber((michel_8c_consomation_prevue_annuelle / michel_8b_consomation_cerema_annuelle)\
-    \ * 100,0) if (michel_8b_consomation_cerema_annuelle!=0) : 0 - Error : invalid\
-    \ syntax (<string>, line 1)\",\n        \"meta\": \"Niveau de Sobriete\",\n  \
-    \      \"06085\": \"\",\n        \"mode\": \"roundNumber((michel_8c_consomation_prevue_annuelle\
+    \   },\n    \"michel_8c_consomation_prevue_annuelle\": {\n        \"total\": 4.96,\n\
+    \        \"meta\": \"Consommation annuelle prevue\",\n        \"06085\": \"\"\
+    ,\n        \"mode\": \"$JS:(michel_duree==0) : 0 ? roundNumber (michel_8d_hectares_necessaires_Total\
+    \ / michel_duree,2) \",\n        \"expr\": \"roundNumber (michel_8d_hectares_necessaires_Total\
+    \ / michel_duree,2) if (michel_duree!=0) else 0\",\n        \"type\": \"FLOAT\"\
+    ,\n        \"source\": \"MICHEL\"\n    },\n    \"michel_8d_niveau_sobriete\":\
+    \ {\n        \"total\": 115.0,\n        \"meta\": \"Niveau de Sobriete\",\n  \
+    \      \"06085\": \"\",\n        \"mode\": \"$JS:(michel_8b_consomation_cerema_annuelle==0)\
+    \ ? 0  : roundNumber((michel_8c_consomation_prevue_annuelle / michel_8b_consomation_cerema_annuelle)\
+    \ * 100,0)\",\n        \"expr\": \"roundNumber((michel_8c_consomation_prevue_annuelle\
     \ / michel_8b_consomation_cerema_annuelle) * 100,0) if (michel_8b_consomation_cerema_annuelle!=0)\
-    \ : 0\",\n        \"expr\": \"roundNumber((michel_8c_consomation_prevue_annuelle\
-    \ / michel_8b_consomation_cerema_annuelle) * 100,0) if (michel_8b_consomation_cerema_annuelle!=0)\
-    \ : 0\",\n        \"type\": \"FLOAT\",\n        \"source\": \"MICHEL\"\n    },\n\
-    \    \"michel_8e_message_sobriete0\": {\n        \"total\": \"Error evaluating\
-    \ Calcul : Line 604 Key = michel_8e_message_sobriete0 + expr : \\\"Territoire\
-    \ de reconquete\\\"  if  (michel_8d_niveau_sobriete < 0 ) else \\\"Consommation\
-    \ Exemplaire\\\" - Error : '<' not supported between instances of 'str' and 'int'\"\
-    ,\n        \"meta\": \"Message de Sobriete\",\n        \"06085\": \"\",\n    \
-    \    \"mode\": \"\\\"Territoire de reconquete\\\"  if  (michel_8d_niveau_sobriete\
-    \ < 0 ) else \\\"Consommation Exemplaire\\\"\",\n        \"expr\": \"\\\"Territoire\
-    \ de reconquete\\\"  if  (michel_8d_niveau_sobriete < 0 ) else \\\"Consommation\
-    \ Exemplaire\\\"\",\n        \"type\": \"STR\",\n        \"source\": \"MICHEL\"\
-    \n    },\n    \"michel_8e_message_sobriete1\": {\n        \"total\": \"Error evaluating\
-    \ Calcul : Line 605 Key = michel_8e_message_sobriete1 + expr : \\\"Objectif ZAN\
-    \ atteint\\\"  if  (michel_8d_niveau_sobriete > 25 ) else michel_8e_message_sobriete0\
-    \ - Error : '>' not supported between instances of 'str' and 'int'\",\n      \
-    \  \"meta\": \"Message de Sobriete\",\n        \"06085\": \"\",\n        \"mode\"\
-    : \"\\\"Objectif ZAN atteint\\\"  if  (michel_8d_niveau_sobriete > 25 ) else michel_8e_message_sobriete0\"\
-    ,\n        \"expr\": \"\\\"Objectif ZAN atteint\\\"  if  (michel_8d_niveau_sobriete\
+    \ else 0\",\n        \"type\": \"FLOAT\",\n        \"source\": \"MICHEL\"\n  \
+    \  },\n    \"michel_8e_message_sobriete0\": {\n        \"total\": \"Consommation\
+    \ Exemplaire\",\n        \"meta\": \"Message de Sobriete\",\n        \"06085\"\
+    : \"\",\n        \"mode\": \"$JS: (michel_8d_niveau_sobriete < 0 ) ?  \\\"Territoire\
+    \ de reconquete\\\" :  \\\"Consommation Exemplaire\\\"\",\n        \"expr\": \"\
+    \\\"Territoire de reconquete\\\"  if  (michel_8d_niveau_sobriete < 0 ) else \\\
+    \"Consommation Exemplaire\\\"\",\n        \"type\": \"STR\",\n        \"source\"\
+    : \"MICHEL\"\n    },\n    \"michel_8e_message_sobriete1\": {\n        \"total\"\
+    : \"Objectif ZAN atteint\",\n        \"meta\": \"Message de Sobriete\",\n    \
+    \    \"06085\": \"\",\n        \"mode\": \"$JS: (michel_8d_niveau_sobriete >=\
+    \ 25 ) ?  \\\"Objectif ZAN atteint\\\" :  michel_8e_message_sobriete0\",\n   \
+    \     \"expr\": \"\\\"Objectif ZAN atteint\\\"  if  (michel_8d_niveau_sobriete\
     \ > 25 ) else michel_8e_message_sobriete0\",\n        \"type\": \"STR\",\n   \
     \     \"source\": \"MICHEL\"\n    },\n    \"michel_8e_message_sobriete2\": {\n\
-    \        \"total\": \"Error evaluating Calcul : Line 606 Key = michel_8e_message_sobriete2\
-    \ + expr : \\\"Consommation Excessive\\\"  if  (michel_8d_niveau_sobriete >= 51\
-    \ ) else michel_8e_message_sobriete1 - Error : '>=' not supported between instances\
-    \ of 'str' and 'int'\",\n        \"meta\": \"Message de Sobriete\",\n        \"\
-    06085\": \"\",\n        \"mode\": \"\\\"Consommation Excessive\\\"  if  (michel_8d_niveau_sobriete\
-    \ >= 51 ) else michel_8e_message_sobriete1\",\n        \"expr\": \"\\\"Consommation\
-    \ Excessive\\\"  if  (michel_8d_niveau_sobriete >= 51 ) else michel_8e_message_sobriete1\"\
-    ,\n        \"type\": \"STR\",\n        \"source\": \"MICHEL\"\n    },\n    \"\
-    michel_8e_message_sobriete3\": {\n        \"total\": \"Error evaluating Calcul\
-    \ : Line 607 Key = michel_8e_message_sobriete3 + expr : \\\"Consommation Abusive\\\
-    \"  if  (michel_8d_niveau_sobriete >= 100 ) else michel_8e_message_sobriete3 -\
-    \ Error : '>=' not supported between instances of 'str' and 'int'\",\n       \
-    \ \"meta\": \"Message de Sobriete\",\n        \"06085\": \"\",\n        \"mode\"\
-    : \"\\\"Consommation Abusive\\\"  if  (michel_8d_niveau_sobriete >= 100 ) else\
-    \ michel_8e_message_sobriete3\",\n        \"expr\": \"\\\"Consommation Abusive\\\
-    \"  if  (michel_8d_niveau_sobriete >= 100 ) else michel_8e_message_sobriete3\"\
-    ,\n        \"type\": \"STR\",\n        \"source\": \"MICHEL\"\n    },\n    \"\
-    michel_8e_message_sobriete\": {\n        \"total\": \"Error evaluating Calcul\
-    \ : Line 607 Key = michel_8e_message_sobriete3 + expr : \\\"Consommation Abusive\\\
-    \"  if  (michel_8d_niveau_sobriete >= 100 ) else michel_8e_message_sobriete3 -\
-    \ Error : '>=' not supported between instances of 'str' and 'int'\",\n       \
-    \ \"meta\": \"Message de Sobriete\",\n        \"06085\": \"\",\n        \"mode\"\
-    : \"$JS:michel_8e_message_sobriete3\",\n        \"expr\": \"michel_8e_message_sobriete3\"\
-    ,\n        \"type\": \"STR\",\n        \"source\": \"MICHEL\"\n    },\n    \"\
-    GRAPHIQUE_LOGEMENTS_2\": {\n        \"total\": \"\",\n        \"meta\": \"\",\n\
-    \        \"06085\": \"output\\\\COMMUNE_MOUGINS_06085_LOGEMENTS_2.png\",\n   \
-    \     \"mode\": \"\",\n        \"expr\": \"\",\n        \"type\": \"\",\n    \
-    \    \"source\": \"\"\n    },\n    \"GRAPHIQUE_LOGEMENTS_3\": {\n        \"total\"\
-    : \"\",\n        \"meta\": \"\",\n        \"06085\": \"output\\\\COMMUNE_MOUGINS_06085_LOGEMENTS_3.png\"\
-    ,\n        \"mode\": \"\",\n        \"expr\": \"\",\n        \"type\": \"\",\n\
-    \        \"source\": \"\"\n    },\n    \"GRAPHIQUE_TAILLE_DES_MENAGES_2\": {\n\
+    \        \"total\": \"Consommation Excessive\",\n        \"meta\": \"Message de\
+    \ Sobriete\",\n        \"06085\": \"\",\n        \"mode\": \"$JS: (michel_8d_niveau_sobriete\
+    \ >= 51 ) ?  \\\"Consommation Excessive\\\" :  michel_8e_message_sobriete1\",\n\
+    \        \"expr\": \"\\\"Consommation Excessive\\\"  if  (michel_8d_niveau_sobriete\
+    \ >= 51 ) else michel_8e_message_sobriete1\",\n        \"type\": \"STR\",\n  \
+    \      \"source\": \"MICHEL\"\n    },\n    \"michel_8e_message_sobriete3\": {\n\
+    \        \"total\": \"Consommation Abusive\",\n        \"meta\": \"Message de\
+    \ Sobriete\",\n        \"06085\": \"\",\n        \"mode\": \"$JS: (michel_8d_niveau_sobriete\
+    \ >= 100 ) ?  \\\"Consommation Abusive\\\" :  michel_8e_message_sobriete2\",\n\
+    \        \"expr\": \"\\\"Consommation Abusive\\\"  if  (michel_8d_niveau_sobriete\
+    \ >= 100 ) else michel_8e_message_sobriete3\",\n        \"type\": \"STR\",\n \
+    \       \"source\": \"MICHEL\"\n    },\n    \"michel_8e_message_sobriete\": {\n\
+    \        \"total\": \"Consommation Abusive\",\n        \"meta\": \"Message de\
+    \ Sobriete\",\n        \"06085\": \"\",\n        \"mode\": \"$JS:michel_8e_message_sobriete3\"\
+    ,\n        \"expr\": \"michel_8e_message_sobriete3\",\n        \"type\": \"STR\"\
+    ,\n        \"source\": \"MICHEL\"\n    },\n    \"GRAPHIQUE_LOGEMENTS_2\": {\n\
+    \        \"total\": \"\",\n        \"meta\": \"\",\n        \"06085\": \"output\\\
+    \\COMMUNE_MOUGINS_06085_LOGEMENTS_2.png\",\n        \"mode\": \"\",\n        \"\
+    expr\": \"\",\n        \"type\": \"\",\n        \"source\": \"\"\n    },\n   \
+    \ \"GRAPHIQUE_LOGEMENTS_3\": {\n        \"total\": \"\",\n        \"meta\": \"\
+    \",\n        \"06085\": \"output\\\\COMMUNE_MOUGINS_06085_LOGEMENTS_3.png\",\n\
+    \        \"mode\": \"\",\n        \"expr\": \"\",\n        \"type\": \"\",\n \
+    \       \"source\": \"\"\n    },\n    \"GRAPHIQUE_TAILLE_DES_MENAGES_2\": {\n\
     \        \"total\": \"\",\n        \"meta\": \"\",\n        \"06085\": \"output\\\
     \\COMMUNE_MOUGINS_06085_TAILLE_DES_MENAGES_2.png\",\n        \"mode\": \"\",\n\
     \        \"expr\": \"\",\n        \"type\": \"\",\n        \"source\": \"\"\n\
@@ -15864,18 +15616,18 @@ JSON_DATA_SET_S:
         michel_8a_densite_nette_Total: '""'
         michel_8b_consomation_cerema_annuelle: roundNumber(michel_8a_consomation_cerema_10_ans
             / 10,2)
-        michel_8b_surface_nette_N1: 'roundNumber(michel_7b_extension_N1 / michel_8a_densite_nette_N1,2)  if
-            (michel_8a_densite_nette_N1!=0) : 0'
-        michel_8b_surface_nette_N2: 'roundNumber(michel_7b_extension_N2 / michel_8a_densite_nette_N2,2)
-            if (michel_8a_densite_nette_N2!=0) : 0'
-        michel_8b_surface_nette_N3: 'roundNumber(michel_7b_extension_N3 / michel_8a_densite_nette_N3,2)
-            if (michel_8a_densite_nette_N3!=0) : 0'
-        michel_8b_surface_nette_N4: 'roundNumber(michel_7b_extension_N4 / michel_8a_densite_nette_N4,2)
-            if (michel_8a_densite_nette_N4!=0) : 0'
-        michel_8b_surface_nette_N5: 'roundNumber(michel_7b_extension_N5 / michel_8a_densite_nette_N5,2)
-            if (michel_8a_densite_nette_N5!=0) : 0'
-        michel_8b_surface_nette_N6: 'roundNumber(michel_7b_extension_N6 / michel_8a_densite_nette_N6,2)
-            if (michel_8a_densite_nette_N6!=0) : 0'
+        michel_8b_surface_nette_N1: roundNumber(michel_7b_extension_N1 / michel_8a_densite_nette_N1,2)  if
+            (michel_8a_densite_nette_N1!=0) else 0
+        michel_8b_surface_nette_N2: roundNumber(michel_7b_extension_N2 / michel_8a_densite_nette_N2,2)
+            if (michel_8a_densite_nette_N2!=0) else 0
+        michel_8b_surface_nette_N3: roundNumber(michel_7b_extension_N3 / michel_8a_densite_nette_N3,2)
+            if (michel_8a_densite_nette_N3!=0) else 0
+        michel_8b_surface_nette_N4: roundNumber(michel_7b_extension_N4 / michel_8a_densite_nette_N4,2)
+            if (michel_8a_densite_nette_N4!=0) else 0
+        michel_8b_surface_nette_N5: roundNumber(michel_7b_extension_N5 / michel_8a_densite_nette_N5,2)
+            if (michel_8a_densite_nette_N5!=0) else 0
+        michel_8b_surface_nette_N6: roundNumber(michel_7b_extension_N6 / michel_8a_densite_nette_N6,2)
+            if (michel_8a_densite_nette_N6!=0) else 0
         michel_8b_surface_nette_Total: roundNumber(michel_8b_surface_nette_N6 + michel_8b_surface_nette_N5
             + michel_8b_surface_nette_N4 + michel_8b_surface_nette_N3 + michel_8b_surface_nette_N2
             + michel_8b_surface_nette_N1,2)
@@ -15895,8 +15647,8 @@ JSON_DATA_SET_S:
             + michel_8c2_surface_equipements_N5 + michel_8c2_surface_equipements_N4
             + michel_8c2_surface_equipements_N3 + michel_8c2_surface_equipements_N2
             + michel_8c2_surface_equipements_N1,2)
-        michel_8c_consomation_prevue_annuelle: 'roundNumber (michel_8d_hectares_necessaires_Total
-            / michel_duree,2) if (michel_duree!=0) : 0'
+        michel_8c_consomation_prevue_annuelle: roundNumber (michel_8d_hectares_necessaires_Total
+            / michel_duree,2) if (michel_duree!=0) else 0
         michel_8c_surface_equipements_N1: '5'
         michel_8c_surface_equipements_N2: '5'
         michel_8c_surface_equipements_N3: '5'
@@ -15920,9 +15672,9 @@ JSON_DATA_SET_S:
             + michel_8d_hectares_necessaires_N5 + michel_8d_hectares_necessaires_N4
             + michel_8d_hectares_necessaires_N3 + michel_8d_hectares_necessaires_N2
             + michel_8d_hectares_necessaires_N1,2)
-        michel_8d_niveau_sobriete: 'roundNumber((michel_8c_consomation_prevue_annuelle
+        michel_8d_niveau_sobriete: roundNumber((michel_8c_consomation_prevue_annuelle
             / michel_8b_consomation_cerema_annuelle) * 100,0) if (michel_8b_consomation_cerema_annuelle!=0)
-            : 0'
+            else 0
         michel_8e_message_sobriete: michel_8e_message_sobriete3
         michel_8e_message_sobriete0: '"Territoire de reconquete"  if  (michel_8d_niveau_sobriete
             < 0 ) else "Consommation Exemplaire"'
@@ -17890,39 +17642,39 @@ JSON_DATA_SET_S:
         michel_8a_densite_nette_Total: $JS:""
         michel_8b_consomation_cerema_annuelle: $JS:roundNumber(michel_8a_consomation_cerema_10_ans
             / 10,2)
-        michel_8b_surface_nette_N1: 'roundNumber(michel_7b_extension_N1 / michel_8a_densite_nette_N1,2)  if
-            (michel_8a_densite_nette_N1!=0) : 0'
-        michel_8b_surface_nette_N2: 'roundNumber(michel_7b_extension_N2 / michel_8a_densite_nette_N2,2)
-            if (michel_8a_densite_nette_N2!=0) : 0'
-        michel_8b_surface_nette_N3: 'roundNumber(michel_7b_extension_N3 / michel_8a_densite_nette_N3,2)
-            if (michel_8a_densite_nette_N3!=0) : 0'
-        michel_8b_surface_nette_N4: 'roundNumber(michel_7b_extension_N4 / michel_8a_densite_nette_N4,2)
-            if (michel_8a_densite_nette_N4!=0) : 0'
-        michel_8b_surface_nette_N5: 'roundNumber(michel_7b_extension_N5 / michel_8a_densite_nette_N5,2)
-            if (michel_8a_densite_nette_N5!=0) : 0'
-        michel_8b_surface_nette_N6: 'roundNumber(michel_7b_extension_N6 / michel_8a_densite_nette_N6,2)
-            if (michel_8a_densite_nette_N6!=0) : 0'
-        michel_8b_surface_nette_Total: roundNumber(michel_8b_surface_nette_N6 + michel_8b_surface_nette_N5
-            + michel_8b_surface_nette_N4 + michel_8b_surface_nette_N3 + michel_8b_surface_nette_N2
-            + michel_8b_surface_nette_N1,2)
-        michel_8c2_surface_equipements_N1: roundNumber(michel_8b_surface_nette_N1
+        michel_8b_surface_nette_N1: '$JS:(michel_8a_densite_nette_N1==0) ? 0 : roundNumber(michel_7b_extension_N1
+            / michel_8a_densite_nette_N1,2)'
+        michel_8b_surface_nette_N2: $JS:(michel_8a_densite_nette_N2==0) ? 0 :roundNumber(michel_7b_extension_N2
+            / michel_8a_densite_nette_N2,2)
+        michel_8b_surface_nette_N3: $JS:(michel_8a_densite_nette_N3==0) ? 0 :roundNumber(michel_7b_extension_N3
+            / michel_8a_densite_nette_N3,2)
+        michel_8b_surface_nette_N4: $JS:(michel_8a_densite_nette_N4==0) ? 0 :roundNumber(michel_7b_extension_N4
+            / michel_8a_densite_nette_N4,2)
+        michel_8b_surface_nette_N5: $JS:(michel_8a_densite_nette_N5==0) ? 0 :roundNumber(michel_7b_extension_N5
+            / michel_8a_densite_nette_N5,2)
+        michel_8b_surface_nette_N6: $JS:(michel_8a_densite_nette_N6==0) ? 0 :roundNumber(michel_7b_extension_N6
+            / michel_8a_densite_nette_N6,2)
+        michel_8b_surface_nette_Total: $JS:roundNumber(michel_8b_surface_nette_N6
+            + michel_8b_surface_nette_N5 + michel_8b_surface_nette_N4 + michel_8b_surface_nette_N3
+            + michel_8b_surface_nette_N2 + michel_8b_surface_nette_N1,2)
+        michel_8c2_surface_equipements_N1: $JS:roundNumber(michel_8b_surface_nette_N1
             * michel_8c_surface_equipements_N1 / 100,2)
-        michel_8c2_surface_equipements_N2: roundNumber(michel_8b_surface_nette_N2
+        michel_8c2_surface_equipements_N2: $JS:roundNumber(michel_8b_surface_nette_N2
             * michel_8c_surface_equipements_N2 / 100,2)
-        michel_8c2_surface_equipements_N3: roundNumber(michel_8b_surface_nette_N3
+        michel_8c2_surface_equipements_N3: $JS:roundNumber(michel_8b_surface_nette_N3
             * michel_8c_surface_equipements_N3 / 100,2)
-        michel_8c2_surface_equipements_N4: roundNumber(michel_8b_surface_nette_N4
+        michel_8c2_surface_equipements_N4: $JS:roundNumber(michel_8b_surface_nette_N4
             * michel_8c_surface_equipements_N4 / 100,2)
-        michel_8c2_surface_equipements_N5: roundNumber(michel_8b_surface_nette_N5
+        michel_8c2_surface_equipements_N5: $JS:roundNumber(michel_8b_surface_nette_N5
             * michel_8c_surface_equipements_N5 / 100,2)
-        michel_8c2_surface_equipements_N6: roundNumber(michel_8b_surface_nette_N6
+        michel_8c2_surface_equipements_N6: $JS:roundNumber(michel_8b_surface_nette_N6
             * michel_8c_surface_equipements_N6 / 100,2)
-        michel_8c2_surface_equipements_Total: roundNumber(michel_8c2_surface_equipements_N6
+        michel_8c2_surface_equipements_Total: $JS:roundNumber(michel_8c2_surface_equipements_N6
             + michel_8c2_surface_equipements_N5 + michel_8c2_surface_equipements_N4
             + michel_8c2_surface_equipements_N3 + michel_8c2_surface_equipements_N2
             + michel_8c2_surface_equipements_N1,2)
-        michel_8c_consomation_prevue_annuelle: 'roundNumber (michel_8d_hectares_necessaires_Total
-            / michel_duree,2) if (michel_duree!=0) : 0'
+        michel_8c_consomation_prevue_annuelle: '$JS:(michel_duree==0) : 0 ? roundNumber
+            (michel_8d_hectares_necessaires_Total / michel_duree,2) '
         michel_8c_surface_equipements_N1: $JS:5
         michel_8c_surface_equipements_N2: $JS:5
         michel_8c_surface_equipements_N3: $JS:5
@@ -17930,34 +17682,34 @@ JSON_DATA_SET_S:
         michel_8c_surface_equipements_N5: $JS:10
         michel_8c_surface_equipements_N6: $JS:10
         michel_8c_surface_equipements_Total: $JS:0
-        michel_8d_hectares_necessaires_N1: roundNumber(michel_8b_surface_nette_N1
+        michel_8d_hectares_necessaires_N1: $JS:roundNumber(michel_8b_surface_nette_N1
             * ( 1 + michel_8c_surface_equipements_N1 / 100),2)
-        michel_8d_hectares_necessaires_N2: roundNumber(michel_8b_surface_nette_N2
+        michel_8d_hectares_necessaires_N2: $JS:roundNumber(michel_8b_surface_nette_N2
             * ( 1 + michel_8c_surface_equipements_N2/ 100),2)
-        michel_8d_hectares_necessaires_N3: roundNumber(michel_8b_surface_nette_N3
+        michel_8d_hectares_necessaires_N3: $JS:roundNumber(michel_8b_surface_nette_N3
             * ( 1 + michel_8c_surface_equipements_N3/ 100),2)
-        michel_8d_hectares_necessaires_N4: roundNumber(michel_8b_surface_nette_N4
+        michel_8d_hectares_necessaires_N4: $JS:roundNumber(michel_8b_surface_nette_N4
             * ( 1 + michel_8c_surface_equipements_N4/ 100),2)
-        michel_8d_hectares_necessaires_N5: roundNumber(michel_8b_surface_nette_N5
+        michel_8d_hectares_necessaires_N5: $JS:roundNumber(michel_8b_surface_nette_N5
             * ( 1 + michel_8c_surface_equipements_N5/ 100),2)
-        michel_8d_hectares_necessaires_N6: roundNumber(michel_8b_surface_nette_N6
+        michel_8d_hectares_necessaires_N6: $JS:roundNumber(michel_8b_surface_nette_N6
             * ( 1 + michel_8c_surface_equipements_N6/ 100),2)
-        michel_8d_hectares_necessaires_Total: roundNumber(michel_8d_hectares_necessaires_N6
+        michel_8d_hectares_necessaires_Total: $JS:roundNumber(michel_8d_hectares_necessaires_N6
             + michel_8d_hectares_necessaires_N5 + michel_8d_hectares_necessaires_N4
             + michel_8d_hectares_necessaires_N3 + michel_8d_hectares_necessaires_N2
             + michel_8d_hectares_necessaires_N1,2)
-        michel_8d_niveau_sobriete: 'roundNumber((michel_8c_consomation_prevue_annuelle
-            / michel_8b_consomation_cerema_annuelle) * 100,0) if (michel_8b_consomation_cerema_annuelle!=0)
-            : 0'
+        michel_8d_niveau_sobriete: '$JS:(michel_8b_consomation_cerema_annuelle==0)
+            ? 0  : roundNumber((michel_8c_consomation_prevue_annuelle / michel_8b_consomation_cerema_annuelle)
+            * 100,0)'
         michel_8e_message_sobriete: $JS:michel_8e_message_sobriete3
-        michel_8e_message_sobriete0: '"Territoire de reconquete"  if  (michel_8d_niveau_sobriete
-            < 0 ) else "Consommation Exemplaire"'
-        michel_8e_message_sobriete1: '"Objectif ZAN atteint"  if  (michel_8d_niveau_sobriete
-            > 25 ) else michel_8e_message_sobriete0'
-        michel_8e_message_sobriete2: '"Consommation Excessive"  if  (michel_8d_niveau_sobriete
-            >= 51 ) else michel_8e_message_sobriete1'
-        michel_8e_message_sobriete3: '"Consommation Abusive"  if  (michel_8d_niveau_sobriete
-            >= 100 ) else michel_8e_message_sobriete3'
+        michel_8e_message_sobriete0: '$JS: (michel_8d_niveau_sobriete < 0 ) ?  "Territoire
+            de reconquete" :  "Consommation Exemplaire"'
+        michel_8e_message_sobriete1: '$JS: (michel_8d_niveau_sobriete >= 25 ) ?  "Objectif
+            ZAN atteint" :  michel_8e_message_sobriete0'
+        michel_8e_message_sobriete2: '$JS: (michel_8d_niveau_sobriete >= 51 ) ?  "Consommation
+            Excessive" :  michel_8e_message_sobriete1'
+        michel_8e_message_sobriete3: '$JS: (michel_8d_niveau_sobriete >= 100 ) ?  "Consommation
+            Abusive" :  michel_8e_message_sobriete2'
         michel_an_arrivee: $JS:2030
         michel_an_depart: $JS:2021
         michel_an_donnee: $JS:2018
@@ -19688,69 +19440,21 @@ JSON_DATA_SET_S:
         michel_8a_densite_nette_N6: 70.0
         michel_8a_densite_nette_Total: ''
         michel_8b_consomation_cerema_annuelle: 4.3
-        michel_8b_surface_nette_N1: 'Error evaluating Calcul : Line 571 Key = michel_8b_surface_nette_N1
-            + expr : roundNumber(michel_7b_extension_N1 / michel_8a_densite_nette_N1,2)  if
-            (michel_8a_densite_nette_N1!=0) : 0 - Error : invalid syntax (<string>,
-            line 1)'
-        michel_8b_surface_nette_N2: 'Error evaluating Calcul : Line 572 Key = michel_8b_surface_nette_N2
-            + expr : roundNumber(michel_7b_extension_N2 / michel_8a_densite_nette_N2,2)
-            if (michel_8a_densite_nette_N2!=0) : 0 - Error : invalid syntax (<string>,
-            line 1)'
-        michel_8b_surface_nette_N3: 'Error evaluating Calcul : Line 573 Key = michel_8b_surface_nette_N3
-            + expr : roundNumber(michel_7b_extension_N3 / michel_8a_densite_nette_N3,2)
-            if (michel_8a_densite_nette_N3!=0) : 0 - Error : invalid syntax (<string>,
-            line 1)'
-        michel_8b_surface_nette_N4: 'Error evaluating Calcul : Line 574 Key = michel_8b_surface_nette_N4
-            + expr : roundNumber(michel_7b_extension_N4 / michel_8a_densite_nette_N4,2)
-            if (michel_8a_densite_nette_N4!=0) : 0 - Error : invalid syntax (<string>,
-            line 1)'
-        michel_8b_surface_nette_N5: 'Error evaluating Calcul : Line 575 Key = michel_8b_surface_nette_N5
-            + expr : roundNumber(michel_7b_extension_N5 / michel_8a_densite_nette_N5,2)
-            if (michel_8a_densite_nette_N5!=0) : 0 - Error : invalid syntax (<string>,
-            line 1)'
-        michel_8b_surface_nette_N6: 'Error evaluating Calcul : Line 576 Key = michel_8b_surface_nette_N6
-            + expr : roundNumber(michel_7b_extension_N6 / michel_8a_densite_nette_N6,2)
-            if (michel_8a_densite_nette_N6!=0) : 0 - Error : invalid syntax (<string>,
-            line 1)'
-        michel_8b_surface_nette_Total: 'Error evaluating Calcul : Line 577 Key = michel_8b_surface_nette_Total
-            + expr : roundNumber(michel_8b_surface_nette_N6 + michel_8b_surface_nette_N5
-            + michel_8b_surface_nette_N4 + michel_8b_surface_nette_N3 + michel_8b_surface_nette_N2
-            + michel_8b_surface_nette_N1,2) - Error : type str doesn''t define __round__
-            method'
-        michel_8c2_surface_equipements_N1: 'Error evaluating Calcul : Line 585 Key
-            = michel_8c2_surface_equipements_N1 + expr : roundNumber(michel_8b_surface_nette_N1
-            * michel_8c_surface_equipements_N1 / 100,2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8c2_surface_equipements_N2: 'Error evaluating Calcul : Line 586 Key
-            = michel_8c2_surface_equipements_N2 + expr : roundNumber(michel_8b_surface_nette_N2
-            * michel_8c_surface_equipements_N2 / 100,2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8c2_surface_equipements_N3: 'Error evaluating Calcul : Line 587 Key
-            = michel_8c2_surface_equipements_N3 + expr : roundNumber(michel_8b_surface_nette_N3
-            * michel_8c_surface_equipements_N3 / 100,2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8c2_surface_equipements_N4: 'Error evaluating Calcul : Line 588 Key
-            = michel_8c2_surface_equipements_N4 + expr : roundNumber(michel_8b_surface_nette_N4
-            * michel_8c_surface_equipements_N4 / 100,2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8c2_surface_equipements_N5: 'Error evaluating Calcul : Line 589 Key
-            = michel_8c2_surface_equipements_N5 + expr : roundNumber(michel_8b_surface_nette_N5
-            * michel_8c_surface_equipements_N5 / 100,2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8c2_surface_equipements_N6: 'Error evaluating Calcul : Line 590 Key
-            = michel_8c2_surface_equipements_N6 + expr : roundNumber(michel_8b_surface_nette_N6
-            * michel_8c_surface_equipements_N6 / 100,2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8c2_surface_equipements_Total: 'Error evaluating Calcul : Line 591
-            Key = michel_8c2_surface_equipements_Total + expr : roundNumber(michel_8c2_surface_equipements_N6
-            + michel_8c2_surface_equipements_N5 + michel_8c2_surface_equipements_N4
-            + michel_8c2_surface_equipements_N3 + michel_8c2_surface_equipements_N2
-            + michel_8c2_surface_equipements_N1,2) - Error : type str doesn''t define
-            __round__ method'
-        michel_8c_consomation_prevue_annuelle: 'Error evaluating Calcul : Line 602
-            Key = michel_8c_consomation_prevue_annuelle + expr : roundNumber (michel_8d_hectares_necessaires_Total
-            / michel_duree,2) if (michel_duree!=0) : 0 - Error : invalid syntax (<string>,
-            line 1)'
+        michel_8b_surface_nette_N1: 7.0
+        michel_8b_surface_nette_N2: 5.0
+        michel_8b_surface_nette_N3: 5.0
+        michel_8b_surface_nette_N4: 14.0
+        michel_8b_surface_nette_N5: 7.0
+        michel_8b_surface_nette_N6: 4.0
+        michel_8b_surface_nette_Total: 42.0
+        michel_8c2_surface_equipements_N1: 0.35
+        michel_8c2_surface_equipements_N2: 0.25
+        michel_8c2_surface_equipements_N3: 0.25
+        michel_8c2_surface_equipements_N4: 0.7
+        michel_8c2_surface_equipements_N5: 0.7
+        michel_8c2_surface_equipements_N6: 0.4
+        michel_8c2_surface_equipements_Total: 2.65
+        michel_8c_consomation_prevue_annuelle: 4.96
         michel_8c_surface_equipements_N1: 5.0
         michel_8c_surface_equipements_N2: 5.0
         michel_8c_surface_equipements_N3: 5.0
@@ -19758,60 +19462,19 @@ JSON_DATA_SET_S:
         michel_8c_surface_equipements_N5: 10.0
         michel_8c_surface_equipements_N6: 10.0
         michel_8c_surface_equipements_Total: 0.0
-        michel_8d_hectares_necessaires_N1: 'Error evaluating Calcul : Line 592 Key
-            = michel_8d_hectares_necessaires_N1 + expr : roundNumber(michel_8b_surface_nette_N1
-            * ( 1 + michel_8c_surface_equipements_N1 / 100),2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8d_hectares_necessaires_N2: 'Error evaluating Calcul : Line 593 Key
-            = michel_8d_hectares_necessaires_N2 + expr : roundNumber(michel_8b_surface_nette_N2
-            * ( 1 + michel_8c_surface_equipements_N2/ 100),2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8d_hectares_necessaires_N3: 'Error evaluating Calcul : Line 594 Key
-            = michel_8d_hectares_necessaires_N3 + expr : roundNumber(michel_8b_surface_nette_N3
-            * ( 1 + michel_8c_surface_equipements_N3/ 100),2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8d_hectares_necessaires_N4: 'Error evaluating Calcul : Line 595 Key
-            = michel_8d_hectares_necessaires_N4 + expr : roundNumber(michel_8b_surface_nette_N4
-            * ( 1 + michel_8c_surface_equipements_N4/ 100),2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8d_hectares_necessaires_N5: 'Error evaluating Calcul : Line 596 Key
-            = michel_8d_hectares_necessaires_N5 + expr : roundNumber(michel_8b_surface_nette_N5
-            * ( 1 + michel_8c_surface_equipements_N5/ 100),2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8d_hectares_necessaires_N6: 'Error evaluating Calcul : Line 597 Key
-            = michel_8d_hectares_necessaires_N6 + expr : roundNumber(michel_8b_surface_nette_N6
-            * ( 1 + michel_8c_surface_equipements_N6/ 100),2) - Error : can''t multiply
-            sequence by non-int of type ''numpy.float64'''
-        michel_8d_hectares_necessaires_Total: 'Error evaluating Calcul : Line 598
-            Key = michel_8d_hectares_necessaires_Total + expr : roundNumber(michel_8d_hectares_necessaires_N6
-            + michel_8d_hectares_necessaires_N5 + michel_8d_hectares_necessaires_N4
-            + michel_8d_hectares_necessaires_N3 + michel_8d_hectares_necessaires_N2
-            + michel_8d_hectares_necessaires_N1,2) - Error : type str doesn''t define
-            __round__ method'
-        michel_8d_niveau_sobriete: 'Error evaluating Calcul : Line 603 Key = michel_8d_niveau_sobriete
-            + expr : roundNumber((michel_8c_consomation_prevue_annuelle / michel_8b_consomation_cerema_annuelle)
-            * 100,0) if (michel_8b_consomation_cerema_annuelle!=0) : 0 - Error : invalid
-            syntax (<string>, line 1)'
-        michel_8e_message_sobriete: 'Error evaluating Calcul : Line 607 Key = michel_8e_message_sobriete3
-            + expr : "Consommation Abusive"  if  (michel_8d_niveau_sobriete >= 100
-            ) else michel_8e_message_sobriete3 - Error : ''>='' not supported between
-            instances of ''str'' and ''int'''
-        michel_8e_message_sobriete0: 'Error evaluating Calcul : Line 604 Key = michel_8e_message_sobriete0
-            + expr : "Territoire de reconquete"  if  (michel_8d_niveau_sobriete <
-            0 ) else "Consommation Exemplaire" - Error : ''<'' not supported between
-            instances of ''str'' and ''int'''
-        michel_8e_message_sobriete1: 'Error evaluating Calcul : Line 605 Key = michel_8e_message_sobriete1
-            + expr : "Objectif ZAN atteint"  if  (michel_8d_niveau_sobriete > 25 )
-            else michel_8e_message_sobriete0 - Error : ''>'' not supported between
-            instances of ''str'' and ''int'''
-        michel_8e_message_sobriete2: 'Error evaluating Calcul : Line 606 Key = michel_8e_message_sobriete2
-            + expr : "Consommation Excessive"  if  (michel_8d_niveau_sobriete >= 51
-            ) else michel_8e_message_sobriete1 - Error : ''>='' not supported between
-            instances of ''str'' and ''int'''
-        michel_8e_message_sobriete3: 'Error evaluating Calcul : Line 607 Key = michel_8e_message_sobriete3
-            + expr : "Consommation Abusive"  if  (michel_8d_niveau_sobriete >= 100
-            ) else michel_8e_message_sobriete3 - Error : ''>='' not supported between
-            instances of ''str'' and ''int'''
+        michel_8d_hectares_necessaires_N1: 7.35
+        michel_8d_hectares_necessaires_N2: 5.25
+        michel_8d_hectares_necessaires_N3: 5.25
+        michel_8d_hectares_necessaires_N4: 14.7
+        michel_8d_hectares_necessaires_N5: 7.7
+        michel_8d_hectares_necessaires_N6: 4.4
+        michel_8d_hectares_necessaires_Total: 44.65
+        michel_8d_niveau_sobriete: 115.0
+        michel_8e_message_sobriete: Consommation Abusive
+        michel_8e_message_sobriete0: Consommation Exemplaire
+        michel_8e_message_sobriete1: Objectif ZAN atteint
+        michel_8e_message_sobriete2: Consommation Excessive
+        michel_8e_message_sobriete3: Consommation Abusive
         michel_an_arrivee: 2030.0
         michel_an_depart: 2021.0
         michel_an_donnee: 2018.0
@@ -27128,57 +26791,57 @@ METRICS:
     source: MICHEL
     type: STR
     value: ''
--   expr: 'roundNumber(michel_7b_extension_N1 / michel_8a_densite_nette_N1,2)  if
-        (michel_8a_densite_nette_N1!=0) : 0'
+-   expr: roundNumber(michel_7b_extension_N1 / michel_8a_densite_nette_N1,2)  if (michel_8a_densite_nette_N1!=0)
+        else 0
     key: michel_8b_surface_nette_N1
     meta: Surface Nette en extension - Zone 1
-    mode: 'roundNumber(michel_7b_extension_N1 / michel_8a_densite_nette_N1,2)  if
-        (michel_8a_densite_nette_N1!=0) : 0'
+    mode: '$JS:(michel_8a_densite_nette_N1==0) ? 0 : roundNumber(michel_7b_extension_N1
+        / michel_8a_densite_nette_N1,2)'
     source: MICHEL
     type: INT
     value: ''
--   expr: 'roundNumber(michel_7b_extension_N2 / michel_8a_densite_nette_N2,2) if (michel_8a_densite_nette_N2!=0)
-        : 0'
+-   expr: roundNumber(michel_7b_extension_N2 / michel_8a_densite_nette_N2,2) if (michel_8a_densite_nette_N2!=0)
+        else 0
     key: michel_8b_surface_nette_N2
     meta: Surface Nette en extension - Zone 2
-    mode: 'roundNumber(michel_7b_extension_N2 / michel_8a_densite_nette_N2,2) if (michel_8a_densite_nette_N2!=0)
-        : 0'
+    mode: $JS:(michel_8a_densite_nette_N2==0) ? 0 :roundNumber(michel_7b_extension_N2
+        / michel_8a_densite_nette_N2,2)
     source: MICHEL
     type: INT
     value: ''
--   expr: 'roundNumber(michel_7b_extension_N3 / michel_8a_densite_nette_N3,2) if (michel_8a_densite_nette_N3!=0)
-        : 0'
+-   expr: roundNumber(michel_7b_extension_N3 / michel_8a_densite_nette_N3,2) if (michel_8a_densite_nette_N3!=0)
+        else 0
     key: michel_8b_surface_nette_N3
     meta: Surface Nette en extension - Zone 3
-    mode: 'roundNumber(michel_7b_extension_N3 / michel_8a_densite_nette_N3,2) if (michel_8a_densite_nette_N3!=0)
-        : 0'
+    mode: $JS:(michel_8a_densite_nette_N3==0) ? 0 :roundNumber(michel_7b_extension_N3
+        / michel_8a_densite_nette_N3,2)
     source: MICHEL
     type: INT
     value: ''
--   expr: 'roundNumber(michel_7b_extension_N4 / michel_8a_densite_nette_N4,2) if (michel_8a_densite_nette_N4!=0)
-        : 0'
+-   expr: roundNumber(michel_7b_extension_N4 / michel_8a_densite_nette_N4,2) if (michel_8a_densite_nette_N4!=0)
+        else 0
     key: michel_8b_surface_nette_N4
     meta: Surface Nette en extension - Zone 4
-    mode: 'roundNumber(michel_7b_extension_N4 / michel_8a_densite_nette_N4,2) if (michel_8a_densite_nette_N4!=0)
-        : 0'
+    mode: $JS:(michel_8a_densite_nette_N4==0) ? 0 :roundNumber(michel_7b_extension_N4
+        / michel_8a_densite_nette_N4,2)
     source: MICHEL
     type: INT
     value: ''
--   expr: 'roundNumber(michel_7b_extension_N5 / michel_8a_densite_nette_N5,2) if (michel_8a_densite_nette_N5!=0)
-        : 0'
+-   expr: roundNumber(michel_7b_extension_N5 / michel_8a_densite_nette_N5,2) if (michel_8a_densite_nette_N5!=0)
+        else 0
     key: michel_8b_surface_nette_N5
     meta: Surface Nette en extension - Zone 5
-    mode: 'roundNumber(michel_7b_extension_N5 / michel_8a_densite_nette_N5,2) if (michel_8a_densite_nette_N5!=0)
-        : 0'
+    mode: $JS:(michel_8a_densite_nette_N5==0) ? 0 :roundNumber(michel_7b_extension_N5
+        / michel_8a_densite_nette_N5,2)
     source: MICHEL
     type: INT
     value: ''
--   expr: 'roundNumber(michel_7b_extension_N6 / michel_8a_densite_nette_N6,2) if (michel_8a_densite_nette_N6!=0)
-        : 0'
+-   expr: roundNumber(michel_7b_extension_N6 / michel_8a_densite_nette_N6,2) if (michel_8a_densite_nette_N6!=0)
+        else 0
     key: michel_8b_surface_nette_N6
     meta: Surface Nette en extension - Zone 6
-    mode: 'roundNumber(michel_7b_extension_N6 / michel_8a_densite_nette_N6,2) if (michel_8a_densite_nette_N6!=0)
-        : 0'
+    mode: $JS:(michel_8a_densite_nette_N6==0) ? 0 :roundNumber(michel_7b_extension_N6
+        / michel_8a_densite_nette_N6,2)
     source: MICHEL
     type: INT
     value: ''
@@ -27186,8 +26849,9 @@ METRICS:
         + michel_8b_surface_nette_N3 + michel_8b_surface_nette_N2 + michel_8b_surface_nette_N1,2)
     key: michel_8b_surface_nette_Total
     meta: Surface Nette en extension - Total
-    mode: roundNumber(michel_8b_surface_nette_N6 + michel_8b_surface_nette_N5 + michel_8b_surface_nette_N4
-        + michel_8b_surface_nette_N3 + michel_8b_surface_nette_N2 + michel_8b_surface_nette_N1,2)
+    mode: $JS:roundNumber(michel_8b_surface_nette_N6 + michel_8b_surface_nette_N5
+        + michel_8b_surface_nette_N4 + michel_8b_surface_nette_N3 + michel_8b_surface_nette_N2
+        + michel_8b_surface_nette_N1,2)
     source: MICHEL
     type: INT
     value: ''
@@ -27244,7 +26908,7 @@ METRICS:
         / 100,2)
     key: michel_8c2_surface_equipements_N1
     meta: Rajout Equipements en surface - Zone 1
-    mode: roundNumber(michel_8b_surface_nette_N1 * michel_8c_surface_equipements_N1
+    mode: $JS:roundNumber(michel_8b_surface_nette_N1 * michel_8c_surface_equipements_N1
         / 100,2)
     source: MICHEL
     type: FLOAT
@@ -27253,7 +26917,7 @@ METRICS:
         / 100,2)
     key: michel_8c2_surface_equipements_N2
     meta: Rajout Equipements en surface - Zone 2
-    mode: roundNumber(michel_8b_surface_nette_N2 * michel_8c_surface_equipements_N2
+    mode: $JS:roundNumber(michel_8b_surface_nette_N2 * michel_8c_surface_equipements_N2
         / 100,2)
     source: MICHEL
     type: FLOAT
@@ -27262,7 +26926,7 @@ METRICS:
         / 100,2)
     key: michel_8c2_surface_equipements_N3
     meta: Rajout Equipements en surface - Zone 3
-    mode: roundNumber(michel_8b_surface_nette_N3 * michel_8c_surface_equipements_N3
+    mode: $JS:roundNumber(michel_8b_surface_nette_N3 * michel_8c_surface_equipements_N3
         / 100,2)
     source: MICHEL
     type: FLOAT
@@ -27271,7 +26935,7 @@ METRICS:
         / 100,2)
     key: michel_8c2_surface_equipements_N4
     meta: Rajout Equipements en surface - Zone 4
-    mode: roundNumber(michel_8b_surface_nette_N4 * michel_8c_surface_equipements_N4
+    mode: $JS:roundNumber(michel_8b_surface_nette_N4 * michel_8c_surface_equipements_N4
         / 100,2)
     source: MICHEL
     type: FLOAT
@@ -27280,7 +26944,7 @@ METRICS:
         / 100,2)
     key: michel_8c2_surface_equipements_N5
     meta: Rajout Equipements en surface - Zone 5
-    mode: roundNumber(michel_8b_surface_nette_N5 * michel_8c_surface_equipements_N5
+    mode: $JS:roundNumber(michel_8b_surface_nette_N5 * michel_8c_surface_equipements_N5
         / 100,2)
     source: MICHEL
     type: FLOAT
@@ -27289,7 +26953,7 @@ METRICS:
         / 100,2)
     key: michel_8c2_surface_equipements_N6
     meta: Rajout Equipements en surface - Zone 6
-    mode: roundNumber(michel_8b_surface_nette_N6 * michel_8c_surface_equipements_N6
+    mode: $JS:roundNumber(michel_8b_surface_nette_N6 * michel_8c_surface_equipements_N6
         / 100,2)
     source: MICHEL
     type: FLOAT
@@ -27299,7 +26963,7 @@ METRICS:
         michel_8c2_surface_equipements_N2 + michel_8c2_surface_equipements_N1,2)
     key: michel_8c2_surface_equipements_Total
     meta: Rajout Equipements en surface - Total
-    mode: roundNumber(michel_8c2_surface_equipements_N6 + michel_8c2_surface_equipements_N5
+    mode: $JS:roundNumber(michel_8c2_surface_equipements_N6 + michel_8c2_surface_equipements_N5
         + michel_8c2_surface_equipements_N4 + michel_8c2_surface_equipements_N3 +
         michel_8c2_surface_equipements_N2 + michel_8c2_surface_equipements_N1,2)
     source: MICHEL
@@ -27309,7 +26973,7 @@ METRICS:
         / 100),2)
     key: michel_8d_hectares_necessaires_N1
     meta: Hectares Necessaires - Zone 1
-    mode: roundNumber(michel_8b_surface_nette_N1 * ( 1 + michel_8c_surface_equipements_N1
+    mode: $JS:roundNumber(michel_8b_surface_nette_N1 * ( 1 + michel_8c_surface_equipements_N1
         / 100),2)
     source: MICHEL
     type: FLOAT
@@ -27318,7 +26982,7 @@ METRICS:
         100),2)
     key: michel_8d_hectares_necessaires_N2
     meta: Hectares Necessaires - Zone 2
-    mode: roundNumber(michel_8b_surface_nette_N2 * ( 1 + michel_8c_surface_equipements_N2/
+    mode: $JS:roundNumber(michel_8b_surface_nette_N2 * ( 1 + michel_8c_surface_equipements_N2/
         100),2)
     source: MICHEL
     type: FLOAT
@@ -27327,7 +26991,7 @@ METRICS:
         100),2)
     key: michel_8d_hectares_necessaires_N3
     meta: Hectares Necessaires - Zone 3
-    mode: roundNumber(michel_8b_surface_nette_N3 * ( 1 + michel_8c_surface_equipements_N3/
+    mode: $JS:roundNumber(michel_8b_surface_nette_N3 * ( 1 + michel_8c_surface_equipements_N3/
         100),2)
     source: MICHEL
     type: FLOAT
@@ -27336,7 +27000,7 @@ METRICS:
         100),2)
     key: michel_8d_hectares_necessaires_N4
     meta: Hectares Necessaires - Zone 4
-    mode: roundNumber(michel_8b_surface_nette_N4 * ( 1 + michel_8c_surface_equipements_N4/
+    mode: $JS:roundNumber(michel_8b_surface_nette_N4 * ( 1 + michel_8c_surface_equipements_N4/
         100),2)
     source: MICHEL
     type: FLOAT
@@ -27345,7 +27009,7 @@ METRICS:
         100),2)
     key: michel_8d_hectares_necessaires_N5
     meta: Hectares Necessaires - Zone 5
-    mode: roundNumber(michel_8b_surface_nette_N5 * ( 1 + michel_8c_surface_equipements_N5/
+    mode: $JS:roundNumber(michel_8b_surface_nette_N5 * ( 1 + michel_8c_surface_equipements_N5/
         100),2)
     source: MICHEL
     type: FLOAT
@@ -27354,7 +27018,7 @@ METRICS:
         100),2)
     key: michel_8d_hectares_necessaires_N6
     meta: Hectares Necessaires - Zone 6
-    mode: roundNumber(michel_8b_surface_nette_N6 * ( 1 + michel_8c_surface_equipements_N6/
+    mode: $JS:roundNumber(michel_8b_surface_nette_N6 * ( 1 + michel_8c_surface_equipements_N6/
         100),2)
     source: MICHEL
     type: FLOAT
@@ -27364,7 +27028,7 @@ METRICS:
         michel_8d_hectares_necessaires_N2 + michel_8d_hectares_necessaires_N1,2)
     key: michel_8d_hectares_necessaires_Total
     meta: Hectares Necessaires - Total
-    mode: roundNumber(michel_8d_hectares_necessaires_N6 + michel_8d_hectares_necessaires_N5
+    mode: $JS:roundNumber(michel_8d_hectares_necessaires_N6 + michel_8d_hectares_necessaires_N5
         + michel_8d_hectares_necessaires_N4 + michel_8d_hectares_necessaires_N3 +
         michel_8d_hectares_necessaires_N2 + michel_8d_hectares_necessaires_N1,2)
     source: MICHEL
@@ -27384,21 +27048,21 @@ METRICS:
     source: MICHEL
     type: FLOAT
     value: ''
--   expr: 'roundNumber (michel_8d_hectares_necessaires_Total / michel_duree,2) if
-        (michel_duree!=0) : 0'
+-   expr: roundNumber (michel_8d_hectares_necessaires_Total / michel_duree,2) if (michel_duree!=0)
+        else 0
     key: michel_8c_consomation_prevue_annuelle
     meta: Consommation annuelle prevue
-    mode: 'roundNumber (michel_8d_hectares_necessaires_Total / michel_duree,2) if
-        (michel_duree!=0) : 0'
+    mode: '$JS:(michel_duree==0) : 0 ? roundNumber (michel_8d_hectares_necessaires_Total
+        / michel_duree,2) '
     source: MICHEL
     type: FLOAT
     value: ''
--   expr: 'roundNumber((michel_8c_consomation_prevue_annuelle / michel_8b_consomation_cerema_annuelle)
-        * 100,0) if (michel_8b_consomation_cerema_annuelle!=0) : 0'
+-   expr: roundNumber((michel_8c_consomation_prevue_annuelle / michel_8b_consomation_cerema_annuelle)
+        * 100,0) if (michel_8b_consomation_cerema_annuelle!=0) else 0
     key: michel_8d_niveau_sobriete
     meta: Niveau de Sobriete
-    mode: 'roundNumber((michel_8c_consomation_prevue_annuelle / michel_8b_consomation_cerema_annuelle)
-        * 100,0) if (michel_8b_consomation_cerema_annuelle!=0) : 0'
+    mode: '$JS:(michel_8b_consomation_cerema_annuelle==0) ? 0  : roundNumber((michel_8c_consomation_prevue_annuelle
+        / michel_8b_consomation_cerema_annuelle) * 100,0)'
     source: MICHEL
     type: FLOAT
     value: ''
@@ -27406,7 +27070,7 @@ METRICS:
         Exemplaire"'
     key: michel_8e_message_sobriete0
     meta: Message de Sobriete
-    mode: '"Territoire de reconquete"  if  (michel_8d_niveau_sobriete < 0 ) else "Consommation
+    mode: '$JS: (michel_8d_niveau_sobriete < 0 ) ?  "Territoire de reconquete" :  "Consommation
         Exemplaire"'
     source: MICHEL
     type: STR
@@ -27414,21 +27078,21 @@ METRICS:
 -   expr: '"Objectif ZAN atteint"  if  (michel_8d_niveau_sobriete > 25 ) else michel_8e_message_sobriete0'
     key: michel_8e_message_sobriete1
     meta: Message de Sobriete
-    mode: '"Objectif ZAN atteint"  if  (michel_8d_niveau_sobriete > 25 ) else michel_8e_message_sobriete0'
+    mode: '$JS: (michel_8d_niveau_sobriete >= 25 ) ?  "Objectif ZAN atteint" :  michel_8e_message_sobriete0'
     source: MICHEL
     type: STR
     value: ''
 -   expr: '"Consommation Excessive"  if  (michel_8d_niveau_sobriete >= 51 ) else michel_8e_message_sobriete1'
     key: michel_8e_message_sobriete2
     meta: Message de Sobriete
-    mode: '"Consommation Excessive"  if  (michel_8d_niveau_sobriete >= 51 ) else michel_8e_message_sobriete1'
+    mode: '$JS: (michel_8d_niveau_sobriete >= 51 ) ?  "Consommation Excessive" :  michel_8e_message_sobriete1'
     source: MICHEL
     type: STR
     value: ''
 -   expr: '"Consommation Abusive"  if  (michel_8d_niveau_sobriete >= 100 ) else michel_8e_message_sobriete3'
     key: michel_8e_message_sobriete3
     meta: Message de Sobriete
-    mode: '"Consommation Abusive"  if  (michel_8d_niveau_sobriete >= 100 ) else michel_8e_message_sobriete3'
+    mode: '$JS: (michel_8d_niveau_sobriete >= 100 ) ?  "Consommation Abusive" :  michel_8e_message_sobriete2'
     source: MICHEL
     type: STR
     value: ''

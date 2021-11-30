@@ -1347,8 +1347,8 @@ class DataStore():
                 print_red(error)
                 self.add_metric(_key, _description, source=_source, mode=_total, data=error, type=_type, expr=_expr)
 
+        update_DataStoreCache(self, self.code_insee)
         self.store_index = save_index
-        update_DataStoreCache(self)
         return self
 
     def total_data(self, meta=True):
