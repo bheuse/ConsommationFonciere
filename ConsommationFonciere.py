@@ -1340,14 +1340,15 @@ class DataStore():
             # print_grey("Evaluating Metric " + str(_line) + ": " + str(_key) + " : " + str(_data))
             _data = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _data)    # Replace ${VAR} by VAR
             try:
+                print_red("collect_data Evaluating metrique : Line " + str(_line) + " Key = " + str(_key) + " expr : " + str(_expr))
                 value = eval(_data, self.get_row_as_dict(), {**globals(), **locals()})
                 self.add_metric(_key, _description, source=_source, mode=_total, data=value, type=_type, expr=_expr)
             except Exception as e :
-                error = "Error evaluating metrique : Line " + str(_line) + " Key = " + str(_key) + " + expr : " + str(_expr) + " - Error : " + str(e)
+                error = "collect_data Error evaluating metrique : Line " + str(_line) + " Key = " + str(_key) + " expr : " + str(_expr) + " - Error : " + str(e)
                 print_red(error)
                 self.add_metric(_key, _description, source=_source, mode=_total, data=error, type=_type, expr=_expr)
 
-        update_DataStoreCache(self, self.code_insee)
+        update_DataStoreCache(self)
         self.store_index = save_index
         return self
 
@@ -1478,10 +1479,11 @@ class DataStore():
             elif (mode == "CUSTOM"):  continue
             else:
                 try:
+                    print_red("total_data Evaluating metrique total mode  : " + key + " + expr : " + mode)
                     mode = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', mode)    # Replace ${VAR} by VAR
                     total_dict[key] =eval(mode, total_dict, globals())
                 except Exception as e:
-                    error = "Error evaluating metrique total mode  : " + key + " + expr : " + mode + " - Error : " + str(e)
+                    error = "total_data Error evaluating metrique total mode  : " + key + " + expr : " + mode + " - Error : " + str(e)
                     print_red(error)
                     total_dict[key] = error
 
@@ -1523,7 +1525,7 @@ class DataStore():
             if (str(_key) == "nan") : continue          # Empty Line
             if (str(_key) == "")    : continue          # Empty Line
             if (str(_key).startswith("#")) : continue   # Ignore line / key starting with #
-            # print_grey("Evaluating Calcul " + str(_line) + ": " + str(_key) + " : " + str(_data))
+            print_grey("Evaluating Calcul " + str(_line) + ": " + str(_key) + " : " + str(_data))
             _data = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _python)    # Replace ${VAR} by VAR
             try:
                 value = eval(_data, self.get_row_as_dict(), {**globals(), **locals()})
@@ -1567,6 +1569,7 @@ class DataStore():
             if (str(_key).startswith("#")) : continue   # Ignore key starting with #
             _data = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _test)    # Replace ${VAR} by VAR
             try:
+                print_red("Evaluating Diagnostic : " + _key + " + eval : " + _test)
                 value = bool(eval(_test, self.get_row_as_dict(), {**globals(), **locals()}))
                 if (str(_messageV) == "nan") : _messageV = ""          # Empty Line
                 if (str(_messageV).startswith("\"")):
@@ -2707,7 +2710,7 @@ class TestConsommation(unittest.TestCase):
 
     def testAlpesMaritimes(self):
         print_yellow("> Departement Alpes Maritimes")
-        ds = report_dept(dept_id="06", force=False)
+        ds = report_dept(dept_id="06", force=False, with_communes=True)
         self.assertEqual(str(ds.get("NOM_COMMUNE")), "Alpes-Maritimes")
         print_yellow("< Departement Alpes Maritimes")
 
