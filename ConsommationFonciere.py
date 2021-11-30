@@ -1348,6 +1348,7 @@ class DataStore():
                 self.add_metric(_key, _description, source=_source, mode=_total, data=error, type=_type, expr=_expr)
 
         self.store_index = save_index
+        update_DataStoreCache(self)
         return self
 
     def total_data(self, meta=True):
@@ -1626,10 +1627,11 @@ def update_DataStoreCache(ds : DataStore, code_insee=None):
         DataStoreCache[str(code_insee)] = ds
         print_green("Added in Cache : DataStore with code INSEE " + str(ds.store_code) + " : "  + ds.store_name)
     elif (isinstance(ds["CODE_INSEE"], int)) or (isinstance(ds["CODE_INSEE"], str)):
-        DataStoreCache[str(ds.data_frame["CODE_INSEE"])] = ds
+        DataStoreCache[str(ds["CODE_INSEE"])] = ds
         print_green("Added in Cache : DataStore with code INSEE " + str(ds["CODE_INSEE"]) + " : "  + ds.store_name)
     else:
         print_red("Not Added in Cache : DataStore without code INSEE : " + ds.store_name)
+
 
 def render_index(template=html_index_template, region="93"):
     """" Building Mako Template Context """

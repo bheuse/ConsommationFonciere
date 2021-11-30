@@ -60,6 +60,9 @@ function f_percent(part, full, rounding=1, suffix = "%", format = "") {
         // Adds format: format="+"   =>  +45%
         // Adds format: format="+()" =>  (+45%) 90
         // Adds format: format="()"  =>   (45%) 90
+        if (isNaN(full) || (full === Infinity)) {
+            return 0
+        }
         var   percent = (part / full) * 100 ;
         var f_percent = percent.toFixed(rounding);
         if (format=="")           return f_percent+suffix ;
@@ -87,8 +90,11 @@ function f_taux(value, rounding=2, suffix = "%", format = "+") {
         return ""+value.toString()+suffix;
 }
 
-function  f_round(value, rounding=0)  {
+function f_round(value, rounding=0)  {
     // Rounding
+    if (isNaN(value) || (value === Infinity)) {
+        return 0
+        }
     return roundNumber(value, rounding)
     }
 
@@ -102,26 +108,65 @@ function downloadObjectAsJson(exportObj, exportName){
     downloadAnchorNode.remove();
     }
 
-function run_calculs(dataset){
+function loadFileAsJson() {
+    var input, file, fr;
+    if (typeof window.FileReader !== 'function') {
+      alert("The file API isn't supported on this browser yet.");
+      return;
+    }
+    input = document.getElementById('fileinput');
+    if (!input) {
+      alert("Um, couldn't find the fileinput element.");
+    }
+    else if (!input.files) {
+      alert("This browser doesn't seem to support the `files` property of file inputs.");
+    }
+    else if (!input.files[0]) {
+      alert("Please select a file before clicking 'Load'");
+    }
+    else {
+      file = input.files[0];
+      fr = new FileReader();
+      fr.onload = receivedText;
+      fr.readAsText(file);
+    }
+    function receivedText(e) {
+      let lines = e.target.result;
+      var newArr = JSON.parse(lines);
+    }
+}
+
+
+function run_calculs(dataset, full = false, filter = "*"){
     console.log("> run_calculs");
     console.log(dataset);
     calculs = s_calculs["X"]
     console.log(calculs);
     console.log(dataset);
     for (const [key, value] of Object.entries(calculs)) {
+        if ((value.Flag == "#") && (full == false)) {
+            console.log("# > Skipping : " + key);
+            continue
+            }
+        if (!((filter == "*") || (value.Source == filter) || (key == filter))) {
+            console.log("# > Skipping : " + key);
+            continue
+            }
         js_expr = value.JavaScript ;
         console.log("Calculs : " + key + " : " + js_expr + " =" );
         the_value = evalInContext(js_expr, dataset.total);
         console.log(the_value);
-        dataset.total[key] = the_value ;
-        dataset.Data[key]  = [];
-        dataset.Data[key]["meta"]    = value.Description ;
-        dataset.Data[key]["expr"]    = value.JavaScript ;
-        dataset.Data[key]["type"]    = value.Type ;
-        dataset.Data[key]["mode"]    = value.Python ;
-        dataset.Data[key]["source"]  = value.Source ;
-        dataset.Data[key]["comment"] = value.Commentaire ;
-        dataset.Data[key]["total"]   = the_value ;
+        tkey = key.trim();
+        dataset.total[tkey] = the_value;
+        dataset.Data[tkey]  = [];
+        dataset.Data[tkey]["meta"]    = value.Description ;
+        dataset.Data[tkey]["expr"]    = value.JavaScript ;
+        dataset.Data[tkey]["type"]    = value.Type ;
+        dataset.Data[tkey]["flag"]    = value.Flag ;
+        dataset.Data[tkey]["mode"]    = value.Python ;
+        dataset.Data[tkey]["source"]  = value.Source ;
+        dataset.Data[tkey]["comment"] = value.Commentaire ;
+        dataset.Data[tkey]["total"]   = the_value ;
         }
     console.log("< run_calculs");
     console.log(dataset.total);
@@ -130,12 +175,16 @@ function run_calculs(dataset){
     return dataset
     }
 
-function run_diagnostics(dataset){
+function run_diagnostics(dataset, filter = "*"){
     console.log("> run_diagnostics");
     console.log(dataset);
     diagnostics = s_diagnostics["X"]
     console.log(diagnostics);
     for (const [key, value] of Object.entries(diagnostics)) {
+        if (!((filter == "*") || (value.Source == filter) || (key == filter))) {
+            console.log("# > Skipping : " + key);
+            continue
+            }
         js_expr = value.Test ;
         // console.log("Diagnostics : " + key + " : " + js_expr + " =" );
         the_value = evalInContext(js_expr, dataset.total);
@@ -168,8 +217,8 @@ class scenario {
         }
     reset(data_serveur) {
         console.log("scenario reset")
-        this.dataset = run_calculs(data_serveur);
-        this.dataset = run_diagnostics(this.dataset);
+        this.dataset = run_calculs(data_serveur, full = false, filter = "*");
+        this.dataset = run_diagnostics(this.dataset, filter = "*");
         this.data_s = dataset                   // Data du Serveur
         this.data   = this.data_s.Data;         // Data par Metrique
         this.ds     = this.data_s.total;        // Data du Territoire
@@ -255,8 +304,8 @@ const vm = Vue.createApp({
                 return
                 }
             g_data_s.total.scen = "scen0"
-            dataset = run_calculs(g_data_s);
-            dataset = run_diagnostics(dataset);
+            dataset = run_calculs(g_data_s, full = true, filter = "*");
+            dataset = run_diagnostics(dataset, filter = "*");
             this.data_s = dataset;
             this.ds     = this.data_s.total;
             this.data   = this.data_s.Data;
