@@ -1224,7 +1224,8 @@ class DataStore():
 
         if (str(code_insee) in DataStoreCache) :
             print_green("Cached Donnees : " + str(code_postal) + " : " + commune + " (Code INSEE : " + code_insee + ")")
-            return DataStoreCache[code_insee]
+            self.data_frame = self.data_frame.append(DataStoreCache[code_insee].data_frame[code_insee])
+            return self
 
         save_index       = self.store_index
         self.store_index = code_insee
