@@ -1224,7 +1224,7 @@ class DataStore():
 
         if (str(code_insee) in DataStoreCache) :
             print_green("Cached Donnees : " + str(code_postal) + " : " + commune + " (Code INSEE : " + code_insee + ")")
-            self.data_frame = self.data_frame.append(DataStoreCache[code_insee].data_frame[code_insee])
+            self.data_frame = merge_DataStoreCache(self, code_insee)
             return self
 
         save_index       = self.store_index
@@ -1636,6 +1636,23 @@ def update_DataStoreCache(ds : DataStore, code_insee=None):
         print_green("Added in Cache : DataStore with code INSEE " + str(ds["CODE_INSEE"]) + " : "  + ds.store_name)
     else:
         print_red("Not Added in Cache : DataStore without code INSEE : " + ds.store_name)
+
+def merge_DataStoreCache(ds : DataStore, code_insee=None) -> pd.DataFrame :
+    l_data_frame = ds.data_frame.append(DataStoreCache[code_insee].data_frame.loc[code_insee, :])
+    # Add Meta Data
+    if 'meta'   not in l_data_frame.index: l_data_frame = l_data_frame.append(DataStoreCache[code_insee].data_frame.loc["meta", :])
+    if 'mode'   not in l_data_frame.index: l_data_frame = l_data_frame.append(DataStoreCache[code_insee].data_frame.loc["mode", :])
+    if 'type'   not in l_data_frame.index: l_data_frame = l_data_frame.append(DataStoreCache[code_insee].data_frame.loc["type", :])
+    if 'source' not in l_data_frame.index: l_data_frame = l_data_frame.append(DataStoreCache[code_insee].data_frame.loc["source", :])
+    if 'expr'   not in l_data_frame.index: l_data_frame = l_data_frame.append(DataStoreCache[code_insee].data_frame.loc["expr", :])
+    ds.source_dict = DataStoreCache[code_insee].source_dict
+    ds.key_datas   = DataStoreCache[code_insee].key_datas
+    ds.meta_dict   = DataStoreCache[code_insee].meta_dict
+    ds.type_dict   = DataStoreCache[code_insee].type_dict
+    ds.source_dict = DataStoreCache[code_insee].source_dict
+    ds.mode_dict   = DataStoreCache[code_insee].mode_dict
+    ds.expr_dict   = DataStoreCache[code_insee].expr_dict
+    return l_data_frame
 
 
 def render_index(template=html_index_template, region="93"):
@@ -2700,7 +2717,7 @@ class TestConsommation(unittest.TestCase):
 
     def testCAPL(self):
         print_yellow("> CA Cannes Pays de Lerins")
-        ds = report_epci(epci_id="200039915", force=False)
+        ds = report_epci(epci_id="200039915", force=True, with_communes=True)
         self.assertEqual(str(ds.get("EPCI")), "200039915")
         self.assertEqual(str(ds.get("NOM_COMMUNE")), "EPCI")
         print_yellow("< CA Cannes Pays de Lerins")
