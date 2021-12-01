@@ -1229,7 +1229,7 @@ class DataStore():
         save_index       = self.store_index
         self.store_index = code_insee
 
-        print_green("Collecte Donnees : " + str(code_postal) + " : " + commune + " (Code INSEE : " + code_insee + ")")
+        print_green("- Collecte Donnees : " + str(code_postal) + " : " + commune + " (Code INSEE : " + code_insee + ")")
 
         # Donnees Commune
         self.add_metric("CODE_INSEE",     "Code INSEE Commune",        source=source_codes,    mode=mode_count,  data=code_insee,          type="STR")
@@ -1324,6 +1324,7 @@ class DataStore():
         load_flux_2018()
 
         # Collected Data
+        print_green("- Calculs Donnees : " + str(code_postal) + " : " + commune + " (Code INSEE : " + code_insee + ")")
         _line = 0
         for index, metric in collectDataMetrics.iterrows():
             _line = _line + 1
@@ -1340,7 +1341,7 @@ class DataStore():
             # print_grey("Evaluating Metric " + str(_line) + ": " + str(_key) + " : " + str(_data))
             _data = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _data)    # Replace ${VAR} by VAR
             try:
-                print_red("collect_data Evaluating metrique : Line " + str(_line) + " Key = " + str(_key) + " expr : " + str(_expr))
+                # -print_red("collect_data Evaluating metrique : Line " + str(_line) + " Key = " + str(_key) + " expr : " + str(_expr))
                 value = eval(_data, self.get_row_as_dict(), {**globals(), **locals()})
                 self.add_metric(_key, _description, source=_source, mode=_total, data=value, type=_type, expr=_expr)
             except Exception as e :
@@ -1479,7 +1480,7 @@ class DataStore():
             elif (mode == "CUSTOM"):  continue
             else:
                 try:
-                    print_red("total_data Evaluating metrique total mode  : " + key + " + expr : " + mode)
+                    # print_red("total_data Evaluating metrique total mode  : " + key + " + expr : " + mode)
                     mode = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', mode)    # Replace ${VAR} by VAR
                     total_dict[key] =eval(mode, total_dict, globals())
                 except Exception as e:
@@ -1525,7 +1526,7 @@ class DataStore():
             if (str(_key) == "nan") : continue          # Empty Line
             if (str(_key) == "")    : continue          # Empty Line
             if (str(_key).startswith("#")) : continue   # Ignore line / key starting with #
-            print_grey("Evaluating Calcul " + str(_line) + ": " + str(_key) + " : " + str(_data))
+            # print_grey("Evaluating Calcul " + str(_line) + ": " + str(_key) + " : " + str(_data))
             _data = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _python)    # Replace ${VAR} by VAR
             try:
                 value = eval(_data, self.get_row_as_dict(), {**globals(), **locals()})
@@ -1569,7 +1570,7 @@ class DataStore():
             if (str(_key).startswith("#")) : continue   # Ignore key starting with #
             _data = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _test)    # Replace ${VAR} by VAR
             try:
-                print_red("Evaluating Diagnostic : " + _key + " + eval : " + _test)
+                # print_red("Evaluating Diagnostic : " + _key + " + eval : " + _test)
                 value = bool(eval(_test, self.get_row_as_dict(), {**globals(), **locals()}))
                 if (str(_messageV) == "nan") : _messageV = ""          # Empty Line
                 if (str(_messageV).startswith("\"")):

@@ -8,10 +8,8 @@ tabula-py
 xlrd
 termcolor
 pybase64
-pathlib
 unidecode
 mako
-numpy
 jk_commentjson
 pyyaml
 requests
