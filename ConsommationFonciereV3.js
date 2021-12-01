@@ -1312,7 +1312,7 @@ vm.component('michel-ozan', {
                 <td class="w3-right-align">{{this.ds.michel_pop_arrivee - this.ds.michel_pop_depart}}</td>
             </tr>
             <tr>
-                <td height="50" >2- Besoins en RP</td>
+                <td height="50" >2.0 - Besoins en Logements</td>
             </tr>
             <tr>
                 <td height="50" >2.1 - Population hors Ménages</td>
@@ -1339,7 +1339,7 @@ vm.component('michel-ozan', {
                 <td class="w3-right-align">{{this.ds.michel_tm_delta}}</td>
             </tr>
             <tr>
-                <td height="50" >2.4 - Residences Principales</td>
+                <td height="50" >2.4 - Résidences Principales</td>
                 <td class="w3-right-align">{{this.ds.michel_tx_rp_an_donnee *100}}%</td>
                 <td class="w3-right-align">{{this.ds.C18_MEN}}</td>
                 <td class="w3-right-align">{{((this.ds.michel_rp_depart/this.ds.michel_log_depart)*100).toFixed(1)}}% - {{this.ds.michel_rp_depart}}</td>
@@ -1363,7 +1363,7 @@ vm.component('michel-ozan', {
                 <td class="w3-right-align">{{this.ds.michel_rv_delta}}</td>
             </tr>
             <tr>
-                <td height="50" >4.1- Parc Total</td>
+                <td height="50" >4.1- Parc Total de Logements</td>
                 <td class="w3-right-align">100.0%</td>
                 <td class="w3-right-align">{{this.ds.log_2018}}</td>
                 <td class="w3-right-align">{{this.ds.michel_log_depart}}</td>
@@ -1371,7 +1371,30 @@ vm.component('michel-ozan', {
                 <td class="w3-right-align">{{this.ds.michel_log_delta}}</td>
             </tr>
             <tr>
-                <td height="50" >5 - Renouvellement du Parc (sur 2013-2018)</td>
+                <th height="50" >4.2- Besoins en Logements</th>
+                <td class="w3-right-align"></td>
+                <th class="w3-right-align">{{this.ds.michel_log_delta}}</th>
+                <th class="w3-left-align">Logements</th>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table class="w3-table-all w3-hoverable w3-card-4">
+            <tbody>
+            <tr>
+                <th class="w3-teal" height="50" >Renouvellement du Parc</th>
+                <th class="w3-right-align w3-teal"></th>
+                <th class="w3-right-align w3-teal"></th>
+                <th class="w3-right-align w3-teal"></th>
+                <th class="w3-right-align w3-teal">Evolution du Parc</th>
+                <th class="w3-right-align w3-teal">Construits </th>
+                <th class="w3-right-align w3-teal">Renouvellement</th>
+            </tr>
+            <tr>
+                <td height="50" >5.0 - Renouvellement du Parc (sur 2013-2018)</td>
+                <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align">Evolution {{this.ds.michel_evolution_parc_5_ans}}</td>
@@ -1379,12 +1402,30 @@ vm.component('michel-ozan', {
                 <td class="w3-right-align">{{this.ds.michel_renouvellement_5_ans}}</td>
             </tr>
             <tr>
-                <td height="50" >5.1 - Renouvellement Annuel</td>
-                <td class="w3-right-align"></td>
-                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_renouvellement_taux"></td>
+                <td height="50" >5.1 - Renouvellement annuel futur ({{this.ds.michel_an_depart}} - {{this.ds.michel_an_arrivee}}) :</td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
-                <td class="w3-right-align">{{this.ds.michel_renouvellement_an}}</td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align w3-2021-french-blue"> (en %) <input  type="number" min="0" max="099" step="0.001" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_renouvellement_taux"></td>
+                <td class="w3-right-align">En nombre (par an) : </td>
+                <td class="w3-right-align">{{this.ds.michel_renouvellement_nombre_an}}</td>
+            </tr>
+            <tr>
+                <td height="50" >5.2 - Renouvellement a terme</td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align">{{this.ds.michel_renouvellement_arrivee}}</td>
+            </tr>
+            <tr>
+                <th height="50" >5.3 - Besoin en logements sur foncier vierge:</th>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <th class="w3-right-align">{{this.ds.michel_besoin_logements_sur_foncier_vierge}}</th>
+                <th class="w3-left-align">Logements</th>
+                <td class="w3-right-align"></td>
             </tr>
             </tbody>
         </table>
@@ -1402,17 +1443,17 @@ vm.component('michel-ozan', {
                 <th class="w3-right-align w3-teal">Total</th>
             </tr>
             <tr>
-                <td height="50" >6a - Répartition des logts au depart</td>
-                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6a_repartition_log_N1"></td>
-                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6a_repartition_log_N2"></td>
-                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6a_repartition_log_N3"></td>
-                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6a_repartition_log_N4"></td>
-                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6a_repartition_log_N5"></td>
-                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6a_repartition_log_N6"></td>
+                <td height="50" >6a - Répartition des logts au depart (en % - pour information)</td>
+                <td class="w3-right-align w3-2021-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6a_repartition_log_N1"></td>
+                <td class="w3-right-align w3-2021-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6a_repartition_log_N2"></td>
+                <td class="w3-right-align w3-2021-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6a_repartition_log_N3"></td>
+                <td class="w3-right-align w3-2021-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6a_repartition_log_N4"></td>
+                <td class="w3-right-align w3-2021-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6a_repartition_log_N5"></td>
+                <td class="w3-right-align w3-2021-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6a_repartition_log_N6"></td>
                 <td class="w3-right-align">{{this.ds.michel_6a_repartition_log_Total}}</td>
             </tr>
             <tr>
-                <td height="50" >6b - Répartition des nouveaux logts</td>
+                <td height="50" >6b - Répartition des nouveaux logts  (en %)</td>
                 <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6b_repartition_nouv_log_N1"></td>
                 <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6b_repartition_nouv_log_N2"></td>
                 <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_6b_repartition_nouv_log_N3"></td>
@@ -1422,7 +1463,7 @@ vm.component('michel-ozan', {
                 <td class="w3-right-align">{{this.ds.michel_6b_repartition_nouv_log_Total}}</td>
             </tr>
             <tr>
-                <td height="50" >6c - Répartition des besoins en logts</td>
+                <td height="50" >6c - Répartition des besoins en logts (en nombre)</td>
                 <td class="w3-right-align">{{this.ds.michel_6c_repartition_besoins_log_N1}}</td>
                 <td class="w3-right-align">{{this.ds.michel_6c_repartition_besoins_log_N2}}</td>
                 <td class="w3-right-align">{{this.ds.michel_6c_repartition_besoins_log_N3}}</td>
@@ -1432,7 +1473,7 @@ vm.component('michel-ozan', {
                 <td class="w3-right-align">{{this.ds.michel_6c_repartition_besoins_log_Total}}</td>
             </tr>
             <tr>
-                <td height="50" >7a - Possibilité de Densification (en nombre) </td>
+                <td height="50" >7a - Possibilité de Densification (logts en nombre) </td>
                 <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_7a_densification_N1"></td>
                 <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_7a_densification_N2"></td>
                 <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_7a_densification_N3"></td>
@@ -1462,7 +1503,7 @@ vm.component('michel-ozan', {
                 <td class="w3-right-align">{{this.ds.michel_8a_densite_nette_Total}}</td>
             </tr>
             <tr>
-                <td height="50" >8b - Surface Nette en extension</td>
+                <td height="50" >8b - Surface Nette en Extension (Ha)</td>
                 <td class="w3-right-align">{{this.ds.michel_8b_surface_nette_N1}}</td>
                 <td class="w3-right-align">{{this.ds.michel_8b_surface_nette_N2}}</td>
                 <td class="w3-right-align">{{this.ds.michel_8b_surface_nette_N3}}</td>
@@ -1472,7 +1513,7 @@ vm.component('michel-ozan', {
                 <td class="w3-right-align">{{this.ds.michel_8b_surface_nette_Total}}</td>
             </tr>
             <tr>
-                <td height="50" >8c - Rajout Equipements en pourcent</td>
+                <td height="50" >8c - Rajout Equipements (en %)</td>
                 <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_8c_surface_equipements_N1"></td>
                 <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_8c_surface_equipements_N2"></td>
                 <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="099" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_8c_surface_equipements_N3"></td>
@@ -1482,7 +1523,7 @@ vm.component('michel-ozan', {
                 <td class="w3-right-align">{{this.ds.michel_8c_surface_equipements_Total}}</td>
             </tr>
             <tr>
-                <td height="50" >8c - Rajout Equipements en surface</td>
+                <td height="50" >8c - Rajout Equipements en surface (Ha)</td>
                 <td class="w3-right-align">{{this.ds.michel_8c2_surface_equipements_N1}}</td>
                 <td class="w3-right-align">{{this.ds.michel_8c2_surface_equipements_N1}}</td>
                 <td class="w3-right-align">{{this.ds.michel_8c2_surface_equipements_N3}}</td>
@@ -1492,7 +1533,7 @@ vm.component('michel-ozan', {
                 <td class="w3-right-align">{{this.ds.michel_8c2_surface_equipements_Total}}</td>
             </tr>
             <tr>
-                <td height="50" >8d - Hectares Necessaires</td>
+                <td height="50" >8d - Hectares nécessaires (Ha)</td>
                 <td class="w3-right-align">{{this.ds.michel_8d_hectares_necessaires_N1}}</td>
                 <td class="w3-right-align">{{this.ds.michel_8d_hectares_necessaires_N2}}</td>
                 <td class="w3-right-align">{{this.ds.michel_8d_hectares_necessaires_N3}}</td>
@@ -1501,16 +1542,28 @@ vm.component('michel-ozan', {
                 <td class="w3-right-align">{{this.ds.michel_8d_hectares_necessaires_N6}}</td>
                 <td class="w3-right-align">{{this.ds.michel_8d_hectares_necessaires_Total}}</td>
             </tr>
+            <tr>
+                <th height="50" >8e - Foncier nécessaire (Ha)</th>
+                <th class="w3-right-align">{{this.ds.michel_8d_hectares_necessaires_Total}}</th>
+                <th class="w3-left-align">Hectares</th>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+            </tr>
             </tbody>
         </table>
 
-        <div class="w3-panel w3-card-4 w3-teal">
+        <div class="w3-panel w3-card-4 w3-teal w3-center">
             <br>
-            <p>Consommation Fonciere passee en 10 ans : {{ this.ds.michel_8a_consomation_cerema_10_ans }}</p>
-            <p>Consommation Fonciere passee annuelle :  {{ this.ds.michel_8b_consomation_cerema_annuelle }}</p>
-            <p>Consommation Fonciere future prevue   :  {{ this.ds.michel_8c_consomation_prevue_annuelle }}</p>
-            <h2>Votre niveau de sobriete fonciere    :  {{ this.ds.michel_8d_niveau_sobriete }}</h2>
             <h1>{{ this.ds.michel_8e_message_sobriete }}</h1>
+            <br>
+            <h2>Votre niveau de sobriété fonciere    :  {{ this.ds.michel_8d_niveau_sobriete }}%</h2>
+            <br>
+            <p>Consommation Fonciere passée en 10 ans : {{ this.ds.michel_8a_consomation_cerema_10_ans }} ha</p>
+            <p>Consommation Fonciere passée annuelle :  {{ this.ds.michel_8b_consomation_cerema_annuelle }} ha</p>
+            <p>Consommation Fonciere future annuelle :  {{ this.ds.michel_8c_consomation_prevue_annuelle }} ha</p>
             <br>
         </div>
 
