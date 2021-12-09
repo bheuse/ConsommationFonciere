@@ -30,7 +30,7 @@ import logging
 import datetime
 
 timestamp = datetime.datetime.now().strftime("%y%m%d-%H%M%S")
-logFile = "output"+os.sep+"ConsommationFonciere_"+timestamp+".log"
+logFile   = "output"+os.sep+"ConsommationFonciere_"+timestamp+".log"
 logging.basicConfig(filename=logFile, filemode='w', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
 reload(matplotlib)
@@ -39,6 +39,8 @@ matplotlib.use('Agg')
 warnings.filterwarnings("ignore")
 warnings.simplefilter(action='ignore', category=pd.errors.PerformanceWarning)
 
+from warnings import simplefilter
+simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
 
 # Working Directories
 output_dir = "output" + os.sep
@@ -141,8 +143,8 @@ def load_sitadel_locaux(sitadelLocaux1316_file:  str = sitadelLocaux1316File,
 sitadel1019SourcePage = "https://www.insee.fr/fr/statistiques/5395856?sommaire=5395912"
 sitadel1019SourceFile = data_dir + "logements_commences_PACA_2010-2019.xls"
 
-
 sitadel1019 = None
+
 
 def load_logements_paca(sitadel1019S:  str = sitadel1019SourceFile):
     global sitadel1019
@@ -386,6 +388,7 @@ flux2018SourceFile = data_dir + "base-flux-mobilite-residentielle-2018.csv"
 
 flux2018 = None
 
+
 def load_flux_2018(flux2018SourceFile:  str = flux2018SourceFile):
     global flux2018
     if (flux2018 is None) :
@@ -418,6 +421,7 @@ def load_collectData(collect_file: str = collectDataFile):
         collectDiagnostics  = pd.read_excel(xls, 'Diagnostic', index_col=0, dtype=str)
         collectCalculations = pd.read_excel(xls, 'Calculs',    index_col=0, dtype=str)
 
+        print_yellow("  - Generation : " + "datametrics.json" + " ...")
         dm = pd.read_excel(xls, 'Collect', index_col=0, dtype=str).fillna('')
         dm = dm[~dm.index.duplicated(keep='first')]
         for index, row in dm.iterrows():
@@ -429,6 +433,7 @@ def load_collectData(collect_file: str = collectDataFile):
             f.write(to_json(d, indent=4))
             f.close()
 
+        print_yellow("  - Generation : " + "calculations.json" + " ...")
         dm = pd.read_excel(xls, 'Calculs', index_col=0, dtype=str).fillna('')
         dm = dm[~dm.index.duplicated(keep='first')]
         dm = dm[~dm.index.duplicated(keep='first')]
@@ -441,6 +446,7 @@ def load_collectData(collect_file: str = collectDataFile):
             f.write(to_json(d, indent=4))
             f.close()
 
+        print_yellow("  - Generation : " + "diagnostics.json" + " ...")
         dm = pd.read_excel(xls, 'Diagnostic', index_col=0, dtype=str).fillna('')
         dm = dm[~dm.index.duplicated(keep='first')]
         for index, row in dm.iterrows():
@@ -459,9 +465,9 @@ def load_collectData(collect_file: str = collectDataFile):
 ###
 
 
-def delete_pattern(dir=output_dir, pattern="*.bck"):
+def delete_pattern(directory=output_dir, pattern="*.bck"):
     # Get a list of all the file paths that ends with .txt from in specified directory
-    fileList = glob.glob(dir+pattern)
+    fileList = glob.glob(directory+pattern)
     # Iterate over the list of filepaths & remove each file.
     for filePath in fileList:
         try:
@@ -551,9 +557,22 @@ def print_green(text):
     print(colored(text, "green"))
     logging.debug(text)
 
+
 def print_red(text):
     print(colored(text, "red"))
     logging.debug(text)
+
+
+def print_verbose(text):
+    global VERBOSE
+    if (VERBOSE) :
+       print(colored(text, "magenta"))
+    logging.debug(text)
+
+
+def print_error(text):
+    print(colored(text, "cyan"))
+    logging.error(text)
 
 
 def print_yellow(text):
@@ -570,6 +589,7 @@ def print_blue(text):
     print(colored(text, "blue"))
     logging.debug(text)
 
+
 def print_white(text):
     print(colored(text, "white"))
     logging.debug(text)
@@ -578,6 +598,7 @@ def print_white(text):
 def print_data(p_data_dict: dict):
     for l_key in p_data_dict.keys():
         print_white(l_key + " : " + str(p_data_dict[l_key]))
+
 
 def print_data_frame(p_data_frame: pd.DataFrame, code_insee: str):
     for column in p_data_frame:
@@ -974,11 +995,14 @@ class DataStore():
         self.type_dict   = {}  # { "INT", "STR",    "TAUX",  "PERCENT", "FLOAT" }
         self.source_dict = {}  # { "SRU", "INSEE",  "ART",   "SIT",     "DATA", "PROJ", "EVOL", "CALC" }
         self.mode_dict   = {}  # { "SUM", "IGNORE", "EQUAL", "COUNT",   "CUSTOM", "N/A", "AVG" }
-        self.expr_dict   = {}  # Expression USed for Calculations
+        self.expr_dict   = {}  # Expression Used for Calculations
         self.error_dict  = {}  # Error while processing this indicator / metric
         self.metric_list = []  # List of Metrics for Rendering
         self.diagnostics = []  # List of Diagnostic for Rendering
         self.html        = None
+        self.calc_done   = False
+        self.diag_done   = False
+        self.plot_done   = False
 
     def add_metric(self, key : str, meta : str, source: str, mode : str, type: str, index : str = None, data=None, expr="None"):
         """ Add a metric to the data store """
@@ -1061,7 +1085,9 @@ class DataStore():
         self.data_frame = self.data_frame.fillna('')
         if ("__builtins__" in self.data_frame.columns):
             self.data_frame.drop("__builtins__", axis=1,inplace=True)
+        print_green("> Saving Data   : "+self.get_fullname())
         # DF TO EXCEL
+        print_yellow("  - Saving Data : "+self.get_fullname()+ ".xlsx")
         writer = pd.ExcelWriter(output_dir + self.get_fullname() + ".xlsx")
         self.data_frame.to_excel(writer, "Data")
         pivot = self.data_frame.transpose()
@@ -1071,13 +1097,16 @@ class DataStore():
         writer.save()
         writer.close()
         # DF TO CSV
+        print_yellow("  - Saving Data : "+self.get_fullname()+ ".csv")
         self.data_frame.to_csv(output_dir + self.get_fullname() + ".csv", sep=',')
         # DF TO JSON
         ## _d.json
+        self.data_frame.to_csv(output_dir + self.get_fullname() + "_d.json", sep=',')
         with open(output_dir + self.get_fullname() + "_d.json", 'w') as f:
             global_context["JSON_DIAGNOSTICS"] = " { \"Diagnostic\" : "+to_json(jsonc.loads(jsonc.dumps(self.diagnostics)), indent=4) + "}"
             f.write(global_context["JSON_DIAGNOSTICS"])
         ## _m.json
+        print_yellow("  - Saving Data : "+self.get_fullname()+ "_m.json")
         all = {}
         for name, values in self.data_frame.iteritems():
             all[name] = {}
@@ -1087,6 +1116,7 @@ class DataStore():
             global_context["JSON_DATA_SET_M"] = to_json(all, indent=4)
             f.write(global_context["JSON_DATA_SET_M"])
         ## _c.json
+        print_yellow("  - Saving Data : "+self.get_fullname()+ "_c.json")
         with open(output_dir + self.get_fullname() + "_c.json", 'w') as f:
             data_c = self.data_frame.fillna('').to_dict(orient='index')
             data_c["Data"] = all
@@ -1096,6 +1126,8 @@ class DataStore():
             # f.write(global_context["JSON_DATA_SET_C"])
             f.write(to_json(data_c, indent=4))
         ## _s.json
+        print_yellow("  - Saving Data : "+self.get_fullname()+ "_s.json")
+        self.data_frame.to_csv(output_dir + self.get_fullname() + "_s.json", sep=',')
         all = dict()
         summary_data = self.clean_data().fillna('')
         for name, values in summary_data.iteritems():
@@ -1114,7 +1146,7 @@ class DataStore():
         # EXCEL to DF
         filename = output_dir + self.get_fullname() + ".xlsx"
         if not os.path.isfile(filename) : return None
-        print_green("Chargement Donnees : "+filename)
+        print_green("> Load Data : "+filename)
         xls = pd.ExcelFile(filename)
         self.data_frame  = pd.read_excel(xls, 'Data', index_col=0)
         self.key_datas   = list(self.data_frame.columns.values)
@@ -1155,7 +1187,12 @@ class DataStore():
 
     def render_report(self, template=html_report_template, suffix=""):
         """ Render Report with specific HTML Mako Template """
+        self.run_calculs()
+        self.run_diagnostic()
+        self.run_plots()
         # Building Mako Template Context
+        html_file = output_dir + self.get_fullname() + suffix + ".html"
+        print_green("> Render Report : " + html_file)
         context = {**self.get_row_as_dict(), **global_context}
         metric_list = []
         for metric in self.metric_list :
@@ -1174,11 +1211,10 @@ class DataStore():
         temp = Template(filename=template)
         self.html = temp.render(**context)
         # Saving to File
-        p_html_file = output_dir + self.get_fullname() + suffix + ".html"
-        f = open(p_html_file, 'w')
+        f = open(html_file, 'w')
         f.write(self.html)
         f.close()
-        return p_html_file
+        return html_file
 
     # Add Meta Data
     def add_meta_data(self):
@@ -1230,7 +1266,7 @@ class DataStore():
         save_index       = self.store_index
         self.store_index = code_insee
 
-        print_green("- Collecte Donnees : " + str(code_postal) + " : " + commune + " (Code INSEE : " + code_insee + ")")
+        print_green("> Collecte Donnees  : " + str(code_postal) + " : " + commune + " (Code INSEE : " + code_insee + ")")
 
         # Donnees Commune
         self.add_metric("CODE_INSEE",     "Code INSEE Commune",        source=source_codes,    mode=mode_count,  data=code_insee,          type="STR")
@@ -1325,7 +1361,7 @@ class DataStore():
         load_flux_2018()
 
         # Collected Data
-        print_green("- Calculs Donnees : " + str(code_postal) + " : " + commune + " (Code INSEE : " + code_insee + ")")
+        print_green("> Calculs Metriques : " + str(code_postal) + " : " + commune + " (Code INSEE : " + code_insee + ")")
         _line = 0
         for index, metric in collectDataMetrics.iterrows():
             _line = _line + 1
@@ -1340,14 +1376,14 @@ class DataStore():
             if (str(_key) == "")    : continue          # Empty Line
             if (str(_key).startswith("#")) : continue   # Ignore line / key starting with #
             # print_grey("Evaluating Metric " + str(_line) + ": " + str(_key) + " : " + str(_data))
-            _data = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _data)    # Replace ${VAR} by VAR
             try:
-                # -print_red("collect_data Evaluating metrique : Line " + str(_line) + " Key = " + str(_key) + " expr : " + str(_expr))
+                print_verbose("  - Evaluating Collect Line " + str(_line) + " :  [" + str(_key) + "] Expr : " + str(_expr))
+                _data = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _data)  # Replace ${VAR} by VAR
                 value = eval(_data, self.get_row_as_dict(), {**globals(), **locals()})
+                print_verbose("  - Evaluating Collect Line " + str(_line) + " :  [" + str(_key) + "] Value : " + str(value) + " - " + str(type(value)))
                 self.add_metric(_key, _description, source=_source, mode=_total, data=value, type=_type, expr=_expr)
             except Exception as e :
-                error = "collect_data Error evaluating metrique : Line " + str(_line) + " Key = " + str(_key) + " expr : " + str(_expr) + " - Error : " + str(e)
-                print_red(error)
+                print_error("collect_data Error evaluating metrique : Line " + str(_line) + " Key = " + str(_key) + " expr : " + str(_expr) + " - Error : " + str(e))
                 self.add_metric(_key, _description, source=_source, mode=_total, data=error, type=_type, expr=_expr)
 
         update_DataStoreCache(self)
@@ -1360,13 +1396,16 @@ class DataStore():
         data_clean = self.clean_meta_data()
         if 'total'   in data_clean.index : data_clean.drop(labels="total",   axis=0, inplace=True)
 
-        print_green("> Total Donnees : " + str(self.store_code) + " : " + self.store_name)
+        print_green("> Total Donnees   : " + str(self.store_code) + " : " + self.store_name)
 
         total_dict = {}
+        _line = 0
         for key in self.key_datas:
+            _line = _line + 1
             total_dict[key] = "ERROR Invalid Mode"
             mode = self.mode_dict[key]
             try:
+                print_verbose("  - Evaluating Total Line " + str(_line) + ": [" + str(key) + "] Mode : " + str(mode))
                 if (key == "CODE_INSEE"): total_dict[key] = self.store_index
                 elif (mode == "SUM"):     total_dict[key] = data_clean[key].sum()
                 elif (mode == "EQUAL"):   total_dict[key] = data_clean[key][0]
@@ -1376,11 +1415,9 @@ class DataStore():
                 elif (mode == "AVG"):     total_dict[key] = data_clean[key].average()
                 elif (mode == "CUSTOM"):  total_dict[key] = "CUSTOM not Implemented"
                 else:                     total_dict[key] = "CUSTOM not evaluated"
+                print_verbose("  - Evaluating Total Line " + str(_line) + ": [" + str(key) + "] Value : " + str(total_dict[key]))
             except Exception as e:
-                print(key)
-                print("Exception : [" + str(mode) + " ] for key : [" + str(key) + "] : " + str(e))
-                print(data_clean[key])
-                quit()
+                print_error("Exception Evaluating Total Line : [" + str(mode) + " ] for key : [" + str(key) + "] : " + str(e))
 
         if (self.store_type == "COMMUNE"):
             total_dict["BASE_NAME"]     = self.get_fullname()
@@ -1481,32 +1518,36 @@ class DataStore():
             elif (mode == "CUSTOM"):  continue
             else:
                 try:
-                    # print_red("total_data Evaluating metrique total mode  : " + key + " + expr : " + mode)
+                    print_verbose("  - Evaluating Total Line : [" + str(key) + "] Mode : " + str(mode))
                     mode = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', mode)    # Replace ${VAR} by VAR
-                    total_dict[key] =eval(mode, total_dict, globals())
+                    if ("hmen_2020" == key) :
+                        print_verbose(total_dict["pop_2020"])
+                        print_verbose(total_dict["txhmen_2020"])
+                    value = eval(mode, total_dict, globals())
+                    print_verbose("  - Evaluating Total Line : [" + str(key) + "] Value : " + str(value) + " - " + str(type(value)))
+                    total_dict[key] = value
                 except Exception as e:
                     error = "total_data Error evaluating metrique total mode  : " + key + " + expr : " + mode + " - Error : " + str(e)
-                    print_red(error)
+                    print_error(error)
                     total_dict[key] = error
 
         # Store in Data Frame
+        self.data_frame = self.data_frame.append(pd.Series(total_dict, name="total"))
         if (meta):
             # Add Meta Data
             self.data_frame = self.data_frame.append(pd.Series(self.meta_dict,   name='meta'))
             self.data_frame = self.data_frame.sort_index(ascending=False)        # sorting by index
-            self.data_frame = self.data_frame.append(pd.Series(total_dict,       name="total"))
             self.data_frame = self.data_frame.append(pd.Series(self.mode_dict,   name='mode'))
             self.data_frame = self.data_frame.append(pd.Series(self.type_dict,   name='type'))
             self.data_frame = self.data_frame.append(pd.Series(self.source_dict, name='source'))
             self.data_frame = self.data_frame.append(pd.Series(self.expr_dict,   name='expr'))
-        else:
-            # Store in Data Frame
-            self.data_frame = self.data_frame.append(pd.Series(total_dict, name="total"))
 
         update_DataStoreCache(self)
         return self
 
-    def calculs(self, meta=True):
+    def run_calculs(self, meta=True, force=False):
+        """ Run Calculs from Configuration file, Calculs tab """
+        if ((self.calc_done) and (force==False)) : return self
 
         print_green("> Calculs Donnees : " + str(self.store_code) + " : " + self.store_name)
 
@@ -1521,16 +1562,17 @@ class DataStore():
             _description = metric["Description"]
             _source      = metric["Source"]
             _type        = metric["Type"]
-            _data        = str(metric["Python"])
+            _flag        = metric["Flag"]
             _python      = str(metric["Python"])
             _javascript  = str(metric["JavaScript"])
             if (str(_key) == "nan") : continue          # Empty Line
             if (str(_key) == "")    : continue          # Empty Line
             if (str(_key).startswith("#")) : continue   # Ignore line / key starting with #
-            # print_grey("Evaluating Calcul " + str(_line) + ": " + str(_key) + " : " + str(_data))
-            _data = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _python)    # Replace ${VAR} by VAR
             try:
-                value = eval(_data, self.get_row_as_dict(), {**globals(), **locals()})
+                print_verbose("  - Evaluating Calcul Line " + str(_line) + ": [" + str(_key) + "] Eval : " + str(_python))
+                _python = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _python)  # Replace ${VAR} by VAR
+                value = eval(_python, self.get_row_as_dict(), {**globals(), **locals()})
+                print_verbose("  - Evaluating Calcul Line " + str(_line) + ": [" + str(_key) + "] Value : " + str(value) + " - " + str(type(value)))
                 if   ((pd.isna(value)) and (_type == "STR")):     value = ""
                 elif ((pd.isna(value)) and (_type == "INT")):     value = 0
                 elif ((pd.isna(value)) and (_type == "FLOAT")):   value = 0
@@ -1541,21 +1583,21 @@ class DataStore():
                 elif (_type == "FLOAT"):   value = float(value)
                 elif (_type == "TAUX"):    value = float(value)
                 elif (_type == "PERCENT"): value = float(value)
-                self.add_metric(_key, _description, source=_source, mode="$JS:"+_javascript, data=value, type=_type, expr=_python)
+                # self.add_metric(_key, _description, source=_source, mode="$JS:"+_javascript, data=value, type=_type, expr=_python)
+                self.add_metric(_key, _description, source=_source, mode=_python, data=value, type=_type, expr=_python)
             except Exception as e :
-                error = "Error evaluating Calcul : Line " + str(_line) + " Key = " + str(_key) + " + expr : " + str(_python) + " - Error : " + str(e)
-                print_red(error)
+                print_error("Error evaluating Calcul : Line " + str(_line) + " Key = " + str(_key) + " + expr : " + str(_python) + " - Error : " + str(e))
                 self.add_metric(_key, _description, source=_source, mode=_python, data=error, type=_type, expr=_python)
         self.store_index = save_index
         self.add_meta_data()
+        self.calc_done = True
         return self
 
-
-    def run_diagnostic(self):
-        """ Evaluate diagnostics on the total data """
-
+    def run_diagnostic(self, force=False):
+        """ Run Diagnostics from Configuration file, Diagnostics tab """
+        if ((self.diag_done) and (force==False)) : return self
         load_min_data()
-        self.calculs()
+        self.run_calculs()
         print_green("> Etablissement des diagnostics : " + str(self.store_code) + " : " + self.store_name)
         _line = 0
         for index, metric in collectDiagnostics.iterrows():
@@ -1567,12 +1609,13 @@ class DataStore():
             _messageF    = metric["MessageSiFaux"]
             _categorie   = metric["Categorie"]
             _type        = metric["Type"]
-            if (str(_key) == "nan") : continue          # Ignore empty lines
+            if (str(_key) == "nan")        : continue   # Ignore empty lines
             if (str(_key).startswith("#")) : continue   # Ignore key starting with #
             _data = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _test)    # Replace ${VAR} by VAR
             try:
-                # print_red("Evaluating Diagnostic : " + _key + " + eval : " + _test)
+                print_verbose("  - Evaluating Diagnostic Line " + str(_line) + " : [" + str(_key) + "] Eval : " + str(_test))
                 value = bool(eval(_test, self.get_row_as_dict(), {**globals(), **locals()}))
+                print_verbose("  - Evaluating Diagnostic Line " + str(_line) + " : [" + str(_key) + "] Value : " + str(value) + " - " + str(type(value)))
                 if (str(_messageV) == "nan") : _messageV = ""          # Empty Line
                 if (str(_messageV).startswith("\"")):
                     _messageV = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', _messageV)  # Replace ${VAR} by VAR
@@ -1583,15 +1626,24 @@ class DataStore():
                     _messageF = str(eval(_messageF, self.get_row_as_dict(), {**globals(), **locals()}))
                 self.add_diagnostic(_key, _description, test=_test, messageV=_messageV, data=value, messageF=_messageF, cat=_categorie, type=_type)
             except Exception as e :
-                error = "Error evaluating Diagnostic : " + _key + " + eval : " + _test + " - Error : " + str(e)
-                print_red(error)
-                self.add_diagnostic(_key, _description, test=_test, messageV=error, data=value, messageF=error, cat=_categorie, type=_type)
+                print_error("Error evaluating Diagnostic : " + _key + " + eval : " + _test + " - Error : " + str(e))
+                self.add_diagnostic(_key, _description, test=_test, messageV=str(e), data=value, messageF=str(e), cat=_categorie, type=_type)
+        self.diag_done = True
+        return self
+
+    def run_plots(self, force=False):
+        """ Draw Graphics """
+        if ((self.plot_done) and (force==False)) : return self
+        print_green("> Generation des Graphiques : " + str(self.store_code) + " : " + self.store_name)
+        self.run_calculs()
+        plots(self)
+        self.plot_done = True
         return self
 
     def report(self, force=True, data_only: bool = False, ftp_push: bool = False):
         """ Generate report for DataStore. Force = True will re-calculate DataStore data from source. """
         load_min_data()
-        print_yellow("Preparation Rapport "+self.store_type + " " + self.store_name + " (Code INSEE : "+self.store_code+")")
+        print_blue("Preparation Rapport "+self.store_type + " " + self.store_name + " (Code INSEE : "+self.store_code+")")
         loaded = None
         if (force is False) :
             loaded = self.load_data()
@@ -1617,12 +1669,22 @@ class DataStore():
                 self.store_index = 'total'
 
         global FAST
+        html_report_file = None
         if (not FAST):
+            self.run_calculs()
             self.run_diagnostic()
-            plots(self)
-        html_report_file = gen_report(ds=self, data_only=data_only, ftp_push=ftp_push)
-        # html_index_file  = gen_index()
-        display_in_browser(html_report_file)
+            self.run_plots()
+            gen_tracker(self)
+            html_report_file = gen_report(ds=self)
+
+        self.save_data()
+
+        if (ftp_push):
+            ftp_push_ds(self)
+
+        if (html_report_file):
+            display_in_browser(html_report_file)
+
         return self
 
 
@@ -1630,14 +1692,16 @@ def update_DataStoreCache(ds : DataStore, code_insee=None):
     """ Cache a DataStore for re-use without re-calculations """
     if code_insee and ((isinstance(code_insee, int)) or (isinstance(code_insee, str))):
         DataStoreCache[str(code_insee)] = ds
-        print_green("Added in Cache : DataStore with code INSEE " + str(ds.store_code) + " : "  + ds.store_name)
+        print_green("> Added in Cache  : DataStore with code INSEE " + str(ds.store_code) + " : "  + ds.store_name)
     elif (isinstance(ds["CODE_INSEE"], int)) or (isinstance(ds["CODE_INSEE"], str)):
         DataStoreCache[str(ds["CODE_INSEE"])] = ds
-        print_green("Added in Cache : DataStore with code INSEE " + str(ds["CODE_INSEE"]) + " : "  + ds.store_name)
+        print_green("> Added in Cache  : DataStore with code INSEE " + str(ds["CODE_INSEE"]) + " : "  + ds.store_name)
     else:
-        print_red("Not Added in Cache : DataStore without code INSEE : " + ds.store_name)
+        print_red("- Not Added in Cache : DataStore without code INSEE : " + ds.store_name)
+
 
 def merge_DataStoreCache(ds : DataStore, code_insee=None) -> pd.DataFrame :
+    """ Update a DataStore from cache for Data with code_insee """
     l_data_frame = ds.data_frame.append(DataStoreCache[code_insee].data_frame.loc[code_insee, :])
     # Add Meta Data
     if 'meta'   not in l_data_frame.index: l_data_frame = l_data_frame.append(DataStoreCache[code_insee].data_frame.loc["meta", :])
@@ -1655,8 +1719,13 @@ def merge_DataStoreCache(ds : DataStore, code_insee=None) -> pd.DataFrame :
     return l_data_frame
 
 
+###
+### HTML Reports
+###
+
 def render_index(template=html_index_template, region="93"):
-    """" Building Mako Template Context """
+    """" Index HTML file of Regions,Dept, EPCI, Communes """
+    # TODO
     context = {**report_region_dict(region=region, filename=france_file), **global_context}
     # Rendering Template
     mako.runtime.UNDEFINED = 'MISSING_CONTEXT'
@@ -1669,10 +1738,6 @@ def render_index(template=html_index_template, region="93"):
     f.write(index_html)
     f.close()
     return p_html_index_filename
-
-###
-### HTML Reports & Plotting
-###
 
 
 def report_diagnostic(ds: DataStore):
@@ -1840,6 +1905,10 @@ def report_full_data(ds: DataStore):
     return data_html
 
 
+###
+### Plotting
+###
+
 index_figure = 0
 
 
@@ -1852,6 +1921,7 @@ def new_figure():
 
 
 def plots(ds: DataStore):
+    """ Generates Plots from plots.json """
     with open(plots_file) as json_file:
         desc = jsonc.load(json_file)
     for plot in desc["Plots"] :
@@ -1862,7 +1932,7 @@ def plots(ds: DataStore):
 
 
 def plots_donut1(plot, ds: DataStore):
-    # Draw plot
+    """ Generic : Draw plot Donut1 with DataStore values """
     key = plot["Key"]
     ctx1 = ds.get_row_as_dict()
     ctx2 = {**globals(), **locals()}
@@ -1883,7 +1953,7 @@ def plots_donut1(plot, ds: DataStore):
               "Logements Vacants :\n"      + str(data_dict["TX_RES_VAC_18"]*100)+"%"]
     """
 
-    wedges, texts = ax.pie(data, wedgeprops=dict(width=0.5), startangle=-40)
+    wedges, texts = ax.pie(data, wedgeprops=dict(width=0.5), startangle=-40, normalize=True)
     bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec="k", lw=0.72)
     kw = dict(arrowprops=dict(arrowstyle="-") , bbox=bbox_props, zorder=0, va="center")
     for i, p in enumerate(wedges):
@@ -1905,7 +1975,7 @@ def plots_donut1(plot, ds: DataStore):
 
 
 def plots_donut2(plot, ds: DataStore):
-    # Draw plot
+    """ Generic : Draw plot Donut2 with DataStore values """
     key = plot["Key"]
     ctx1 = ds.get_row_as_dict()
     ctx2 = {**globals(), **locals()}
@@ -1919,7 +1989,7 @@ def plots_donut2(plot, ds: DataStore):
 
     # Pie Chart
     _, _, autotexts = plt.pie(values, colors=colors, labels=labels,
-                    autopct='%1.1f%%', pctdistance=0.75)
+                    autopct='%1.1f%%', pctdistance=0.75, normalize=True)
     for autotext in autotexts:
         autotext.set_color('white')
 
@@ -1944,13 +2014,13 @@ def plots_donut2(plot, ds: DataStore):
 
 
 def plots_pie(plot, ds: DataStore):
-    # Draw plot
+    """ Generic : Draw plot Pie with DataStore values """
     plt = new_figure()
     key = plot["Key"]
     ctx1 = ds.get_row_as_dict()
     ctx2 = {**globals(), **locals()}
     # Title & Legend
-    titre = eval(plot["Title"], ctx1, ctx2)
+    titre  = eval(plot["Title"], ctx1, ctx2)
     legend = eval(plot["Legende"], ctx1, ctx2)
     plt.title(titre, color=plot["ColorTitle"], weight='bold')
     fig, ax = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))
@@ -1976,7 +2046,7 @@ def plots_pie(plot, ds: DataStore):
 
 
 def plots_lines(plot, ds: DataStore):
-    # Draw plot
+    """ Generic : Draw plot Lines with DataStore values """
     plt = new_figure()
     key = plot["Key"]
     ctx1 = ds.get_row_as_dict()
@@ -2017,6 +2087,7 @@ def plots_lines(plot, ds: DataStore):
 
 
 def plot_smooth(x_values : list[int], y_values : list[int]):
+    """ Smoothing Plot Lines """
     # 300 represents number of points to make between T.min and T.max
     x_values = np.array(x_values)
     y_values = np.array(y_values)
@@ -2288,18 +2359,17 @@ def gen_index(region="93"):
     return render_index()
 
 
-def gen_report(ds : DataStore, data_only : bool = False, ftp_push : bool = False):
+def gen_tracker(ds : DataStore):
     """ Generates Report for DataStore """
-    ds.save_data()
+    ds.render_report(input_dir  + "tracker_template.html", suffix="_tracker")
+
+
+def gen_report(ds : DataStore):
+    """ Generates Report for DataStore """
     global_context["HTML_PLOT_LOGEMENTS"]          = plot_logements(ds)
     global_context["HTML_PLOT_LOGEMENTS_PIE"]      = plot_logements_pie(ds)
     global_context["HTML_PLOT_POPULATION"]         = plot_population(ds)
     global_context["HTML_PLOT_TAILLE_DES_MENAGES"] = plot_taille_menages(ds)
-    ds.render_report(input_dir  + "tracker_template.html", suffix="_tracker")
-    if (data_only) :
-        if (ftp_push):
-            ftp_push_ds(ds)
-        return None
     global_context["HTML_SOURCES"]                 = report_source(ds)
     global_context["HTML_DIAGNOSTIC"]              = report_diagnostic(ds)
     global_context["HTML_TABLE_HISTORIQUE"]        = report_historique(ds)
@@ -2308,31 +2378,26 @@ def gen_report(ds : DataStore, data_only : bool = False, ftp_push : bool = False
     global_context["HTML_TABLE_SRU"]               = report_sru(ds)
     global_context["HTML_TABLE_SUMMARY"]           = report_summary_data(ds)
     global_context["HTML_FULL_DATA"]               = report_full_data(ds)
-    if (ftp_push) :
-        ftp_push_ds(ds)
     return ds.render_report()
 
 
 def readme_to_html():
+    print_green("> README.md to HTML     : " + "README.html")
     markdown.markdownFromFile(input='README.md', output='README.html')
 
 
 def ftp_push_ds(ds : DataStore):
     global FAST
     file_list = list()
-    prefix = ds.get_fullname()
+    file_dir     = output_dir
+    file_prefix  = ds.get_fullname()
+    file_exts     = ["_s.json"] if FAST else [".xlsx", ".csv", "_s.json", "_tracker.html"]
+    for file_ext in file_exts :
+        file_list.append(file_dir + file_prefix + file_ext)
     if (not FAST):
-        file_ext  = [".xlsx", ".csv", "_s.json", "_tracker.html"]
-    else:
-        file_ext = ["_s.json"]
-    for ext in file_ext :
-        file_list.append(output_dir + prefix + ext)
-    if (not FAST):
-        png_files1 = [f for f in os.listdir(output_dir) if re.match(ds.get_fullname().upper()+'.*\.png', f)]
-        png_files2 = [f for f in os.listdir(output_dir) if re.match(ds.get_fullname()+'.*\.png', f)]
-        for png_file in png_files1 :
+        for png_file in [f for f in os.listdir(output_dir) if re.match(ds.get_fullname().upper()+'.*\.png', f)] :
             file_list.append(output_dir + png_file)
-        for png_file in png_files2 :
+        for png_file in [f for f in os.listdir(output_dir) if re.match(ds.get_fullname()+'.*\.png', f)] :
             file_list.append(output_dir + png_file)
     ftp_push_file(file_list)
 
@@ -2359,32 +2424,31 @@ def ftp_push_file(filename):
 
 def ftp_push_files():
     global FAST
-    filelist = ["output/select.json",
-                "input/Configuration.xlsx",  "input/plots.json",
-                "output/calculations.json",  "output/datametrics.json", "output/diagnostics.json",
-                "ConsommationFonciereV3.html", "ConsommationFonciereV3.js"
-                ]
-    if (not FAST):
-        filelist = ["output/france.json",        "output/select.json",
-                    "input/Configuration.xlsx",  "input/plots.json",
-                    "output/calculations.json",  "output/datametrics.json", "output/diagnostics.json",
-                    "input/Legend_Logements.png",
-                    "input/Gadseca-Logo-BIG.png", "input/Gadseca-Logo.png",
-                    "input/Gadseca_50Ans.jpg",    "input/Gadseca_Logo.png",
-                    "input/Logo2-Vert-FV.png",    "input/Logo2-Vert.png",
-                    "input/Logo3-Color-FV.png",   "input/Logo3-Color.png",
-                    "input/report_template.html", "input/tracker_template.html",
-                    "input/CartePaca1.jpg",       "input/CartePaca2.png",
-                    "input/CartePaca4.png",       "input/CartoPaca4.png",
-                    "input/CartoPaca3.png",       "input/CartoPaca3-Green.png",
-                    "input/myShophia-Logo.jpg",    "input/CartoPaca3-Light-Green.png",
-                    "README.md",  "README.html",   "README.dillinger.html",
-                    "ConsommationFonciere.html",   "ConsommationFonciere.js",   "ConsommationFonciere.py",
-                    "ConsommationFonciereV2.html", "ConsommationFonciereV2.js",
-                    "ConsommationFonciereV3.html", "ConsommationFonciereV3.js",
-                    "index.html",
-                    "Header.png", "Body.png"
-                    ]
+    filelist = ["input/Configuration.xlsx",     "input/plots.json",
+                "output/select.json",
+                "output/calculations.json",     "output/datametrics.json",  "output/diagnostics.json",
+                "ConsommationFonciereV3.html",  "ConsommationFonciereV3.js"
+               ]
+    if FAST:
+        filelist.extend([
+                "index.html",
+                "Header.png", "Body.png"
+                "output/france.json",
+                "README.md",  "README.html",    "README.dillinger.html",
+                "ConsommationFonciere.py",
+                "ConsommationFonciere.html",    "ConsommationFonciere.js",
+                "ConsommationFonciereV2.html",  "ConsommationFonciereV2.js",
+                "input/report_template.html",   "input/tracker_template.html",
+                "input/Legend_Logements.png",
+                "input/Gadseca-Logo-BIG.png",   "input/Gadseca-Logo.png",
+                "input/Gadseca_50Ans.jpg",      "input/Gadseca_Logo.png",
+                "input/Logo2-Vert-FV.png",      "input/Logo2-Vert.png",
+                "input/Logo3-Color-FV.png",     "input/Logo3-Color.png",
+                "input/CartePaca1.jpg",         "input/CartePaca2.png",
+                "input/CartePaca4.png",         "input/CartoPaca4.png",
+                "input/CartoPaca3.png",         "input/CartoPaca3-Green.png",
+                "input/myShophia-Logo.jpg",     "input/CartoPaca3-Light-Green.png",
+                ])
     ftp_push_file(filelist)
 
 
@@ -2396,7 +2460,7 @@ def report_commune(code_insee : str = None, code_postal: str = None, force=True,
     elif (code_postal):
         code_insee, commune = get_code_insee_commune(code_postal)
     if ((not commune) or (str(commune).startswith("Pas"))):
-        print_red("COMMUNE non trouvee for codes : INSEE ["+str(code_insee+"] POSTAL : ["+str(code_postal)+"]"))
+        print_red("COMMUNE non trouvee pour code : INSEE ["+str(code_insee+"] POSTAL : ["+str(code_postal)+"]"))
         return None
     entite = entite_commune
     name   = commune
@@ -2410,7 +2474,7 @@ def report_epci(epci_id: str = "200039915", force=True, with_communes=False, dat
     name   = nom_epci(epci_id, clean=True)
     code   = epci_id
     if ((not name) or (str(name).startswith("Pas"))):
-        print_red("EPCI non trouvee for codes :  [" + str(epci_id) + "]")
+        print_red("EPCI non trouvee pour code :  [" + str(epci_id) + "]")
         return None
     if (with_communes):
         for commune in communes_epci(epci_id):
@@ -2424,7 +2488,7 @@ def report_dept(dept_id: str = "06", force=True, with_communes=False, data_only 
     name   = nom_dept(dept_id, clean=True)
     code   = dept_id
     if ((not name) or (str(name).startswith("Pas"))):
-        print_red("DEPT non trouve for codes :  [" + str(dept_id) + "]")
+        print_red("DEPT non trouve pour code :  [" + str(dept_id) + "]")
         return None
     if (with_communes):
         for commune in communes_dept(dept_id):
@@ -2440,7 +2504,7 @@ def report_region(reg_id: str = "93", force=True, with_communes=False, data_only
     name   = nom_region(reg_id, clean=True)
     code   = reg_id
     if ((not name) or (str(name).startswith("Pas"))):
-        print_red("REGION non trouvee for codes :  [" + str(reg_id) + "]")
+        print_red("REGION non trouvee for pour code :  [" + str(reg_id) + "]")
         return None
     if (with_communes):
         for dept in list_dept(reg_id):
@@ -2490,12 +2554,12 @@ report_select = {}
 
 """
 Region
-List of Communes
-List of ECPI
-    [Communes]
-List of Dept
-    [Communes]
-    [ECPIS]
+    List of Communes
+    List of ECPI
+        [Communes]
+    List of Dept
+        [Communes]
+        [ECPIS]
 """
 
 
@@ -2504,11 +2568,13 @@ def report_select_dict(region=None, filename=None, force=False, ftp_push=False) 
     if str(region) in report_select: return report_select[str(region)]
 
     if ((force == False) and (os.path.isfile(filename))):
+        print_yellow("+ Reading  Select Index : " + filename)
         with open(filename, "r") as read_file:
             print_grey("Converting JSON encoded data into Python dictionary : "+filename)
             select = jsonc.load(read_file)
             report_select[str(region)] = select
             return select
+    print_yellow("+ Creating Select Index : " + filename)
     select = {}
     select["REGIONS"] = []
     if (not region):
@@ -2558,27 +2624,26 @@ def report_select_dict(region=None, filename=None, force=False, ftp_push=False) 
     select["REGIONS"].append(rd)
     if (filename):
         save_file(to_json(select, indent=4), filename)
-        print_grey("Creating : " + filename)
+        print_yellow("+ Saved    Select Index : " + filename)
     report_select[str(region)] = select
-    readme_to_html()
-    if (ftp_push):
-        ftp_push_files()
     return select
 
 
 report_france = {}
 
 
-def report_region_dict(region=None, filename=None, force=False, ftp_push=False) -> dict:
+def report_region_dict(region=None, filename=None, force=False) -> dict:
     global report_france
     if str(region) in report_france : return report_france[str(region)]
 
     if ((force == False) and (os.path.isfile(filename))):
+        print_yellow("+ Reading  Region Index : " + filename)
         with open(filename, "r") as read_file:
             print_grey("Converting JSON encoded data into Python dictionary : " + filename)
             france = jsonc.load(read_file)
             report_france[str(region)] = france
             return france
+    print_yellow("+ Creating Region Index : " + filename)
     france = {}
     france["REGIONS"] = []
     if (not region):
@@ -2652,11 +2717,8 @@ def report_region_dict(region=None, filename=None, force=False, ftp_push=False) 
                 dd["COMMUNES"].append(cd)
     if (filename):
         save_file(to_json(france, indent=4),  filename)
-        print_grey("Creating : " + filename)
+        print_yellow("+ Saved    Region Index : " + filename)
     report_france[str(region)] = france
-    readme_to_html()
-    if (ftp_push):
-        ftp_push_files()
     return france
 
 
@@ -2677,6 +2739,10 @@ def load_all_data():
     load_sitadel_locaux()
     load_evolution()
     load_artificialisation()
+
+
+def fast():
+    load_collectData()
 
 
 class TestConsommation(unittest.TestCase):
@@ -2922,6 +2988,7 @@ LIST_COMMUNE       = False
 DATA_ONLY          = False
 FTP_PUSH           = False
 FAST               = False
+VERBOSE            = False
 
 
 def read_command_line_args(argv):
@@ -2931,7 +2998,7 @@ def read_command_line_args(argv):
     # print_yellow("Command Line Arguments : " + str(argv))
 
     usage = """
-    Usage: -f -a -p -n -b -l -c -t <commune_code> -e <epci_code> -d <dept_code> -r <region_code>   
+    Usage: -v -f -a -p -n -b -l -c -t <commune_code> -e <epci_code> -d <dept_code> -r <region_code>   
            -l --list         : List for all communes/epci/dept in Territory       
            -c --commune <c> : Report for Commune Code INSEE 'c'                 
            -e --ecpi    <e> : Report for ECPI Code INSEE 'e'                      
@@ -2941,7 +3008,8 @@ def read_command_line_args(argv):
            -n --data        : No report - Generate only data & Graphics        
            -p --push        : FTP Push Data to Infinity Free Host WebSite         
            -f --force       : Report reading source data (cache ignored)     
-           -t --fast        : Fast      
+           -t --fast        : FasT (Only Data Refresh during Dev)     
+           -v --verbose     : Verbose     
            --browse         : Start Browser on generated report (debug)  
            --cxlsx            <ConfigurationFile.xlsx> : Use Configuration File  
            --rhtml            <ReportTemplate.html>    : Use ReportTemplate      
@@ -2965,6 +3033,9 @@ def read_command_line_args(argv):
             continue
         elif opt in ("-p", "-P", "-push", "-PUSH", "-ftp", "-FTP"):
             FTP_PUSH = True
+            continue
+        elif opt in ("-v", "-V", "-verbose", "-VERBOSE"):
+            VERBOSE = True
             continue
         elif opt in ("-t", "-T", "-fast", "-FAST"):
             FAST = True
@@ -3015,8 +3086,8 @@ def read_command_line_args(argv):
                 print_commune(communes_epci(CODE_EPCI))
             else:
                 print_yellow("> EPCI " + str(CODE_EPCI))
-                report_select_dict("93", filename=selection_file, force=True, ftp_push=FTP_PUSH)
-                report_region_dict("93", filename=france_file, force=True, ftp_push=FTP_PUSH)
+                report_select_dict("93", filename=selection_file, force=True)
+                report_region_dict("93", filename=france_file,    force=True)
                 report_epci(CODE_EPCI, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY, ftp_push=FTP_PUSH)
                 print_yellow("< EPCI " + str(CODE_EPCI))
                 quit()
@@ -3028,8 +3099,8 @@ def read_command_line_args(argv):
                 quit()
             else:
                 print_yellow("> Departement " + str(CODE_DEPT))
-                report_select_dict("93", filename=selection_file, force=True, ftp_push=FTP_PUSH)
-                report_region_dict("93", filename=france_file, force=True, ftp_push=FTP_PUSH)
+                report_select_dict("93", filename=selection_file, force=True)
+                report_region_dict("93", filename=france_file,    force=True)
                 report_dept(CODE_DEPT, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY, ftp_push=FTP_PUSH)
                 print_yellow("< Departement " + str(CODE_DEPT))
                 quit()
@@ -3042,8 +3113,8 @@ def read_command_line_args(argv):
                 quit()
             else:
                 print_yellow("> Region " + str(CODE_REGION))
-                report_select_dict("93", filename=selection_file, force=True, ftp_push=FTP_PUSH)
-                report_region_dict(str(CODE_REGION), filename=france_file, force=True, ftp_push=FTP_PUSH)
+                report_select_dict("93",              filename=selection_file, force=True)
+                report_region_dict(str(CODE_REGION),  filename=france_file,    force=True)
                 report_region(CODE_REGION, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY, ftp_push=FTP_PUSH)
                 print_yellow("< Region " + str(CODE_REGION))
                 quit()
