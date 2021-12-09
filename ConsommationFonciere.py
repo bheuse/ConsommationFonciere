@@ -1,3 +1,4 @@
+import json
 import unittest
 from typing import Union
 import yaml
@@ -1481,10 +1482,15 @@ class DataStore():
             elif (mode == "CUSTOM"):  continue
             else:
                 try:
-                    # print_red("total_data Evaluating metrique total mode  : " + key + " + expr : " + mode)
+                    print_red("total_data Evaluating metrique total mode  : " + key + " + expr : " + mode)
                     mode = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', mode)    # Replace ${VAR} by VAR
-                    total_dict[key] =eval(mode, total_dict, globals())
+                    print_green(str(mode))
+                    print_green(total_dict["BASE_NAME"])
+                    # print_green(json.dumps(total_dict,indent=2))
+                    print_green(total_dict["BASE_NAME"])
+                    total_dict[key] =eval(mode, total_dict,  {**globals(), **locals()})
                 except Exception as e:
+                    print_yellow(to_json(total_dict,3))
                     error = "total_data Error evaluating metrique total mode  : " + key + " + expr : " + mode + " - Error : " + str(e)
                     print_red(error)
                     total_dict[key] = error
@@ -1541,7 +1547,8 @@ class DataStore():
                 elif (_type == "FLOAT"):   value = float(value)
                 elif (_type == "TAUX"):    value = float(value)
                 elif (_type == "PERCENT"): value = float(value)
-                self.add_metric(_key, _description, source=_source, mode="$JS:"+_javascript, data=value, type=_type, expr=_python)
+                # self.add_metric(_key, _description, source=_source, mode="$JS:"+_javascript, data=value, type=_type, expr=_python)
+                self.add_metric(_key, _description, source=_source, mode=_python, data=value, type=_type, expr=_python)
             except Exception as e :
                 error = "Error evaluating Calcul : Line " + str(_line) + " Key = " + str(_key) + " + expr : " + str(_python) + " - Error : " + str(e)
                 print_red(error)
@@ -1883,7 +1890,7 @@ def plots_donut1(plot, ds: DataStore):
               "Logements Vacants :\n"      + str(data_dict["TX_RES_VAC_18"]*100)+"%"]
     """
 
-    wedges, texts = ax.pie(data, wedgeprops=dict(width=0.5), startangle=-40)
+    wedges, texts = ax.pie(data, wedgeprops=dict(width=0.5), startangle=-40, normalize=True)
     bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec="k", lw=0.72)
     kw = dict(arrowprops=dict(arrowstyle="-") , bbox=bbox_props, zorder=0, va="center")
     for i, p in enumerate(wedges):
@@ -1918,8 +1925,7 @@ def plots_donut2(plot, ds: DataStore):
     colors   = eval(plot["Colors"], ctx1, ctx2)
 
     # Pie Chart
-    _, _, autotexts = plt.pie(values, colors=colors, labels=labels,
-                    autopct='%1.1f%%', pctdistance=0.75)
+    _, _, autotexts = plt.pie(values, colors=colors, labels=labels, autopct='%1.1f%%', pctdistance=0.75, normalize=True)
     for autotext in autotexts:
         autotext.set_color('white')
 
