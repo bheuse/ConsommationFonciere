@@ -2429,10 +2429,10 @@ def ftp_push_files():
                 "output/calculations.json",     "output/datametrics.json",  "output/diagnostics.json",
                 "ConsommationFonciereV3.html",  "ConsommationFonciereV3.js"
                ]
-    if FAST:
+    if not FAST:
         filelist.extend([
                 "index.html",
-                "Header.png", "Body.png"
+                "Header.png", "Body.png",
                 "output/france.json",
                 "README.md",  "README.html",    "README.dillinger.html",
                 "ConsommationFonciere.py",
@@ -2745,6 +2745,11 @@ def fast():
     load_collectData()
 
 
+def report_meta():
+    load_collectData()
+    ftp_push_files()
+
+
 class TestConsommation(unittest.TestCase):
 
     def setUp(self) -> None:
@@ -2994,11 +2999,11 @@ VERBOSE            = False
 def read_command_line_args(argv):
     global DISPLAY_HTML, FORCE, DEBUG, WITH_COMMUNES, LIST_COMMUNE
     global CONFIGURATION_FILE, TEMPLATE_FILE, DATA_ONLY, FTP_PUSH, FAST
-    global CODE_COMMUNE, CODE_EPCI, CODE_DEPT, CODE_REGION
+    global CODE_COMMUNE, CODE_EPCI, CODE_DEPT, CODE_REGION, VERBOSE
     # print_yellow("Command Line Arguments : " + str(argv))
 
     usage = """
-    Usage: -v -f -a -p -n -b -l -c -t <commune_code> -e <epci_code> -d <dept_code> -r <region_code>   
+    Usage: -v -f -a -p -n -b -t -m -l -c -t <commune_code> -e <epci_code> -d <dept_code> -r <region_code>   
            -l --list         : List for all communes/epci/dept in Territory       
            -c --commune <c> : Report for Commune Code INSEE 'c'                 
            -e --ecpi    <e> : Report for ECPI Code INSEE 'e'                      
@@ -3009,6 +3014,7 @@ def read_command_line_args(argv):
            -p --push        : FTP Push Data to Infinity Free Host WebSite         
            -f --force       : Report reading source data (cache ignored)     
            -t --fast        : FasT (Only Data Refresh during Dev)     
+           -m --meta        : Meta (Only Meta Refresh during Dev)     
            -v --verbose     : Verbose     
            --browse         : Start Browser on generated report (debug)  
            --cxlsx            <ConfigurationFile.xlsx> : Use Configuration File  
@@ -3017,7 +3023,7 @@ def read_command_line_args(argv):
     """
 
     try:
-        opts, args = getopt.getopt(argv, "hanlbptfc:e:d:r:", ["help", "list", "data" , "fast" ,"push" , "commune=", "epci=", "dep=", "reg=", "no_debug"])
+        opts, args = getopt.getopt(argv, "hanlbmptfc:e:d:r:", ["help", "list", "data" , "fast" , "push" , "clean" , "meta" , "commune=", "epci=", "dep=", "reg=", "no_debug"])
     except getopt.GetoptError:
         print(usage)
         sys.exit(2)
@@ -3052,6 +3058,11 @@ def read_command_line_args(argv):
         elif opt in ("-b", "--browse"):
             DISPLAY_HTML = True
             continue
+        elif opt in ("-m", "--meta"):
+            print_yellow("> Meta ")
+            report_meta()
+            print_yellow("< Meta ")
+            quit()
         elif (opt == "--cxlsx"):
             if (not os.path.isfile(arg)):
                 print_red("Configuration File not found : "+arg)
@@ -3061,6 +3072,9 @@ def read_command_line_args(argv):
         elif (opt == "--clean"):
             delete_pattern(output_dir, "*.png")
             delete_pattern(output_dir, "*.csv")
+            delete_pattern(output_dir, "*.log")
+            delete_pattern(output_dir, "context.yaml")
+            delete_pattern(output_dir, "france.json")
             delete_pattern(output_dir, "*_*.json")
             delete_pattern(output_dir, "*.xlsx")
             delete_pattern(output_dir, "*.html")
@@ -3087,7 +3101,7 @@ def read_command_line_args(argv):
             else:
                 print_yellow("> EPCI " + str(CODE_EPCI))
                 report_select_dict("93", filename=selection_file, force=True)
-                report_region_dict("93", filename=france_file,    force=True)
+                if (not FAST) : report_region_dict("93", filename=france_file,    force=True)
                 report_epci(CODE_EPCI, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY, ftp_push=FTP_PUSH)
                 print_yellow("< EPCI " + str(CODE_EPCI))
                 quit()
@@ -3100,7 +3114,7 @@ def read_command_line_args(argv):
             else:
                 print_yellow("> Departement " + str(CODE_DEPT))
                 report_select_dict("93", filename=selection_file, force=True)
-                report_region_dict("93", filename=france_file,    force=True)
+                if (not FAST) : report_region_dict("93", filename=france_file,    force=True)
                 report_dept(CODE_DEPT, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY, ftp_push=FTP_PUSH)
                 print_yellow("< Departement " + str(CODE_DEPT))
                 quit()
@@ -3114,7 +3128,7 @@ def read_command_line_args(argv):
             else:
                 print_yellow("> Region " + str(CODE_REGION))
                 report_select_dict("93",              filename=selection_file, force=True)
-                report_region_dict(str(CODE_REGION),  filename=france_file,    force=True)
+                if (not FAST) : report_region_dict(str(CODE_REGION),  filename=france_file,    force=True)
                 report_region(CODE_REGION, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY, ftp_push=FTP_PUSH)
                 print_yellow("< Region " + str(CODE_REGION))
                 quit()

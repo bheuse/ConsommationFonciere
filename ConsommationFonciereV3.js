@@ -395,7 +395,7 @@ const vm = Vue.createApp({
             },
         selectCommuneEvent(event){
             console.log("selectCommune : "+event.target.value);
-            selectCommuneName(event.target.value);
+            this.selectCommuneName(event.target.value);
             },
         selectCommuneName(name){
             console.log("selectCommuneName : "+name);
