@@ -1388,7 +1388,8 @@ class DataStore():
                 print_verbose("  - Evaluating Collect Line " + str(_line) + " :  [" + str(_key) + "] Value : " + str(value) + " - " + str(type(value)))
                 self.add_metric(_key, _description, source=_source, mode=_total, data=value, type=_type, expr=_expr)
             except Exception as e :
-                print_error("collect_data Error evaluating metrique : Line " + str(_line) + " Key = " + str(_key) + " expr : " + str(_expr) + " - Error : " + str(e))
+                error = "collect_data Error evaluating metrique : Line " + str(_line) + " Key = " + str(_key) + " expr : " + str(_expr) + " - Error : " + str(e)
+                print_error(error)
                 self.add_metric(_key, _description, source=_source, mode=_total, data=error, type=_type, expr=_expr)
 
         update_DataStoreCache(self)
