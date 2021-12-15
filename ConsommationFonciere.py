@@ -519,6 +519,11 @@ def downloadFile(url: str, filename: str, zip=False, zipped_file: str = None) ->
     return local_filename
 
 
+def nan0(value, default=0) :
+    if (value != value) : return default
+    return value
+
+
 def round0(value, rounding=0) -> Union[float, int] :
     if (value != value) : value = 0  # NaN
     if (rounding == 0): return int(round(value, 0))
