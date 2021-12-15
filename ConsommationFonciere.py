@@ -524,6 +524,11 @@ def nan0(value, default=0) :
     return value
 
 
+def error0(value, default=0) :
+    if ("error" in str(value).lower()) : return default
+    return value
+
+
 def round0(value, rounding=0) -> Union[float, int] :
     if (value != value) : value = 0  # NaN
     if (rounding == 0): return int(round(value, 0))
