@@ -1395,6 +1395,8 @@ class DataStore():
             except Exception as e :
                 error = "collect_data Error evaluating metrique : Line " + str(_line) + " Key = " + str(_key) + " expr : " + str(_expr) + " - Error : " + str(e)
                 print_error(error)
+                if (_data.startswith("error0")) :
+                    error = 0
                 self.add_metric(_key, _description, source=_source, mode=_total, data=error, type=_type, expr=_expr)
 
         update_DataStoreCache(self)
@@ -1540,6 +1542,8 @@ class DataStore():
                 except Exception as e:
                     error = "total_data Error evaluating metrique total mode  : " + key + " + expr : " + mode + " - Error : " + str(e)
                     print_error(error)
+                    if (mode.startswith("error0")):
+                        error = 0
                     total_dict[key] = error
 
         # Store in Data Frame
