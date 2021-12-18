@@ -380,14 +380,16 @@ def load_artificialisation(dossier_artificialisation_file: str = dossierArtifici
     return dossierArtificialisation
 
 
-##############
-### Flux 20218
-##############
+#############
+### Flux 2018
+#############
+
+flux2018SourcePage = "https://www.insee.fr/fr/statistiques/5393826"
+flux2018SourceFile = "https://www.insee.fr/fr/statistiques/fichier/5393826/base-csv-flux-mobilite-residentielle-2018.zip"
+flux2018SourceMeta = "https://www.insee.fr/fr/statistiques/5393826#dictionnaire"
 
 flux2018SourceFile = data_dir + "base-flux-mobilite-residentielle-2018.csv"
-
 flux2018 = None
-
 
 def load_flux_2018(flux2018SourceFile:  str = flux2018SourceFile):
     global flux2018
@@ -397,6 +399,28 @@ def load_flux_2018(flux2018SourceFile:  str = flux2018SourceFile):
                                                                          'DCRAN': str, 'L_DCRAN': str,
                                                                          'NBFLUX_C18_POP01P' : float })
     return flux2018
+
+
+##############
+### Stock 2018
+##############
+
+stock2018SourcePage = "https://www.insee.fr/fr/statistiques/5542867?sommaire=5395764"
+stock2018SourceFile = "https://www.insee.fr/fr/statistiques/fichier/5542867/RP2018_LOGEMTZE_csv.zip"
+stock2018SourceMeta = "https://www.insee.fr/fr/statistiques/fichier/5542867/dictionnaire_logemt_rp2018.pdf"
+
+stock2018SourceFile = data_dir + "FD_LOGEMTZE_2018.csv"
+stock2018 = None
+
+def load_stock_2018(stock2018SourceFile:  str = stock2018SourceFile):
+    global stock2018
+    if (stock2018 is None) :
+        downloadFile(stock2018SourceFile, stock2018SourceFile, zip=True, zipped_file="FD_LOGEMTZE_2018.csv")
+        print_blue("Lecture Besoins de Logements en Stock 2018 : " + stock2018SourceFile + " ...")
+        stock2018 = pd.read_csv(stock2018SourceFile, delimiter=';', dtype={'CODGEO': str, 'LIBGEO': str,
+                                                                         'DCRAN': str, 'L_DCRAN': str,
+                                                                         'NBFLUX_C18_POP01P' : float })
+    return stock2018
 
 
 ###
@@ -515,7 +539,7 @@ def downloadFile(url: str, filename: str, zip=False, zipped_file: str = None) ->
         with zipfile.ZipFile(local_filename, 'r') as zip_ref:
             zip_ref.extractall("zip")
         shutil.move('zip' + os.sep + zipped_file, filename)
-    print_red("Exctracted : " + local_filename)
+    print_red("Extracted : " + local_filename)
     return local_filename
 
 

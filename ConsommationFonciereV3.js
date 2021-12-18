@@ -98,6 +98,16 @@ function f_round(value, rounding=0)  {
     return roundNumber(value, rounding)
     }
 
+function nan0(value, defaultValue=0) {
+    if (!value) { return defaultValue }
+    return value
+    }
+
+function error0(value, defaultValue=0) {
+    if (String(value).toLowerCase().includes('error')) { return defaultValue }
+    return value
+    }
+
 function downloadObjectAsJson(exportObj, exportName){
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
     var downloadAnchorNode = document.createElement('a');
@@ -135,7 +145,6 @@ function loadFileAsJson() {
       var newArr = JSON.parse(lines);
     }
 }
-
 
 function run_calculs(dataset, full = false, filter = "*"){
     console.log("> run_calculs");
@@ -212,11 +221,12 @@ class scenario {
     // A Dataset with a Name
     // When "scen" Input Field are Changed, call recalc to adjust value.
     constructor(data_serveur = g_data_s , titre = "Votre Scenario Zero Artificialisation Nette !") {
+        console.log("scenario constructor : "+this.titre)
         this.titre = titre
         this.reset(data_serveur)
         }
     reset(data_serveur) {
-        console.log("scenario reset")
+        console.log("scenario reset : "+this.titre)
         this.dataset = run_calculs(data_serveur, full = false, filter = "*");
         this.dataset = run_diagnostics(this.dataset, filter = "*");
         this.data_s = dataset                   // Data du Serveur
@@ -228,7 +238,7 @@ class scenario {
         return this.dataset
         }
     recalc(){
-        console.log("scenario recalc")
+        console.log("scenario recalc : "+this.titre)
         return this.reset(this.dataset)
         }
 }
@@ -277,19 +287,46 @@ const vm = Vue.createApp({
                ],
             selectEpcis      : [], // EPCIs of current Region / Departement
             selectCommunes   : [], // Communes of current Departement / EPCIs
-            tt : "TT"
+            eoo : "End of Object"
             }
       },
-    mounted(){
-        // this.selectDeptCode("06")
-        this.selectCommuneMougins()
+      mounted(){
+          console.log("mounted");
+          let urlParams = new URLSearchParams(window.location.search);
+          var code_postal = urlParams.get('CODE_POSTAL')
+          var code_insee  = urlParams.get('CODE_INSEE')
+          var type_entity = urlParams.get('TYPE')
+          var commune     = urlParams.get('COMMUNE')
+          var dept        = urlParams.get('DEPT')
+          var epci        = urlParams.get('EPCI')
+          var region      = urlParams.get('REGION')
+          if (type_entity != null) { code_insee = code_insee ; type_entity=type_entity} ;
+          if (region != null)      { code_insee = region     ; type_entity="REGION"} ;
+          if (dept != null)        { code_insee = dept       ; type_entity="DEPT"} ;
+          if (epci != null)        { code_insee = epci       ; type_entity="EPCI"} ;
+          if (commune != null)     { code_insee = commune    ; type_entity="COMMUNE"} ;
+          if (code_postal != null) {
+              this.selectCommunePostal(code_postal)
+              return
+          }
+          if (type_entity=="COMMUNE") {
+              this.selectCommuneCode(code_insee)
+              return
+          }
+          if (type_entity=="EPCI") {
+              this.selectEpciCode(code_insee)
+              return
+          }
+          if (type_entity=="DEPT") {
+              this.selectDeptCode(code_insee)
+              return
+          }
      },
     methods : {
         loadData(){
             this.select_message = select_message ;
             this.message = default_message ;
             console.log("loadData : "+this.entity);
-            $.ajaxSetup({ async: false });
             json_s = "output/"+this.entity+"_s.json";
             console.log("json_s : "+json_s);
             this.data_s  = null ;
@@ -297,6 +334,7 @@ const vm = Vue.createApp({
             this.data    = null ;
             this.diag    = null ;
             g_data_s     = null ;
+            $.ajaxSetup({ async: false });
             $.getJSON(json_s, function(json) { g_data_s = json ; console.log("g_data_s") ; console.log(g_data_s) });
             console.log(g_data_s);
             if (! g_data_s) {
@@ -370,10 +408,26 @@ const vm = Vue.createApp({
             },
         selectEpciEvent(event){
             console.log("selectEPCI : "+event.target.value);
-            epci_index       = this.selectEpcis.findIndex(x => x.nom === event.target.value);
+            epci_index  = this.selectEpcis.findIndex(x => x.nom === event.target.value);
+            epci        = this.selectEpcis[epci_index]
+            this.selectEpci(epci)
+            },
+        selectEpciCode(epci_code){
+            console.log("selectEpciCode : "+epci_code);
+            epci_index  = select["REGIONS"][0]["EPCIS"].findIndex(x => x.INSEE === epci_code);
+            epci        =  select["REGIONS"][0]["EPCIS"][epci_index]
+            this.selectEpci(epci)
+            },
+        selectEpciName(epci_name){
+            console.log("selectEpciName : "+epci_name);
+            epci_index = select["REGIONS"][0]["EPCIS"].findIndex(x => x.Nom === epci_name);
+            epci       = select["REGIONS"][0]["EPCIS"][epci_index]
+            this.selectEpci(epci)
+            },
+        selectEpci(epci){
             this.territoire  = "EPCI";
-            this.nom         = this.selectEpcis[epci_index].nom;
-            this.code        = this.selectEpcis[epci_index].code ;
+            this.nom         = epci.nom;
+            this.code        = epci.code ;
             this.entity      = this.selectEpcis[epci_index].entity;
             console.log(this.nom + " entity : " + this.entity);
             this.loadData()
@@ -397,28 +451,42 @@ const vm = Vue.createApp({
             console.log("selectCommune : "+event.target.value);
             this.selectCommuneName(event.target.value);
             },
+        selectCommuneCode(commune_code){
+            console.log("selectCommuneCode : "+commune_code);
+            comm_index         = select["REGIONS"][0]["COMMUNES"].findIndex(x => x.INSEE === commune_code);
+            commune   =  select["REGIONS"][0]["COMMUNES"][comm_index]
+            if (! commune) {
+                comm_index = select["REGIONS"][0]["COMMUNES"].findIndex(x => x.Postal === commune_code);
+                commune    = select["REGIONS"][0]["COMMUNES"][comm_index]
+            }
+            this.selectCommune(commune)
+            },
+        selectCommunePostal(commune_postal){
+            console.log("selectCommunePostal : "+commune_postal);
+            comm_index = select["REGIONS"][0]["COMMUNES"].findIndex(x => x.Postal === commune_postal);
+            commune    = select["REGIONS"][0]["COMMUNES"][comm_index]
+            this.selectCommune(commune)
+            },
         selectCommuneName(name){
             console.log("selectCommuneName : "+name);
-            comm_index       = this.selectCommunes.findIndex(x => x.nom === name);
+            comm_index = select["REGIONS"][0]["COMMUNES"].findIndex(x => x.Nom === name);
+            commune    = select["REGIONS"][0]["COMMUNES"][comm_index]
+            if (! commune) {
+                comm_index = select["REGIONS"][0]["COMMUNES"].findIndex(x => x.Libelle === commune_code);
+                commune    = select["REGIONS"][0]["COMMUNES"][comm_index]
+            }
+            this.selectCommune(commune)
+            },
+        selectCommune(commune){
             this.territoire  = "Commune";
-            this.nom         = this.selectCommunes[comm_index].nom;
-            this.code        = this.selectCommunes[comm_index].code ;
-            this.entity      = this.selectCommunes[comm_index].entity;
+            console.log("selectCommune : "+commune);
+            this.nom         = commune.Nom;
+            this.code        = commune.INSEE ;
+            this.entity      = commune.Clean;
             console.log(this.nom + " entity : " + this.entity);
             this.loadData()
-            console.log("Done selectCommune "+this.entity);
+            console.log("Done selectCommune by Code "+this.entity);
             },
-        selectCommuneMougins(name){
-            console.log("selectCommuneMougins");
-            this.territoire  = "Commune";
-            this.nom         ="Mougins"
-            this.code        = "06085" ;
-            this.entity      = "COMMUNE_MOUGINS_06085";
-            console.log(this.nom + " entity : " + this.entity);
-            this.loadData()
-            console.log("Done selectCommune "+this.entity);
-            },
-
   },
 })
 
@@ -2267,56 +2335,4 @@ function onPageLoaded() {
   const queryString = window.location.search;
   console.log("onPageLoaded : " + queryString);
 }
-
-function onPageLoadedBuggy() {
-  const queryString = window.location.search;
-  console.log("onPageLoaded : " + queryString);
-  const urlParams = new URLSearchParams(queryString);
-  // "output/DEPT_Alpes-Maritimes_06.html"
-  var code_postal = urlParams.get('CODE_POSTAL')
-  var code_insee  = urlParams.get('CODE_INSEE')
-  var type_entity = urlParams.get('TYPE')
-  var commune     = urlParams.get('COMMUNE')
-  var dept        = urlParams.get('DEPT')
-  var epci        = urlParams.get('EPCI')
-  var region      = urlParams.get('REGION')
-
-  if (type_entity != null) { code_insee = code_insee ; type_entity=type_entity} ;
-  if (region != null)      { code_insee = region     ; type_entity="REGION"} ;
-  if (dept != null)        { code_insee = dept       ; type_entity="DEPT"} ;
-  if (epci != null)        { code_insee = epci       ; type_entity="EPCI"} ;
-  if (commune != null)     { code_insee = commune    ; type_entity="COMMUNE"} ;
-  if (code_postal != null) { code_insee = commune    ; type_entity="COMMUNE"} ;
-
-  if (type_entity == "DEPT") {
-        // Locate Dept in France JSON
-        depts            = select["REGIONS"][0]["DEPARTEMENTS"];
-        dept_index       = depts.findIndex(x => x.INSEE === code_insee);
-        console.log("DEPT : " + depts[dept_index]);
-        nom_dept         = depts[dept_index].Nom;
-        console.log("DEPT : " + nom_dept);
-    } ;
-  if (type_entity == "EPCI") {
-        // Locate EPCI in France JSON
-        depts            = select["REGIONS"][0]["DEPARTEMENTS"];
-        for (let i = 0; i < select["REGIONS"][0]["DEPARTEMENTS"].length; i++) {
-            dept = select["REGIONS"][0]["DEPARTEMENTS"][i]
-            for (let j = 0; i < dept["EPCI"].length; j++) {
-                if (dept["EPCI"][j].INSEE === code_insee ) {
-                    }
-                    nom_epci = dept["EPCI"][j].Nom ;
-                }
-            this.selectCommunes.push(commune);
-            }
-        console.log("EPCI : " + nom_epci);
-    } ;
-
-  var entity = urlParams.get('ENTITE')
-  if (entity == null) { init_page = "DEPT_Alpes-Maritimes_06" } ;
-  entity =  "output/"+init_page+".html";
-  console.log(entity);
-  console.log("Page is loaded");
-  // alert("Page is loaded : " + init_page);
-}
-
 

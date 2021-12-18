@@ -3110,27 +3110,27 @@ HTML_FULL_DATA: "<h3>Toutes les Donnees - Details : CA Cannes Pays de L\xE9rins<
     \      <td>com_sitadelLocaux['SURF_ENT_TRANSFORMEE'].sum()</td>\n      <td>com_sitadelLocaux['SURF_PUB_AVANT'].sum()</td>\n\
     \      <td>com_sitadelLocaux['SURF_PUB_CREEE'].sum()</td>\n      <td>com_sitadelLocaux['SURF_PUB_ISSUE_TRANSFO'].sum()</td>\n\
     \      <td>com_sitadelLocaux['SURF_PUB_DEMOLIE'].sum()</td>\n      <td>com_sitadelLocaux['SURF_PUB_TRANSFORMEE'].sum()</td>\n\
-    \      <td>sitadel1019.loc[sitadel1019['Unnamed: 0'] == str(CODE_INSEE)]['Unnamed:\
-    \ 5'].iloc[0]</td>\n      <td>sitadel1019.loc[sitadel1019['Unnamed: 0'] == str(CODE_INSEE)]['Unnamed:\
-    \ 6'].iloc[0]</td>\n      <td>sitadel1019.loc[sitadel1019['Unnamed: 0'] == str(CODE_INSEE)]['Unnamed:\
-    \ 7'].iloc[0]</td>\n      <td>sitadel1019.loc[sitadel1019['Unnamed: 0'] == str(CODE_INSEE)]['Unnamed:\
-    \ 8'].iloc[0]</td>\n      <td>sitadel1019.loc[sitadel1019['Unnamed: 0'] == str(CODE_INSEE)]['Unnamed:\
-    \ 9'].iloc[0]</td>\n      <td>sitadel1019.loc[sitadel1019['Unnamed: 0'] == str(CODE_INSEE)]['Unnamed:\
-    \ 10'].iloc[0]</td>\n      <td>sitadel1019.loc[sitadel1019['Unnamed: 0'] == str(CODE_INSEE)]['Unnamed:\
-    \ 11'].iloc[0]</td>\n      <td>sitadel1019.loc[sitadel1019['Unnamed: 0'] == str(CODE_INSEE)]['Unnamed:\
-    \ 12'].iloc[0]</td>\n      <td>sitadel1019.loc[sitadel1019['Unnamed: 0'] == str(CODE_INSEE)]['Unnamed:\
-    \ 13'].iloc[0]</td>\n      <td>sitadel1019.loc[sitadel1019['Unnamed: 0'] == str(CODE_INSEE)]['Unnamed:\
-    \ 14'].iloc[0]</td>\n      <td>LOG_COMMENCES_2010 + LOG_COMMENCES_2011 + LOG_COMMENCES_2012\
-    \ + LOG_COMMENCES_2013 + LOG_COMMENCES_2014</td>\n      <td>LOG_COMMENCES_2015\
+    \      <td>error0(nan0(sitadel1019.loc[sitadel1019['Unnamed: 0'] == str(CODE_INSEE)]['Unnamed:\
+    \ 5'].iloc[0]))</td>\n      <td>error0(nan0(sitadel1019.loc[sitadel1019['Unnamed:\
+    \ 0'] == str(CODE_INSEE)]['Unnamed: 6'].iloc[0]))</td>\n      <td>error0(nan0(sitadel1019.loc[sitadel1019['Unnamed:\
+    \ 0'] == str(CODE_INSEE)]['Unnamed: 7'].iloc[0]))</td>\n      <td>error0(nan0(sitadel1019.loc[sitadel1019['Unnamed:\
+    \ 0'] == str(CODE_INSEE)]['Unnamed: 8'].iloc[0]))</td>\n      <td>error0(nan0(sitadel1019.loc[sitadel1019['Unnamed:\
+    \ 0'] == str(CODE_INSEE)]['Unnamed: 9'].iloc[0]))</td>\n      <td>error0(nan0(sitadel1019.loc[sitadel1019['Unnamed:\
+    \ 0'] == str(CODE_INSEE)]['Unnamed: 10'].iloc[0]))</td>\n      <td>error0(nan0(sitadel1019.loc[sitadel1019['Unnamed:\
+    \ 0'] == str(CODE_INSEE)]['Unnamed: 11'].iloc[0]))</td>\n      <td>error0(nan0(sitadel1019.loc[sitadel1019['Unnamed:\
+    \ 0'] == str(CODE_INSEE)]['Unnamed: 12'].iloc[0]))</td>\n      <td>error0(nan0(sitadel1019.loc[sitadel1019['Unnamed:\
+    \ 0'] == str(CODE_INSEE)]['Unnamed: 13'].iloc[0]))</td>\n      <td>error0(nan0(sitadel1019.loc[sitadel1019['Unnamed:\
+    \ 0'] == str(CODE_INSEE)]['Unnamed: 14'].iloc[0]))</td>\n      <td>LOG_COMMENCES_2010\
+    \ + LOG_COMMENCES_2011 + LOG_COMMENCES_2012 + LOG_COMMENCES_2013 + LOG_COMMENCES_2014</td>\n\
+    \      <td>LOG_COMMENCES_2015 + LOG_COMMENCES_2016 + LOG_COMMENCES_2017 + LOG_COMMENCES_2018\
+    \ + LOG_COMMENCES_2019</td>\n      <td>LOG_COMMENCES_2010 + LOG_COMMENCES_2011\
+    \ + LOG_COMMENCES_2012 + LOG_COMMENCES_2013 + LOG_COMMENCES_2014 + LOG_COMMENCES_2015\
     \ + LOG_COMMENCES_2016 + LOG_COMMENCES_2017 + LOG_COMMENCES_2018 + LOG_COMMENCES_2019</td>\n\
-    \      <td>LOG_COMMENCES_2010 + LOG_COMMENCES_2011 + LOG_COMMENCES_2012 + LOG_COMMENCES_2013\
-    \ + LOG_COMMENCES_2014 + LOG_COMMENCES_2015 + LOG_COMMENCES_2016 + LOG_COMMENCES_2017\
-    \ + LOG_COMMENCES_2018 + LOG_COMMENCES_2019</td>\n      <td>round(flux2018.loc[(flux2018['CODGEO']\
-    \ == str(CODE_INSEE))&amp;(flux2018['DCRAN'] != str(CODE_INSEE))]['NBFLUX_C18_POP01P'].sum(),0)</td>\n\
     \      <td>round(flux2018.loc[(flux2018['CODGEO'] == str(CODE_INSEE))&amp;(flux2018['DCRAN']\
-    \ != str(CODE_INSEE))&amp;(flux2018['DCRAN'].str.startswith(str(DEP), na=False))]['NBFLUX_C18_POP01P'].sum(),0)</td>\n\
-    \      <td>round(flux2018.loc[(flux2018['CODGEO'] == str(CODE_INSEE))&amp;(flux2018['DCRAN']\
-    \ != str(CODE_INSEE))&amp;(flux2018['DCRAN'].isin(communes_epci(EPCI)))]['NBFLUX_C18_POP01P'].sum(),0)</td>\n\
+    \ != str(CODE_INSEE))]['NBFLUX_C18_POP01P'].sum(),0)</td>\n      <td>round(flux2018.loc[(flux2018['CODGEO']\
+    \ == str(CODE_INSEE))&amp;(flux2018['DCRAN'] != str(CODE_INSEE))&amp;(flux2018['DCRAN'].str.startswith(str(DEP),\
+    \ na=False))]['NBFLUX_C18_POP01P'].sum(),0)</td>\n      <td>round(flux2018.loc[(flux2018['CODGEO']\
+    \ == str(CODE_INSEE))&amp;(flux2018['DCRAN'] != str(CODE_INSEE))&amp;(flux2018['DCRAN'].isin(communes_epci(EPCI)))]['NBFLUX_C18_POP01P'].sum(),0)</td>\n\
     \      <td>round(flux2018.loc[(flux2018['CODGEO'] == str(CODE_INSEE))&amp;(flux2018['DCRAN']\
     \ != str(CODE_INSEE))&amp;(flux2018['DCRAN'].str.startswith('99', na=False))]['NBFLUX_C18_POP01P'].sum(),0)</td>\n\
     \      <td>FLUX_2018_ENTRANT - FLUX_2018_ENTRANT_DPT - FLUX_2018_ENTRANT_INTERNATIONAL</td>\n\
@@ -5839,7 +5839,7 @@ HTML_TABLE_SUMMARY: "<h3>Donnees Brutes Consolidees pour : CA Cannes Pays de L\x
     \ and a cast of thousands\\n    for supporting Python development.  See www.python.org\
     \ for more information., 'license': Type license() to see the full license text,\
     \ 'help': Type help() for interactive help, or help(object) for help about object.,\
-    \ '__pybind11_internals_v3_msvc__': &lt;capsule object NULL at 0x00000205578410F0&gt;}</td>\n\
+    \ '__pybind11_internals_v3_msvc__': &lt;capsule object NULL at 0x000001EB97B421B0&gt;}</td>\n\
     \      <td>NaN</td>\n    </tr>\n  </tbody>\n</table>"
 JSON_DATA_SET_C:
     06138:
@@ -6809,26 +6809,26 @@ JSON_DATA_SET_C:
             + LOG_COMMENCES_2017 + LOG_COMMENCES_2018 + LOG_COMMENCES_2019
         LOG_COMMENCES_1519: LOG_COMMENCES_2015 + LOG_COMMENCES_2016 + LOG_COMMENCES_2017
             + LOG_COMMENCES_2018 + LOG_COMMENCES_2019
-        LOG_COMMENCES_2010: 'sitadel1019.loc[sitadel1019[''Unnamed: 0''] == str(CODE_INSEE)][''Unnamed:
-            5''].iloc[0]'
-        LOG_COMMENCES_2011: 'sitadel1019.loc[sitadel1019[''Unnamed: 0''] == str(CODE_INSEE)][''Unnamed:
-            6''].iloc[0]'
-        LOG_COMMENCES_2012: 'sitadel1019.loc[sitadel1019[''Unnamed: 0''] == str(CODE_INSEE)][''Unnamed:
-            7''].iloc[0]'
-        LOG_COMMENCES_2013: 'sitadel1019.loc[sitadel1019[''Unnamed: 0''] == str(CODE_INSEE)][''Unnamed:
-            8''].iloc[0]'
-        LOG_COMMENCES_2014: 'sitadel1019.loc[sitadel1019[''Unnamed: 0''] == str(CODE_INSEE)][''Unnamed:
-            9''].iloc[0]'
-        LOG_COMMENCES_2015: 'sitadel1019.loc[sitadel1019[''Unnamed: 0''] == str(CODE_INSEE)][''Unnamed:
-            10''].iloc[0]'
-        LOG_COMMENCES_2016: 'sitadel1019.loc[sitadel1019[''Unnamed: 0''] == str(CODE_INSEE)][''Unnamed:
-            11''].iloc[0]'
-        LOG_COMMENCES_2017: 'sitadel1019.loc[sitadel1019[''Unnamed: 0''] == str(CODE_INSEE)][''Unnamed:
-            12''].iloc[0]'
-        LOG_COMMENCES_2018: 'sitadel1019.loc[sitadel1019[''Unnamed: 0''] == str(CODE_INSEE)][''Unnamed:
-            13''].iloc[0]'
-        LOG_COMMENCES_2019: 'sitadel1019.loc[sitadel1019[''Unnamed: 0''] == str(CODE_INSEE)][''Unnamed:
-            14''].iloc[0]'
+        LOG_COMMENCES_2010: 'error0(nan0(sitadel1019.loc[sitadel1019[''Unnamed: 0'']
+            == str(CODE_INSEE)][''Unnamed: 5''].iloc[0]))'
+        LOG_COMMENCES_2011: 'error0(nan0(sitadel1019.loc[sitadel1019[''Unnamed: 0'']
+            == str(CODE_INSEE)][''Unnamed: 6''].iloc[0]))'
+        LOG_COMMENCES_2012: 'error0(nan0(sitadel1019.loc[sitadel1019[''Unnamed: 0'']
+            == str(CODE_INSEE)][''Unnamed: 7''].iloc[0]))'
+        LOG_COMMENCES_2013: 'error0(nan0(sitadel1019.loc[sitadel1019[''Unnamed: 0'']
+            == str(CODE_INSEE)][''Unnamed: 8''].iloc[0]))'
+        LOG_COMMENCES_2014: 'error0(nan0(sitadel1019.loc[sitadel1019[''Unnamed: 0'']
+            == str(CODE_INSEE)][''Unnamed: 9''].iloc[0]))'
+        LOG_COMMENCES_2015: 'error0(nan0(sitadel1019.loc[sitadel1019[''Unnamed: 0'']
+            == str(CODE_INSEE)][''Unnamed: 10''].iloc[0]))'
+        LOG_COMMENCES_2016: 'error0(nan0(sitadel1019.loc[sitadel1019[''Unnamed: 0'']
+            == str(CODE_INSEE)][''Unnamed: 11''].iloc[0]))'
+        LOG_COMMENCES_2017: 'error0(nan0(sitadel1019.loc[sitadel1019[''Unnamed: 0'']
+            == str(CODE_INSEE)][''Unnamed: 12''].iloc[0]))'
+        LOG_COMMENCES_2018: 'error0(nan0(sitadel1019.loc[sitadel1019[''Unnamed: 0'']
+            == str(CODE_INSEE)][''Unnamed: 13''].iloc[0]))'
+        LOG_COMMENCES_2019: 'error0(nan0(sitadel1019.loc[sitadel1019[''Unnamed: 0'']
+            == str(CODE_INSEE)][''Unnamed: 14''].iloc[0]))'
         LOG_NON_VENDUS_1320: EXCES_BESOINS_1320 - NOUV_RESSEC_1318 - NOUV_LOGVAC_1318
         LONGITUDE: get_gps_long_insee(CODE_INSEE)
         NAIS0813: dossierComplet['NAIS0813'][code_insee]
@@ -13302,44 +13302,44 @@ JSON_DATA_SET_M: "{\n    \"CODE_INSEE\": {\n        \"total\": \"06138\",\n     
     SUM\",\n        \"expr\": \"com_sitadelLocaux['SURF_PUB_TRANSFORMEE'].sum()\"\
     ,\n        \"type\": \"INT\",\n        \"source\": \"SIT\"\n    },\n    \"LOG_COMMENCES_2010\"\
     : {\n        \"total\": 8.0,\n        \"meta\": \"Logements Commences en 2010\"\
-    ,\n        \"06138\": 8.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"sitadel1019.loc[sitadel1019['Unnamed:\
-    \ 0'] == str(CODE_INSEE)]['Unnamed: 5'].iloc[0]\",\n        \"type\": \"INT\"\
+    ,\n        \"06138\": 8.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"error0(nan0(sitadel1019.loc[sitadel1019['Unnamed:\
+    \ 0'] == str(CODE_INSEE)]['Unnamed: 5'].iloc[0]))\",\n        \"type\": \"INT\"\
     ,\n        \"source\": \"SIT\"\n    },\n    \"LOG_COMMENCES_2011\": {\n      \
     \  \"total\": 2.0,\n        \"meta\": \"Logements Commences en 2011\",\n     \
-    \   \"06138\": 2.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"sitadel1019.loc[sitadel1019['Unnamed:\
-    \ 0'] == str(CODE_INSEE)]['Unnamed: 6'].iloc[0]\",\n        \"type\": \"INT\"\
+    \   \"06138\": 2.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"error0(nan0(sitadel1019.loc[sitadel1019['Unnamed:\
+    \ 0'] == str(CODE_INSEE)]['Unnamed: 6'].iloc[0]))\",\n        \"type\": \"INT\"\
     ,\n        \"source\": \"SIT\"\n    },\n    \"LOG_COMMENCES_2012\": {\n      \
     \  \"total\": 4.0,\n        \"meta\": \"Logements Commences en 2012\",\n     \
-    \   \"06138\": 4.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"sitadel1019.loc[sitadel1019['Unnamed:\
-    \ 0'] == str(CODE_INSEE)]['Unnamed: 7'].iloc[0]\",\n        \"type\": \"INT\"\
+    \   \"06138\": 4.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"error0(nan0(sitadel1019.loc[sitadel1019['Unnamed:\
+    \ 0'] == str(CODE_INSEE)]['Unnamed: 7'].iloc[0]))\",\n        \"type\": \"INT\"\
     ,\n        \"source\": \"SIT\"\n    },\n    \"LOG_COMMENCES_2013\": {\n      \
     \  \"total\": 3.0,\n        \"meta\": \"Logements Commences en 2013\",\n     \
-    \   \"06138\": 3.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"sitadel1019.loc[sitadel1019['Unnamed:\
-    \ 0'] == str(CODE_INSEE)]['Unnamed: 8'].iloc[0]\",\n        \"type\": \"INT\"\
+    \   \"06138\": 3.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"error0(nan0(sitadel1019.loc[sitadel1019['Unnamed:\
+    \ 0'] == str(CODE_INSEE)]['Unnamed: 8'].iloc[0]))\",\n        \"type\": \"INT\"\
     ,\n        \"source\": \"SIT\"\n    },\n    \"LOG_COMMENCES_2014\": {\n      \
     \  \"total\": 1.0,\n        \"meta\": \"Logements Commences en 2014\",\n     \
-    \   \"06138\": 1.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"sitadel1019.loc[sitadel1019['Unnamed:\
-    \ 0'] == str(CODE_INSEE)]['Unnamed: 9'].iloc[0]\",\n        \"type\": \"INT\"\
+    \   \"06138\": 1.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"error0(nan0(sitadel1019.loc[sitadel1019['Unnamed:\
+    \ 0'] == str(CODE_INSEE)]['Unnamed: 9'].iloc[0]))\",\n        \"type\": \"INT\"\
     ,\n        \"source\": \"SIT\"\n    },\n    \"LOG_COMMENCES_2015\": {\n      \
     \  \"total\": 1.0,\n        \"meta\": \"Logements Commences en 2015\",\n     \
-    \   \"06138\": 1.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"sitadel1019.loc[sitadel1019['Unnamed:\
-    \ 0'] == str(CODE_INSEE)]['Unnamed: 10'].iloc[0]\",\n        \"type\": \"INT\"\
+    \   \"06138\": 1.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"error0(nan0(sitadel1019.loc[sitadel1019['Unnamed:\
+    \ 0'] == str(CODE_INSEE)]['Unnamed: 10'].iloc[0]))\",\n        \"type\": \"INT\"\
     ,\n        \"source\": \"SIT\"\n    },\n    \"LOG_COMMENCES_2016\": {\n      \
     \  \"total\": 53.0,\n        \"meta\": \"Logements Commences en 2016\",\n    \
-    \    \"06138\": 53.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"sitadel1019.loc[sitadel1019['Unnamed:\
-    \ 0'] == str(CODE_INSEE)]['Unnamed: 11'].iloc[0]\",\n        \"type\": \"INT\"\
+    \    \"06138\": 53.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"error0(nan0(sitadel1019.loc[sitadel1019['Unnamed:\
+    \ 0'] == str(CODE_INSEE)]['Unnamed: 11'].iloc[0]))\",\n        \"type\": \"INT\"\
     ,\n        \"source\": \"SIT\"\n    },\n    \"LOG_COMMENCES_2017\": {\n      \
     \  \"total\": 41.0,\n        \"meta\": \"Logements Commences en 2017\",\n    \
-    \    \"06138\": 41.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"sitadel1019.loc[sitadel1019['Unnamed:\
-    \ 0'] == str(CODE_INSEE)]['Unnamed: 12'].iloc[0]\",\n        \"type\": \"INT\"\
+    \    \"06138\": 41.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"error0(nan0(sitadel1019.loc[sitadel1019['Unnamed:\
+    \ 0'] == str(CODE_INSEE)]['Unnamed: 12'].iloc[0]))\",\n        \"type\": \"INT\"\
     ,\n        \"source\": \"SIT\"\n    },\n    \"LOG_COMMENCES_2018\": {\n      \
     \  \"total\": 4.0,\n        \"meta\": \"Logements Commences en 2018\",\n     \
-    \   \"06138\": 4.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"sitadel1019.loc[sitadel1019['Unnamed:\
-    \ 0'] == str(CODE_INSEE)]['Unnamed: 13'].iloc[0]\",\n        \"type\": \"INT\"\
+    \   \"06138\": 4.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"error0(nan0(sitadel1019.loc[sitadel1019['Unnamed:\
+    \ 0'] == str(CODE_INSEE)]['Unnamed: 13'].iloc[0]))\",\n        \"type\": \"INT\"\
     ,\n        \"source\": \"SIT\"\n    },\n    \"LOG_COMMENCES_2019\": {\n      \
     \  \"total\": 2.0,\n        \"meta\": \"Logements Commences en 2019\",\n     \
-    \   \"06138\": 2.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"sitadel1019.loc[sitadel1019['Unnamed:\
-    \ 0'] == str(CODE_INSEE)]['Unnamed: 14'].iloc[0]\",\n        \"type\": \"INT\"\
+    \   \"06138\": 2.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"error0(nan0(sitadel1019.loc[sitadel1019['Unnamed:\
+    \ 0'] == str(CODE_INSEE)]['Unnamed: 14'].iloc[0]))\",\n        \"type\": \"INT\"\
     ,\n        \"source\": \"SIT\"\n    },\n    \"LOG_COMMENCES_1014\": {\n      \
     \  \"total\": 18.0,\n        \"meta\": \"Logements Commences entre 2010 et 2014\"\
     ,\n        \"06138\": 18.0,\n        \"mode\": \"SUM\",\n        \"expr\": \"\
@@ -16118,26 +16118,26 @@ JSON_DATA_SET_S:
             + LOG_COMMENCES_2017 + LOG_COMMENCES_2018 + LOG_COMMENCES_2019
         LOG_COMMENCES_1519: LOG_COMMENCES_2015 + LOG_COMMENCES_2016 + LOG_COMMENCES_2017
             + LOG_COMMENCES_2018 + LOG_COMMENCES_2019
-        LOG_COMMENCES_2010: 'sitadel1019.loc[sitadel1019[''Unnamed: 0''] == str(CODE_INSEE)][''Unnamed:
-            5''].iloc[0]'
-        LOG_COMMENCES_2011: 'sitadel1019.loc[sitadel1019[''Unnamed: 0''] == str(CODE_INSEE)][''Unnamed:
-            6''].iloc[0]'
-        LOG_COMMENCES_2012: 'sitadel1019.loc[sitadel1019[''Unnamed: 0''] == str(CODE_INSEE)][''Unnamed:
-            7''].iloc[0]'
-        LOG_COMMENCES_2013: 'sitadel1019.loc[sitadel1019[''Unnamed: 0''] == str(CODE_INSEE)][''Unnamed:
-            8''].iloc[0]'
-        LOG_COMMENCES_2014: 'sitadel1019.loc[sitadel1019[''Unnamed: 0''] == str(CODE_INSEE)][''Unnamed:
-            9''].iloc[0]'
-        LOG_COMMENCES_2015: 'sitadel1019.loc[sitadel1019[''Unnamed: 0''] == str(CODE_INSEE)][''Unnamed:
-            10''].iloc[0]'
-        LOG_COMMENCES_2016: 'sitadel1019.loc[sitadel1019[''Unnamed: 0''] == str(CODE_INSEE)][''Unnamed:
-            11''].iloc[0]'
-        LOG_COMMENCES_2017: 'sitadel1019.loc[sitadel1019[''Unnamed: 0''] == str(CODE_INSEE)][''Unnamed:
-            12''].iloc[0]'
-        LOG_COMMENCES_2018: 'sitadel1019.loc[sitadel1019[''Unnamed: 0''] == str(CODE_INSEE)][''Unnamed:
-            13''].iloc[0]'
-        LOG_COMMENCES_2019: 'sitadel1019.loc[sitadel1019[''Unnamed: 0''] == str(CODE_INSEE)][''Unnamed:
-            14''].iloc[0]'
+        LOG_COMMENCES_2010: 'error0(nan0(sitadel1019.loc[sitadel1019[''Unnamed: 0'']
+            == str(CODE_INSEE)][''Unnamed: 5''].iloc[0]))'
+        LOG_COMMENCES_2011: 'error0(nan0(sitadel1019.loc[sitadel1019[''Unnamed: 0'']
+            == str(CODE_INSEE)][''Unnamed: 6''].iloc[0]))'
+        LOG_COMMENCES_2012: 'error0(nan0(sitadel1019.loc[sitadel1019[''Unnamed: 0'']
+            == str(CODE_INSEE)][''Unnamed: 7''].iloc[0]))'
+        LOG_COMMENCES_2013: 'error0(nan0(sitadel1019.loc[sitadel1019[''Unnamed: 0'']
+            == str(CODE_INSEE)][''Unnamed: 8''].iloc[0]))'
+        LOG_COMMENCES_2014: 'error0(nan0(sitadel1019.loc[sitadel1019[''Unnamed: 0'']
+            == str(CODE_INSEE)][''Unnamed: 9''].iloc[0]))'
+        LOG_COMMENCES_2015: 'error0(nan0(sitadel1019.loc[sitadel1019[''Unnamed: 0'']
+            == str(CODE_INSEE)][''Unnamed: 10''].iloc[0]))'
+        LOG_COMMENCES_2016: 'error0(nan0(sitadel1019.loc[sitadel1019[''Unnamed: 0'']
+            == str(CODE_INSEE)][''Unnamed: 11''].iloc[0]))'
+        LOG_COMMENCES_2017: 'error0(nan0(sitadel1019.loc[sitadel1019[''Unnamed: 0'']
+            == str(CODE_INSEE)][''Unnamed: 12''].iloc[0]))'
+        LOG_COMMENCES_2018: 'error0(nan0(sitadel1019.loc[sitadel1019[''Unnamed: 0'']
+            == str(CODE_INSEE)][''Unnamed: 13''].iloc[0]))'
+        LOG_COMMENCES_2019: 'error0(nan0(sitadel1019.loc[sitadel1019[''Unnamed: 0'']
+            == str(CODE_INSEE)][''Unnamed: 14''].iloc[0]))'
         LOG_NON_VENDUS_1320: EXCES_BESOINS_1320 - NOUV_RESSEC_1318 - NOUV_LOGVAC_1318
         LONGITUDE: get_gps_long_insee(CODE_INSEE)
         NAIS0813: dossierComplet['NAIS0813'][code_insee]
