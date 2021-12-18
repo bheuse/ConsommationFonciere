@@ -152,7 +152,6 @@
       </footer>
     </div>
 </div>
-<hr>
 
 <!-- Modal Pop Up -->
 <div id="id02" class="w3-modal">
@@ -188,7 +187,6 @@
       </footer>
     </div>
 </div>
-<hr>
 
 <!-- Departements (Paca Seulement) ... -->
 <div>
@@ -291,15 +289,15 @@ function openTab(evt, cityName) {
 <button class="w3-bar-item w3-button databtn w3-padding-16" onclick="openTab(event,'Artificialisation')"> Artificialisation </button>
 <button class="w3-bar-item w3-button databtn w3-padding-16" onclick="openTab(event,'Projections')">       Projections </button>
 <button class="w3-bar-item w3-button databtn w3-padding-16" onclick="openTab(event,'Loi_SRU')">           Loi SRU  </button>
-<button class="w3-bar-item w3-button databtn w3-padding-16 w3-pink" onclick="openTab(event,'Diagnostics')">             Diagnostics </button>
 <button class="w3-bar-item w3-button databtn w3-padding-16 w3-grey" onclick="openTab(event,'Calculettes')">             Calculettes </button>
 <button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'Cartes')">         Cartes </button>
 <button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'Graphiques')">     Graphiques </button>
-<button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'Sources')">        Sources </button>
-<button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'DonneesBrutes')">  Donnees Brutes </button>
 <button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'BigTable')">       Table de Calcul</button>
 <button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'ObjectifZan')">    Objectif Zan</button>
 <button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'MichelZan')">      Michel Zan</button>
+<button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'Sources')">        Sources </button>
+<button class="w3-bar-item w3-button databtn w3-padding-16 w3-pink" onclick="openTab(event,'Diagnostics')">             Diagnostics </button>
+<button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'DonneesBrutes')">  Donnees Brutes </button>
 <button class="w3-bar-item w3-button databtn w3-padding-16 w3-grey" onclick="openTab(event,'Debug')">                   Debug </button>
 </div>
 </div>
@@ -1075,7 +1073,6 @@ function openTab(evt, cityName) {
     </div>
 </div>
 
-
 <div  v-if="this.data_s != null">
         <div class="w3-container w3-theme-dark w3-mobile w3-center ">
         <iframe frameBorder="0" height="190" width="700" :src="ds.GOOGLE_TRACKER"></iframe>
@@ -1083,13 +1080,16 @@ function openTab(evt, cityName) {
 </div>
 
 
+<!-- Rapport Complet
 <div class="w3-teal w3-center">
+    <h3 class="w3-teal w3-center">${LIBELLE}</h3>
     <h2 class="w3-teal w3-center">Vigi Foncier - Un site du Gadseca</h2>
     <img class="w3-center w3-image"
           src="input/Gadseca_50Ans.jpg"
           alt="Gadseca Logo"
           style="display: block; margin-left: auto; margin-right: auto; width: 600px; height: auto;">
 </div>
+-->
 
 </footer>
 

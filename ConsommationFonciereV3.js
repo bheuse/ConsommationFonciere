@@ -451,6 +451,10 @@ const vm = Vue.createApp({
             console.log("selectCommune : "+event.target.value);
             this.selectCommuneName(event.target.value);
             },
+        selectCommuneEvent(event){
+            console.log("selectCommune : "+event.target.value);
+            this.selectCommuneName(event.target.value);
+            },
         selectCommuneCode(commune_code){
             console.log("selectCommuneCode : "+commune_code);
             comm_index         = select["REGIONS"][0]["COMMUNES"].findIndex(x => x.INSEE === commune_code);
@@ -902,7 +906,7 @@ vm.component('table-ozan', {
                 <div class="w3-red w3-hover-shadow w3-center">
                     <br>
                     <h1>Objectif non atteint sur 10 ans.</h1>
-                    <h2>Deficit pour les logements par rapport a l'Objectif ZAN : {{ Math.round(this.ds.oz_ha_manquant_pour_logements*10)/10 }} hectares.</h2>
+                    <h3>Deficit pour les logements par rapport a l'Objectif ZAN : {{ Math.round(this.ds.oz_ha_manquant_pour_logements*10)/10 }} hectares.</h3>
                     <h2>Densifiez ou Renouvellez plus !</h2>
                     <br>
                 </div>
@@ -918,7 +922,7 @@ vm.component('table-ozan', {
             </div>
 
         <br>
-        <img src="input/Densite.png" alt="Examples de Densite" class="center" height="250">
+        <img src="input/Densite.png" alt="Examples de Densite" >
         <br>
         <br>
         <div class="columns">
@@ -926,7 +930,7 @@ vm.component('table-ozan', {
                     <table class="w3-table-all w3-hoverable w3-card-4">
                         <tbody>
                         <tr class="w3-teal">
-                            <th class="w3-right-align w3-grey">Consommation foncière</th>
+                            <th class="w3-right-align w3-grey">Consommation</th>
                             <th class="w3-right-align w3-grey">Hectares</th>
                         </tr>
                         <tr>
@@ -982,7 +986,7 @@ vm.component('table-ozan', {
             <div class="w3-red w3-hover-shadow w3-center">
                 <br>
                 <h1>Objectif non atteint sur 10 ans.</h1>
-                <h2>Deficit pour les logements par rapport a l'Objectif ZAN : {{ Math.round(this.ds.oz_ha_manquant_pour_logements*10)/10 }} hectares.</h2>
+                <h3>Deficit pour les logements par rapport a l'Objectif ZAN : {{ Math.round(this.ds.oz_ha_manquant_pour_logements*10)/10 }} hectares.</h3>
                 <h2>Densifiez ou Renouvellez plus !</h2>
                 <br>
             </div>
@@ -1116,7 +1120,7 @@ vm.component('table-ozan', {
                 <div class="w3-red w3-hover-shadow w3-center">
                     <br>
                     <h1>Objectif non atteint sur 10 ans.</h1>
-                    <h2>Deficit pour les logements par rapport a l'Objectif ZAN : {{ Math.round(this.ds.oz_scen_ha_manquant_pour_logements*10)/10 }} hectares.</h2>
+                    <h3>Deficit pour les logements par rapport a l'Objectif ZAN : {{ Math.round(this.ds.oz_scen_ha_manquant_pour_logements*10)/10 }} hectares.</h3>
                     <h2>Densifiez ou Renouvellez plus !</h2>
                     <br>
                 </div>
@@ -1134,7 +1138,7 @@ vm.component('table-ozan', {
 
 
         <p align-text="left" ><b>A titre d'exemple : </b></p>
-        <img src="input/Densite_3.jpg" alt="Examples de Densite" class="center"  >
+        <img src="input/Densite_3.jpg" alt="Examples de Densite"  >
         <br>
         <br>
 
@@ -1143,7 +1147,7 @@ vm.component('table-ozan', {
                     <table class="w3-table-all w3-hoverable w3-card-4">
                         <tbody>
                         <tr class="w3-teal">
-                            <th class="w3-right-align w3-grey">Consommation foncière</th>
+                            <th class="w3-right-align w3-grey">Consommation</th>
                             <th class="w3-right-align w3-grey">Hectares</th>
                         </tr>
                         <tr>
@@ -1199,7 +1203,7 @@ vm.component('table-ozan', {
                 <div class="w3-red w3-hover-shadow w3-center">
                     <br>
                     <h1>Objectif non atteint sur 10 ans.</h1>
-                    <h2>Deficit pour les logements par rapport a l'Objectif ZAN : {{ Math.round(this.ds.oz_scen_ha_manquant_pour_logements*10)/10 }} hectares.</h2>
+                    <h3>Deficit pour les logements par rapport a l'Objectif ZAN : {{ Math.round(this.ds.oz_scen_ha_manquant_pour_logements*10)/10 }} hectares.</h3>
                     <h2>Densifiez ou Renouvellez plus !</h2>
                     <br>
                 </div>
