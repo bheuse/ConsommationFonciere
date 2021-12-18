@@ -811,11 +811,454 @@ vm.component('table-ozan', {
         },
       },
   template: `
-    <div  v-if="this.dataset != null">
-        <h3 v-if="titre"> {{titre}}</h3>
+
+<div class="w3-container">
+
+<div  v-if="this.dataset != null">
+<h3 v-if="titre"> {{titre}}</h3>
+<h4 class="w3-left">Les Formules de la Federation des SCoTs (objectif-zan.com) avec les donnees les plus recentes, et pertinentes au territoire.</h4>
+<div>
+<div class="w3-border">
+<div class="w3-bar w3-theme w3-right">
+<button class="w3-bar-item w3-button ozanbtn w3-padding-16"                     onclick="openTabOzan(event,'Insee')">         Insee </button>
+<button class="w3-bar-item w3-button ozanbtn w3-padding-16 w3-2021-french-blue" onclick="openTabOzan(event,'Territoire')">    Votre territoire</button>
+<button class="w3-bar-item w3-button ozanbtn w3-padding-16 w3-flat-wisteria"    onclick="openTabOzan(event,'Coteacote')">     Côte à Côte</button>
+</div>
+</div>
+
+<div id="Insee"  class="w3-container ozan w3-animate-opacity">
+        <h2>Insee</h2>
+            <div >
+                <br>
+                <div class="w3-panel w3-hoverable w3-card-4 w3-teal">
+                <h2>Estimations basées sur les chiffres de l'Insee :</h2>
+                </div>
+        <table class="w3-table-all w3-hoverable w3-card-4">
+            <tbody>
+            <tr class="w3-teal">
+                <th height="43" class="w3-left-align  w3-teal">Période d'étude</th>
+                <th class="w3-right-align w3-teal">2018</th>
+                <th class="w3-right-align w3-teal">2030</th>
+                <th class="w3-right-align w3-grey">Variation</th>
+            </tr>
+            <tr>
+                <td height="43"> Population</td>
+                <td class="w3-right-align">{{this.ds.oz_population_2018}}</td>
+                <td class="w3-right-align">{{this.ds.oz_population_2030}}</td>
+                <td class="w3-right-align">{{this.ds.oz_population_variation}}</td>
+            </tr>
+            <tr>
+                <td height="43"> Nombre de personnes par ménage</td>
+                <td class="w3-right-align">{{this.ds.oz_tm_2018}}</td>
+                <td class="w3-right-align">{{this.ds.oz_tm_2030}}</td>
+                <td class="w3-right-align">{{this.ds.oz_tm_variation}}</td>
+            </tr>
+            <tr>
+                <td height="43">Demande potentielle liée : </td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+            </tr>
+            <tr>
+                <td height="43"><i>- à la croissance démographique</i></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align">{{this.ds.oz_dde_croissance_demo}}</td>
+            </tr>
+            <tr>
+                <td height="43"><i>- au desserrement des ménages</i></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align">{{this.ds.oz_dde_diminution_tm}}</td>
+            </tr>
+            <tr>
+                <td height="43">Parc de logements vacants</td>
+                <td class="w3-right-align">{{this.ds.oz_parc_res_vac_2018}}</td>
+                <td class="w3-right-align">{{this.ds.oz_parc_res_vac_2030}}</td>
+                <td class="w3-right-align">{{this.ds.oz_parc_res_vac_variation}}</td>
+            </tr>
+            <tr>
+                <td height="43">Parc de résidences secondaires</td>
+                <td class="w3-right-align">{{this.ds.oz_parc_res_sec_2018}}</td>
+                <td class="w3-right-align">{{this.ds.oz_parc_res_sec_2030}}</td>
+                <td class="w3-right-align">{{this.ds.oz_parc_res_sec_variation}}</td>
+            </tr>
+            <tr>
+                <td height="43">Désaffectations</td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align">{{this.ds.oz_desaffectations}}</td>
+            </tr>
+            </tbody>
+        </table>
         <br>
-        <h3 class="w3-center" >Les Formules de la Federation des SCoTs (objectif-zan.com) avec les donnees les plus recentes, et pertinentes au territoire.</p>
+        <div class="w3-panel w3-card-4 w3-teal">
+            <br>
+            <p>Demande potentielle à l'horizon 2030 : {{ this.ds.oz_demande_potentielle }}</p>
+            <h2>Votre besoin annuel en logements :     {{ this.ds.oz_demande_annuelle_de_logements }}</h2>
+            <br>
+        </div>
+
+        <div class="slidecontainer">
+          <h1>Objectif de renouvellement urbain</h1>
+          <p>Taux en pourcentage : {{this.ds.scen_taux_renouvellement}} %</p>
+          <input type="range" min="0" max="100"  class="slider" id="myRange" v-on:blur="recalc" v-on:change="recalc" v-model.value="this.ds.scen_taux_renouvellement">
+          <p>Reconversion de friches, dents creuses, transformation de l'existant, sur-élévation...</p>
+        </div>
+        <div class="slidecontainer">
+          <h1>Densité réalisable en extension</h1>
+          <p>Logements par hectare :  {{this.ds.scen_log_ha}} </p>
+          <input type="range" min="1" max="100"  class="slider" id="myRange" v-on:blur="recalc" v-on:change="recalc" v-model.value="this.ds.scen_log_ha">
+          <p>Sélectionnez le niveau de densité représentatif de votre territoire</p>
+        </div>
+
+            <div v-if="this.ds.oz_ha_manquant_pour_logements > 0" >
+                <div class="w3-red w3-hover-shadow w3-center">
+                    <br>
+                    <h1>Objectif non atteint sur 10 ans.</h1>
+                    <h3>Deficit pour les logements par rapport a l'Objectif ZAN : {{ Math.round(this.ds.oz_ha_manquant_pour_logements*10)/10 }} hectares.</h3>
+                    <h2>Densifiez ou Renouvellez plus !</h2>
+                    <br>
+                </div>
+            </div>
+            <div v-else class="w3-center">
+                <div class="w3-green w3-hover-shadow w3-center">
+                    <br>
+                    <h1>Objectif atteint sur 10 ans !</h1>
+                    <h2>Gain sur l'Objectif ZAN : {{ Math.round(-this.ds.oz_ha_manquant_pour_logements*10)/10 }} hectares.</h2>
+                    <h2>Territoire Vertueux !</h2>
+                    <br>
+                </div>
+            </div>
+
         <br>
+        <img src="input/Densite.png" alt="Examples de Densite" >
+        <br>
+        <br>
+        <div class="columns">
+             <div class="column">
+                    <table class="w3-table-all w3-hoverable w3-card-4">
+                        <tbody>
+                        <tr class="w3-teal">
+                            <th class="w3-right-align w3-grey">Consommation</th>
+                            <th class="w3-right-align w3-grey">Hectares</th>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align">2009-2018 :</td>
+                            <td class="w3-right-align">{{Math.round(this.ds.oz_ha_consommes_ha_zan_historique*10)/10}}</td>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align">Moyenne Annuelle :</td>
+                            <td class="w3-right-align">{{ Math.round(this.ds.oz_ha_consommes_ha_zan_historique)/10 }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            <div class="column">
+                  <table class="w3-table-all w3-hoverable w3-card-4">
+                        <tbody>
+                        <tr class="w3-teal">
+                            <th class="w3-right-align w3-teal">Objectif ZAN</th>
+                            <th class="w3-right-align w3-teal">Hectares</th>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align" >2020-2030 :</td>
+                            <td class="w3-right-align" >{{Math.round(this.ds.oz_ha_consommes_ha_zan_2030*10)/10}}</td>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align" style="text-shadow:1px 1px 0 #444">Moyenne Annuelle :</td>
+                            <td class="w3-right-align" style="text-shadow:1px 1px 0 #444">{{ Math.round(this.ds.oz_ha_consommes_ha_zan_par_an*10)/10}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+
+
+        <div v-if="this.ds.oz_ha_manquant_pour_logements > 0" >
+              <table class="w3-table-all w3-hoverable w3-card-4">
+                    <tbody>
+                    <tr class="w3-orange">
+                        <th class="w3-right-align ">Objectif non atteint sur 10 ans</th>
+                        <th class="w3-right-align ">Ha en 2030</th>
+                    </tr>
+                    <tr>
+                        <td class="w3-right-align" >Enveloppe ZAN disponible :</td>
+                        <td class="w3-right-align" >{{Math.round(this.ds.oz_ha_consommes_ha_zan_2030*10)/10}}</td>
+                    </tr>
+                    <tr>
+                        <td class="w3-right-align" >Enveloppe ZAN utilisée :</td>
+                        <td class="w3-right-align" >{{Math.round(this.ds.oz_ha_consommes_en_extension*10)/10}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            <br>
+            <div class="w3-red w3-hover-shadow w3-center">
+                <br>
+                <h1>Objectif non atteint sur 10 ans.</h1>
+                <h3>Deficit pour les logements par rapport a l'Objectif ZAN : {{ Math.round(this.ds.oz_ha_manquant_pour_logements*10)/10 }} hectares.</h3>
+                <h2>Densifiez ou Renouvellez plus !</h2>
+                <br>
+            </div>
+        </div>
+        <div v-else class="w3-center">
+              <table class="w3-table-all w3-hoverable w3-card-4">
+                    <tbody>
+                    <tr class="w3-teal">
+                        <th class="w3-right-align w3-teal">Objectif atteint sur 10 ans !</th>
+                        <th class="w3-right-align w3-teal">Ha en 2030</th>
+                    </tr>
+                    <tr>
+                        <td class="w3-right-align" >Enveloppe ZAN disponible :</td>
+                        <td class="w3-right-align" >{{Math.round(this.ds.oz_ha_consommes_ha_zan_2030*10)/10}}</td>
+                    </tr>
+                    <tr>
+                        <td class="w3-right-align" >Enveloppe ZAN utilisée :</td>
+                        <td class="w3-right-align" >{{Math.round(this.ds.oz_ha_consommes_en_extension*10)/10}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            <br>
+            <div class="w3-green w3-hover-shadow w3-center">
+                <br>
+                <h1>Objectif atteint sur 10 ans !</h1>
+                <h2>Gain sur l'Objectif ZAN : {{ Math.round(-this.ds.oz_ha_manquant_pour_logements*10)/10 }} hectares.</h2>
+                <h2>Territoire Vertueux !</h2>
+                <br>
+            </div>
+        </div>
+
+
+        <div class="w3-panel w3-card-4 w3-teal" style="text-align:justify">
+            <br>
+            <p>Hectares consommes ces 10 dernieres annees : {{ this.ds.oz_ha_consommes_ha_zan_historique }}</p>
+            <p>Hectares disponibles les 10 prochaines annees : {{ this.ds.oz_ha_consommes_ha_zan_2030 }}</p>
+            <p>Logements Construits en Renouvellement : {{ this.ds.oz_logement_en_renouvellement }}</p>
+            <p>Logements Construits en Extension : {{ this.ds.oz_logement_en_extension }}</p>
+            <p>Hectares necessaires en Extension : {{ this.ds.oz_ha_consommes_en_extension }}</p>
+            <p>Difference par rapport aux besoins : {{ Math.round(this.ds.oz_ha_manquant_pour_logements*10)/10 }}</p>
+            <br>
+        </div>
+
+      </div>
+</div>
+<div id="Territoire"  class="w3-container ozan w3-animate-opacity">
+        <h2>Votre Territoire</h2>
+                <br>
+                <div class="w3-panel w3-hoverable w3-card-4 w3-2021-french-blue">
+                <h2>Saisir les besoins en logements sur votre territoire :</h2>
+                </div>
+        <table class="w3-table-all w3-hoverable w3-card-4">
+            <tbody>
+            <tr class="w3-2021-french-blue">
+                <th class="w3-left-align w3-2021-french-blue">Période d'étude</th>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="2000" max="99999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.oz_scen_an_depart"></td>
+                <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="2000" max="99999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.oz_scen_an_arrivee"></td>
+                <th class="w3-right-align w3-grey">Variation</th>
+            </tr>
+            <tr>
+                <td>Population</td>
+                <td class="w3-right-align"> <input  type="number" min="0" max="99999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.oz_scen_pop_depart"></td>
+                <td class="w3-right-align"> <input  type="number" min="0" max="99999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.oz_scen_pop_arrivee"></td>
+                <td class="w3-right-align">{{this.ds.oz_scen_population_variation}}</td>
+            </tr>
+            <tr>
+                <td>Personnes par ménage</td>
+                <td class="w3-right-align"> <input type="number" min="0" max="99999" step="0.01" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.oz_scen_tm_depart"></td>
+                <td class="w3-right-align"> <input type="number" min="0" max="99999" step="0.01" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.oz_scen_tm_arrivee"></td>
+                <td class="w3-right-align"> {{this.ds.oz_scen_tm_variation}}</td>
+            </tr>
+            <tr>
+                <td>Demande liée : </td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+            </tr>
+            <tr>
+                <td><i>- à la démographie<i></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align">{{this.ds.oz_scen_dde_croissance_demo}}</td>
+            </tr>
+            <tr>
+                <td><i>- au desserrement </i></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align">{{this.ds.oz_scen_dde_diminution_tm}}</td>
+            </tr>
+            <tr>
+                <td>Logements vacants</td>
+                <td class="w3-right-align"> <input type="number"min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_vac_depart"></td>
+                <td class="w3-right-align"> <input type="number"min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_vac_arrivee"></td>
+                <td class="w3-right-align">{{this.ds.oz_scen_parc_res_vac_variation}}</td>
+            </tr>
+            <tr>
+                <td>Résidences secondaires</td>
+                <td class="w3-right-align"> <input type="number"min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_sec_depart"></td>
+                <td class="w3-right-align"> <input type="number"min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_sec_arrivee"></td>
+                <td class="w3-right-align">{{this.ds.oz_scen_parc_res_sec_variation}}</td>
+            </tr>
+            <tr>
+                <td>Désaffectations</td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"> <input type="number"min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_desaffectations"></td>
+                <td class="w3-right-align">{{this.ds.oz_scen_desaffectations}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <div class="w3-panel w3-card-4 w3-2021-french-blue">
+            <br>
+            <p>Demande potentielle à l'horizon {{this.ds.oz_scen_an_arrivee}} : {{ this.ds.oz_scen_demande_potentielle }}</p>
+            <h2>Votre besoin annuel en logements :     {{ this.ds.oz_scen_demande_annuelle_de_logements }}</h2>
+            <br>
+        </div>
+
+        <div class="slidecontainer ">
+          <h1>Objectif de renouvellement urbain</h1>
+          <p>Taux en pourcentage : {{this.ds.oz_scen_renouvellement}} %</p>
+          <input type="range" min="0" max="100"  class="slider" id="myRange" v-on:blur="recalc" v-on:change="recalc" v-model.value="this.ds.oz_scen_renouvellement">
+          <p>Reconversion de friches, dents creuses, transformation de l'existant, sur-élévation...</p>
+        </div>
+        <div class="slidecontainer ">
+          <h1>Densité réalisable en extension</h1>
+          <p>Logements par hectare :  {{this.ds.oz_scen_log_ha}} </p>
+          <input type="range" min="1" max="100"  class="slider" id="myRange" v-on:blur="recalc" v-on:change="recalc" v-model.value="this.ds.oz_scen_log_ha">
+          <p>Sélectionnez le niveau de densité représentatif de votre territoire</p>
+        </div>
+
+            <div v-if="this.ds.oz_scen_ha_manquant_pour_logements > 0" >
+                <div class="w3-red w3-hover-shadow w3-center">
+                    <br>
+                    <h1>Objectif non atteint sur 10 ans.</h1>
+                    <h3>Deficit pour les logements par rapport a l'Objectif ZAN : {{ Math.round(this.ds.oz_scen_ha_manquant_pour_logements*10)/10 }} hectares.</h3>
+                    <h2>Densifiez ou Renouvellez plus !</h2>
+                    <br>
+                </div>
+            </div>
+            <div v-else class="w3-center">
+                <div class="w3-green w3-hover-shadow w3-center">
+                    <br>
+                    <h1>Objectif atteint sur 10 ans !</h1>
+                    <h2>Gain sur l'Objectif ZAN : {{ Math.round(-this.ds.oz_scen_ha_manquant_pour_logements*10)/10 }} hectares.</h2>
+                    <h2>Territoire Vertueux !</h2>
+                    <br>
+                </div>
+            </div>
+        <br>
+
+
+        <p align-text="left" ><b>A titre d'exemple : </b></p>
+        <img src="input/Densite_3.jpg" alt="Examples de Densite"  >
+        <br>
+        <br>
+
+        <div class="columns">
+             <div class="column">
+                    <table class="w3-table-all w3-hoverable w3-card-4">
+                        <tbody>
+                        <tr class="w3-teal">
+                            <th class="w3-right-align w3-grey">Consommation</th>
+                            <th class="w3-right-align w3-grey">Hectares</th>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align">2009-2018 :</td>
+                            <td class="w3-right-align">{{Math.round(this.ds.oz_ha_consommes_ha_zan_historique*10)/10}}</td>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align">Moyenne Annuelle :</td>
+                            <td class="w3-right-align">{{ Math.round(this.ds.oz_ha_consommes_ha_zan_historique)/10 }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            <div class="column">
+                  <table class="w3-table-all w3-hoverable w3-card-4">
+                        <tbody>
+                        <tr class="w3-teal">
+                            <th class="w3-right-align w3-teal">Objectif ZAN</th>
+                            <th class="w3-right-align w3-teal">Hectares</th>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align" >2020-2030 :</td>
+                            <td class="w3-right-align" >{{Math.round(this.ds.oz_scen_ha_consommes_ha_zan_2030*10)/10}}</td>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align" style="text-shadow:1px 1px 0 #444">Moyenne Annuelle :</td>
+                            <td class="w3-right-align" style="text-shadow:1px 1px 0 #444">{{ Math.round(this.ds.oz_scen_ha_consommes_ha_zan_par_an*10)/10}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+
+
+            <div v-if="this.ds.oz_scen_ha_manquant_pour_logements > 0" >
+                  <table class="w3-table-all w3-hoverable w3-card-4">
+                        <tbody>
+                        <tr class="w3-orange">
+                            <th class="w3-right-align ">Objectif non atteint sur 10 ans</th>
+                            <th class="w3-right-align ">Ha en 2030</th>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align" >Enveloppe ZAN disponible :</td>
+                            <td class="w3-right-align" >{{Math.round(this.ds.oz_scen_ha_consommes_ha_zan_2030*10)/10}}</td>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align" >Enveloppe ZAN utilisée :</td>
+                            <td class="w3-right-align" >{{Math.round(this.ds.oz_scen_ha_consommes_en_extension*10)/10}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                <br>
+                <div class="w3-red w3-hover-shadow w3-center">
+                    <br>
+                    <h1>Objectif non atteint sur 10 ans.</h1>
+                    <h3>Deficit pour les logements par rapport a l'Objectif ZAN : {{ Math.round(this.ds.oz_scen_ha_manquant_pour_logements*10)/10 }} hectares.</h3>
+                    <h2>Densifiez ou Renouvellez plus !</h2>
+                    <br>
+                </div>
+            </div>
+            <div v-else class="w3-center">
+                  <table class="w3-table-all w3-hoverable w3-card-4">
+                        <tbody>
+                        <tr class="w3-teal">
+                            <th class="w3-right-align w3-2021-french-blue">Objectif atteint sur 10 ans !</th>
+                            <th class="w3-right-align w3-2021-french-blue">Ha en 2030</th>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align" >Enveloppe ZAN disponible :</td>
+                            <td class="w3-right-align" >{{Math.round(this.ds.oz_scen_ha_consommes_ha_zan_2030*10)/10}}</td>
+                        </tr>
+                        <tr>
+                            <td class="w3-right-align" >Enveloppe ZAN utilisée :</td>
+                            <td class="w3-right-align" >{{Math.round(this.ds.oz_scen_ha_consommes_en_extension*10)/10}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                <br>
+                <div class="w3-green w3-hover-shadow w3-center">
+                    <br>
+                    <h1>Objectif atteint sur 10 ans !</h1>
+                    <h2>Gain sur l'Objectif ZAN : {{ Math.round(-this.ds.oz_scen_ha_manquant_pour_logements*10)/10 }} hectares.</h2>
+                    <h2>Territoire Vertueux !</h2>
+                    <br>
+                </div>
+            </div>
+
+        <div class="w3-panel w3-card-4 w3-2021-french-blue" style="text-align:justify">
+            <br>
+            <p>Hectares consommes ces 10 dernieres annees : {{ this.ds.oz_ha_consommes_ha_zan_historique }}</p>
+            <p>Hectares disponibles les 10 prochaines annees : {{ this.ds.oz_ha_consommes_ha_zan_2030 }}</p>
+            <p>Logements Construits en Renouvellement : {{ this.ds.oz_scen_logement_en_renouvellement }}</p>
+            <p>Logements Construits en Extension : {{ this.ds.oz_scen_logement_en_extension }}</p>
+            <p>Hectares necessaires en Extension : {{ this.ds.oz_scen_ha_consommes_en_extension }}</p>
+            <p>Difference par rapport aux besoins : {{ Math.round(this.ds.oz_scen_ha_manquant_pour_logements*10)/10 }} hectares</p>
+            <br>
+        </div>
+</div>
+<div id="Coteacote"  class="w3-container ozan w3-animate-opacity">
+        <h2>Côte à Côte</h2>
         <div class="columns">
             <div class="column">
                 <br>
@@ -826,55 +1269,55 @@ vm.component('table-ozan', {
         <table class="w3-table-all w3-hoverable w3-card-4">
             <tbody>
             <tr class="w3-teal">
-                <th height="50" class="w3-left-align  w3-teal">Période d'étude</th>
+                <th height="43" class="w3-left-align  w3-teal">Période d'étude</th>
                 <th class="w3-right-align w3-teal">2018</th>
                 <th class="w3-right-align w3-teal">2030</th>
                 <th class="w3-right-align w3-grey">Variation</th>
             </tr>
             <tr>
-                <td height="50" >Population</td>
+                <td height="43">Population</td>
                 <td class="w3-right-align">{{this.ds.oz_population_2018}}</td>
                 <td class="w3-right-align">{{this.ds.oz_population_2030}}</td>
                 <td class="w3-right-align">{{this.ds.oz_population_variation}}</td>
             </tr>
             <tr>
-                <td height="50"> Nombre de personnes par ménage</td>
+                <td height="43"> Nombre de personnes par ménage</td>
                 <td class="w3-right-align">{{this.ds.oz_tm_2018}}</td>
                 <td class="w3-right-align">{{this.ds.oz_tm_2030}}</td>
                 <td class="w3-right-align">{{this.ds.oz_tm_variation}}</td>
             </tr>
             <tr>
-                <td height="50">Demande potentielle liée : </td>
+                <td height="43">Demande potentielle liée : </td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
             </tr>
             <tr>
-                <td height="50"><i>- à la croissance démographique</td>
+                <td height="43"><i>- à la croissance démographique</i></td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align">{{this.ds.oz_dde_croissance_demo}}</td>
             </tr>
             <tr>
-                <td height="50"><i>- au desserrement des ménages</i></td>
+                <td height="43"><i>- au desserrement des ménages</i></td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align">{{this.ds.oz_dde_diminution_tm}}</td>
             </tr>
             <tr>
-                <td height="50">Parc de logements vacants</td>
+                <td height="43">Parc de logements vacants</td>
                 <td class="w3-right-align">{{this.ds.oz_parc_res_vac_2018}}</td>
                 <td class="w3-right-align">{{this.ds.oz_parc_res_vac_2030}}</td>
                 <td class="w3-right-align">{{this.ds.oz_parc_res_vac_variation}}</td>
             </tr>
             <tr>
-                <td height="50">Parc de résidences secondaires</td>
+                <td height="43">Parc de résidences secondaires</td>
                 <td class="w3-right-align">{{this.ds.oz_parc_res_sec_2018}}</td>
                 <td class="w3-right-align">{{this.ds.oz_parc_res_sec_2030}}</td>
                 <td class="w3-right-align">{{this.ds.oz_parc_res_sec_variation}}</td>
             </tr>
             <tr>
-                <td height="50">Désaffectations</td>
+                <td height="43">Désaffectations</td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align">{{this.ds.oz_desaffectations}}</td>
@@ -1053,18 +1496,18 @@ vm.component('table-ozan', {
             </tr>
             <tr>
                 <td>Personnes par ménage</td>
-                <td><input type="number" style="text-align: right;" min="0" max="99999" step="0.01" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.oz_scen_tm_depart"></td>
-                <td><input type="number" style="text-align: right;" min="0" max="99999" step="0.01" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.oz_scen_tm_arrivee"></td>
+                <td class="w3-right-align"> <input type="number"min="0" max="99999" step="0.01" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.oz_scen_tm_depart"></td>
+                <td class="w3-right-align"> <input type="number"min="0" max="99999" step="0.01" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.oz_scen_tm_arrivee"></td>
                 <td class="w3-right-align">{{this.ds.oz_scen_tm_variation}}</td>
             </tr>
             <tr>
-                <td>Demande potentielle liée : </td>
+                <td>Demande liée : </td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
             </tr>
             <tr>
-                <td><i>- à la démographique</td>
+                <td><i>- à la démographie</i></td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align">{{this.ds.oz_scen_dde_croissance_demo}}</td>
@@ -1077,20 +1520,20 @@ vm.component('table-ozan', {
             </tr>
             <tr>
                 <td>Logements vacants</td>
-                <td><input type="number" style="text-align: right;" min="0" max="99999999" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_vac_depart"></td>
-                <td><input type="number" style="text-align: right;" min="0" max="99999999" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_vac_arrivee"></td>
+                <td class="w3-right-align"> <input type="number"min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_vac_depart"></td>
+                <td class="w3-right-align"> <input type="number"min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_vac_arrivee"></td>
                 <td class="w3-right-align">{{this.ds.oz_scen_parc_res_vac_variation}}</td>
             </tr>
             <tr>
                 <td>Résidences secondaires</td>
-                <td><input type="number" style="text-align: right;" min="0" max="99999999" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_sec_depart"></td>
-                <td><input type="number" style="text-align: right;" min="0" max="99999999" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_sec_arrivee"></td>
+                <td class="w3-right-align"> <input type="number"min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_sec_depart"></td>
+                <td class="w3-right-align"> <input type="number"min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_sec_arrivee"></td>
                 <td class="w3-right-align">{{this.ds.oz_scen_parc_res_sec_variation}}</td>
             </tr>
             <tr>
                 <td>Désaffectations</td>
                 <td class="w3-right-align"></td>
-                <td><input type="number" style="text-align: right;" min="0" max="99999999" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_desaffectations"></td>
+                <td class="w3-right-align"> <input type="number"min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_desaffectations"></td>
                 <td class="w3-right-align">{{this.ds.oz_scen_desaffectations}}</td>
             </tr>
             </tbody>
@@ -1137,7 +1580,7 @@ vm.component('table-ozan', {
         <br>
 
 
-        <p align-text="left" ><b>A titre d'exemple : </b></p>
+        <p  ><b>A titre d'exemple : </b></p>
         <img src="input/Densite_3.jpg" alt="Examples de Densite"  >
         <br>
         <br>
@@ -1250,8 +1693,6 @@ vm.component('table-ozan', {
          </div>
       </div>
         <br>
-
-
         <div class="columns">
              <div class="column">
         </div>
@@ -1260,6 +1701,13 @@ vm.component('table-ozan', {
         </div>
 
     </div>
+
+</div>
+
+</div>
+
+
+</div>
   `
 })
 

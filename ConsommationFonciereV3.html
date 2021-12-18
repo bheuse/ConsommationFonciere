@@ -281,6 +281,21 @@ function openTab(evt, cityName) {
   document.getElementById(cityName).style.display = "block";
   evt.currentTarget.className += " w3-dark-grey";
 }
+// Tabs
+function openTabOzan(evt, tabName) {
+  console.log("openTabOzan : "+tabName)
+  var i;
+  var x = document.getElementsByClassName("ozan");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  var ozanbtn = document.getElementsByClassName("ozanbtn");
+  for (i = 0; i < x.length; i++) {
+    ozanbtn[i].className = ozanbtn[i].className.replace(" w3-dark-grey", "");
+  }
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " w3-dark-grey";
+}
 </script>
 <div class="w3-border">
 <div class="w3-bar w3-theme">
