@@ -87,7 +87,7 @@
       }
       ]
    },
-{
+  {
     "Key" : "LOGEMENTS_3",
     "Categorie" : "LOG",
     "xLabel" : "Annees",
@@ -119,7 +119,7 @@
       }
     ]
    },
-    {
+  {
     "Key" : "TAILLE_DES_MENAGES_2",
     "Categorie" : "POP",
     "xLabel" : "Annees",
