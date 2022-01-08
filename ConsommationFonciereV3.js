@@ -6,6 +6,20 @@ select_message  = "Sélectionner un territoire"
 default_message = "Sélectionner un territoire"
 no_postal = "-"
 
+dataset_cache = {}
+function get_dataset(dataset_id) {
+    console.log("get_dataset Cached : "+dataset_id);
+    if (dataset_id in dataset_cache) { return dataset_cache[dataset_id] }
+    console.log("get_dataset  Loading: "+dataset_id);
+    json_s = "output/"+dataset_id+"_s.json";
+    console.log("json_s : "+json_s);
+    $.ajaxSetup({ async: false });
+    $.getJSON(json_s, function(json) { g_data_s = json ; console.log("g_data_s") ; console.log(g_data_s) });
+    dataset_cache[dataset_id] = g_data_s
+    return dataset_cache[dataset_id]
+}
+
+
 // Execute script in private context
 function evalInContext(script, context) {
    var js_expr = pythonToJavaScript(script);
@@ -154,17 +168,17 @@ function run_calculs(dataset, full = false, filter = "*"){
     console.log(dataset);
     for (const [key, value] of Object.entries(calculs)) {
         if ((value.Flag == "#") && (full == false)) {
-            console.log("# > Skipping : " + key);
+            // console.log("# > Skipping : " + key);
             continue
             }
         if (!((filter == "*") || (value.Source == filter) || (key == filter))) {
-            console.log("# > Skipping : " + key);
+            // console.log("# > Skipping : " + key);
             continue
             }
         js_expr = value.JavaScript ;
-        console.log("Calculs : " + key + " : " + js_expr + " =" );
+        // console.log("Calculs : " + key + " : " + js_expr + " =" );
         the_value = evalInContext(js_expr, dataset.total);
-        console.log(the_value);
+        // console.log(the_value);
         tkey = key.trim();
         dataset.total[tkey] = the_value;
         dataset.Data[tkey]  = [];
@@ -181,6 +195,7 @@ function run_calculs(dataset, full = false, filter = "*"){
     console.log(dataset.total);
     console.log(dataset.Data);
     console.log(dataset);
+    console.log("<<< run_calculs");
     return dataset
     }
 
@@ -191,7 +206,7 @@ function run_diagnostics(dataset, filter = "*"){
     console.log(diagnostics);
     for (const [key, value] of Object.entries(diagnostics)) {
         if (!((filter == "*") || (value.Source == filter) || (key == filter))) {
-            console.log("# > Skipping : " + key);
+            // console.log("# > Skipping : " + key);
             continue
             }
         js_expr = value.Test ;
@@ -209,7 +224,7 @@ function run_diagnostics(dataset, filter = "*"){
         diag["type"]          = value.Type ;
         diag["value"]         = the_value ;
         dataset.diag = dataset.Diagnostics.filter(el => !(el.key === key));
-        dataset.diag.push(diag)
+        dataset.Diagnostics.push(diag)
         }
     console.log("< run_diagnostics");
     console.log(dataset.diag);
@@ -357,16 +372,20 @@ const vm = Vue.createApp({
             this.data    = null ;
             this.diag    = null ;
             g_data_s     = null ;
-            $.ajaxSetup({ async: false });
-            $.getJSON(json_s, function(json) { g_data_s = json ; console.log("g_data_s") ; console.log(g_data_s) });
+            // $.ajaxSetup({ async: false });
+            // $.getJSON(json_s, function(json) { g_data_s = json ; console.log("g_data_s") ; console.log(g_data_s) });
+            g_data_s = get_dataset(this.entity)
             console.log(g_data_s);
             if (! g_data_s) {
                 this.message = "Donnees non-disponibles."
                 return
                 }
             g_data_s.total.scen = "scen0"
+            console.log("Doing run_calculs : ");
             g_data_s = run_calculs(g_data_s, full = true, filter = "*");
+            console.log("Done run_calculs : ");
             g_data_s = run_diagnostics(g_data_s, filter = "*");
+            console.log("Done run_diagnostics : ");
             this.data_s = g_data_s;
             this.ds     = this.data_s.total;
             this.data   = this.data_s.Data;
@@ -1489,116 +1508,6 @@ vm.component('table-stat', {
   `
 })
 
-vm.component('calculette-color', {
-  props: ['titre' , 'valeur', 'val_depart', 'annee_depart', 'val_arrivee', 'annee_arrivee', 'taux_de_croissance'   ],
-    data() {
-        return {
-                loan: {
-                  principal: 300000,
-                  interest: .0299,
-                  compoundingEvery: 12,
-                  timeYears: 15,
-                  payment: 0,
-                  total: 0,
-                  totalInterest: 0,
-                  l: 0,
-                  r: 0 }
-            }
-      },
-    methods : {
-            calc: function () {
-              this.loan.l = this.loan.principal * (1 + this.loan.interest / this.loan.compoundingEvery) ** (this.loan.compoundingEvery * this.loan.timeYears);
-              this.loan.r = ((1 + this.loan.interest / this.loan.compoundingEvery) ** (this.loan.compoundingEvery * this.loan.timeYears) - 1) / (this.loan.interest / this.loan.compoundingEvery);
-              this.loan.payment = Math.round(this.loan.l / this.loan.r * 100) / 100;
-              this.loan.total = Math.round(this.loan.payment * this.loan.compoundingEvery * this.loan.timeYears * 100) / 100;
-              this.loan.totalInterest = Math.round((this.loan.total - this.loan.principal) * 100) / 100;
-            },
-            formatPrice(value) {
-              let val = (value / 1).toFixed(2);
-              return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }
-      },
-  template: `
-<section class="hero is-info">
-<div class="hero-body">
-    <div class="container">
-      <h1 class="title">
-        Evaluez les besoins en logements de votre territoire !
-      </h1>
-      <h2 class="subtitle">
-        par France Nature Environement & le Gadseca
-      </h2>
-    </div>
-  </div>
-</section>
-<div class="container">
-    <p class="ins">
-    Enter your values to see your monthly payment, and grand total, and interest paid.
-    </p>
-      <div class="columns">
-        <div class="column">
-            <label>Principal Loan Amount</label>
-            <input class="input" type="number" v-on:blur="calc" v-model.number="loan.principal">
-        </div>
-        <div class="column">
-            <label>Interest Rate</label>
-            <input class="input" type="text" v-on:blur="calc" v-model.number="loan.interest">
-        </div>
-        <div class="column">
-            <label>Time in Years</label>
-            <input class="input" type="number" v-on:blur="calc" v-model.number="loan.timeYears">
-        </div>
-        <div class="column">
-            <label>Compounded (months)</label>
-            <input class="input" type="number" v-on:blur="calc" v-model.number="loan.compoundingEvery">
-        </div>
-      </div>
-    <button class="button is-info" v-on:click="calc">Compute</button>
-
-    <div class="columns">
-      <div class="column">
-        <div class="notification is-success">
-          <h3>Monthly Payment</h3>
-          <p>{{ formatPrice(loan.payment) }}</p>
-        </div>
-      </div>
-      <div class="column">
-        <div class="notification is-warning">
-        <h3>Grand Total</h3>
-        <p>{{ formatPrice(loan.total) }}</p>
-        </div>
-      </div>
-      <div class="column">
-        <div class="notification is-danger">
-        <h3>Total Interest</h3>
-        <p>{{ formatPrice(loan.totalInterest) }}</p>
-        </div>
-      </div>
-</div>
-
-<div class="notification">
-<h2 class="title">
-  Compound Interest Formula
-</h2>
-<p>
-    principal ( 1 + <sup>interest </sup> / <sub> compounded </sub>)
-    <sup>compounded * time </sup> =
-    <sup>payment [ ( 1 + <sup>interest</sup> / <sub> compounded </sub>) <sup>compounded * time</sup> - 1 ] </sup> / <sub> <sup>interest</sup> / <sub> compounded </sub> </sub>
-</p>
-<p>
-    {{ loan.principal }} ( 1 + <sup>{{ loan.interest }}</sup> / <sub> {{ loan.compoundingEvery }} </sub>)
-    <sup>{{ loan.compoundingEvery }} * {{ loan.timeYears }}</sup> =
-    <sup>payment [ ( 1 + <sup>{{ loan.interest }}</sup> / <sub> {{ loan.compoundingEvery }} </sub>) <sup>{{ loan.compoundingEvery }} * {{ loan.timeYears }}</sup> - 1 ] </sup> / <sub> <sup>{{ loan.interest }}</sup> / <sub> {{ loan.compoundingEvery }} </sub> </sub>
-    <br>
-    {{ loan.l }} = payment( {{ loan.r }} )
-    <br>
-    {{ loan.payment }} = payment
-</p>
-</div>
-</div>
-`
-})
-
 vm.component('rapport-iframe', {
     props:['url'],
     data(){
@@ -1616,7 +1525,6 @@ vm.component('rapport-iframe', {
     template: '<iframe class="w3-container" :src="url"  height="1200" />'
 });
 
-
 vm.mount('#app');
 
 function onPageLoaded() {
@@ -1624,19 +1532,11 @@ function onPageLoaded() {
   console.log("onPageLoaded : " + queryString);
 }
 
-
-// https://www.w3schools.com/w3css/w3css_color_fashion.asp
-
-function transparentize(value, opacity) {
-  var alpha = opacity === undefined ? 0.5 : 1 - opacity;
-  return colorLib(value).alpha(alpha).rgbString();
-}
-
 google.charts.load('current', {'packages':['corechart']});
-// google.charts.setOnLoadCallback(drawChart);
 
 function chartsUpdate(ds) {
 
+    // https://www.w3schools.com/w3css/w3css_color_fashion.asp
     theme_color             = "#008080" ; // teal
     res_principales_color   = '#00A170' ;
     res_secondaires_color   = '#2AA9DB' ;
@@ -1650,9 +1550,9 @@ function chartsUpdate(ds) {
     border_Color     = "#006e6d" ;
     background_Color = "#56C6A9" ; //"#99ffff" ;
 
-
     // Production et Besoins en Logements Plotly
     $('#logementsPlotlyChartContainer').html('');
+    $('#logementsPlotlyChartContainer2').html('');
     if (ds) {
 
         offset = ds.LOG_COMMENCES_2010 * 2
@@ -1661,33 +1561,34 @@ function chartsUpdate(ds) {
         offset_construits = ( ds.LOG_COMMENCES_2010 + ds.LOG_COMMENCES_2011 + ds.LOG_COMMENCES_2012) / 3 * 5
         if (ds.NOUV_LOG_0813 > offset_construits) { offset_construits = ds.NOUV_LOG_0813 }
         if (offset_construits < 0) { offset_construits = 0 }
+
         var data = [
         {
             name   : "Résidences Principales des ménages - Historique",
             mode   : 'lines',
             line: {shape: 'spline', dash: 'solid', width: 3, color : res_principales_color },
             x : [2008, 2013, 2018, 2020],
-            y : [ds.P08_RP-ds.P08_RP,
-                 ds.P13_RP-ds.P08_RP,
-                 ds.P18_RP-ds.P08_RP,
-                 ds.LOG_2020-ds.P08_RP],
+            y : [ds.P08_RP   - ds.P08_RP,
+                 ds.P13_RP   - ds.P08_RP,
+                 ds.P18_RP   - ds.P08_RP,
+                 ds.LOG_2020 - ds.P08_RP],
         },
         {
             name   : "Résidences Principales des ménages - Projection des Besoins",
             mode: 'lines',
             line: {shape: 'spline', dash: 'dot', width: 3, color : res_principales_color },
             x : [2020, 2030],
-            y : [ds.LOG_2020-ds.P08_RP,
-                 ds.LOG_2030-ds.P08_RP],
+            y : [ds.LOG_2020 - ds.P08_RP,
+                 ds.LOG_2030 - ds.P08_RP],
         },
         {
             name   : "Résidences Secondaires + Vacantes",
             mode: 'lines',
             line: {shape: 'spline', dash: 'solid', width: 3, color : log_sec_vac_color},
             x : [2008, 2013, 2018],
-            y : [ds.P08_RSECOCC-ds.P08_RSECOCC+ds.P08_LOGVAC-ds.P08_LOGVAC,
-                 ds.P13_RSECOCC-ds.P08_RSECOCC+ds.P13_LOGVAC-ds.P08_LOGVAC,
-                 ds.P18_RSECOCC-ds.P08_RSECOCC+ds.P18_LOGVAC-ds.P08_LOGVAC],
+            y : [ds.P08_RSECOCC - ds.P08_RSECOCC + ds.P08_LOGVAC - ds.P08_LOGVAC,
+                 ds.P13_RSECOCC - ds.P08_RSECOCC + ds.P13_LOGVAC - ds.P08_LOGVAC,
+                 ds.P18_RSECOCC - ds.P08_RSECOCC + ds.P18_LOGVAC - ds.P08_LOGVAC],
         },
         {
             name   : "Résidences Principales + Secondaires + Vacantes",
@@ -1719,18 +1620,7 @@ function chartsUpdate(ds) {
 
 /*
       {
-            name : "Logements Construits 66",
-            mode: 'lines',
-            line: {shape: 'spline', dash: 'solid', width: 6, color : "blue"},
-            x : [2008, 2010, 2013, 2016, 2020],
-            y : [0 ,
-                 offset + ds.LOG_COMMENCES_2010 ,
-                 offset + ds.LOG_COMMENCES_2010 + ds.LOG_COMMENCES_2011 + ds.LOG_COMMENCES_2012,
-                 offset + ds.NB_LGT_TOT_COMMENCES_1316,
-                 offset + ds.NB_LGT_TOT_COMMENCES_1316 + ds.NB_LGT_TOT_COMMENCES_1721]
-      },
-      {
-            name : "Logements Construits 33",
+            name : "Logements Construits",
             mode: 'lines',
             line: {shape: 'spline', dash: 'dot', width: 4, color : log_construits_color},
             x : [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019],
@@ -1780,8 +1670,6 @@ function chartsUpdate(ds) {
                       xanchor:"right",
                       x:1
                     },
-          xaxis0: {range: [40, 160], title: "Square Meters"},
-          yaxis0: {range: [5, 16],   title: "Price in Millions"},
           title : {
               font : { color : theme_color } ,
               text: "<b>Logements sur "+ ds.LIBELLE + "</b>"
@@ -1795,6 +1683,7 @@ function chartsUpdate(ds) {
 
     // Répartition des types de Logements en 2018
     $('#typeLogGoogleChartContainer').html('');
+    $('#typeLogGoogleChartContainer2').html('');
     if (ds) {
         var data = google.visualization.arrayToDataTable([
           ['Répartition des Logements sur ' + ds.LIBELLE, 'Logements'],
@@ -1824,6 +1713,7 @@ function chartsUpdate(ds) {
 
     // Evolution de la Répartition des types de Logements entre 2008 et 2018
     $('#typeLogPlotlyChartContainer').html('');
+    $('#typeLogPlotlyChartContainer2').html('');
     if (ds) {
 
         var trace1 = {

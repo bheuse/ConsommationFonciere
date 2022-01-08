@@ -1121,44 +1121,48 @@ class DataStore():
             self.data_frame.drop("__builtins__", axis=1,inplace=True)
         print_green("> Saving Data   : "+self.get_fullname())
         # DF TO EXCEL
-        print_yellow("  - Saving Data : "+self.get_fullname()+ ".xlsx")
-        writer = pd.ExcelWriter(output_dir + self.get_fullname() + ".xlsx")
-        self.data_frame.to_excel(writer, "Data")
-        pivot = self.data_frame.transpose()
-        pivot.to_excel(writer, "Pivot")
-        diag_df = self.data_frame.from_dict(self.diagnostics)
-        diag_df.to_excel(writer, "Diagnotics")
-        writer.save()
-        writer.close()
+        if (not FAST):
+            print_yellow("  - Saving Data : "+self.get_fullname()+ ".xlsx")
+            writer = pd.ExcelWriter(output_dir + self.get_fullname() + ".xlsx")
+            self.data_frame.to_excel(writer, "Data")
+            pivot = self.data_frame.transpose()
+            pivot.to_excel(writer, "Pivot")
+            diag_df = self.data_frame.from_dict(self.diagnostics)
+            diag_df.to_excel(writer, "Diagnotics")
+            writer.save()
+            writer.close()
         # DF TO CSV
-        print_yellow("  - Saving Data : "+self.get_fullname()+ ".csv")
-        self.data_frame.to_csv(output_dir + self.get_fullname() + ".csv", sep=',')
-        # DF TO JSON
-        ## _d.json
-        self.data_frame.to_csv(output_dir + self.get_fullname() + "_d.json", sep=',')
-        with open(output_dir + self.get_fullname() + "_d.json", 'w') as f:
-            global_context["JSON_DIAGNOSTICS"] = " { \"Diagnostic\" : "+to_json(jsonc.loads(jsonc.dumps(self.diagnostics)), indent=4) + "}"
-            f.write(global_context["JSON_DIAGNOSTICS"])
+        if (not FAST):
+            print_yellow("  - Saving Data : "+self.get_fullname()+ ".csv")
+            self.data_frame.to_csv(output_dir + self.get_fullname() + ".csv", sep=',')
+            # DF TO JSON
+            ## _d.json
+            self.data_frame.to_csv(output_dir + self.get_fullname() + "_d.json", sep=',')
+            with open(output_dir + self.get_fullname() + "_d.json", 'w') as f:
+                global_context["JSON_DIAGNOSTICS"] = " { \"Diagnostic\" : "+to_json(jsonc.loads(jsonc.dumps(self.diagnostics)), indent=4) + "}"
+                f.write(global_context["JSON_DIAGNOSTICS"])
         ## _m.json
-        print_yellow("  - Saving Data : "+self.get_fullname()+ "_m.json")
-        all = {}
-        for name, values in self.data_frame.iteritems():
-            all[name] = {}
-            for name2, value2 in values.iteritems():
-                all[name][name2] = value2
-        with open(output_dir + self.get_fullname() + "_m.json", 'w') as f:
-            global_context["JSON_DATA_SET_M"] = to_json(all, indent=4)
-            f.write(global_context["JSON_DATA_SET_M"])
+        if (not FAST):
+            print_yellow("  - Saving Data : "+self.get_fullname()+ "_m.json")
+            all = {}
+            for name, values in self.data_frame.iteritems():
+                all[name] = {}
+                for name2, value2 in values.iteritems():
+                    all[name][name2] = value2
+            with open(output_dir + self.get_fullname() + "_m.json", 'w') as f:
+                global_context["JSON_DATA_SET_M"] = to_json(all, indent=4)
+                f.write(global_context["JSON_DATA_SET_M"])
         ## _c.json
-        print_yellow("  - Saving Data : "+self.get_fullname()+ "_c.json")
-        with open(output_dir + self.get_fullname() + "_c.json", 'w') as f:
-            data_c = self.data_frame.fillna('').to_dict(orient='index')
-            data_c["Data"] = all
-            data_c["Diagnostics"] = self.diagnostics
-            global_context["JSON_DATA_SET_C"] = self.data_frame.to_dict(orient='index')
-            # global_context["JSON_DATA_SET_C"] = to_json(jsonc.loads(self.data_frame.to_json(orient='index')), indent=4)
-            # f.write(global_context["JSON_DATA_SET_C"])
-            f.write(to_json(data_c, indent=4))
+        if (not FAST):
+            print_yellow("  - Saving Data : "+self.get_fullname()+ "_c.json")
+            with open(output_dir + self.get_fullname() + "_c.json", 'w') as f:
+                data_c = self.data_frame.fillna('').to_dict(orient='index')
+                data_c["Data"] = all
+                data_c["Diagnostics"] = self.diagnostics
+                global_context["JSON_DATA_SET_C"] = self.data_frame.to_dict(orient='index')
+                # global_context["JSON_DATA_SET_C"] = to_json(jsonc.loads(self.data_frame.to_json(orient='index')), indent=4)
+                # f.write(global_context["JSON_DATA_SET_C"])
+                f.write(to_json(data_c, indent=4))
         ## _s.json
         print_yellow("  - Saving Data : "+self.get_fullname()+ "_s.json")
         self.data_frame.to_csv(output_dir + self.get_fullname() + "_s.json", sep=',')
@@ -2463,13 +2467,13 @@ def ftp_push_file(filename):
 
 def ftp_push_files():
     global FAST
-    filelist = ["input/Configuration.xlsx",     "input/plots.json",
-                "output/select.json",
+    filelist = ["input/plots.json",             "output/select.json",
                 "output/calculations.json",     "output/datametrics.json",  "output/diagnostics.json",
-                "ConsommationFonciereV3.html",  "ConsommationFonciereV3.js"
+                "index.html",  "ConsommationFonciereV3.html",  "ConsommationFonciereV3.js"
                ]
     if not FAST:
         filelist.extend([
+                "input/Configuration.xlsx",
                 "index.html",
                 "Header.png", "Body.png",
                 "output/france.json",
@@ -2477,14 +2481,12 @@ def ftp_push_files():
                 "ConsommationFonciere.py",
                 "ConsommationFonciere.html",    "ConsommationFonciere.js",
                 "ConsommationFonciereV2.html",  "ConsommationFonciereV2.js",
-                "input/report_template.html",   "input/tracker_template.html",
                 "input/Legend_Logements.png",   "input/CommentCaMarche.png",
                 "input/Densite.png",            "input/Densite_1.jpg",
                 "input/Densite_2.jpg",          "input/Densite_3.jpg",
                 "input/Densite_4.jpg",          "input/Densite_5.png",
                 "input/Densite_6.jpg",          "input/Densite_7.png",
-                "input/Gadseca-Logo-BIG.png",   "input/Gadseca-Logo.png",
-                "input/Gadseca_50Ans.jpg",      "input/Gadseca_Logo.png",
+                "input/Gadseca-Logo.png",       "input/Gadseca_50Ans.jpg",
                 "input/Logo2-Vert-FV.png",      "input/Logo2-Vert.png",
                 "input/Logo3-Color-FV.png",     "input/Logo3-Color.png",
                 "input/CartePaca1.jpg",         "input/CartePaca2.png",

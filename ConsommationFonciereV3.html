@@ -86,7 +86,7 @@
     <!-- Utilities -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
-    <script type="module"> import kurkleColor from 'https://cdn.skypack.dev/@kurkle/color'; </script>
+    <script src="https://cdn.jsdelivr.net/npm/danfojs@0.3.3/lib/bundle.min.js"></script>
     <!-- Chartjs Charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
     <script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
@@ -115,6 +115,8 @@
     <i onclick="w3_open()" class="fa fa-bars w3-xlarge w3-button w3-theme"></i>
     <div class="w3-center"><h4>Vigi Foncier</h4>
         <h1 class="w3-xxxlarge w3-animate-bottom">Consommation Fonciere par France Nature Environnement</h1>
+    Consultez les données de votre territoire et planifiez votre urbanisation
+    en accord avec l'objectif Zéro Artificialisation Nette de la loi Climat et Résilience.
           <div class="columns">
              <div class="column"></div>
              <div class="column">
@@ -1075,7 +1077,7 @@ function openTabOzan(evt, tabName) {
      </div>
 </div>
 <div id="ObjectifZan"       class="w3-container city w3-animate-opacity">
-     <h2>Test - Objectif Zero Artificialisation Nette.</h2>
+     <h2>Objectif Zero Artificialisation Nette.</h2>
      <div class="w3-container">
         <table-ozan ref="ObjectifZan"> </table-ozan>
      </div>
@@ -1173,24 +1175,22 @@ function openTabOzan(evt, tabName) {
     </div>
 </div>
 
-<!-- Tracker -->
+<!-- Tracker
 <div  v-if="this.data_s != null">
         <div class="w3-container w3-theme-dark w3-mobile w3-center ">
         <iframe frameBorder="0" height="190" width="700" :src="ds.GOOGLE_TRACKER"></iframe>
         </div>
 </div>
+-->
 
-
-<!-- Rapport Complet(now in Tracker)
+<!-- Rapport Complet(was in Tracker) -->
 <div class="w3-teal w3-center">
-    <h3 class="w3-teal w3-center">${LIBELLE}</h3>
     <h2 class="w3-teal w3-center">Vigi Foncier - Un site du Gadseca</h2>
     <img class="w3-center w3-image"
           src="input/Gadseca_50Ans.jpg"
           alt="Gadseca Logo"
           style="display: block; margin-left: auto; margin-right: auto; width: 600px; height: auto;">
 </div>
--->
 
 
 </footer>
@@ -1209,11 +1209,11 @@ function openTabOzan(evt, tabName) {
 
 <div  v-if="this.dataset != null">
 <h3 v-if="titre"> {{titre}}</h3>
-<h4 class="w3-left">Les Formules de la Federation des SCoTs et de l'Union Nationale des Aménageurs
-                    avec les données les plus récentes et pertinentes au territoire.</h4>
+<h4 class="w3-left">Les Formules de la Federation des SCoT et de l'Union Nationale des Aménageurs
+                    avec les données les plus récentes, et pertinentes au territoire.</h4>
 <br>
 <br>
-<p>La Fédération Nationale des SCoT regroupe les structures porteuses de SCoT</p>
+<p>La Fédération Nationale des SCoT regroupe les structures porteuses de Shémas de Coherence Territoriale</p>
 <p>L'Union Nationale des Aménageurs est l'organisation des professionnels privés qui accompagnent les aménageurs dans leurs territoires.</p>
 <div>
 <div class="w3-border">
