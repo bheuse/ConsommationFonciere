@@ -6,6 +6,7 @@ select_message  = "Sélectionner un territoire"
 default_message = "Sélectionner un territoire"
 no_postal = "-"
 
+// Get with Cache
 dataset_cache = {}
 function get_dataset(dataset_id) {
     console.log("get_dataset Cached : "+dataset_id);
@@ -18,7 +19,6 @@ function get_dataset(dataset_id) {
     dataset_cache[dataset_id] = g_data_s
     return dataset_cache[dataset_id]
 }
-
 
 // Execute script in private context
 function evalInContext(script, context) {
@@ -87,7 +87,7 @@ function f_percent(part, full, rounding=1, suffix = "%", format = "") {
 
 function f_diff(after, before, format = "+") {
         // After = 200, Before = 100 => 100
-        // Adds format: format="+"   =>  +45%
+        // Adds format: format="+"   => +45
         var diff = after - before ;
         if (format.includes("+") && (diff>0)) return ("+"+diff.toString())
         return ""+diff.toString();
@@ -345,6 +345,13 @@ const vm = Vue.createApp({
         f_round(value, rounding=0)  {
             return (Math.round((value + Number.EPSILON) * (Math.pow(10,rounding))) / (Math.pow(10,rounding)))
         },
+        f_diff(after, before, format = "+") {
+            // After = 200, Before = 100 => 100
+            // Adds format: format="+"   => +45
+            var diff = after - before ;
+            if (format.includes("+") && (diff>0)) return ("+"+diff.toString())
+            return ""+diff.toString();
+        },
         f_percent(part, full, rounding=1, suffix = "%", format = "") {
             // Retourne formatted part in percent of full     Part = 90, Full = 200 => 45
             // Adds suffix: suffix="%"   =>   45%
@@ -378,6 +385,7 @@ const vm = Vue.createApp({
             console.log(g_data_s);
             if (! g_data_s) {
                 this.message = "Donnees non-disponibles."
+                chartsUpdate(this.ds);
                 return
                 }
             g_data_s.total.scen = "scen0"
@@ -538,9 +546,11 @@ const vm = Vue.createApp({
 })
 
 vm.component('diagnostics', {
-  props: ['diags' , 'type' , 'categorie'  ],
+  props: ['diags' , 'type' , 'categorie', 'titre' ],
   template: `
     <div class="diagnostics">
+    <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
+    <h3>Diagnostics {{ titre }}</h3></div>
     <div v-for='diag in diags' >
          <div v-if="( type == 'ALL' || type == 'NOTE')  && diag.type == 'NOTE'" >
              <div v-if="categorie == 'ALL' || categorie == diag.categorie" >
@@ -600,6 +610,7 @@ vm.component('diagnostics', {
          </div>
     </div>
   </div>
+  <br>
   `
 })
 
@@ -653,35 +664,39 @@ vm.component('calculette-taux', {
         },
       },
     template: `
+            <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
             <h3 v-if="titre"> {{titre}}</h3>
             <h3 v-else>Calcul de Taux, selon l'evolution :</h3>
+            </div>
             <form v-if="valeur" onsubmit="return false">
-                Annee de Depart :  <input class="input" id="tx_annee_depart"   name="tx_annee_depart"    type="number" step="any" placeholder="Annee de Depart"  v-on:blur="recalc_taux" v-model.number="calculette_taux.annee_depart"> <br>
-                {{valeur}} de Depart : <input class="input" id="tx_val_depart"     name="tx_val_depart"      type="number" step="any" placeholder="Valeur de Depart" v-on:blur="recalc_taux" v-model.number="calculette_taux.val_depart"> <br>
-                Annee d'Arrivee :  <input class="input" id="tx_annee_arrivee"  name="tx_annee_arrivee"   type="number" step="any" placeholder="Annee d'Arrivee"  v-on:blur="recalc_taux" v-model.number="calculette_taux.annee_arrivee"><br>
-                {{valeur}} d'Arrivee : <input class="input" id="tx_val_arrivee"    name="tx_val_arrivee"     type="number" step="any" placeholder="Valeur d'Arrivee" v-on:blur="recalc_taux" v-model.number="calculette_taux.val_arrivee"><br>
-                <br>
                 <div class="columns">
                     <div class="column">
+                         Année de Départ :  <input class="input" id="tx_annee_depart"   name="tx_annee_depart"    type="number" step="any" placeholder="Année de Départ"  v-on:blur="recalc_taux" v-model.number="calculette_taux.annee_depart"> <br>
+                        {{valeur}} de Départ : <input class="input" id="tx_val_depart"     name="tx_val_depart"      type="number" step="any" placeholder="Valeur de Départ" v-on:blur="recalc_taux" v-model.number="calculette_taux.val_depart"> <br>
+                        <br>
                         <button class="button is-info" v-on:click="recalc_taux()"> Taux de Croissance Annuel : {{ calculette_taux.taux_de_croissance }} % </button>
+                        <br>
+                        <br>
+                        <div class="notification is-success">
+                              <p>{{valeur}} en {{ calculette_taux.annee_arrivee }} : {{ calculette_taux.val_arrivee }} </p>
+                              <p>Taux de Croissance : {{ calculette_taux.taux_de_croissance }} % / an </p>
+                        </div>
                     </div>
                     <div class="column">
+                        Année d'Arrivée :  <input class="input" id="tx_annee_arrivee"  name="tx_annee_arrivee"   type="number" step="any" placeholder="Annee d'Arrivée"  v-on:blur="recalc_taux" v-model.number="calculette_taux.annee_arrivee"><br>
+                        {{valeur}} d'Arrivée : <input class="input" id="tx_val_arrivee"    name="tx_val_arrivee"     type="number" step="any" placeholder="Valeur d'Arrivée" v-on:blur="recalc_taux" v-model.number="calculette_taux.val_arrivee"><br>
+                        <br>
                         <button class="button is-info" v-on:click="reset()"> Reset </button>
+                        <br>
+                        <br>
+                        <div class="notification is-warning">
+                             <p>Evolution {{ calculette_taux.annee_depart }} - {{ calculette_taux.annee_arrivee }} : {{ calculette_taux.augmentation }}</p>
+                             <p>Par an : {{ calculette_taux.augmentation_an }}</p>
+                        </div>
                     </div>
                 </div>
             </form>
             <br>
-            <div class="notification is-success">
-                  <p>{{valeur}} en {{ calculette_taux.annee_arrivee }} : {{ calculette_taux.val_arrivee }} </p>
-                  <p>Taux de Croissance : {{ calculette_taux.taux_de_croissance }} % / an </p>
-            </div>
-            <div class="notification is-warning">
-                <p>Evolution {{ calculette_taux.annee_depart }} - {{ calculette_taux.annee_arrivee }} : {{ calculette_taux.augmentation }}</p>
-                <p>Par an : {{ calculette_taux.augmentation_an }}</p>
-            </div>
-            <!-- <div class="notification is-danger">
-                <p>Par an : {{ calculette_taux.augmentation_an }}</p>
-            </div> -->
   `
 })
 
@@ -734,35 +749,38 @@ vm.component('calculette-evol', {
         },
       },
   template: `
+            <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
             <h3 v-if="titre"> {{titre}}</h3>
             <h3 v-else>Evolution de la Valeur selon le taux : </h3>
+            </div>
             <form>
-                Annee de Depart :  <input class="input" id="annee_depart"    name="annee_depart"    type="number" step="any" placeholder="Annee de Depart"  v-on:blur="recalc_evol"  v-model.number="calculette_evol.annee_depart"> <br>
-                {{valeur}} de Depart : <input class="input" id="val_depart"      name="val_depart"      type="number" step="any" placeholder="Valeur de Depart" v-on:blur="recalc_evol"  v-model.number="calculette_evol.val_depart"> <br>
-                Annee d'Arrivee :  <input class="input" id="annee_arrivee"   name="annee_arrivee"   type="number" step="any" placeholder="Annee d'Arrivee"  v-on:blur="recalc_evol"  v-model.number="calculette_evol.annee_arrivee"><br>
-                Taux de Croissance Annuel (en %) : <input class="input" id="taux_croissance" name="taux_croissance" type="number" step="any" placeholder="Taux de Croissance" v-on:blur="recalc_evol" v-model.number="calculette_evol.taux_de_croissance"><br>
-                <br>
                 <div class="columns">
                     <div class="column">
-                        <button class="button is-info" v-on:click="recalc_evol()"> {{valeur}} d'Arrivee : {{ calculette_evol.val_arrivee }}</button>
+                        Année de Départ :  <input class="input" id="annee_depart"    name="annee_depart"    type="number" step="any" placeholder="Année de Départ"  v-on:blur="recalc_evol"  v-model.number="calculette_evol.annee_depart"> <br>
+                        {{valeur}} de Départ : <input class="input" id="val_depart"      name="val_depart"      type="number" step="any" placeholder="Valeur de Départ" v-on:blur="recalc_evol"  v-model.number="calculette_evol.val_depart"> <br>
+                        <br>
+                        <button class="button is-info" v-on:click="recalc_evol()"> {{valeur}} d'Arrivée : {{ calculette_evol.val_arrivee }}</button>
+                        <br>
+                        <br>
+                        <div class="notification is-success">
+                             <p>{{valeur}} en {{ calculette_evol.annee_arrivee }} : {{ calculette_evol.val_arrivee }} </p>
+                             <p>Taux de Croissance : {{ calculette_evol.taux_de_croissance }} % / an </p>
+                         </div>
                     </div>
                     <div class="column">
+                        Année d'Arrivée :  <input class="input" id="annee_arrivee"   name="annee_arrivee"   type="number" step="any" placeholder="Annee d'Arrivee"  v-on:blur="recalc_evol"  v-model.number="calculette_evol.annee_arrivee"><br>
+                        Taux de Croissance Annuel (en %) : <input class="input" id="taux_croissance" name="taux_croissance" type="number" step="any" placeholder="Taux de Croissance" v-on:blur="recalc_evol" v-model.number="calculette_evol.taux_de_croissance"><br>
+                        <br>
                         <button class="button is-info" v-on:click="reset()"> Reset </button>
+                        <br>
+                        <br>
+                        <div class="notification is-warning">
+                            <p>Evolution {{ calculette_evol.annee_depart }} - {{ calculette_evol.annee_arrivee }} : {{ calculette_evol.augmentation }}</p>
+                            <p>Par an : {{ calculette_evol.augmentation_an }}</p>
+                        </div>
                     </div>
                 </div>
             </form>
-            <br>
-            <div class="notification is-success">
-                  <p>{{valeur}} en {{ calculette_evol.annee_arrivee }} : {{ calculette_evol.val_arrivee }} </p>
-                  <p>Taux de Croissance : {{ calculette_evol.taux_de_croissance }} % / an </p>
-            </div>
-            <div class="notification is-warning">
-                <p>Evolution {{ calculette_evol.annee_depart }} - {{ calculette_evol.annee_arrivee }} : {{ calculette_evol.augmentation }}</p>
-                <p>Par an : {{ calculette_evol.augmentation_an }}</p>
-            </div>
-            <!-- <div class="notification is-danger">
-                <p>Par an : {{ calculette_evol.augmentation_an }}</p>
-            </div> -->
   `
 })
 
@@ -862,7 +880,7 @@ vm.component('michel-ozan', {
         return {
             dataset : g_data_s,
             loaded : 0 ,
-            titre : "L'outil ultime pour valider l'Objectif Zero Artificialisation Nette sur votre Territoire." ,
+            titre : "Outil pour valider l'objectif Zero Artificialisation Nette sur un Territoire." ,
             scen   : "scen0" ,
             scen0 : {
                evol_pop : 0 ,
@@ -1508,23 +1526,6 @@ vm.component('table-stat', {
   `
 })
 
-vm.component('rapport-iframe', {
-    props:['url'],
-    data(){
-        return {
-            url :'output/DEPT_Alpes-Maritimes_06.html',
-        }
-    },
-    methods:{
-        updatePage(page){
-            // page = "output/"+entity+".html" ;
-            console.log("updatePage "+page);
-            this.url = page
-        }
-    },
-    template: '<iframe class="w3-container" :src="url"  height="1200" />'
-});
-
 vm.mount('#app');
 
 function onPageLoaded() {
@@ -1532,440 +1533,463 @@ function onPageLoaded() {
   console.log("onPageLoaded : " + queryString);
 }
 
+// ################################
+// Plots
+// ################################
+
 google.charts.load('current', {'packages':['corechart']});
+
+// https://www.w3schools.com/w3css/w3css_color_fashion.asp
+theme_color             = "#008080" ; // teal
+res_principales_color   = '#00A170' ;
+res_secondaires_color   = '#2AA9DB' ;
+res_vacantes_color      = '#7E7E7E' ;
+logements_color         = '#8E44AD' ;
+log_sec_vac_color       = '#798EA4' ;
+res_principales_color   = '#00A170' ;
+log_construits_color    = '#61443A' ;
+log_sru_color           = '#E91E63' ;
+
+border_Color     = "#006e6d" ;
+background_Color = "#56C6A9" ; //"#99ffff" ;
+
+function chartRepartitionNouveauxLogements(ds, container) {
+    // Répartition des nouveaux Logements de 2008 a 2018
+    $('#'+container).html('');
+    if (ds=== null) { return ; }
+
+    var data = google.visualization.arrayToDataTable([
+      ['Répartition des Nouveaux Logements sur ' + ds.LIBELLE, 'Logements'],
+      ['Nouvelles Résidences Principales', (ds.P18_RP      - ds.P08_RP>0)      ? (ds.P18_RP - ds.P08_RP) : 0],
+      ['Nouvelles Résidences Secondaires', (ds.P18_RSECOCC - ds.P08_RSECOCC>0) ? (ds.P18_RSECOCC - ds.P08_RSECOCC) : 0],
+      ['Nouvelles Résidences Vacantes',    (ds.P18_LOGVAC  - ds.P08_LOGVAC>0)  ? (ds.P18_LOGVAC - ds.P08_LOGVAC) : 0 ]
+    ]);
+
+    var options = {
+      title:'Répartition des Nouveaux Logements sur ' + ds.LIBELLE,
+      is3D: true,
+      titleTextStyle: {
+           color: theme_color,
+        },
+      slices: {
+        0: { color: res_principales_color },
+        1: { color: res_secondaires_color },
+        2: { color: res_vacantes_color }
+      }
+    };
+
+    new google.visualization.PieChart(document.getElementById(container)).draw(data, options);
+}
+
+function chartProductionBesoinsLogements(ds, container) {
+    // Production et Besoins en Logements Plotly
+    $('#'+container).html('');
+    if (ds=== null) { return ; }
+
+    offset = ds.LOG_COMMENCES_2010 * 2
+    offset = (ds.P13_RP-ds.P08_RP+ds.P13_RSECOCC-ds.P08_RSECOCC+ds.P13_LOGVAC-ds.P08_LOGVAC ) / 5 * 2
+    if (offset < 0) { offset = 0 }
+    offset_construits = ( ds.LOG_COMMENCES_2010 + ds.LOG_COMMENCES_2011 + ds.LOG_COMMENCES_2012) / 3 * 5
+    if (ds.NOUV_LOG_0813 > offset_construits) { offset_construits = ds.NOUV_LOG_0813 }
+    if (offset_construits < 0) { offset_construits = 0 }
+
+    var data = [
+    {
+        name   : "Résidences Principales des ménages - Historique",
+        mode   : 'lines',
+        line: {shape: 'spline', dash: 'solid', width: 3, color : res_principales_color },
+        x : [2008, 2013, 2018, 2020],
+        y : [ds.P08_RP   - ds.P08_RP,
+             ds.P13_RP   - ds.P08_RP,
+             ds.P18_RP   - ds.P08_RP,
+             ds.LOG_2020 - ds.P08_RP],
+    },
+    {
+        name   : "Résidences Principales des ménages - Projection des Besoins",
+        mode: 'lines',
+        line: {shape: 'spline', dash: 'dot', width: 3, color : res_principales_color },
+        visible : 'legendonly',
+        x : [2020, 2030],
+        y : [ds.LOG_2020 - ds.P08_RP,
+             ds.LOG_2030 - ds.P08_RP],
+    },
+    {
+        name   : "Résidences Secondaires + Vacantes",
+        mode: 'lines',
+        line: {shape: 'spline', dash: 'solid', width: 3, color : log_sec_vac_color},
+        x : [2008, 2013, 2018],
+        y : [ds.P08_RSECOCC - ds.P08_RSECOCC + ds.P08_LOGVAC - ds.P08_LOGVAC,
+             ds.P13_RSECOCC - ds.P08_RSECOCC + ds.P13_LOGVAC - ds.P08_LOGVAC,
+             ds.P18_RSECOCC - ds.P08_RSECOCC + ds.P18_LOGVAC - ds.P08_LOGVAC],
+    },
+    {
+        name   : "Résidences Principales + Secondaires + Vacantes",
+        mode: 'lines',
+        line: {shape: 'spline', dash: 'solid', width: 6, color : logements_color},
+        x : [2008, 2013, 2018],
+        y : [ds.P08_RP - ds.P08_RP + ds.P08_RSECOCC - ds.P08_RSECOCC + ds.P08_LOGVAC - ds.P08_LOGVAC,
+             ds.P13_RP - ds.P08_RP + ds.P13_RSECOCC - ds.P08_RSECOCC + ds.P13_LOGVAC - ds.P08_LOGVAC,
+             ds.P18_RP - ds.P08_RP + ds.P18_RSECOCC - ds.P08_RSECOCC + ds.P18_LOGVAC - ds.P08_LOGVAC],
+    },
+  {
+        name : "Logements Construits",
+        mode: 'lines',
+        line: {shape: 'spline', dash: 'solid', width: 4, color : log_construits_color},
+        x : [2008, 2013, 2016, 2020],
+        y : [0, offset_construits ,
+             offset_construits + ds.NB_LGT_TOT_COMMENCES_1316,
+             offset_construits + ds.NB_LGT_TOT_COMMENCES_1316 + ds.NB_LGT_TOT_COMMENCES_1721]
+  },
+  {
+        name : "Indéterminées (Non-Affectés / Non-Vendues)",
+        mode: 'lines',
+        line: {shape: 'spline', dash: 'dot', width: 4, color : '#74248f'},
+        x : [2018, 2020],
+        y : [ds.P18_RP-ds.P08_RP+ds.P18_RSECOCC-ds.P08_RSECOCC+ds.P18_LOGVAC-ds.P08_LOGVAC ,
+             ds.NOUV_LOG_0813+ds.NB_LGT_TOT_COMMENCES_1316+ds.NB_LGT_TOT_COMMENCES_1721]
+  },
+  ];
+
+/*
+  {
+        name : "Logements Construits",
+        mode: 'lines',
+        line: {shape: 'spline', dash: 'dot', width: 4, color : log_construits_color},
+        x : [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019],
+        y : [0 , offset,
+             offset + ds.LOG_COMMENCES_2010 ,
+             offset + ds.LOG_COMMENCES_2010 + ds.LOG_COMMENCES_2011,
+             offset + ds.LOG_COMMENCES_2010 + ds.LOG_COMMENCES_2011 + ds.LOG_COMMENCES_2012,
+             offset + ds.LOG_COMMENCES_2010 + ds.LOG_COMMENCES_2011 + ds.LOG_COMMENCES_2012 + ds.LOG_COMMENCES_2013,
+             offset + ds.LOG_COMMENCES_1014,
+             offset + ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015,
+             offset + ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015 + ds.LOG_COMMENCES_2016,
+             offset + ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015 + ds.LOG_COMMENCES_2016 + ds.LOG_COMMENCES_2017,
+             offset + ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015 + ds.LOG_COMMENCES_2016 + ds.LOG_COMMENCES_2017 + ds.LOG_COMMENCES_2018,
+             offset + ds.LOG_COMMENCES_1019]
+  },
+     {
+            name : "Projection Logements Construits",
+            line: {shape: 'spline', dash: 'dot', width: 4, color : log_construits_color},
+            x : [2020, 2021],
+            y : [ds.NOUV_LOG_0813 + ds.NB_LGT_TOT_COMMENCES_1316 + ds.NB_LGT_TOT_COMMENCES_1721,
+                 ds.NOUV_LOG_0813 + ds.PROJ_LOG_REALISES_2021]
+     },
+*/
+
+    if ((ds.SRU_CARENCE_2020 != 0 ) || ((ds.NB_LGT_PRET_LOC_SOCIAL_1316 + ds.NB_LGT_PRET_LOC_SOCIAL_1721) != 0)) {
+      offset_sru = offset + ds.LOG_COMMENCES_2010 + ds.LOG_COMMENCES_2011 + ds.LOG_COMMENCES_2012
+      offset_sru = ds.NOUV_LOG_0813
+      offset_sru = offset_construits
+      if (offset_sru  < 0) { offset_sru = 0 }
+      data.push(
+         {
+            "Condition" : "(SRU_CARENCE_2020 != 0) or ((NB_LGT_PRET_LOC_SOCIAL_1316+ NB_LGT_PRET_LOC_SOCIAL_1721) != 0)",
+            name : "Logements Sociaux Construits",
+            mode: 'lines',
+            line: {shape: 'spline', dash: 'solid', width: 3, color : log_sru_color },
+            x : [2013, 2016, 2020],
+            y : [offset_sru ,
+                 offset_sru + ds.NB_LGT_PRET_LOC_SOCIAL_1316,
+                 offset_sru + ds.NB_LGT_PRET_LOC_SOCIAL_1316 + ds.NB_LGT_PRET_LOC_SOCIAL_1721]
+          })
+    }
+
+    // Define Layout
+    var layout = {
+      legend : {  yanchor:"bottom",
+                  y:-3.2,
+                  xanchor:"right",
+                  x:1
+                },
+      title : {
+          font : { color : theme_color } ,
+          text: "<b>Logements sur "+ ds.LIBELLE + "</b>"
+      }
+    };
+
+    // Display using Plotly
+    Plotly.newPlot(container,  data, layout);
+}
+
+function chartRepartitionTypesLogements(ds, container) {
+    // Répartition des types de Logements en 2018
+    $('#'+container).html('');
+    if (ds=== null) { return ; }
+
+    var trace1 = {
+      x: ["2008", "2013", "2018"],
+      y: [ds.P08_RP, ds.P13_RP, ds.P18_RP],
+      name: 'Residences Principales',
+      marker: { color: res_principales_color },
+      type: 'bar'
+    };
+
+    var trace2 = {
+      x: ["2008", "2013", "2018"],
+      y: [ds.P08_RSECOCC, ds.P13_RSECOCC, ds.P18_RSECOCC],
+      name: 'Residences Secondaires',
+      marker: { color: res_secondaires_color },
+      type: 'bar'
+    };
+
+    var trace3 = {
+      x: ["2008", "2013", "2018"],
+      y: [ds.P08_LOGVAC, ds.P13_LOGVAC, ds.P18_LOGVAC],
+      name: 'Residences Vacantes',
+      marker: { color: res_vacantes_color },
+      type: 'bar'
+    };
+
+    var data = [trace1, trace2, trace3];
+
+    // Define Layout
+    var layout = {
+      barmode: 'stack',
+      legend : {  yanchor:"bottom",
+                  y:-3.2,
+                  xanchor:"right",
+                  x:1
+                },
+      title : {
+          font : { color : theme_color } ,
+          text: "<b>Répartition des types de Logements sur "+ ds.LIBELLE + "</b>"
+      }
+    };
+
+    Plotly.newPlot(container, data, layout);
+}
+
+function chartConstructions(ds, container) {
+
+    // Graphique Constructions de Logements 2010-2019 (ChartJS)
+    $('#'+container).html('');
+    if (ds=== null) { return ; }
+
+    const data = {
+      labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019"],
+      datasets: [
+        {
+          label: "Logements Construits - Par an",
+          data: [ds.LOG_COMMENCES_2010, ds.LOG_COMMENCES_2011, ds.LOG_COMMENCES_2012, ds.LOG_COMMENCES_2013,
+                 ds.LOG_COMMENCES_2014, ds.LOG_COMMENCES_2015, ds.LOG_COMMENCES_2016, ds.LOG_COMMENCES_2017,
+                 ds.LOG_COMMENCES_2018, ds.LOG_COMMENCES_2019],
+          fill: false,
+          tension: 0.5,
+          borderDash: [5, 5],
+          borderColor: border_Color,
+          backgroundColor: background_Color,
+        },
+        {
+          label: "Logements Construits - Cumul",
+          data: [   ds.LOG_COMMENCES_2010 ,
+                    ds.LOG_COMMENCES_2010 + ds.LOG_COMMENCES_2011,
+                    ds.LOG_COMMENCES_2010 + ds.LOG_COMMENCES_2011 + ds.LOG_COMMENCES_2012,
+                    ds.LOG_COMMENCES_2010 + ds.LOG_COMMENCES_2011 + ds.LOG_COMMENCES_2012 + ds.LOG_COMMENCES_2013,
+                    ds.LOG_COMMENCES_1014,
+                    ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015,
+                    ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015 + ds.LOG_COMMENCES_2016,
+                    ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015 + ds.LOG_COMMENCES_2016 + ds.LOG_COMMENCES_2017,
+                    ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015 + ds.LOG_COMMENCES_2016 + ds.LOG_COMMENCES_2017+
+                    ds.LOG_COMMENCES_2018,
+                    ds.LOG_COMMENCES_1019],
+          fill: false,
+          tension: 0.5,
+          borderColor: border_Color,
+          backgroundColor: background_Color,
+        }
+      ]
+    };
+
+    const config = {
+      type: 'line',
+      data: data,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true, color: theme_color,
+            text: 'Logements Construits sur ' + ds.LIBELLE,
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: false, color: theme_color,
+              text: 'Annees'
+            }
+          },
+          y: {
+            title: {
+              display: true, color: theme_color,
+              text: 'Logements Construits'
+            },
+          }
+        },
+      },
+    };
+
+    $('<canvas id="'+container+'Canvas"></canvas>').appendTo($('#'+container));
+    var myChart = new Chart($("#"+container+"Canvas").get(0).getContext("2d"), config);
+}
+
+function chartTailleDesMenages(ds, container) {
+
+    // Graphique Taille des Ménages (ChartJS)
+    $('#'+container).html('');
+    if (ds=== null) { return ; }
+
+    const data = {
+      labels: ["2008", "2013", "2018", "2020", "2025", "2030", "2035", "2040"],
+      datasets: [
+        {
+          label: "Taille des Ménages - Historique",
+          data: [ds.TM_2008, ds.TM_2013, ds.TM_2018, ds.TM_2020, , , , ],
+          fill: false,
+          tension: 0.5,
+          borderColor: border_Color,
+          backgroundColor: background_Color,
+        },
+        {
+          label: "Taille des Ménages - Projetée",
+          data: [ , , , ds.TM_2020, (ds.TM_2020 + ds.TM_2030)/2 ,ds.TM_2030, (ds.TM_2030 + ds.TM_2040)/2 , ds.TM_2040],
+          fill: false,
+          tension: 0.5,
+          borderDash: [5, 5],
+          borderColor: border_Color,
+          backgroundColor: background_Color,
+        }
+      ]
+    };
+
+    const config = {
+      type: 'line',
+      data: data,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true, color: theme_color,
+            text: 'Taille des Ménages sur ' + ds.LIBELLE,
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: false, color: theme_color,
+              text: 'Annees'
+            }
+          },
+          y: {
+            suggestedMin: 1 , suggestedMax: 3 ,
+            title: {
+              display: true, color: theme_color,
+              text: 'Taille des Ménages' ,
+            },
+          }
+        },
+      },
+    };
+
+    $('<canvas id="'+container+'Canvas"></canvas>').appendTo($('#'+container));
+    var myChart = new Chart($("#"+container+"Canvas").get(0).getContext("2d"), config);
+}
+
+function chartGraphiquePopulation(ds, container) {
+
+    // Graphique Population (ChartJS)
+    $('#'+container).html('');
+    if (ds=== null) { return ; }
+
+    const data = {
+      labels: ["2008", "2013", "2018", "2020", "2025", "2030", "2035", "2040"],
+      datasets: [
+        {
+          label: "Population - Historique",
+          data: [ds.P08_POP, ds.P13_POP, ds.P18_POP, ds.POP_2020, , , , ],
+          fill: false,
+          tension: 0.5,
+          borderColor: border_Color,
+          backgroundColor: background_Color,
+        },
+        {
+          label: "Population - Projetée",
+          data: [ , , , ds.POP_2020, (ds.POP_2020 + ds.POP_2030)/2 ,ds.POP_2030, (ds.POP_2030 + ds.POP_2040)/2 , ds.POP_2040],
+          fill: false,
+          tension: 0.5,
+          borderDash: [5, 5],
+          borderColor: border_Color,
+          backgroundColor: background_Color,
+        }
+      ]
+    };
+
+    const config = {
+      type: 'line',
+      data: data,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true, color: theme_color,
+            text: 'Population sur ' + ds.LIBELLE,
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: false, color: theme_color,
+              text: 'Annees'
+            }
+          },
+          y: {
+            suggestedMin: ds.P08_POP * 0.9 , suggestedMax: ds.P08_POP * 1.1 ,
+            title: {
+              display: true, color: theme_color,
+              text: 'Population' ,
+            },
+          }
+        },
+      },
+    };
+
+    $('<canvas id="'+container+'Canvas"></canvas>').appendTo($('#'+container));
+    var myChart = new Chart($("#"+container+"Canvas").get(0).getContext("2d"), config);
+}
 
 function chartsUpdate(ds) {
 
-    // https://www.w3schools.com/w3css/w3css_color_fashion.asp
-    theme_color             = "#008080" ; // teal
-    res_principales_color   = '#00A170' ;
-    res_secondaires_color   = '#2AA9DB' ;
-    res_vacantes_color      = '#7E7E7E' ;
-    logements_color         = '#8E44AD' ;
-    log_sec_vac_color       = '#798EA4' ;
-    res_principales_color   = '#00A170' ;
-    log_construits_color    = '#61443A' ;
-    log_sru_color           = '#E91E63' ;
+    // Tab Constructions
+    chartProductionBesoinsLogements(ds,   'constructionsProductionBesoinsLogementsChartContainer')
+    chartConstructions(ds,                'constructionsConstructionsLogementsChartContainer')
 
-    border_Color     = "#006e6d" ;
-    background_Color = "#56C6A9" ; //"#99ffff" ;
+    // chartProductionBesoinsLogements(ds,   'logementsPlotlyChartContainer2')
+    // chartRepartitionTypesLogements(ds,    'typeLogPlotlyChartContainer2')
+    // chartConstructions(ds,                'constLogChartContainer')
 
-    // Production et Besoins en Logements Plotly
-    $('#logementsPlotlyChartContainer').html('');
-    $('#logementsPlotlyChartContainer2').html('');
-    if (ds) {
+    // Tab Population
+    chartTailleDesMenages(ds,             'populationTailleMenagesChartContainer')
+    chartGraphiquePopulation(ds,          'populationChartContainer')
 
-        offset = ds.LOG_COMMENCES_2010 * 2
-        offset = (ds.P13_RP-ds.P08_RP+ds.P13_RSECOCC-ds.P08_RSECOCC+ds.P13_LOGVAC-ds.P08_LOGVAC ) / 5 * 2
-        if (offset < 0) { offset = 0 }
-        offset_construits = ( ds.LOG_COMMENCES_2010 + ds.LOG_COMMENCES_2011 + ds.LOG_COMMENCES_2012) / 3 * 5
-        if (ds.NOUV_LOG_0813 > offset_construits) { offset_construits = ds.NOUV_LOG_0813 }
-        if (offset_construits < 0) { offset_construits = 0 }
+    // Tab Logements
+    chartRepartitionNouveauxLogements(ds, 'logementsRepartitionNouveauxLogementsChartContainer')
+    chartRepartitionTypesLogements(ds,    'logementsRepartitionTypesLogementsChartContainer')
 
-        var data = [
-        {
-            name   : "Résidences Principales des ménages - Historique",
-            mode   : 'lines',
-            line: {shape: 'spline', dash: 'solid', width: 3, color : res_principales_color },
-            x : [2008, 2013, 2018, 2020],
-            y : [ds.P08_RP   - ds.P08_RP,
-                 ds.P13_RP   - ds.P08_RP,
-                 ds.P18_RP   - ds.P08_RP,
-                 ds.LOG_2020 - ds.P08_RP],
-        },
-        {
-            name   : "Résidences Principales des ménages - Projection des Besoins",
-            mode: 'lines',
-            line: {shape: 'spline', dash: 'dot', width: 3, color : res_principales_color },
-            x : [2020, 2030],
-            y : [ds.LOG_2020 - ds.P08_RP,
-                 ds.LOG_2030 - ds.P08_RP],
-        },
-        {
-            name   : "Résidences Secondaires + Vacantes",
-            mode: 'lines',
-            line: {shape: 'spline', dash: 'solid', width: 3, color : log_sec_vac_color},
-            x : [2008, 2013, 2018],
-            y : [ds.P08_RSECOCC - ds.P08_RSECOCC + ds.P08_LOGVAC - ds.P08_LOGVAC,
-                 ds.P13_RSECOCC - ds.P08_RSECOCC + ds.P13_LOGVAC - ds.P08_LOGVAC,
-                 ds.P18_RSECOCC - ds.P08_RSECOCC + ds.P18_LOGVAC - ds.P08_LOGVAC],
-        },
-        {
-            name   : "Résidences Principales + Secondaires + Vacantes",
-            mode: 'lines',
-            line: {shape: 'spline', dash: 'solid', width: 6, color : logements_color},
-            x : [2008, 2013, 2018],
-            y : [ds.P08_RP - ds.P08_RP + ds.P08_RSECOCC - ds.P08_RSECOCC + ds.P08_LOGVAC - ds.P08_LOGVAC,
-                 ds.P13_RP - ds.P08_RP + ds.P13_RSECOCC - ds.P08_RSECOCC + ds.P13_LOGVAC - ds.P08_LOGVAC,
-                 ds.P18_RP - ds.P08_RP + ds.P18_RSECOCC - ds.P08_RSECOCC + ds.P18_LOGVAC - ds.P08_LOGVAC],
-        },
-      {
-            name : "Logements Construits",
-            mode: 'lines',
-            line: {shape: 'spline', dash: 'solid', width: 4, color : log_construits_color},
-            x : [2008, 2013, 2016, 2020],
-            y : [0, offset_construits ,
-                 offset_construits + ds.NB_LGT_TOT_COMMENCES_1316,
-                 offset_construits + ds.NB_LGT_TOT_COMMENCES_1316 + ds.NB_LGT_TOT_COMMENCES_1721]
-      },
-      {
-            name : "Indéterminées (Non-Affectés / Non-Vendues)",
-            mode: 'lines',
-            line: {shape: 'spline', dash: 'dot', width: 4, color : '#74248f'},
-            x : [2018, 2020],
-            y : [ds.P18_RP-ds.P08_RP+ds.P18_RSECOCC-ds.P08_RSECOCC+ds.P18_LOGVAC-ds.P08_LOGVAC ,
-                 ds.NOUV_LOG_0813+ds.NB_LGT_TOT_COMMENCES_1316+ds.NB_LGT_TOT_COMMENCES_1721]
-      },
-      ];
-
-/*
-      {
-            name : "Logements Construits",
-            mode: 'lines',
-            line: {shape: 'spline', dash: 'dot', width: 4, color : log_construits_color},
-            x : [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019],
-            y : [0 , offset,
-                 offset + ds.LOG_COMMENCES_2010 ,
-                 offset + ds.LOG_COMMENCES_2010 + ds.LOG_COMMENCES_2011,
-                 offset + ds.LOG_COMMENCES_2010 + ds.LOG_COMMENCES_2011 + ds.LOG_COMMENCES_2012,
-                 offset + ds.LOG_COMMENCES_2010 + ds.LOG_COMMENCES_2011 + ds.LOG_COMMENCES_2012 + ds.LOG_COMMENCES_2013,
-                 offset + ds.LOG_COMMENCES_1014,
-                 offset + ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015,
-                 offset + ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015 + ds.LOG_COMMENCES_2016,
-                 offset + ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015 + ds.LOG_COMMENCES_2016 + ds.LOG_COMMENCES_2017,
-                 offset + ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015 + ds.LOG_COMMENCES_2016 + ds.LOG_COMMENCES_2017 + ds.LOG_COMMENCES_2018,
-                 offset + ds.LOG_COMMENCES_1019]
-      },
-         {
-                name : "Projection Logements Construits",
-                line: {shape: 'spline', dash: 'dot', width: 4, color : log_construits_color},
-                x : [2020, 2021],
-                y : [ds.NOUV_LOG_0813 + ds.NB_LGT_TOT_COMMENCES_1316 + ds.NB_LGT_TOT_COMMENCES_1721,
-                     ds.NOUV_LOG_0813 + ds.PROJ_LOG_REALISES_2021]
-         },
-*/
-
-        if ((ds.SRU_CARENCE_2020 != 0 ) || ((ds.NB_LGT_PRET_LOC_SOCIAL_1316 + ds.NB_LGT_PRET_LOC_SOCIAL_1721) != 0)) {
-          offset_sru = offset + ds.LOG_COMMENCES_2010 + ds.LOG_COMMENCES_2011 + ds.LOG_COMMENCES_2012
-          offset_sru = ds.NOUV_LOG_0813
-          offset_sru = offset_construits
-          if (offset_sru  < 0) { offset_sru = 0 }
-          data.push(
-             {
-                "Condition" : "(SRU_CARENCE_2020 != 0) or ((NB_LGT_PRET_LOC_SOCIAL_1316+ NB_LGT_PRET_LOC_SOCIAL_1721) != 0)",
-                name : "Logements Sociaux Construits",
-                mode: 'lines',
-                line: {shape: 'spline', dash: 'solid', width: 3, color : log_sru_color },
-                x : [2013, 2016, 2020],
-                y : [offset_sru ,
-                     offset_sru + ds.NB_LGT_PRET_LOC_SOCIAL_1316,
-                     offset_sru + ds.NB_LGT_PRET_LOC_SOCIAL_1316 + ds.NB_LGT_PRET_LOC_SOCIAL_1721]
-              })
-        }
-
-        // Define Layout
-        var layout = {
-          legend : {  yanchor:"bottom",
-                      y:-3.2,
-                      xanchor:"right",
-                      x:1
-                    },
-          title : {
-              font : { color : theme_color } ,
-              text: "<b>Logements sur "+ ds.LIBELLE + "</b>"
-          }
-        };
-
-        // Display using Plotly
-        Plotly.newPlot("logementsPlotlyChartContainer",  data, layout);
-        Plotly.newPlot("logementsPlotlyChartContainer2", data, layout);
-        }
-
-    // Répartition des types de Logements en 2018
-    $('#typeLogGoogleChartContainer').html('');
-    $('#typeLogGoogleChartContainer2').html('');
-    if (ds) {
-        var data = google.visualization.arrayToDataTable([
-          ['Répartition des Logements sur ' + ds.LIBELLE, 'Logements'],
-          ['Résidences Principales', ds.P18_RP],
-          ['Résidences Secondaires', ds.P18_RSECOCC],
-          ['Résidences Vacantes',    ds.P18_LOGVAC]
-        ]);
-
-        var options = {
-          title:'Répartition des Logements sur ' + ds.LIBELLE,
-          is3D: true,
-          titleTextStyle: {
-               color: theme_color,
-            },
-          slices: {
-            0: { color: res_principales_color },
-            1: { color: res_secondaires_color },
-            2: { color: res_vacantes_color }
-          }
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('typeLogGoogleChartContainer'));
-        chart.draw(data, options);
-        var chart2 = new google.visualization.PieChart(document.getElementById('typeLogGoogleChartContainer2'));
-        chart2.draw(data, options);
-    }
-
-    // Evolution de la Répartition des types de Logements entre 2008 et 2018
-    $('#typeLogPlotlyChartContainer').html('');
-    $('#typeLogPlotlyChartContainer2').html('');
-    if (ds) {
-
-        var trace1 = {
-          x: ["2008", "2013", "2018"],
-          y: [ds.P08_RP, ds.P13_RP, ds.P18_RP],
-          name: 'Residences Principales',
-          marker: { color: res_principales_color },
-          type: 'bar'
-        };
-
-        var trace2 = {
-          x: ["2008", "2013", "2018"],
-          y: [ds.P08_RSECOCC, ds.P13_RSECOCC, ds.P18_RSECOCC],
-          name: 'Residences Secondaires',
-          marker: { color: res_secondaires_color },
-          type: 'bar'
-        };
-
-        var trace3 = {
-          x: ["2008", "2013", "2018"],
-          y: [ds.P08_LOGVAC, ds.P13_LOGVAC, ds.P18_LOGVAC],
-          name: 'Residences Vacantes',
-          marker: { color: res_vacantes_color },
-          type: 'bar'
-        };
-
-
-        var data = [trace1, trace2, trace3];
-
-        // Define Layout
-        var layout = {
-          barmode: 'stack',
-          legend : {  yanchor:"bottom",
-                      y:-3.2,
-                      xanchor:"right",
-                      x:1
-                    },
-          title : {
-              font : { color : theme_color } ,
-              text: "<b>Répartition des types de Logements sur "+ ds.LIBELLE + "</b>"
-          }
-        };
-
-        // Display using Plotly
-        Plotly.newPlot("typeLogPlotlyChartContainer", data, layout);
-        Plotly.newPlot("typeLogPlotlyChartContainer2", data, layout);
-        }
-
-    // Constructions de Logements 2010-2019
-    $('#constLogChartContainer').html('');
-    if (ds) {
-        $('<canvas id="constLogChart"></canvas>').appendTo($("#constLogChartContainer"));
-
-        const data = {
-          labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019"],
-          datasets: [
-            {
-              label: "Logements Construits - Par an",
-              data: [ds.LOG_COMMENCES_2010, ds.LOG_COMMENCES_2011, ds.LOG_COMMENCES_2012, ds.LOG_COMMENCES_2013,
-                     ds.LOG_COMMENCES_2014, ds.LOG_COMMENCES_2015, ds.LOG_COMMENCES_2016, ds.LOG_COMMENCES_2017,
-                     ds.LOG_COMMENCES_2018, ds.LOG_COMMENCES_2019],
-              fill: false,
-              tension: 0.5,
-              borderDash: [5, 5],
-              borderColor: border_Color,
-              backgroundColor: background_Color,
-            },
-            {
-              label: "Logements Construits - Cumul",
-              data: [   ds.LOG_COMMENCES_2010 ,
-                        ds.LOG_COMMENCES_2010 + ds.LOG_COMMENCES_2011,
-                        ds.LOG_COMMENCES_2010 + ds.LOG_COMMENCES_2011 + ds.LOG_COMMENCES_2012,
-                        ds.LOG_COMMENCES_2010 + ds.LOG_COMMENCES_2011 + ds.LOG_COMMENCES_2012 + ds.LOG_COMMENCES_2013,
-                        ds.LOG_COMMENCES_1014,
-                        ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015,
-                        ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015 + ds.LOG_COMMENCES_2016,
-                        ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015 + ds.LOG_COMMENCES_2016 + ds.LOG_COMMENCES_2017,
-                        ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015 + ds.LOG_COMMENCES_2016 + ds.LOG_COMMENCES_2017+
-                        ds.LOG_COMMENCES_2018,
-                        ds.LOG_COMMENCES_1019],
-              fill: false,
-              tension: 0.5,
-              borderColor: border_Color,
-              backgroundColor: background_Color,
-            }
-          ]
-        };
-
-        const config = {
-          type: 'line',
-          data: data,
-          options: {
-            responsive: true,
-            plugins: {
-              legend: {
-                position: 'top',
-              },
-              title: {
-                display: true, color: theme_color,
-                text: 'Logements Construits sur ' + ds.LIBELLE,
-              }
-            },
-            scales: {
-              x: {
-                title: {
-                  display: false, color: theme_color,
-                  text: 'Annees'
-                }
-              },
-              y: {
-                title: {
-                  display: true, color: theme_color,
-                  text: 'Logements Construits'
-                },
-              }
-            },
-          },
-        };
-
-
-        var ctx = $("#constLogChart").get(0).getContext("2d");
-        var myChart = new Chart(ctx, config);
-    }
-
-    // Taille des Ménages
-    $('#tailleMenagesChartContainer').html('');
-    if (ds) {
-        $('<canvas id="tailleMenagesChart"></canvas>').appendTo($("#tailleMenagesChartContainer"));
-
-        const data = {
-          labels: ["2008", "2013", "2018", "2020", "2025", "2030", "2035", "2040"],
-          datasets: [
-            {
-              label: "Taille des Ménages - Historique",
-              data: [ds.TM_2008, ds.TM_2013, ds.TM_2018, ds.TM_2020, , , , ],
-              fill: false,
-              tension: 0.5,
-              borderColor: border_Color,
-              backgroundColor: background_Color,
-            },
-            {
-              label: "Taille des Ménages - Projetee",
-              data: [ , , , ds.TM_2020, (ds.TM_2020 + ds.TM_2030)/2 ,ds.TM_2030, (ds.TM_2030 + ds.TM_2040)/2 , ds.TM_2040],
-              fill: false,
-              tension: 0.5,
-              borderDash: [5, 5],
-              borderColor: border_Color,
-              backgroundColor: background_Color,
-            }
-          ]
-        };
-
-        const config = {
-          type: 'line',
-          data: data,
-          options: {
-            responsive: true,
-            plugins: {
-              legend: {
-                position: 'top',
-              },
-              title: {
-                display: true, color: theme_color,
-                text: 'Taille des Ménages sur ' + ds.LIBELLE,
-              }
-            },
-            scales: {
-              x: {
-                title: {
-                  display: false, color: theme_color,
-                  text: 'Annees'
-                }
-              },
-              y: {
-                suggestedMin: 1 , suggestedMax: 3 ,
-                title: {
-                  display: true, color: theme_color,
-                  text: 'Taille des Ménages' ,
-                },
-              }
-            },
-          },
-        };
-
-
-        var ctx = $("#tailleMenagesChart").get(0).getContext("2d");
-        var myChart = new Chart(ctx, config);
-    }
-
-    // Population
-    $('#populationChartContainer').html('');
-    if (ds) {
-        $('<canvas id="populationChart"></canvas>').appendTo($("#populationChartContainer"));
-
-        const data = {
-          labels: ["2008", "2013", "2018", "2020", "2025", "2030", "2035", "2040"],
-          datasets: [
-            {
-              label: "Population- Historique",
-              data: [ds.P08_POP, ds.P13_POP, ds.P18_POP, ds.POP_2020, , , , ],
-              fill: false,
-              tension: 0.5,
-              borderColor: border_Color,
-              backgroundColor: background_Color,
-            },
-            {
-              label: "Population - Projetee",
-              data: [ , , , ds.POP_2020, (ds.POP_2020 + ds.POP_2030)/2 ,ds.POP_2030, (ds.POP_2030 + ds.POP_2040)/2 , ds.POP_2040],
-              fill: false,
-              tension: 0.5,
-              borderDash: [5, 5],
-              borderColor: border_Color,
-              backgroundColor: background_Color,
-            }
-          ]
-        };
-
-        const config = {
-          type: 'line',
-          data: data,
-          options: {
-            responsive: true,
-            plugins: {
-              legend: {
-                position: 'top',
-              },
-              title: {
-                display: true, color: theme_color,
-                text: 'Population sur ' + ds.LIBELLE,
-              }
-            },
-            scales: {
-              x: {
-                title: {
-                  display: false, color: theme_color,
-                  text: 'Annees'
-                }
-              },
-              y: {
-                suggestedMin: ds.P08_POP * 0.9 , suggestedMax: ds.P08_POP * 1.1 ,
-                title: {
-                  display: true, color: theme_color,
-                  text: 'Population' ,
-                },
-              }
-            },
-          },
-        };
-
-
-        var ctx = $("#populationChart").get(0).getContext("2d");
-        var myChart = new Chart(ctx, config);
-    }
+    // Tab Graphiques
+    chartGraphiquePopulation(ds,          'graphiquesPopulationChartContainer')
+    chartTailleDesMenages(ds,             'graphiquesTailleMenagesChartContainer')
+    chartProductionBesoinsLogements(ds,   'graphiquesProductionBesoinsLogementsChartContainer')
+    chartConstructions(ds,                'graphiquesConstructionsLogementsChartContainer')
+    chartRepartitionNouveauxLogements(ds, 'graphiquesRepartitionNouveauxLogementsChartContainer')
+    chartRepartitionTypesLogements(ds,    'graphiquesRepartitionTypesLogementsChartContainer')
 
 }
