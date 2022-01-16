@@ -380,6 +380,32 @@ def load_artificialisation(dossier_artificialisation_file: str = dossierArtifici
     return dossierArtificialisation
 
 
+# IDCOM	IDCOMTXT	IDREG	IDREGTXT	IDDEP	IDDEPTXT	EPCI20	EPCI20TXT	AAV2020	LIBAAV2020	CATEAAV202
+# NAF09ART10	ART09ACT10	ART09HAB10	ART09MIX10	ART09INC10
+# NAF10ART11	ART10ACT11	ART10HAB11	ART10MIX11	ART10INC11
+# NAF11ART12	ART11ACT12	ART11HAB12	ART11MIX12	ART11INC12
+# NAF12ART13	ART12ACT13	ART12HAB13	ART12MIX13	ART12INC13
+# NAF13ART14	ART13ACT14	ART13HAB14	ART13MIX14	ART13INC14
+# NAF14ART15	ART14ACT15	ART14HAB15	ART14MIX15	ART14INC15
+# NAF15ART16	ART15ACT16	ART15HAB16	ART15MIX16	ART15INC16
+# NAF16ART17	ART16ACT17	ART16HAB17	ART16MIX17	ART16INC17
+# NAF17ART18	ART17ACT18	ART17HAB18	ART17MIX18	ART17INC18
+# NAF18ART19	ART18ACT19	ART18HAB19	ART18MIX19	ART18INC19
+# NAF19ART20	ART19ACT20	ART19HAB20	ART19MIX20	ART19INC20
+# NAFART0920	ARTACT0920	ARTHAB0920	ARTMIX0920	ARTINC0920  ARTCOM0920
+# POP12	POP17	POP1217	MEN12	MEN17	MEN1217	EMP17	EMP12	EMP1217	MEPART1217	MENHAB1217	ARTPOP1217	SURFCOM20
+dossierArtificialisationPacaFile = data_dir + "Fichier_CEREMA_Art_2009-2020_PACA.xls"
+dossierArtificialisationPaca = None
+
+
+def load_artificialisationPaca(dossier_artificialisationPaca_file: str = dossierArtificialisationPacaFile):
+    global dossierArtificialisationPaca
+    if (dossierArtificialisationPaca is None):
+        print_blue("Lecture Donnees Artificialisation Paca : " + dossier_artificialisationPaca_file + " ...")
+        xls = pd.ExcelFile(dossier_artificialisationPaca_file)
+        dossierArtificialisationPaca = pd.read_excel(xls, index_col=0, dtype={"IDCOM": str})
+    return dossierArtificialisationPaca
+
 #############
 ### Flux 2018
 #############
@@ -391,6 +417,7 @@ flux2018SourceMeta = "https://www.insee.fr/fr/statistiques/5393826#dictionnaire"
 flux2018SourceFile = data_dir + "base-flux-mobilite-residentielle-2018.csv"
 flux2018 = None
 
+
 def load_flux_2018(flux2018SourceFile:  str = flux2018SourceFile):
     global flux2018
     if (flux2018 is None) :
@@ -400,6 +427,114 @@ def load_flux_2018(flux2018SourceFile:  str = flux2018SourceFile):
                                                                          'NBFLUX_C18_POP01P' : float })
     return flux2018
 
+#############
+### Flux 2017
+#############
+
+flux2017SourcePage = "https://www.insee.fr/fr/statistiques/4509335"
+flux2017SourceFile = "https://www.insee.fr/fr/statistiques/fichier/4509335/base-csv-flux-mobilite-residentielle-2017.zip"
+flux2017SourceMeta = "https://www.insee.fr/fr/statistiques/4509335#dictionnaire"
+
+flux2017SourceFile = data_dir + "base-flux-mobilite-residentielle-2017.csv"
+flux2017 = None
+
+
+def load_flux_2017(flux2017SourceFile:  str = flux2017SourceFile):
+    global flux2017
+    if (flux2017 is None) :
+        print_blue("Lecture Flux Mobilite Residentielle 2017 : " + flux2017SourceFile + " ...")
+        flux2017 = pd.read_csv(flux2017SourceFile, delimiter=';', dtype={'CODGEO': str, 'LIBGEO': str,
+                                                                         'DCRAN': str, 'L_DCRAN': str,
+                                                                         'NBFLUX_C17_POP01P' : float })
+    return flux2017
+
+#############
+### Flux 2014-15-16
+#############
+
+flux2016SourceFile = data_dir + "base-texte-flux-mobilite-residentielle-2016.csv"
+flux2016 = None
+
+
+def load_flux_2016(flux2016SourceFile:  str = flux2016SourceFile):
+    global flux2016
+    if (flux2016 is None) :
+        print_blue("Lecture Flux Mobilite Residentielle 2016 : " + flux2016SourceFile + " ...")
+        flux2016 = pd.read_csv(flux2016SourceFile, delimiter=';', encoding = "ISO-8859-1",
+                                                                  dtype={'CODGEO': str, 'LIBGEO': str,
+                                                                         'DCRAN': str, 'L_DCRAN': str,
+                                                                         'NBFLUX_C16_POP01P' : float })
+    return flux2016
+
+flux2015SourceFile = data_dir + "base-texte-flux-mobilite-residentielle-2015.csv"
+flux2015 = None
+
+
+def load_flux_2015(flux2015SourceFile:  str = flux2015SourceFile):
+    global flux2015
+    if (flux2015 is None) :
+        print_blue("Lecture Flux Mobilite Residentielle 2015 : " + flux2015SourceFile + " ...")
+        flux2015 = pd.read_csv(flux2015SourceFile, delimiter=';', encoding = "ISO-8859-1",
+                                                                  dtype={'CODGEO': str, 'LIBGEO': str,
+                                                                         'DCRAN': str, 'L_DCRAN': str,
+                                                                         'NBFLUX_C15_POP01P' : float })
+    return flux2015
+
+flux2014SourceFile = data_dir + "base-texte-flux-mobilite-residentielle-2014.csv"
+flux2014 = None
+
+
+def load_flux_2014(flux2014SourceFile:  str = flux2014SourceFile):
+    global flux2014
+    if (flux2014 is None) :
+        print_blue("Lecture Flux Mobilite Residentielle 2014 : " + flux2014SourceFile + " ...")
+        flux2014 = pd.read_csv(flux2014SourceFile, delimiter=';', encoding = "ISO-8859-1",
+                                                                  dtype={'CODGEO': str, 'LIBGEO': str,
+                                                                         'DCRAN': str, 'L_DCRAN': str,
+                                                                         'NBFLUX_C14_POP01P' : float })
+    return flux2014
+
+
+######################
+### Flux Travail 2018
+######################
+
+fluxpro2018SourcePage = "https://www.insee.fr/fr/statistiques/5393835"
+fluxpro2018SourceFile = "https://www.insee.fr/fr/statistiques/fichier/5393835/base-csv-flux-mobilite-domicile-lieu-travail-2018.zip"
+fluxpro2018SourceMeta = "https://www.insee.fr/fr/statistiques/5393835#dictionnaire"
+
+fluxpro2018SourceFile = data_dir + "base-flux-mobilite-domicile-lieu-travail-2018.csv"
+fluxpro2018 = None
+
+# CODGEO;LIBGEO;DCLT;L_DCLT;NBFLUX_C18_ACTOCC15P
+def load_fluxpro_2018(fluxpro2018SourceFile:  str = fluxpro2018SourceFile):
+    global fluxpro2018
+    if (fluxpro2018 is None) :
+        print_blue("Lecture Flux Mobilite Domicile Travail 2018 : " + fluxpro2018SourceFile + " ...")
+        fluxpro2018 = pd.read_csv(fluxpro2018SourceFile, delimiter=';', dtype={'CODGEO': str, 'LIBGEO': str,
+                                                                         'DCRAN': str, 'L_DCRAN': str,
+                                                                         'NBFLUX_C18_POP01P' : float })
+    return fluxpro2018
+
+######################
+### Pop Communale 2019
+######################
+
+pop2019SourcePage = "https://www.insee.fr/fr/statistiques/6011070?sommaire=6011075"
+pop2019SourceFile = "https://www.insee.fr/fr/statistiques/fichier/6011070/ensemble.zip"
+
+pop2019SourceFile = data_dir + "donnees_communes_pop_2019.csv"
+pop2019 = None
+
+# REG;DEP;COM;PMUN;PCAP;PTOT
+def load_pop2019(pop2019SourceFile:  str = pop2019SourceFile):
+    global pop2019
+    if (pop2019 is None) :
+        print_blue("Lecture Populations Légales 2019 : " + pop2019SourceFile + " ...")
+        pop2019 = pd.read_csv(pop2019SourceFile, index_col=2, delimiter=';', dtype={'REG': str, 'DEP': str,
+                                                                       'COM': str, 'PMUN': int,
+                                                                       'PCAP' : int, 'PTOT' : int })
+    return pop2019
 
 ##############
 ### Stock 2018
@@ -1328,12 +1463,14 @@ class DataStore():
 
         # Donnees INSEE Commune
         load_communes()
+        load_pop2019()
 
         # Donnees SRU
         load_sru()
 
         # Donnee Artificialisation
         load_artificialisation()
+        load_artificialisationPaca()
 
         # Donnees Projections EPCI
         load_projections_paca()
@@ -1395,8 +1532,10 @@ class DataStore():
         # Donnees Logements Paca 2010-2019
         load_logements_paca()
 
-        # Donnees Flux 2018
+        # Donnees Flux
+        load_flux_2017()
         load_flux_2018()
+        load_fluxpro_2018()
 
         # Collected Data
         print_green("> Calculs Metriques : " + str(code_postal) + " : " + commune + " (Code INSEE : " + code_insee + ")")
@@ -1729,6 +1868,71 @@ class DataStore():
             display_in_browser(html_report_file)
 
         return self
+
+def excel_flux():
+    # Donnees Flux
+    load_flux_2018()
+    load_flux_2017()
+    load_flux_2016()
+    load_flux_2015()
+    load_flux_2014()
+    excel_flux_details(flux2014, "NBFLUX_C14_POP01P" , "93", 'Flux2014-93.xlsx')
+    excel_flux_details(flux2015, "NBFLUX_C15_POP01P" , "93", 'Flux2015-93.xlsx')
+    excel_flux_details(flux2016, "NBFLUX_C16_POP01P" , "93", 'Flux2016-93.xlsx')
+    excel_flux_details(flux2017, "NBFLUX_C17_POP01P" , "93", 'Flux2017-93.xlsx')
+    excel_flux_details(flux2018, "NBFLUX_C18_POP01P" , "93", 'Flux2018-93.xlsx')
+
+
+def excel_flux_details(data_file, field, region, xls_file):
+        # Donnees Flux
+        print_green("Flux : "+xls_file)
+        print_green("Flux - Communes")
+        data1 = data_file.loc[(flux2018['CODGEO'].isin(communes_region(region)))  | (data_file['DCRAN'].isin(communes_region(region)))]
+        print_green("Flux - EPCI")
+
+        data2 = pd.DataFrame(columns=epci_region(region) , index=epci_region(region))
+        data2 = data2.append(pd.DataFrame(index=['99', 'Nom']))
+        data2["99"] = ""
+        data2["Nom"] = ""
+        for x_epci in epci_region(region) :
+            for y_epci in epci_region(region):
+                xy_data = round(data_file.loc[flux2018['CODGEO'].isin(communes_epci(x_epci))  & data_file['DCRAN'].isin(communes_epci(y_epci)) & (data_file['DCRAN'] != data_file['CODGEO'])][field].sum(),0)
+                data2[x_epci][y_epci] = xy_data
+                data2['Nom'][y_epci] = nom_epci(y_epci)
+                xy_data = round(data_file.loc[(~data_file['CODGEO'].isin(communes_region(region))) & (data_file['DCRAN'].isin(communes_epci(y_epci))) & (data_file['DCRAN'] != data_file['CODGEO'])][field].sum(), 0)
+                data2['99'][y_epci] = xy_data
+                data2['Nom'][y_epci] = nom_epci(y_epci)
+            xy_data = round(data_file.loc[data_file['CODGEO'].isin(communes_epci(x_epci)) & (~data_file['DCRAN'].isin(communes_region(region))) & (data_file['DCRAN'] != data_file['CODGEO'])][field].sum(), 0)
+            data2[x_epci]['99'] = xy_data
+            data2[x_epci]['Nom'] = nom_epci(x_epci)
+
+        print_green("Flux - DEPT")
+        data3 = pd.DataFrame(columns=list_dept(region) , index=list_dept(region))
+        data3 = data3.append(pd.DataFrame(index=['99', 'Nom']))
+        data3["99"] = ""
+        data3["Nom"] = ""
+        for x_epci in list_dept(region) :
+            for y_epci in list_dept(region):
+                xy_data = round(data_file.loc[(data_file['CODGEO'].isin(communes_dept(x_epci)))  & (data_file['DCRAN'].isin(communes_dept(y_epci))) & (data_file['DCRAN'] != data_file['CODGEO'])][field].sum(),0)
+                data3[x_epci][y_epci] = xy_data
+                data3['Nom'][y_epci] = nom_dept(y_epci)
+                xy_data = round(data_file.loc[(~(data_file['CODGEO'].isin(communes_region(region)))) & (data_file['DCRAN'].isin(communes_dept(y_epci))) & (data_file['DCRAN'] != data_file['CODGEO'])][field].sum(), 0)
+                data3['99'][y_epci]  = xy_data
+                data3['Nom'][y_epci]  = nom_dept(y_epci)
+            xy_data = round(data_file.loc[(data_file['CODGEO'].isin(communes_dept(x_epci))) & (~data_file['DCRAN'].isin(communes_region(region))) & (data_file['DCRAN'] != data_file['CODGEO'])][field].sum(), 0)
+            data3[x_epci]['99']  = xy_data
+            data3[x_epci]['Nom'] = nom_dept(x_epci)
+
+        # Create excel writer
+        excel_file = output_dir + xls_file
+        print_green("Flux : "+excel_file)
+        writer = pd.ExcelWriter(excel_file)
+        # Write dataframe to excel sheet named 'marks'
+        data3.to_excel(writer, 'dept')
+        data2.to_excel(writer, 'epci')
+        data1.to_excel(writer, 'communes')
+        # Save the excel file
+        writer.save()
 
 
 def update_DataStoreCache(ds : DataStore, code_insee=None):
@@ -2984,6 +3188,9 @@ class TestConsommation(unittest.TestCase):
     def testPlots(self):
         ds = report_commune(code_postal="06250", force=False)
         plots(ds)
+
+    def testExcelFlux(self):
+        excel_flux()
 
     def testCalc(self):
         self.assertEqual("0",    round0str(0,   rounding=0))

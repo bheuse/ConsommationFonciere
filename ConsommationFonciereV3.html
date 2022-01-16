@@ -256,10 +256,10 @@
     <div v-else>
          <h2 class="w3-center">Rapport : {{nom}} </h2>
             <div v-if="territoire == 'Commune'">
-                 <h3 class="w3-container w3-padding-32 w3-theme">{{territoire}} {{code}} : {{nom}} - {{ds.CODE_POSTAL}} - {{ ds.P18_POP }} habitants</h3>
+                 <h3 class="w3-container w3-padding-32 w3-theme">{{territoire}} {{code}} : {{nom}} - {{ds.CODE_POSTAL}} - {{ ds.POP_LEGALE_2019 }} habitants</h3>
             </div>
             <div v-else>
-                 <h3 class="w3-container w3-padding-32 w3-theme">{{territoire}} {{code}} : {{nom}} - {{ ds.P18_POP }} habitants</h3>
+                 <h3 class="w3-container w3-padding-32 w3-theme">{{territoire}} {{code}} : {{nom}} - {{ ds.POP_LEGALE_2019 }} habitants</h3>
             </div>
 
         <div class="w3-container">
@@ -270,6 +270,7 @@
             <p> Region :      {{ ds.REG_NOM}} - {{ ds.REG }}  </p>
         </div>
         <p class="w3-container w3-theme">Pour imprimer ou obtenir un fichier PDF: CTRL-P, Imprimer ou Sauver comme PDF - ne garder que les cinq premieres pages.</p>
+        <p class="w3-container"> <b>Avertissement :</b> Les donnees peuvent être incohérentes car les différentes sources officielles dont elles sont issues ne partent pas des mêmes bases.</p>
     </div>
 </div>
 
@@ -392,6 +393,12 @@ function openFneOzan(evt, tabName) {
     <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
         <h3>Evolution de la Répartition des types de Logements entre 2008 et 2018</h3></div>
         <div id="graphiquesRepartitionTypesLogementsChartContainer"     class="center" style="width:100%;max-width:600px; max-height:500px;"></div>
+
+    <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
+        <h3>Artificialisation des sols entre 2009 et 2020</h3></div>
+        <div id="graphiquesArtificialisationChartContainer"      class="center"  style="width:100%; max-width:600px; max-height:500px;"></div>
+
+
 </div>
 
 <div id="Population"        class="w3-container city w3-animate-opacity">
@@ -402,13 +409,14 @@ function openFneOzan(evt, tabName) {
          <p><a target="_blank" :href="ds.DOSSIER_INSEE">Dossier Insee Complet {{ nom }}</a></p>
          <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
          <h3>Evolution de la Population</h3></div>
+         <p>Population Légale : {{ ds.POP_LEGALE_2019 }}</a></p>
          <table class="w3-table-all w3-hoverable w3-card-4">
             <tbody>
             <tr class="w3-teal">
-                <th>Données INSEE</th>
-                <th class="w3-right-align">2008</th>
-                <th class="w3-right-align">2013</th>
-                <th class="w3-right-align">2018</th>
+                <th style="color:white" >Données INSEE</th>
+                <th class="w3-right-align" style="color:white">2008</th>
+                <th class="w3-right-align" style="color:white">2013</th>
+                <th class="w3-right-align" style="color:white">2018</th>
             </tr>
             <tr>
                 <td><b>Population</b></td>
@@ -441,12 +449,6 @@ function openFneOzan(evt, tabName) {
                 <td class="w3-right-align">{{ds.C18_PMEN}}</td>
             </tr>
             <tr>
-                <td>Nombre de Ménages</td>
-                <td class="w3-right-align">{{ds.C08_MEN}}</td>
-                <td class="w3-right-align">{{ds.C13_MEN}}</td>
-                <td class="w3-right-align">{{ds.C18_MEN}}</td>
-            </tr>
-            <tr>
                 <td>Taille des Ménages</td>
                 <td class="w3-right-align">{{ds.TM_2008}}</td>
                 <td class="w3-right-align">{{ds.TM_2013}}</td>
@@ -459,7 +461,19 @@ function openFneOzan(evt, tabName) {
                 <td class="w3-right-align"><i><small>{{ f_val(Math.round( ((ds.TXTM_1318 * 100).toFixed(2)) ) / 100  )}}%</i></small></td>
             </tr>
             <tr>
-                <td><b>Résidence Principale</b></td>
+                <td>Nombre de Ménages</td>
+                <td class="w3-right-align">{{ds.C08_MEN}}</td>
+                <td class="w3-right-align">{{ds.C13_MEN}}</td>
+                <td class="w3-right-align">{{ds.C18_MEN}}</td>
+            </tr>
+            <tr>
+                <td><i><small>- Evolution en nombre en 5 ans</i></small></td>
+                <td class="w3-right-align"><i><small>-</i></small></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.C13_MEN - ds.C08_MEN)}}</i></small></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.C18_MEN - ds.C13_MEN)}}</i></small></td>
+            </tr>
+            <tr>
+                <td><b>Résidences Principales</b></td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
@@ -487,6 +501,12 @@ function openFneOzan(evt, tabName) {
                 <td class="w3-right-align">{{f_percent(ds.P08_RP, ds.P08_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align">{{f_percent(ds.P13_RP, ds.P13_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align">{{f_percent(ds.P18_RP, ds.P18_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+            </tr>
+            <tr>
+                <td><i><small>- Evolution en nombre en 5 ans</small></i></td>
+                <td class="w3-right-align"><i><small>-</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P13_RP - ds.P08_RP)}}</i></small></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RP - ds.P13_RP)}}</i></small></td>
             </tr>
             <tr>
                 <td>- Résidences Secondaires</td>
@@ -523,11 +543,11 @@ function openFneOzan(evt, tabName) {
          <table class="w3-table-all w3-hoverable w3-card-4">
             <tbody>
             <tr class="w3-teal">
-                <th>Données INSEE 2018</th>
-                <th class="w3-right-align">Total : </th>
-                <th class="w3-right-align">de / vers le Département :</th>
-                <th class="w3-right-align">- dont de / vers l'EPCI :</th>
-                <th class="w3-right-align">En dehors du Département :</th>
+                <th style="color:white">Données INSEE 2018</th>
+                <th class="w3-right-align" style="color:white">Total : </th>
+                <th class="w3-right-align" style="color:white">de / vers le Département :</th>
+                <th class="w3-right-align" style="color:white">- dont de / vers l'EPCI :</th>
+                <th class="w3-right-align" style="color:white">En dehors du Département :</th>
             </tr>
             <tr>
                 <td>Population Entrante</td>
@@ -579,12 +599,12 @@ function openFneOzan(evt, tabName) {
          <table class="w3-table-all w3-hoverable w3-card-4">
             <tbody>
             <tr class="w3-teal">
-                <th>Données INSEE</th>
-                <th class="w3-right-align">2008</th>
-                <th class="w3-right-align"></th>
-                <th class="w3-right-align">2013</th>
-                <th class="w3-right-align"></th>
-                <th class="w3-right-align">2018</th>
+                <th style="color:white">Données INSEE</th>
+                <th class="w3-right-align" style="color:white">2008</th>
+                <th class="w3-right-align" style="color:white"></th>
+                <th class="w3-right-align" style="color:white">2013</th>
+                <th class="w3-right-align" style="color:white"></th>
+                <th class="w3-right-align" style="color:white">2018</th>
             </tr>
             <tr>
                 <td><b>Logements</b></td>
@@ -644,55 +664,90 @@ function openFneOzan(evt, tabName) {
     <div v-if="this.data_s != null">
          <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
          <h3>Besoins et Production de Logements</h3></div>
+         <p>Les données 2013-2018 sont définitives.</p>
+         <p>Les données 2020 sont des données estimées à partir de projections des données légales 2019
+            et des données Sitadel brutes récentes, qui peuvent être approximatives.</p>
          <table class="w3-table-all w3-hoverable w3-card-4">
                     <tbody>
                     <tr class="w3-teal">
-                        <th>Données INSEE / Sitadel / DREAL</th>
-                        <th class="w3-right-align">2013 - 2021</th>
+                        <th style="color:white">Données INSEE / Sitadel</th>
+                        <th style="color:white" class="w3-right-align">2013</th>
+                        <th style="color:white" class="w3-right-align"><small>13-18</small></th>
+                        <th style="color:white" class="w3-right-align">2018</th>
+                        <th style="color:white" class="w3-right-align"><b><small>13-20</small></b></th>
+                        <th style="color:white" class="w3-right-align">2020</th>
                     </tr>
                     <tr>
-                        <td>Periode 2013 - 2020 : </td>
+                        <td><b>Besoins</b> en Logements :</td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
                     </tr>
                     <tr>
-                        <td> - Besoins en logements :</td>
-                        <td class="w3-right-align">{{ds.BESOINS_1320}}</td>
-                    </tr>
-                    <tr>
-                        <td> - Logements Construits :</td>
-                        <td class="w3-right-align">{{ds.NB_LGT_TOT_COMMENCES_1321}}</td>
-                    </tr>
-                    <tr>
-                        <td> - Exces de Logements Construits par rapport aux besoins :</td>
-                        <td class="w3-right-align"><b>{{ds.EXCES_BESOINS_1320}}</b></td>
-                    </tr>
-                    <tr>
-                        <td> -&gt; Nouvelles Residences Secondaires :</td>
-                        <td class="w3-right-align">{{ds.NOUV_RESSEC_1318}}</td>
-                    </tr>
-                    <tr>
-                        <td> -&gt; Nouvelles Residences Vacantes :</td>
-                        <td class="w3-right-align">{{ds.NOUV_LOGVAC_1318}}</td>
-                    </tr>
-                    <tr>
-                        <td> -&gt; En Construction / Non-Vendus :</td>
-                        <td class="w3-right-align">{{ds.LOG_NON_VENDUS_1320}}</td>
-                    </tr>
-                    <tr>
-                        <td>Logements Sociaux (Periode 2013 - 2021) : </td>
+                        <td>- Population des Ménages : </td>
+                        <td class="w3-right-align">{{ds.C13_PMEN}}</td>
                         <td class="w3-right-align"></td>
+                        <td class="w3-right-align">{{ds.C18_PMEN}}</td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align">{{ds.pmen_2020}}</td>
                     </tr>
                     <tr>
-                        <td> - Logements Construits :</td>
-                        <td class="w3-right-align">{{ds.NB_LGT_TOT_COMMENCES_1321}}</td>
+                        <td>- Taille des Ménages : </td>
+                        <td class="w3-right-align">{{f_round(ds.TM_2013,3)}}</td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align">{{f_round(ds.TM_2018,3)}}</td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align">{{f_round(ds.TM_2020,3)}}</td>
+                    </tr>
+                    <tr>
+                        <td>- Besoins en Résidences Principales : </td>
+                        <td class="w3-right-align">{{ds.P13_RP}}</td>
+                        <td class="w3-right-align"><b>{{f_val(ds.BESOINS_LOG_1318)}}</b></td>
+                        <td class="w3-right-align">{{ds.P18_RP}}</td>
+                        <td class="w3-right-align"><b>{{f_val(ds.BESOINS_LOG_1320)}}</b></td>
+                        <td class="w3-right-align">{{ds.LOG_2020}}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Production</b> en Logements :</td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align"><b>{{ds.PROD_LOG_1318}}</b></td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align"><b>{{ds.PROD_LOG_1320}}</b></td>
+                        <td class="w3-right-align"></td>
                     </tr>
                     <tr>
                         <td> - Logements Sociaux Construits (Taux) :</td>
-                        <td class="w3-right-align">{{ds.NB_LGT_PRET_LOC_SOCIAL_1321}} ({{ Math.round( ((ds.TX_LGT_PRET_LOC_SOCIAL_1321 * 10000).toFixed(4)) ) / 100  }}%)</td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align">{{ds.PROD_LLS_1318}}</td>
+                        <td class="w3-right-align">({{ Math.round( ((ds.TX_PROD_LLS_1318 * 10000).toFixed(4)) ) / 100  }}%)</td>
+                        <td class="w3-right-align">{{ds.PROD_LLS_1320}}</td>
+                        <td class="w3-right-align">({{ Math.round( ((ds.TX_PROD_LLS_1320 * 10000).toFixed(4)) ) / 100  }}%)</td>
                     </tr>
                     <tr>
-                        <td>Residences Secondaires & Vacantes en 2018 (Taux) :</td>
-                        <td class="w3-right-align">{{ (ds.P18_RSECOCC + ds.P18_LOGVAC) }} ({{ Math.round( (((ds.TX_RES_SEC_18 + ds.TX_RES_VAC_18)* 10000).toFixed(4)) ) / 100  }}%)</td>
+                        <td><b>Excédents</b> de Logements Construits par rapport aux besoins :</td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align"><b><i>{{ds.EXCES_BESOINS_1318}}</i></b></td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align"><b><i>{{ds.EXCES_BESOINS_1320}}</i></b></td>
+                        <td class="w3-right-align"></td>
+                    </tr>
+                    <tr>
+                        <td> -&gt; Nouvelles Résidences Secondaires :</td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align">{{ds.NOUV_RESSEC_1318}}</td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align"></td>
+                    </tr>
+                    <tr>
+                        <td> -&gt; Nouvelles Résidences Vacantes :</td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align">{{ds.NOUV_LOGVAC_1318}}</td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -717,9 +772,12 @@ function openFneOzan(evt, tabName) {
 
     <h2>Artificialisation</h2>
 
+    <p>L'artificialisation étant une préoccupation récente, les donnees qui y sont relatives sont dévirées de sources approximatives
+        et peu précises. Elles donnent néanmoins une indication des tendances en cours.</p>
+
     <div v-if="this.data_s != null">
         <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
-        <h3>Artificialisation sur bases fiscales en 10 ans (2009-2020)</h3></div>
+        <h3>Artificialisation des sols sur bases fiscales en 10 ans (2009-2020)</h3></div>
         <p>Artificialisation : <a target="_blank" :href="ds.URL_SOURCE_ARTIFICIALISATION"> Dossier Cerema </a></p>
         <p> Parmi les sources disponibles, les données issues des fichiers fiscaux traitées par le CEREMA offrent
              l'avantage d'être annuelles et disponibles pour tout le territoire de manière comparable même si elles ne
@@ -728,27 +786,73 @@ function openFneOzan(evt, tabName) {
              mais pas précisément les surfaces artificialisées comme pourra le faire la future base de données
              cartographiques Occupation du sol à grande échelle (OCS GE) actuellement en chantier.</p>
         <table class="w3-table-all w3-hoverable w3-card-4">
-                    <tbody>
-                    <tr class="w3-teal">
-                        <th>Données Cerema</th>
-                        <th class="w3-right-align">2009-2020</th>
-                    </tr>
-                    <tr>
-                        <td>Surface du Territoire</td>
-                        <td class="w3-right-align">{{ Math.round( ((ds.SURFACE_COMMUNE / 100 ).toFixed(2)) ) / 100  }} ha</td>
-                    </tr>
-                    <tr>
-                        <td>Artificialisation en 10 ans</td>
-                        <td class="w3-right-align">{{ Math.round( ((ds.ART_TOTAL / 100).toFixed(2)) ) / 100  }} ha</td>
-                    </tr>
-                    <tr>
-                        <td>Supplément en 10 ans</td>
-                        <td class="w3-right-align">{{ Math.round( ((ds.ART_POURCENT * 100).toFixed(2)) ) / 100  }}%</td>
-                    </tr>
-                    </tbody>
-                </table>
+            <tbody>
+            <tr class="w3-teal">
+                <th style="color:white">Données Cerema</th>
+                <th style="color:white"class="w3-right-align">2009 - 2020</th>
+            </tr>
+            <tr>
+                <td>Surface du Territoire :</td>
+                <td class="w3-right-align">{{ Math.round( ((ds.SURFACE_COMMUNE / 100 ).toFixed(2)) ) / 100  }} ha</td>
+            </tr>
+            <tr>
+                <td>Artificialisation en 10 ans :</td>
+                <td class="w3-right-align">{{ Math.round( ((ds.ART_TOTAL / 100).toFixed(2)) ) / 100  }} ha</td>
+            </tr>
+            <tr>
+                <td>- Artificialisation à destination de l'habitat : </td>
+                <td class="w3-right-align">{{ Math.round( ((ds.ART_HABITAT / 100 ).toFixed(2)) ) / 100  }} ha</td>
+            </tr>
+            <tr>
+                <td>- Artificialisation à destination de l'activité économique : </td>
+                <td class="w3-right-align">{{ Math.round( ((ds.ART_ACTIVITE / 100 ).toFixed(2)) ) / 100  }} ha</td>
+            </tr>
+            <tr>
+                <td>- Autres artificialisation : </td>
+                <td class="w3-right-align">{{ Math.round( (((ds.ART_MIXTE + ds.ART_INCONNUE) / 100 ).toFixed(2)) ) / 100  }} ha</td>
+            </tr>
+            <tr>
+                <td>Supplément d'artificialisation en % en 10 ans :</td>
+                <td class="w3-right-align">{{ Math.round( ((ds.ART_POURCENT * 100).toFixed(2)) ) / 100  }}%</td>
+            </tr>
+            </tbody>
+        </table>
         <br>
+    </div>
 
+    <div id="artificialisationArtificialisationChartContainer"      class="center"  style="width:100%; max-width:600px; max-height:500px;"></div>
+    <br>
+
+    <div v-if="this.data_s != null">
+        <table class="w3-table-all w3-hoverable w3-card-4">
+            <tbody>
+            <tr class="w3-teal">
+                <th style="color:white">Artificialisation</th>
+                <th style="color:white"class="w3-right-align">2013 - 2018</th>
+            </tr>
+            <tr>
+                <td>Artificialisation à destination de l'habitat :</td>
+                <td class="w3-right-align">{{ ds.ART_ART13HAB18  }} ha</td>
+            </tr>
+            <tr>
+                <td>Nouveaux logements (Résidences principales, secondaires et vacantes) :</td>
+                <td class="w3-right-align">{{ ds.ART_LOG1318 }}</td>
+            </tr>
+            <tr>
+                <td>- Nouveaux logements par hectare artificialisé :</td>
+                <td class="w3-right-align">{{ ds.ART_LOG_HECT }} log/ha</td>
+            </tr>
+            <tr>
+                <td>M2 artificialisés résidence principale supplémentaire :</td>
+                <td class="w3-right-align">{{ ds.ART_HECT_RP }} m2</td>
+            </tr>
+            <tr>
+                <td>M2 artificialisés par habitant supplémentaire :</td>
+                <td class="w3-right-align">{{ ds.ART_HECT_HAB  }} m2</td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
         <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
         <h3>Artificialisation sur base des Permis de Construire (2013-2021)</h3></div>
         <p>Artificialisation : <a target="_blank" :href="ds.URL_SOURCE_SITADEL"> Dossier Sitadel </a></p>
@@ -756,98 +860,105 @@ function openFneOzan(evt, tabName) {
              Comme celle du CEREMA, elles sont annuelles mais ne sont pas très précises. Elles comptabilisent les
              parcelles cadastrales nouvellement baties à destination de l'habitat, mais pas précisément les surfaces artificialisées.</p>
         <table class="w3-table-all w3-hoverable w3-card-4">
-                    <tbody>
-                    <tr class="w3-teal">
-                        <th>Données Sitadel</th>
-                        <th class="w3-right-align">2013-2021</th>
-                    </tr>
-                    <tr>
-                        <td>Surface du Territoire</td>
-                        <td class="w3-right-align">{{ Math.round( ((ds.SURFACE_COMMUNE / 100 ).toFixed(2)) ) / 100  }} ha</td>
-                    </tr>
-                    <tr>
-                        <td>Nombre de logements nouveaux</td>
-                        <td class="w3-right-align">{{ ds.NB_LGT_NOUVEAU  }} </td>
-                    </tr>
-                    <tr>
-                        <td>Nombre de logements en renouvellement</td>
-                        <td class="w3-right-align">{{ ds.NB_LGT_RENOUVELLEMENT  }} </td>
-                    </tr>
-                    <tr>
-                        <td>Superficie des terrains dédiés aux logements.</td>
-                        <td class="w3-right-align">{{ f_round(ds.SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN / 10000,2)  }} ha</td>
-                    </tr>
-                    <tr>
-                        <td>Logements par hectares : </td>
-                        <td class="w3-right-align">{{ f_round(ds.NB_LGT_NOUVEAU / (ds.SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN / 10000),1)  }} log / ha</td>
-                    </tr>
-                    <tr>
-                        <td>Superficie des terrains dédiés aux activités.</td>
-                        <td class="w3-right-align">{{ Math.round( ((ds.SITADEL_LOCAUX_SUPERFICIE_TERRAIN / 100 ).toFixed(2)) ) / 100  }} ha</td>
-                    </tr>
-                    </tbody>
-                </table>
+            <tbody>
+            <tr class="w3-teal">
+                <th style="color:white">Données Sitadel</th>
+                <th style="color:white" class="w3-right-align">2013 - 2021</th>
+            </tr>
+            <tr>
+                <td>Surface du Territoire :</td>
+                <td class="w3-right-align">{{ Math.round( ((ds.SURFACE_COMMUNE / 100 ).toFixed(2)) ) / 100  }} ha</td>
+            </tr>
+            <tr>
+                <td>Nombre de logements nouveaux :</td>
+                <td class="w3-right-align">{{ ds.NB_LGT_NOUVEAU  }} </td>
+            </tr>
+            <tr>
+                <td>Nombre de logements en renouvellement :</td>
+                <td class="w3-right-align">{{ ds.NB_LGT_RENOUVELLEMENT  }} </td>
+            </tr>
+            <tr>
+                <td>Superficie des terrains dédiés aux logements :</td>
+                <td class="w3-right-align">{{ f_round(ds.SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN / 10000,2)  }} ha</td>
+            </tr>
+            <tr>
+                <td>Logements par hectares :</td>
+                <td class="w3-right-align">{{ f_round(ds.NB_LGT_NOUVEAU / (ds.SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN / 10000),1)  }} log / ha</td>
+            </tr>
+            <tr>
+                <td>Superficie des terrains dédiés aux activités :</td>
+                <td class="w3-right-align">{{ Math.round( ((ds.SITADEL_LOCAUX_SUPERFICIE_TERRAIN / 100 ).toFixed(2)) ) / 100  }} ha</td>
+            </tr>
+            </tbody>
+        </table>
         <br>
-
         <diagnostics :diags=this.data_s.Diagnostics type="ALL" categorie="ART"></diagnostics>
     </div>
+
+
 </div>
 <div id="LoiSRU"            class="w3-container city w3-animate-opacity">
     <div v-if="this.data_s != null">
         <h2>Loi SRU</h2>
         <p>Logements Sociaux : <a target="_blank" :href="ds.URL_SOURCE_SRU"> Dossier Dreal </a></p>
         <table class="w3-table-all w3-hoverable w3-card-4">
-                    <tr class="w3-teal">
-                        <th>Données SRU</th>
-                        <th class="w3-right-align">2017</th>
-                        <th class="w3-right-align">2020</th>
-                        <th class="w3-right-align">Evolution</th>
-                    </tr>
-                    <tr>
-                        <td>Residences Principales</td>
-                        <td class="w3-right-align">{{ds.SRU_RP_2017}}</td>
-                        <td class="w3-right-align">{{ds.SRU_RP_2020}}</td>
-                        <td class="w3-right-align">{{ds.SRU_RP_2020 - ds.SRU_RP_2017}}</td>
-                    </tr>
-                    <tr>
-                        <td>Logements Sociaux :</td>
-                        <td class="w3-right-align">{{ds.SRU_LLS_2017}}</td>
-                        <td class="w3-right-align">{{ds.SRU_LLS_2020}}</td>
-                        <td class="w3-right-align">{{ds.SRU_LLS_2020 - ds.SRU_LLS_2017}}</td>
-                    </tr>
-                    <tr>
-                        <td>Taux Logements Sociaux :</td>
-                        <td class="w3-right-align">{{ Math.round( ((ds.SRU_TX_LLS_2017 * 10000).toFixed(4)) ) / 100  }}%</td>
-                        <td class="w3-right-align">{{ Math.round( ((ds.SRU_TX_LLS_2020                       * 10000).toFixed(4)) ) / 100  }}%</td>
-                        <td class="w3-right-align">{{ Math.round( (((ds.SRU_TX_LLS_2020 - ds.SRU_TX_LLS_2017)* 10000).toFixed(4)) ) / 100  }}%</td>
-                    </tr>
-                    <tr>
-                        <td>Carence :</td>
-                        <td class="w3-right-align">{{ds.SRU_CARENCE_2017}}</td>
-                        <td class="w3-right-align">{{ds.SRU_CARENCE_2020}}</td>
-                        <td class="w3-right-align">{{ds.SRU_CARENCE_2020 - ds.SRU_CARENCE_2017}}</td>
-                    </tr>
-                    <tr>
-                        <td>Objectifs Trienaux :</td>
-                        <td class="w3-right-align">{{ds.SRU_OBJ_2017_2019}}</td>
-                        <td class="w3-right-align">{{ds.SRU_OBJ_2020_2022}}</td>
-                        <td class="w3-right-align">{{ds.SRU_OBJ_2020_2022 - ds.SRU_OBJ_2017_2019}}</td>
-                    </tr>
-                    <tr>
-                        <td>Logements 35% / 65% Trienaux :</td>
-                        <td class="w3-right-align">{{ds.SRU_MOD3565_2017}}</td>
-                        <td class="w3-right-align">{{ds.SRU_MOD3565_2020}}</td>
-                    </tr>
-                </table>
+            <tr class="w3-teal">
+                <th style="color:white">Données SRU</th>
+                <th style="color:white" class="w3-right-align">2017</th>
+                <th style="color:white" class="w3-right-align">2020</th>
+                <th style="color:white" class="w3-right-align">Evolution</th>
+            </tr>
+            <tr>
+                <td>Residences Principales</td>
+                <td class="w3-right-align">{{ds.SRU_RP_2017}}</td>
+                <td class="w3-right-align">{{ds.SRU_RP_2020}}</td>
+                <td class="w3-right-align">{{ds.SRU_RP_2020 - ds.SRU_RP_2017}}</td>
+            </tr>
+            <tr>
+                <td>Logements Sociaux :</td>
+                <td class="w3-right-align">{{ds.SRU_LLS_2017}}</td>
+                <td class="w3-right-align">{{ds.SRU_LLS_2020}}</td>
+                <td class="w3-right-align">{{ds.SRU_LLS_2020 - ds.SRU_LLS_2017}}</td>
+            </tr>
+            <tr>
+                <td>Taux Logements Sociaux :</td>
+                <td class="w3-right-align">{{ Math.round( ((ds.SRU_TX_LLS_2017 * 10000).toFixed(4)) ) / 100  }}%</td>
+                <td class="w3-right-align">{{ Math.round( ((ds.SRU_TX_LLS_2020                       * 10000).toFixed(4)) ) / 100  }}%</td>
+                <td class="w3-right-align">{{ Math.round( (((ds.SRU_TX_LLS_2020 - ds.SRU_TX_LLS_2017)* 10000).toFixed(4)) ) / 100  }}%</td>
+            </tr>
+            <tr>
+                <td>Carence :</td>
+                <td class="w3-right-align">{{ds.SRU_CARENCE_2017}}</td>
+                <td class="w3-right-align">{{ds.SRU_CARENCE_2020}}</td>
+                <td class="w3-right-align">{{ds.SRU_CARENCE_2020 - ds.SRU_CARENCE_2017}}</td>
+            </tr>
+            <tr>
+                <td>Objectifs Trienaux :</td>
+                <td class="w3-right-align">{{ds.SRU_OBJ_2017_2019}}</td>
+                <td class="w3-right-align">{{ds.SRU_OBJ_2020_2022}}</td>
+                <td class="w3-right-align">{{ds.SRU_OBJ_2020_2022 - ds.SRU_OBJ_2017_2019}}</td>
+            </tr>
+        </table>
         <br>
-        <div> <h2>Logements Sociaux : </h2>
-              <p>Evolution 2017-2020 des Residences Principales : {{ds.SRU_EVOLUTION_EN_RP}}</p>
-              <p>Evolution 2017-2020 Carence : {{ds.SRU_EVOLUTION_CARENCE}}</p>
-              <p>Logements Sociaux Realises en 2017-2020 (SRU) : {{ds.SRU_LOGEMENTS_SRU_CONSTRUITS}}</p>
-              <p>Logements Sociaux Realises en 2017-2021 (Sitadel): {{ds.NB_LGT_PRET_LOC_SOCIAL_1721}}</p>
-              <p>Logements Sociaux Realises en 2013-2016 (Sitadel): {{ds.NB_LGT_PRET_LOC_SOCIAL_1316}}</p>
-              <p>Logements Sociaux Realises en 2013-2021 (Sitadel): {{ds.NB_LGT_PRET_LOC_SOCIAL_1321}}</p>
-              <p>Total de logements a construire en 35% / 65% : {{ds.SRU_MOD3565_CARENCE}}</p>
+        <div> <h2>Logements Sociaux Construits / En Construction : </h2>
+        <table class="w3-table-all w3-hoverable w3-card-4">
+            <tr class="w3-teal">
+                <th style="color:white">Données Sitadel</th>
+                <th style="color:white" class="w3-right-align">Logements</th>
+            </tr>
+            <tr>
+                <td>Logements sociaux realisés en 2013-2016</td>
+                <td class="w3-right-align">{{ds.NB_LGT_PRET_LOC_SOCIAL_1316}}</td>
+            </tr>
+            <tr>
+                <td>Logements sociaux commencés en 2017-2021</td>
+                <td class="w3-right-align">{{ds.NB_LGT_PRET_LOC_SOCIAL_1721}}</td>
+            </tr>
+            <tr>
+                <td><b>Total 2013-2021</b></td>
+                <td class="w3-right-align"><b>{{ds.NB_LGT_PRET_LOC_SOCIAL_1321}}</b></td>
+            </tr>
+        </table>
         </div>
         <br>
         <div><h2>Carte Geoportail Logement Social</h2>
@@ -868,67 +979,58 @@ function openFneOzan(evt, tabName) {
         <table class="w3-table-all w3-hoverable w3-card-4">
             <tbody>
             <tr class="w3-teal">
-                <th>Données INSEE</th>
-                <th class="w3-right-align">2020</th>
-                <th class="w3-right-align">2030</th>
-                <th class="w3-right-align">2040</th>
-                <th class="w3-right-align">2050</th>
+                <th style="color:white">Données INSEE</th>
+                <th style="color:white" class="w3-right-align">2020</th>
+                <th style="color:white" class="w3-right-align">2030</th>
+                <th style="color:white" class="w3-right-align">2040</th>
             </tr>
             <tr>
-                <td>Population :</td>
+                <td><b>Population :</b></td>
                 <td class="w3-right-align">{{ds.POP_2020}}</td>
                 <td class="w3-right-align">{{ds.POP_2030}}</td>
                 <td class="w3-right-align">{{ds.POP_2040}}</td>
-                <td class="w3-right-align">{{ds.POP_2050}}</td>
             </tr>
             <tr>
                 <td>- Evolution en 10 ans :</td>
                 <td class="w3-right-align"> -</td>
                 <td class="w3-right-align">{{f_val(ds.POP_2030 - ds.POP_2020)}}</td>
                 <td class="w3-right-align">{{f_val(ds.POP_2040 - ds.POP_2030)}}</td>
-                <td class="w3-right-align">{{f_val(ds.POP_2050 - ds.POP_2040)}}</td>
             </tr>
             <tr>
                 <td>- Evolution en % / an :</td>
                 <td class="w3-right-align">-</td>
                 <td class="w3-right-align">{{f_val(ds.TX_POP_2030, format = "+", suffix = "%")}}</td>
                 <td class="w3-right-align">{{f_val(ds.TX_POP_3040, format = "+", suffix = "%")}}</td>
-                <td class="w3-right-align">{{f_val(ds.TX_POP_4050, format = "+", suffix = "%")}}</td>
             </tr>
             <tr>
-                <td>Taille des Ménages :</td>
+                <td><b>Taille des Ménages :</b></td>
                 <td class="w3-right-align">{{ds.TM_2020}}</td>
                 <td class="w3-right-align">{{ds.TM_2030}}</td>
                 <td class="w3-right-align">{{ds.TM_2040}}</td>
-                <td class="w3-right-align">{{ds.TM_2050}}</td>
             </tr>
             <tr>
                 <td>- Evolution en % / an  :</td>
                 <td class="w3-right-align">-</td>
                 <td class="w3-right-align">{{f_val(f_round(ds.TXTM_1318 / 2,3), format = "+", suffix = "%")}}</td>
                 <td class="w3-right-align">{{f_val(f_round(ds.TXTM_1318 / 3,3), format = "+", suffix = "%")}}</td>
-                <td class="w3-right-align">{{f_val(f_round(ds.TXTM_1318 / 4,3), format = "+", suffix = "%")}}</td>
             </tr>
             <tr>
-                <td>Besoins en logements pour la population :</td>
+                <td><b>Besoins en logements pour la population :</b></td>
                 <td class="w3-right-align">{{ds.LOG_2020}}</td>
                 <td class="w3-right-align">{{ds.LOG_2030}}</td>
                 <td class="w3-right-align">{{ds.LOG_2040}}</td>
-                <td class="w3-right-align">{{ds.LOG_2050}}</td>
             </tr>
             <tr>
                 <td>- Besoins en logements nouveaux sur 10 ans :</td>
                 <td class="w3-right-align"> -</td>
                 <td class="w3-right-align">{{f_val(ds.LOG_2030 - ds.LOG_2020)}}</td>
                 <td class="w3-right-align">{{f_val(ds.LOG_2040 - ds.LOG_2030)}}</td>
-                <td class="w3-right-align">{{f_val(ds.LOG_2050 - ds.LOG_2040)}}</td>
             </tr>
             <tr>
                 <td>- Besoins en logements par an :</td>
                 <td class="w3-right-align"> -</td>
                 <td class="w3-right-align">{{f_val(f_round((ds.LOG_2030 - ds.LOG_2020)/10))}} </td>
                 <td class="w3-right-align">{{f_val(f_round((ds.LOG_2040 - ds.LOG_2030)/10))}}</td>
-                <td class="w3-right-align">{{f_val(f_round((ds.LOG_2050 - ds.LOG_2040)/10))}}</td>
             </tr>
             </tbody>
         </table>
@@ -1103,6 +1205,10 @@ function openFneOzan(evt, tabName) {
 <div id="Calculettes"       class="w3-container city w3-animate-opacity">
         <h2>Calculettes</h2>
         <div class="w3-container">
+
+            <div v-if="this.data_s != null">
+                <p>Population 2013-2018 : {{ f_val(ds.P18_POP - ds.P13_POP) }} habitants ({{f_val(ds.TXPOP_1318)}} %/an). 2019 : {{ds.POP_LEGALE_2019}} habitants </p>
+            </div>
             <div class="w3-container w3-cell">
                 <calculette-evol ref="CalculetteEvolPopulation"
                                  titre="Population - Evolution selon le taux : "
@@ -1129,6 +1235,9 @@ function openFneOzan(evt, tabName) {
             </div>
         </div>
         <br>
+            <div v-if="this.data_s != null">
+                <p>Taille des Ménages 2013-2018: {{ ds.TM_2013 }} -> {{ ds.TM_2018 }} personnes / ménage ({{f_val(ds.TXTM_1318)}} %/an)</p>
+            </div>
         <div class="w3-container">
             <div class="w3-container w3-cell">
                 <calculette-evol ref="CalculetteEvolTailleMenages"

@@ -1632,7 +1632,7 @@ function chartProductionBesoinsLogements(ds, container) {
              ds.P18_RP - ds.P08_RP + ds.P18_RSECOCC - ds.P08_RSECOCC + ds.P18_LOGVAC - ds.P08_LOGVAC],
     },
   {
-        name : "Logements Construits",
+        name : "Logements Construits / Commencés",
         mode: 'lines',
         line: {shape: 'spline', dash: 'solid', width: 4, color : log_construits_color},
         x : [2008, 2013, 2016, 2020],
@@ -1641,7 +1641,7 @@ function chartProductionBesoinsLogements(ds, container) {
              offset_construits + ds.NB_LGT_TOT_COMMENCES_1316 + ds.NB_LGT_TOT_COMMENCES_1721]
   },
   {
-        name : "Indéterminées (Non-Affectés / Non-Vendues)",
+        name : "Logements Non-Affectés / En Construction",
         mode: 'lines',
         line: {shape: 'spline', dash: 'dot', width: 4, color : '#74248f'},
         x : [2018, 2020],
@@ -1836,6 +1836,83 @@ function chartConstructions(ds, container) {
     var myChart = new Chart($("#"+container+"Canvas").get(0).getContext("2d"), config);
 }
 
+function chartArtificialisation(ds, container) {
+
+    // Graphique Artificialisation de Logements 2009-2020 (ChartJS)
+    $('#'+container).html('');
+    if (ds=== null) { return ; }
+
+    ART1015 = ds.ART_NAF09ART10 + ds.ART_NAF10ART11 + ds.ART_NAF11ART12 + ds.ART_NAF12ART13 + ds.ART_NAF13ART14 + ds.ART_NAF14ART15
+    const data = {
+      labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"],
+      datasets: [
+        {
+          label: "Artificialisation - Ha / Par an",
+          data: [ds.ART_NAF09ART10, ds.ART_NAF10ART11, ds.ART_NAF11ART12, ds.ART_NAF12ART13,
+                 ds.ART_NAF13ART14, ds.ART_NAF14ART15, ds.ART_NAF15ART16, ds.ART_NAF16ART17,
+                 ds.ART_NAF17ART18, ds.ART_NAF18ART19, ds.ART_NAF19ART20],
+          fill: false,
+          tension: 0.5,
+          borderDash: [5, 5],
+          borderColor: border_Color,
+          backgroundColor: background_Color,
+        },
+        {
+          label: "Artificialisation - Cumul",
+          data: [ ds.ART_NAF09ART10 ,
+                  ds.ART_NAF09ART10 + ds.ART_NAF10ART11,
+                  ds.ART_NAF09ART10 + ds.ART_NAF10ART11 + ds.ART_NAF11ART12,
+                  ds.ART_NAF09ART10 + ds.ART_NAF10ART11 + ds.ART_NAF11ART12 + ds.ART_NAF12ART13,
+                  ds.ART_NAF09ART10 + ds.ART_NAF10ART11 + ds.ART_NAF11ART12 + ds.ART_NAF12ART13 + ds.ART_NAF13ART14,
+                  ART1015 ,
+                  ART1015 + ds.ART_NAF15ART16 ,
+                  ART1015 + ds.ART_NAF15ART16 + ds.ART_NAF16ART17,
+                  ART1015 + ds.ART_NAF15ART16 + ds.ART_NAF16ART17 + ds.ART_NAF17ART18 ,
+                  ART1015 + ds.ART_NAF15ART16 + ds.ART_NAF16ART17 + ds.ART_NAF17ART18 + ds.ART_NAF18ART19,
+                  ART1015 + ds.ART_NAF15ART16 + ds.ART_NAF16ART17 + ds.ART_NAF17ART18 + ds.ART_NAF18ART19 + ds.ART_NAF19ART20],
+          fill: false,
+          tension: 0.5,
+          borderColor: border_Color,
+          backgroundColor: background_Color,
+        }
+      ]
+    };
+
+    const config = {
+      type: 'line',
+      data: data,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true, color: theme_color,
+            text: 'Artificialisation sur ' + ds.LIBELLE,
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: false, color: theme_color,
+              text: 'Annees'
+            }
+          },
+          y: {
+            title: {
+              display: true, color: theme_color,
+              text: 'Hectares Artificialises'
+            },
+          }
+        },
+      },
+    };
+
+    $('<canvas id="'+container+'Canvas"></canvas>').appendTo($('#'+container));
+    var myChart = new Chart($("#"+container+"Canvas").get(0).getContext("2d"), config);
+}
+
 function chartTailleDesMenages(ds, container) {
 
     // Graphique Taille des Ménages (ChartJS)
@@ -1980,6 +2057,10 @@ function chartsUpdate(ds) {
     chartTailleDesMenages(ds,             'populationTailleMenagesChartContainer')
     chartGraphiquePopulation(ds,          'populationChartContainer')
 
+    // Tab Artificialisation
+    chartArtificialisation(ds,            'artificialisationArtificialisationChartContainer')
+
+
     // Tab Logements
     chartRepartitionNouveauxLogements(ds, 'logementsRepartitionNouveauxLogementsChartContainer')
     chartRepartitionTypesLogements(ds,    'logementsRepartitionTypesLogementsChartContainer')
@@ -1991,5 +2072,6 @@ function chartsUpdate(ds) {
     chartConstructions(ds,                'graphiquesConstructionsLogementsChartContainer')
     chartRepartitionNouveauxLogements(ds, 'graphiquesRepartitionNouveauxLogementsChartContainer')
     chartRepartitionTypesLogements(ds,    'graphiquesRepartitionTypesLogementsChartContainer')
+    chartArtificialisation(ds,            'graphiquesArtificialisationChartContainer')
 
 }
