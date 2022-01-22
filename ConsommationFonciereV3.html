@@ -407,8 +407,8 @@ function openFneOzan(evt, tabName) {
 
     <div v-if="this.data_s != null">
          <p><a target="_blank" :href="ds.DOSSIER_INSEE">Dossier Insee Complet {{ nom }}</a></p>
-         <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
-         <h3>Evolution de la Population</h3></div>
+         <div class="w3-container w3-section w3-teal w3-padding-16 w3-round-large">
+         <h2>Evolution de la Population</h2></div>
          <p>Population Légale : {{ ds.POP_LEGALE_2019 }}</a></p>
          <table class="w3-table-all w3-hoverable w3-card-4">
             <tbody>
@@ -535,45 +535,7 @@ function openFneOzan(evt, tabName) {
             </tbody>
         </table>
          <br>
-         <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
-         <h3>Flux annuel de population</h3></div>
-         <p v-if="this.territoire == 'Commune'">    Pour une commune, représente le nombre de déménagements inter-communaux (depuis et vers le département, l'EPCI, ou d'autres départements).</p>
-         <p v-if="this.territoire == 'EPCI'">       Pour une EPCI, représente le nombre de déménagements inter-communaux (depuis et vers le département, intra EPCI, ou d'autres départements).</p>
-         <p v-if="this.territoire == 'Departement'">Pour un département, représente le nombre de déménagements inter-communaux dans le département (intra départemental, inter EPCI, inter départemental).</p>
-         <table class="w3-table-all w3-hoverable w3-card-4">
-            <tbody>
-            <tr class="w3-teal">
-                <th style="color:white">Données INSEE 2018</th>
-                <th class="w3-right-align" style="color:white">Total : </th>
-                <th class="w3-right-align" style="color:white">de / vers le Département :</th>
-                <th class="w3-right-align" style="color:white">- dont de / vers l'EPCI :</th>
-                <th class="w3-right-align" style="color:white">En dehors du Département :</th>
-            </tr>
-            <tr>
-                <td>Population Entrante</td>
-                <td class="w3-right-align">{{ds.FLUX_2018_ENTRANT}}</td>
-                <td class="w3-right-align">{{ds.FLUX_2018_ENTRANT_DPT}}</td>
-                <td class="w3-right-align">{{ds.FLUX_2018_ENTRANT_EPCI}}</td>
-                <td class="w3-right-align">{{ds.FLUX_2018_ENTRANT_FRANCE + ds.FLUX_2018_ENTRANT_INTERNATIONAL}}</td>
-            </tr>
-            <tr>
-                <td>Population Sortante</td>
-                <td class="w3-right-align">{{ds.FLUX_2018_SORTANT}}</td>
-                <td class="w3-right-align">{{ds.FLUX_2018_SORTANT_DPT}}</td>
-                <td class="w3-right-align">{{ds.FLUX_2018_SORTANT_EPCI}}</td>
-                <td class="w3-right-align">{{ds.FLUX_2018_SORTANT_FRANCE}}</td>
-            </tr>
-            <tr>
-                <td>Solde - entrées moins sorties</td>
-                <td class="w3-right-align">{{f_val(ds.FLUX_2018_ENTRANT - ds.FLUX_2018_SORTANT)}}</td>
-                <td class="w3-right-align">{{f_val(ds.FLUX_2018_ENTRANT_DPT - ds.FLUX_2018_SORTANT_DPT)}}</td>
-                <td class="w3-right-align">{{f_val(ds.FLUX_2018_ENTRANT_EPCI - ds.FLUX_2018_SORTANT_EPCI)}}</td>
-                <td class="w3-right-align">{{f_val(ds.FLUX_2018_ENTRANT_FRANCE + ds.FLUX_2018_ENTRANT_INTERNATIONAL - ds.FLUX_2018_SORTANT_FRANCE)}}</td>
-            </tr>
-            </tbody>
-        </table>
-         <br>
-     </div>
+    </div>
 
     <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
         <h3>Evolution de la Population</h3></div>
@@ -582,6 +544,138 @@ function openFneOzan(evt, tabName) {
     <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
         <h3>Evolution de la Taille des Menages</h3></div>
         <div id="populationTailleMenagesChartContainer"               class="center"  style="width:100%; max-width:600px; max-height:500px;"></div>
+
+    <div v-if="this.data_s != null">
+         <div class="w3-container w3-section w3-teal w3-padding-16 w3-round-large">
+         <h2>Flux annuel de population (Déménagements)</h2></div>
+         <p v-if="this.territoire == 'Commune'">    Pour une commune, représente le nombre de déménagements inter-communaux (depuis et vers le département, l'EPCI, ou d'autres départements).</p>
+         <p v-if="this.territoire == 'EPCI'">       Pour une EPCI, représente le nombre de déménagements inter-communaux (depuis et vers le département, intra EPCI, ou d'autres départements).</p>
+         <p v-if="this.territoire == 'Departement'">Pour un département, représente le nombre de déménagements inter-communaux dans le département (intra départemental, inter EPCI, inter départemental).</p>
+         <br>
+         <table class="w3-table-all w3-hoverable w3-card-4">
+            <tbody>
+            <tr class="w3-teal">
+                <th style="color:white">Données INSEE Moyenne Annuelle 2013-2018</th>
+                <th class="w3-center-align" style="color:white">Part de la Population :</th>
+                <th class="w3-right-align" style="color:white">Total : </th>
+                <th class="w3-right-align" style="color:white">de / vers le Département :</th>
+                <th class="w3-right-align" style="color:white">- dont de / vers l'EPCI :</th>
+                <th class="w3-right-align" style="color:white">En dehors du Département :</th>
+            </tr>
+            <tr>
+                <td>Population Entrante</td>
+                <td class="w3-center-align">{{f_taux(ds.FLUX_1418_ENTRANT_POPULATION*100)}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUX_1418_ENTRANT / 5)}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUX_1418_ENTRANT_DPT / 5)}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUX_1418_ENTRANT_EPCI / 5)}}</td>
+                <td class="w3-right-align">{{f_round((ds.FLUX_1418_ENTRANT_FRANCE + ds.FLUX_1418_ENTRANT_INTERNATIONAL) / 5)}}</td>
+            </tr>
+            <tr>
+                <td>Population Sortante</td>
+                <td class="w3-center-align">{{f_taux(-(ds.FLUX_1418_SORTANT_POPULATION*100))}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUX_1418_SORTANT / 5)}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUX_1418_SORTANT_DPT / 5)}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUX_1418_SORTANT_EPCI / 5)}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUX_1418_SORTANT_FRANCE / 5)}}</td>
+            </tr>
+            <tr>
+                <td>Solde - entrées moins sorties</td>
+                <td class="w3-center-align">{{f_taux(ds.FLUX_1418_SOLDE_POPULATION*100)}}</td>
+                <td class="w3-right-align">{{f_val(f_round((ds.FLUX_1418_ENTRANT - ds.FLUX_1418_SORTANT) / 5))}}</td>
+                <td class="w3-right-align">{{f_val(f_round((ds.FLUX_1418_ENTRANT_DPT - ds.FLUX_1418_SORTANT_DPT) / 5))}}</td>
+                <td class="w3-right-align">{{f_val(f_round((ds.FLUX_1418_ENTRANT_EPCI - ds.FLUX_1418_SORTANT_EPCI) / 5))}}</td>
+                <td class="w3-right-align">{{f_val(f_round((ds.FLUX_1418_ENTRANT_FRANCE + ds.FLUX_1418_ENTRANT_INTERNATIONAL - ds.FLUX_2018_SORTANT_FRANCE) / 5))}}</td>
+            </tr>
+            </tbody>
+        </table>
+         <br>
+         <table class="w3-table-all w3-hoverable w3-card-4">
+            <tbody>
+            <tr class="w3-teal">
+                <th style="color:white">Données INSEE 2018</th>
+                <th class="w3-center-align" style="color:white">Part de la Population :</th>
+                <th class="w3-right-align" style="color:white">Total : </th>
+                <th class="w3-right-align" style="color:white">de / vers le Département :</th>
+                <th class="w3-right-align" style="color:white">- dont de / vers l'EPCI :</th>
+                <th class="w3-right-align" style="color:white">En dehors du Département :</th>
+            </tr>
+            <tr>
+                <td>Population Entrante</td>
+                <td class="w3-center-align">{{f_taux(ds.FLUX_2018_ENTRANT_POPULATION*100)}}</td>
+                <td class="w3-right-align">{{ds.FLUX_2018_ENTRANT}}</td>
+                <td class="w3-right-align">{{ds.FLUX_2018_ENTRANT_DPT}}</td>
+                <td class="w3-right-align">{{ds.FLUX_2018_ENTRANT_EPCI}}</td>
+                <td class="w3-right-align">{{ds.FLUX_2018_ENTRANT_FRANCE + ds.FLUX_2018_ENTRANT_INTERNATIONAL}}</td>
+            </tr>
+            <tr>
+                <td>Population Sortante</td>
+                <td class="w3-center-align">{{f_taux(-(ds.FLUX_2018_SORTANT_POPULATION*100))}}</td>
+                <td class="w3-right-align">{{ds.FLUX_2018_SORTANT}}</td>
+                <td class="w3-right-align">{{ds.FLUX_2018_SORTANT_DPT}}</td>
+                <td class="w3-right-align">{{ds.FLUX_2018_SORTANT_EPCI}}</td>
+                <td class="w3-right-align">{{ds.FLUX_2018_SORTANT_FRANCE}}</td>
+            </tr>
+            <tr>
+                <td>Solde Migratoire - entrées moins sorties</td>
+                <td class="w3-center-align">{{f_taux(ds.FLUX_2018_SOLDE_POPULATION*100)}}</td>
+                <td class="w3-right-align">{{f_val(ds.FLUX_2018_ENTRANT - ds.FLUX_2018_SORTANT)}}</td>
+                <td class="w3-right-align">{{f_val(ds.FLUX_2018_ENTRANT_DPT - ds.FLUX_2018_SORTANT_DPT)}}</td>
+                <td class="w3-right-align">{{f_val(ds.FLUX_2018_ENTRANT_EPCI - ds.FLUX_2018_SORTANT_EPCI)}}</td>
+                <td class="w3-right-align">{{f_val(ds.FLUX_2018_ENTRANT_FRANCE + ds.FLUX_2018_ENTRANT_INTERNATIONAL - ds.FLUX_2018_SORTANT_FRANCE)}}</td>
+            </tr>
+            </tbody>
+        </table>
+         <br>
+    </div>
+
+    <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
+        <h3>Evolution des Flux de Population</h3></div>
+        <div id="populationFluxChartContainer"               class="center"  style="width:100%; max-width:600px; max-height:500px;"></div>
+
+    <div v-if="this.data_s != null">
+         <div class="w3-container w3-section w3-teal w3-padding-16 w3-round-large">
+         <h2>Déplacements Domicile Travail</h2></div>
+         <p v-if="this.territoire == 'Commune'">    Pour une commune, représente le nombre de déplacements inter-communaux (depuis et vers le département, l'EPCI, ou d'autres départements).</p>
+         <p v-if="this.territoire == 'EPCI'">       Pour une EPCI, représente le nombre de déplacements inter-communaux (depuis et vers le département, intra EPCI, ou d'autres départements).</p>
+         <p v-if="this.territoire == 'Departement'">Pour un département, représente le nombre de déplacements inter-communaux dans le département (intra départemental, inter EPCI, inter départemental).</p>
+         <br>
+         <table class="w3-table-all w3-hoverable w3-card-4">
+            <tbody>
+            <tr class="w3-teal">
+                <th style="color:white">Déplacements Domicile Travail 2018</th>
+                <th class="w3-right-align" style="color:white">Total : </th>
+                <th class="w3-right-align" style="color:white">de / vers le Département :</th>
+                <th class="w3-right-align" style="color:white">- dont de / vers l'EPCI :</th>
+                <th class="w3-right-align" style="color:white">En dehors du Département :</th>
+            </tr>
+            <tr>
+                <td>Travailleurs résidents hors de la commune :</td>
+                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_ENTRANT)}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_ENTRANT_DPT)}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_ENTRANT_EPCI)}}</td>
+                <td class="w3-right-align">{{f_round((ds.FLUXPRO_2018_ENTRANT_FRANCE + ds.FLUXPRO_2018_ENTRANT_INTERNATIONAL))}}</td>
+            </tr>
+            <tr>
+                <td>Résidents travaillant hors de leur commune :</td>
+                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_SORTANT)}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_SORTANT_DPT)}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_SORTANT_EPCI)}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_SORTANT_FRANCE)}}</td>
+            </tr>
+            <tr>
+                <td>Déplacements quotidiens inter-communaux</td>
+                <td class="w3-right-align">{{f_round((ds.FLUXPRO_2018_ENTRANT + ds.FLUXPRO_2018_SORTANT))}}</td>
+                <td class="w3-right-align">{{f_round((ds.FLUXPRO_2018_ENTRANT_DPT + ds.FLUXPRO_2018_SORTANT_DPT))}}</td>
+                <td class="w3-right-align">{{f_round((ds.FLUXPRO_2018_ENTRANT_EPCI + ds.FLUXPRO_2018_SORTANT_EPCI))}}</td>
+                <td class="w3-right-align">{{f_round((ds.FLUXPRO_2018_ENTRANT_FRANCE + ds.FLUXPRO_2018_ENTRANT_INTERNATIONAL + ds.FLUXPRO_2018_SORTANT_FRANCE))}}</td>
+            </tr>
+            </tbody>
+        </table>
+         <br>
+         <p>Part des habitants travaillant hors de leur commune de résidence : {{f_round(ds.FLUXPRO_2018_POPULATION*100)}}%</p>
+         <br>
+    </div>
+
 
     <div v-if="this.data_s != null">
         <diagnostics :diags=this.data_s.Diagnostics type="ALL" categorie="POP"></diagnostics>
@@ -641,6 +735,8 @@ function openFneOzan(evt, tabName) {
             </tbody>
         </table>
          <br>
+         <p>Evolution de la vacance entre 2008 et 2018 : {{f_val(f_round(ds.evol_log_vac_0818))}}%</p>
+         <p>Evolution du secondaire entre 2008 et 2018 : {{f_val(f_round(ds.evol_res_sec_0818))}}%</p>
     </div>
 
     <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
@@ -656,7 +752,6 @@ function openFneOzan(evt, tabName) {
     </div>
 
 </div>
-
 <div id="Constructions"     class="w3-container city w3-animate-opacity">
 
     <h2>Constructions</h2>
@@ -767,13 +862,14 @@ function openFneOzan(evt, tabName) {
     </div>
 
 </div>
-
 <div id="Artificialisation" class="w3-container city w3-animate-opacity">
 
     <h2>Artificialisation</h2>
 
     <p>L'artificialisation étant une préoccupation récente, les donnees qui y sont relatives sont dévirées de sources approximatives
         et peu précises. Elles donnent néanmoins une indication des tendances en cours.</p>
+
+    <p>Le taux d'artificialisation pour l'ensemble de PACA sur les 10 dernières années est de 0,3%.</p>
 
     <div v-if="this.data_s != null">
         <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">

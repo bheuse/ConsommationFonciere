@@ -26,6 +26,16 @@ function evalInContext(script, context) {
    return (new Function("with(this) { return " + js_expr + "}")).call(context);
 }
 
+// Execute script in private context
+function stringInContext(text, context) {
+   if (text.trim().startsWith('"')) {
+       var js_expr = pythonToJavaScript(text);
+       return (new Function("with(this) { return " + js_expr + "}")).call(context);
+   } else {
+      return text
+   }
+}
+
 function pythonToJavaScript(expr) {
     var new_expr = expr.replace("TRUE", "true").replace("True", "true");
     new_expr = new_expr.replace("FALSE", "false").replace("False", "false");
@@ -217,13 +227,19 @@ function run_diagnostics(dataset, filter = "*"){
         diag["key"]           = key ;
         diag["categorie"]     = value.Categorie ;
         diag["description"]   = value.Description ;
-        diag["messageSiVrai"] = value.MessageSiVrai ;
-        diag["messageSiFaux"] = value.MessageSiFaux ;
+        diag["messageSiVrai"] = stringInContext(value.MessageSiVrai, dataset.total) ;
+        diag["messageSiFaux"] = stringInContext(value.MessageSiFaux, dataset.total) ;
         diag["Commentaire"]   = value.Commentaire ;
         diag["test"]          = value.Test ;
         diag["type"]          = value.Type ;
         diag["value"]         = the_value ;
-        dataset.diag = dataset.Diagnostics.filter(el => !(el.key === key));
+        if (the_value) {
+            diag["message"] = diag["messageSiVrai"] ;
+        } else {
+            diag["message"] = diag["messageSiFaux"] ;
+        }
+        dataset.diag = dataset.Diagnostics.filter(el => !(el.key == key));
+        dataset.Diagnostics = dataset.Diagnostics.filter(el => !(el.key == key));
         dataset.Diagnostics.push(diag)
         }
     console.log("< run_diagnostics");
@@ -344,6 +360,11 @@ const vm = Vue.createApp({
         },
         f_round(value, rounding=0)  {
             return (Math.round((value + Number.EPSILON) * (Math.pow(10,rounding))) / (Math.pow(10,rounding)))
+        },
+        f_taux(value, rounding=2, suffix = "%", format = "+") {
+            var value = value.toFixed(rounding);
+            if ((value > 0) && (format.includes("+"))) return ("+"+value.toString()+suffix) ;
+            return ""+value.toString()+suffix;
         },
         f_diff(after, before, format = "+") {
             // After = 200, Before = 100 => 100
@@ -552,57 +573,71 @@ vm.component('diagnostics', {
     <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
     <h3>Diagnostics {{ titre }}</h3></div>
     <div v-for='diag in diags' >
-         <div v-if="( type == 'ALL' || type == 'NOTE')  && diag.type == 'NOTE'" >
+         <div v-if="( type == 'ALL' || type == 'NOTE')  && diag.type == 'NOTE' && diag.message != ''" >
              <div v-if="categorie == 'ALL' || categorie == diag.categorie" >
                  <div v-if='diag.value == true' class="w3-panel w3-pale-yellow w3-topbar w3-rightbar w3-border-yellow w3-border">
-                                <p>{{diag.key}} - {{diag.categorie}}</p>
+                                <!-- <p>{{diag.key}} - {{diag.categorie}}</p> -->
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.messageSiVrai}}</p>
                  </div>
                  <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-leftbar w3-border-yellow w3-border">
-                                <p>{{diag.key}} - {{diag.categorie}}</p>
+                                <!-- <p>{{diag.key}} - {{diag.categorie}}</p> -->
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.messageSiFaux}}</p>
                  </div>
                  </div>
          </div>
-         <div v-if="( type == 'ALL' || type == 'BLUE')  && diag.type == 'BLUE'" >
+         <div v-if="( type == 'ALL' || type == 'BLUE')  && diag.type == 'BLUE' && diag.message != ''" >
              <div v-if="categorie == 'ALL' || categorie == diag.categorie" >
                  <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
-                                <p>{{diag.key}} - {{diag.categorie}}</p>
+                                <!-- <p>{{diag.key}} - {{diag.categorie}}</p> -->
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.messageSiVrai}}</p>
                  </div>
                  <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
-                                <p>{{diag.key}} - {{diag.categorie}}</p>
+                                <!-- <p>{{diag.key}} - {{diag.categorie}}</p> -->
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.messageSiFaux}}</p>
                  </div>
              </div>
          </div>
-         <div v-if="( type == 'ALL' || type == 'TEST')  && diag.type == 'TEST'" >
+         <div v-if="( type == 'ALL' || type == 'ORANGE')  && diag.type == 'ORANGE' && diag.message != ''" >
              <div v-if="categorie == 'ALL' || categorie == diag.categorie" >
-                 <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
-                                <p>{{diag.key}} - {{diag.categorie}}</p>
+                 <div v-if='diag.value == true' class="w3-panel w3-sand w3-topbar w3-rightbar w3-border-orange w3-border">
+                                <!-- <p>{{diag.key}} - {{diag.categorie}}</p> -->
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.messageSiVrai}}</p>
                  </div>
-                 <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
-                                <p>{{diag.key}} - {{diag.categorie}}</p>
+                 <div v-else class="w3-panel w3-sand w3-bottombar w3-leftbar w3-border-orange w3-border">
+                                <!-- <p>{{diag.key}} - {{diag.categorie}}</p> -->
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.messageSiFaux}}</p>
                  </div>
              </div>
          </div>
-         <div v-if="( type == 'ALL' || type == 'DIAG')  && diag.type == 'DIAG'" >
+         <div v-if="( type == 'ALL' || type == 'TEST')  && diag.type == 'TEST' && diag.message != ''" >
+             <div v-if="categorie == 'ALL' || categorie == diag.categorie" >
+                 <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
+                                <!-- <p>{{diag.key}} - {{diag.categorie}}</p> -->
+                                <p>{{diag.description}}</p>
+                                <p>{{diag.messageSiVrai}}</p>
+                 </div>
+                 <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
+                                <!-- <p>{{diag.key}} - {{diag.categorie}}</p> -->
+                                <p>{{diag.description}}</p>
+                                <p>{{diag.messageSiFaux}}</p>
+                 </div>
+             </div>
+         </div>
+         <div v-if="( type == 'ALL' || type == 'DIAG')  && diag.type == 'DIAG' && diag.message != ''" >
              <div v-if="categorie == 'ALL' || categorie == diag.categorie" >
                  <div v-if='diag.value == true' class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border">
-                                <p>{{diag.key}} - {{diag.categorie}}</p>
+                                <!-- <p>{{diag.key}} - {{diag.categorie}}</p> -->
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.messageSiVrai}}</p>
                  </div>
                  <div v-else class="w3-panel w3-pale-red w3-bottombar w3-border-red w3-border">
-                                <p>{{diag.key}} - {{diag.categorie}}</p>
+                                <!-- <p>{{diag.key}} - {{diag.categorie}}</p> -->
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.messageSiFaux}}</p>
                  </div>
@@ -1913,6 +1948,70 @@ function chartArtificialisation(ds, container) {
     var myChart = new Chart($("#"+container+"Canvas").get(0).getContext("2d"), config);
 }
 
+function chartFluxPopulation(ds, container) {
+
+    // Graphique Flux de Population (ChartJS)
+    $('#'+container).html('');
+    if (ds=== null) { return ; }
+
+    ART1015 = ds.ART_NAF09ART10 + ds.ART_NAF10ART11 + ds.ART_NAF11ART12 + ds.ART_NAF12ART13 + ds.ART_NAF13ART14 + ds.ART_NAF14ART15
+    const data = {
+      labels: ["2014", "2015", "2016", "2017", "2018"],
+      datasets: [
+        {
+          label: "Flux Entrant",
+          data: [ds.FLUX_2014_ENTRANT, ds.FLUX_2015_ENTRANT, ds.FLUX_2016_ENTRANT, ds.FLUX_2017_ENTRANT, ds.FLUX_2018_ENTRANT],
+          fill: false,
+          tension: 0.5,
+          borderColor: theme_color,
+          backgroundColor: theme_color,
+        },
+        {
+          label: "Flux Sortant",
+          data: [ds.FLUX_2014_SORTANT, ds.FLUX_2015_SORTANT, ds.FLUX_2016_SORTANT, ds.FLUX_2017_SORTANT, ds.FLUX_2018_SORTANT],
+          fill: false,
+          tension: 0.5,
+          borderColor: logements_color,
+          backgroundColor: logements_color,
+        }
+      ]
+    };
+
+    const config = {
+      type: 'line',
+      data: data,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true, color: theme_color,
+            text: 'Flux de Population sur ' + ds.LIBELLE,
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: false, color: theme_color,
+              text: 'Annees'
+            }
+          },
+          y: {
+            title: {
+              display: true, color: theme_color,
+              text: 'Demenagements'
+            },
+          }
+        },
+      },
+    };
+
+    $('<canvas id="'+container+'Canvas"></canvas>').appendTo($('#'+container));
+    var myChart = new Chart($("#"+container+"Canvas").get(0).getContext("2d"), config);
+}
+
 function chartTailleDesMenages(ds, container) {
 
     // Graphique Taille des Ménages (ChartJS)
@@ -2056,6 +2155,7 @@ function chartsUpdate(ds) {
     // Tab Population
     chartTailleDesMenages(ds,             'populationTailleMenagesChartContainer')
     chartGraphiquePopulation(ds,          'populationChartContainer')
+    chartFluxPopulation(ds,               'populationFluxChartContainer')
 
     // Tab Artificialisation
     chartArtificialisation(ds,            'artificialisationArtificialisationChartContainer')

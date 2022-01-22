@@ -1205,7 +1205,7 @@ class DataStore():
             elif (self.type_dict[key] == "TAUX")    : return self.add_value(key, index, float(data))
             elif (self.type_dict[key] == "PERCENT") : return self.add_value(key, index, float(data))
             else:
-                self.error_dict[key] = "Invalid Type  [" + str(index) + "][" + str(key) + "] - Not a " + self.type_dict[key] + " :  " + str(data)
+                self.error_dict[key] = "Invalid Type  [" + str(index) + "][" + str(key) + "] - Not a " + str(self.type_dict[key]) + " :  " + str(data)
                 print_red(self.error_dict[key])
                 self.add_value(key, index, str(data))
                 # quit()
@@ -1486,10 +1486,7 @@ class DataStore():
         p_scot = p_scot.loc[p_scot["Unnamed: 1"].astype(str).str.contains(self.get("EPCI"))]
         p_scot = p_scot.head(1)
 
-        # Donnees Projections Departement 2013-2050
-        load_projections()
-
-        # Donnees Projections Region 2013-2050
+        # Donnees Projections Departement & Region 2013-2050
         load_projections()
 
         # Donnees Evolution Departement 2008-2021
@@ -1533,6 +1530,9 @@ class DataStore():
         load_logements_paca()
 
         # Donnees Flux
+        load_flux_2014()
+        load_flux_2015()
+        load_flux_2016()
         load_flux_2017()
         load_flux_2018()
         load_fluxpro_2018()
@@ -3191,6 +3191,9 @@ class TestConsommation(unittest.TestCase):
 
     def testExcelFlux(self):
         excel_flux()
+
+    def testMeta(self):
+        load_collectData()
 
     def testCalc(self):
         self.assertEqual("0",    round0str(0,   rounding=0))
