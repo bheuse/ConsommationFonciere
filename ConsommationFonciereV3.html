@@ -379,6 +379,11 @@ function openFneOzan(evt, tabName) {
               Contactez nous par email.
         </a></p>
 
+        <p><a class="w3-btn"
+              href="mailto:gadceca06@gmail.com?subject=Atelier%20Sobriete%20Fonciere">
+              Participez a un atelier Sobriété Fonciere.
+        </a></p>
+
     <h3>Guides du Ministere de la Transition Ecologique</h3>
 
         <p><a class="w3-btn"  target="_blank"
@@ -1208,129 +1213,146 @@ function openFneOzan(evt, tabName) {
     </div>
 </div>
 <div id="Sources"           class="w3-container city w3-animate-opacity">
+    <h2>Sources</h2>
     <div v-if="this.data_s != null">
-            <h2>Sources</h2>
             <div>
-                <div class="w3-container w3-section w3-teal">
-                    <h2 class="w3-teal w3-padding-16">Sources de Données : </h2>
-                </div>
+                <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
+                <h3>Sources de Données </h3></div>
+                <p>Les sources des donnees INSEE, Sitadel, Dreal pour {{nom}} : </p>
                 <ul class="w3-ul w3-card-4">
-                    <li><a target="_blank" :href="ds.DOSSIER_INSEE">Dossier Complet Insee : {{ nom }}</a></li>
-                    <li><a target="_blank" :href="ds.URL_SOURCE_ARTIFICIALISATION"> Artificialisation : Dossier Cerema </a></li>
-                    <li><a target="_blank" :href="ds.URL_SOURCE_SRU"> Logements Sociaux : Dossier Dreal </a></li>
-                    <li><a target="_blank" :href="ds.URL_SOURCE_SITADEL"> Logements Construits : Dossier Sitadel </a></li>
-                    <li><a target="_blank" :href="ds.URL_SOURCE_COMMUNES"> Données Communes :Dossier Insee </a></li>
-                    <li><a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS"> Projections 2050 : Dossier Insee </a></li>
-                    <li><a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS_PACA">Projections Paca : Dossier Omphale </a></li>
+                    <li><a class="w3-btn" target="_blank" :href="ds.DOSSIER_INSEE">Dossier Complet Insee : {{ nom }}</a></li>
+                    <li><a class="w3-btn" target="_blank" :href="ds.URL_SOURCE_ARTIFICIALISATION"> Artificialisation : Dossier Cerema </a></li>
+                    <li><a class="w3-btn" target="_blank" :href="ds.URL_SOURCE_SRU"> Logements Sociaux : Dossier Dreal </a></li>
+                    <li><a class="w3-btn" target="_blank" :href="ds.URL_SOURCE_SITADEL"> Logements Construits : Dossier Sitadel </a></li>
+                    <li><a class="w3-btn" target="_blank" :href="ds.URL_SOURCE_COMMUNES"> Données Communes : Dossier Insee </a></li>
+                    <li><a class="w3-btn" target="_blank" :href="ds.URL_SOURCE_PROJECTIONS"> Projections 2050 : Dossier Insee </a></li>
+                    <li><a class="w3-btn" target="_blank" :href="ds.URL_SOURCE_PROJECTIONS_PACA">Projections Paca : Dossier Omphale </a></li>
                 </ul>
             </div>
             <br>
-            <h2>Autres Sites</h2>
-            <p>Données sur Toutes les Villes de France : <a target="_blank" :href="ds.URL_VILLE_DATA">Ville Data</a></p>
-            <p>L'Encyclopédie des villes de France : <a target="_blank" :href="ds.URL_LINTERNAUTE">L'internaute</a></p>
-            <p>Google : <a target="_blank" :href="ds.URL_GOOGLE">Google Search</a></p>
-        </div>
+            <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
+            <h3>Autres Sites </h3></div>
+                <p>Autres sources, pour des données complementaires : </p>
+                <ul class="w3-ul w3-card-4">
+                    <li><a class="w3-btn" target="_blank" :href="ds.URL_VILLE_DATA">Données sur Toutes les Villes de France : Ville Data - {{ nom }}</a></li>
+                    <li><a class="w3-btn" target="_blank" :href="ds.URL_LINTERNAUTE">L'Encyclopédie des villes de France : L'internaute </a></li>
+                    <li><a class="w3-btn" target="_blank" :href="ds.URL_GOOGLE">Google Search </a></li>
+                </ul>
+            </div>
     </div>
 <div id="DonneesBrutes"     class="w3-container city w3-animate-opacity">
     <div v-if="data_s != null">
         <h2>Données Brutes</h2>
-        <p><a target="_blank" :href="ds.DOSSIER_INSEE">Dossier Insee Complet {{ nom }}</a></p>
+        <p><a class="w3-btn"  target="_blank" :href="ds.DOSSIER_INSEE">Dossier Insee Complet {{ nom }} : </a></p>
+        <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
+        <h3>Metadonnées consolidées et valeurs pour {{ nom }}</h3></div>
         <br>
         <div class="w3-cell-row">
-            <div class="w3-container w3-cell w3-mobile">
+            <div class="w3-container w3-cell w3-mobile w3-center">
                 <p><a class="btn w3-btn fa fa-download" :href="ds.DOWNLOAD_CSV"> Download CSV</a></p>
             </div>
-            <div class="w3-container w3-cell w3-mobile">
+            <div class="w3-container w3-cell w3-mobile w3-center">
                 <p><a class="btn w3-btn fa fa-download" :href="ds.DOWNLOAD_XLSX"> Download XLSX</a></p>
             </div>
-            <div class="w3-container w3-cell w3-mobile">
+            <div class="w3-container w3-cell w3-mobile w3-center">
                 <p><a class="btn w3-btn fa fa-download" :href="ds.DOWNLOAD_JSON"> Download JSON</a></p>
             </div>
         </div>
         <br>
         <table class="w3-table-all w3-hoverable w3-card-4" style="width: 100%;">
-            <tr class="w3-teal">
-                <th                        style="width: 10%;">Cle de Donnee</th>
-                <th class="w3-right-align" style="width: 20%;">Semantique</th>
-                <th class="w3-left-align"  style="width: 70%;">Valeur</th>
+            <tbody>
+            <tr class="w3-teal" style="color:white">
+                <th                        style="width: 10%; color:white">Cle de Donnee</th>
+                <th class="w3-right-align" style="width: 20%; color:white">Semantique</th>
+                <th class="w3-left-align"  style="width: 70%; color:white">Valeur</th>
             </tr>
             <tr  v-for="(item, key) in this.data" :key="key" >
-                <td>{{ key }}</td>
+                <td class="w3-tooltip" >{{ key }}
+                    <span class="w3-text w3-tag w3-round-large w3-small w3-teal"><em>{{ item.source }} </em></span></td>
                 <td class="w3-right-align">{{ item.meta }}</td>
-                <td class="w3-left-align"style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;"> {{ item.total }}</td>
+                <td class="w3-left-align w3-tooltip" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 1px;">
+                    {{ item.total }}
+                    <span class="w3-text w3-tag w3-round-large w3-small w3-teal"><em>{{ item.expr }} [ {{ item.mode }} ] </em></span></td>
             </tr>
+            </tbody>
         </table>
     </div>
 </div>
 <div id="Debug"             class="w3-container city w3-animate-opacity">
     <div v-if="this.data_s != null">
         <h2>Debug</h2>
-        <div class="w3-container w3-section w3-teal"><h2 class="w3-teal w3-padding-16">Diagnostics</h2></div>
+        <br>
+        <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
+        <h3>Diagnostics</h3></div>
         <div v-for='diag in this.data_s.Diagnostics' >
             <ul class="w3-ul w3-card-4">
-                <li><h3>{{diag.key}}</h3></li>
+                <li><h3 style="color:teal;">{{diag.key}}</h3></li>
+                <li> Categorie : {{diag.categorie}}</li>
                 <li> Description : {{diag.description}}</li>
+                <li> Type : {{diag.type}}</li>
                 <li> Test : {{diag.test}}</li>
                 <li> Valeur : {{diag.value}}</li>
-                <li> Categorie : {{diag.categorie}}</li>
-                <li> Type : {{diag.type}}</li>
+                <li> Message   : {{diag.message}}</li>
                 <li> Message Si Faux : {{diag.messageSiFaux}}</li>
                 <li> Message Si Vrai : {{diag.messageSiVrai}}</li>
             </ul>
-            <div v-if="diag.type == 'NOTE'" >
-             <div v-if='diag.value == true' class="w3-panel w3-pale-yellow w3-topbar w3-rightbar w3-border-yellow w3-border">
-                            <p>{{diag.key}} - {{diag.categorie}}</p>
-                            <p>{{diag.description}}</p>
-                            <p>{{diag.messageSiVrai}}</p>
-             </div>
-             <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-leftbar w3-border-yellow w3-border">
-                            <p>{{diag.key}} - {{diag.categorie}}</p>
-                            <p>{{diag.description}}</p>
-                            <p>{{diag.messageSiFaux}}</p>
-             </div>
-            </div>
-                 <div v-if="diag.type == 'BLUE'" >
-                     <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
-                                    <p>{{diag.key}} - {{diag.categorie}}</p>
-                                    <p>{{diag.description}}</p>
-                                    <p>{{diag.messageSiVrai}}</p>
-                     </div>
-                     <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
-                                    <p>{{diag.key}} - {{diag.categorie}}</p>
-                                    <p>{{diag.description}}</p>
-                                    <p>{{diag.messageSiFaux}}</p>
-                     </div>
+            <div v-if="diag.type == 'NOTE' && diag.message != ''" >
+                 <div v-if='diag.value == true' class="w3-panel w3-pale-yellow w3-topbar w3-rightbar w3-border-yellow w3-border">
+                                <p>{{diag.description}}</p>
+                                <p>{{diag.message}}</p>
                  </div>
-
-            <div v-if="diag.type == 'DIAG'" >
-             <div v-if='diag.value == true' class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border">
-                            <p>{{diag.key}} - {{diag.categorie}}</p>
-                            <p>{{diag.description}}</p>
-                            <p>{{diag.messageSiVrai}}</p>
-             </div>
-             <div v-else class="w3-panel w3-pale-red w3-bottombar w3-border-red w3-border">
-                            <p>{{diag.key}} - {{diag.categorie}}</p>
-                            <p>{{diag.description}}</p>
-                            <p>{{diag.messageSiFaux}}</p>
-             </div>
-         </div>
-            <div v-if="diag.type == 'TEST'" >
-             <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-border">
-                            <p>{{diag.key}} - {{diag.categorie}}</p>
-                            <p>{{diag.description}}</p>
-                            <p>{{diag.messageSiVrai}}</p>
-             </div>
-             <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-border-blue w3-border">
-                            <p>{{diag.key}} - {{diag.categorie}}</p>
-                            <p>{{diag.description}}</p>
-                            <p>{{diag.messageSiFaux}}</p>
-             </div>
-         </div>
+                 <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-leftbar w3-border-yellow w3-border">
+                                <p>{{diag.description}}</p>
+                                <p>{{diag.message}}</p>
+                 </div>
+            </div>
+            <div v-if="diag.type == 'BLUE' && diag.message != ''" >
+                 <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.message}}</p>
+                 </div>
+                 <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.message}}</p>
+                 </div>
+            </div>
+            <div v-if="diag.type == 'ORANGE' && diag.message != ''" >
+                 <div v-if='diag.value == true' class="w3-panel w3-sand w3-topbar w3-rightbar w3-border-orange w3-border">
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.message}}</p>
+                 </div>
+                 <div v-else class="w3-panel w3-sand w3-bottombar w3-leftbar w3-border-orange w3-border">
+                                    <p>{{diag.description}}</p>
+                                    <p>{{diag.message}}</p>
+                 </div>
+            </div>
+            <div v-if="diag.type == 'DIAG' && diag.message != ''" >
+                 <div v-if='diag.value == true' class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border">
+                                <p>{{diag.description}}</p>
+                                <p>{{diag.message}}</p>
+                 </div>
+                 <div v-else class="w3-panel w3-pale-red w3-bottombar w3-border-red w3-border">
+                                <p>{{diag.description}}</p>
+                                <p>{{diag.message}}</p>
+                 </div>
+            </div>
+            <div v-if="diag.type == 'TEST' && diag.message != ''">
+                <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-border">
+                                <p>{{diag.description}}</p>
+                                <p>{{diag.message}}</p>
+                </div>
+                <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-border-blue w3-border">
+                                <p>{{diag.description}}</p>
+                                <p>{{diag.message}}</p>
+                </div>
+            </div>
         </div>
-        <div class="w3-container w3-section w3-teal"> <h2 class="w3-teal w3-padding-16">Données</h2></div>
+        <br>
+        <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
+        <h3>Données</h3></div>
         <div v-for="(item, key) in this.data" :key="key" >
                 <ul class="w3-ul w3-card-4">
-                    <li><h3>{{ key }}</h3></li>
+                    <li><h3 style="color:teal">{{ key }}</h3></li>
                     <li> Semantique : {{ item.meta   }}</li>
                     <li> Expr :       {{ item.expr   }}</li>
                     <li> Type :       {{ item.type   }}</li>
@@ -1338,6 +1360,7 @@ function openFneOzan(evt, tabName) {
                     <li> Source :     {{ item.source }}</li>
                     <li> Valeur :     {{ item.total  }}</li>
                 </ul>
+                <br>
         </div>
     </div>
 </div>

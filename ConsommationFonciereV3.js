@@ -788,7 +788,6 @@ vm.component('calculette-evol', {
             <h3 v-if="titre"> {{titre}}</h3>
             <h3 v-else>Evolution de la Valeur selon le taux : </h3>
             </div>
-            <form>
                 <div class="columns">
                     <div class="column">
                         Année de Départ :  <input class="input" id="annee_depart"    name="annee_depart"    type="number" step="any" placeholder="Année de Départ"  v-on:blur="recalc_evol"  v-model.number="calculette_evol.annee_depart"> <br>
@@ -815,7 +814,6 @@ vm.component('calculette-evol', {
                         </div>
                     </div>
                 </div>
-            </form>
   `
 })
 

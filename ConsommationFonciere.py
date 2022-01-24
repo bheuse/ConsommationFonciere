@@ -2660,6 +2660,9 @@ def ftp_push_file(filename):
             # remote_files = ftp.nlst()
             # print(remote_files)
             for file in filename:
+                if (not os.path.exists(file)):
+                    print_red("File not found : "+ file)
+                    continue
                 print_blue("FTP Push : " + file)
                 ftp.storbinary('STOR ' + file.replace("\\" , "/"), open(file, 'rb'))
             ftp.close()
@@ -2679,13 +2682,13 @@ def ftp_push_files():
         filelist.extend([
                 "input/Configuration.xlsx",
                 "index.html",
-                "Header.png", "Body.png",
                 "output/france.json",
+                "Header.png", "Body.png",
                 "README.md",  "README.html",    "README.dillinger.html",
                 "ConsommationFonciere.py",
-                "QuestionnerUnProjetDePLU-SCoT.pdf", "Alpes-Maritimes-NoteExcedentsLogements.pdf",
-                "Guide_Pratique_Artif_complet.pdf",  "GuideSF_6_ZCZAE_web.pdf",
-                "GuideSF_16_Observatoires_web.pdf",  "GuideSF_17_fiscalite_web.pdf",
+                "input/QuestionnerUnProjetDePLU-SCoT.pdf", "input/Alpes-Maritimes-NoteExcedentsLogements.pdf",
+                "input/Guide_Pratique_Artif_complet.pdf",  "input/GuideSF_6_ZCZAE_web.pdf",
+                "input/GuideSF_16_Observatoires_web.pdf",  "input/GuideSF_17_fiscalite_web.pdf",
                 "ConsommationFonciere.html",    "ConsommationFonciere.js",
                 "ConsommationFonciereV2.html",  "ConsommationFonciereV2.js",
                 "input/Legend_Logements.png",   "input/CommentCaMarche.png",
