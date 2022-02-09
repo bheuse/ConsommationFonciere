@@ -322,6 +322,24 @@ function openFneOzan(evt, tabName) {
   document.getElementById(tabName).style.display = "block";
   evt.currentTarget.className += " w3-dark-grey";
 }
+// Hide / Show
+function hideShowPOP_function() {
+  var x = document.getElementById("myPOPDIV");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+// Hide / Show
+function hideShowLOG_function() {
+  var x = document.getElementById("myLOGDIV");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
 </script>
 <div class="w3-border">
 <div class="w3-bar w3-theme">
@@ -336,10 +354,11 @@ function openFneOzan(evt, tabName) {
 </div>
 <div class="w3-bar w3-theme">
 -->
-<button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'ObjectifZan')">    FedeSCoT Zan </button>
-<button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'MichelZan')">      FNE Zan </button>
+<button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'MichelZan')">      Objectif Zan ! </button>
+<button class="w3-bar-item w3-button databtn w3-padding-16 w3-blue"          onclick="openTab(event,'PlusLoin')">       Pour aller plus loin </button>
 <button class="w3-bar-item w3-button databtn w3-padding-16 w3-grey"          onclick="openTab(event,'Calculettes')">    Calculettes </button>
 <!--
+<button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'ObjectifZan')">    FedeSCoT Zan </button>
 <button class="w3-bar-item w3-button databtn w3-padding-16 w3-pink"          onclick="openTab(event,'Diagnostics')">    Diagnostics </button>
 <button class="w3-bar-item w3-button databtn w3-padding-16 w3-flat-wisteria" onclick="openTab(event,'Sources')">        Sources </button>
 <button class="w3-bar-item w3-button databtn w3-padding-16 w3-grey"          onclick="openTab(event,'DonneesBrutes')">  Donnees Brutes </button>
@@ -349,15 +368,15 @@ function openFneOzan(evt, tabName) {
 <div class="w3-dropdown-hover w3-mobile">
     <button class="w3-button w3-padding-16 ">Données <i class="fa fa-caret-down"></i></button>
     <div class="w3-dropdown-content w3-bar-block w3-teal">
+      <a class="w3-bar-item w3-button databtn w3-mobile w3-teal" onclick="openTab(event,'Sources')">       Sources</a>
+      <a class="w3-bar-item w3-button databtn w3-mobile w3-flat-wisteria" onclick="openTab(event,'ObjectifZan')">   FedeSCoT Zan</a>
+      <a class="w3-bar-item w3-button databtn w3-mobile w3-flat-wisteria" onclick="openTab(event,'BigTable')">      Table de Calcul</a>
+      <a class="w3-bar-item w3-button databtn w3-mobile w3-teal" onclick="openTab(event,'DonneesBrutes')"> Données Brutes</a>
       <a class="w3-bar-item w3-button databtn w3-mobile w3-teal" onclick="openTab(event,'Graphiques')">    Graphiques</a>
       <a class="w3-bar-item w3-button databtn w3-mobile w3-teal" onclick="openTab(event,'Diagnostics')">   Diagnostics</a>
-      <a class="w3-bar-item w3-button databtn w3-mobile w3-teal" onclick="openTab(event,'Sources')">       Sources</a>
-      <a class="w3-bar-item w3-button databtn w3-mobile w3-teal" onclick="openTab(event,'DonneesBrutes')"> Données Brutes</a>
       <a class="w3-bar-item w3-button databtn w3-mobile w3-teal" onclick="openTab(event,'Debug')">         Debug</a>
-      <a class="w3-bar-item w3-button databtn w3-mobile w3-flat-wisteria" onclick="openTab(event,'BigTable')">      Table de Calcul</a>
     </div>
   </div>
-<button class="w3-bar-item w3-button databtn w3-padding-16 w3-blue"  onclick="openTab(event,'PlusLoin')">       Pour aller plus loin </button>
 </div>
 </div>
 
@@ -431,7 +450,7 @@ function openFneOzan(evt, tabName) {
         <div id="graphiquesProductionBesoinsLogementsChartContainer"  class="center" style="width:100%;max-width:700px; max-height:700px;"></div>
 
     <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
-        <h3>Constructions de Logements 2010-2019</h3></div>
+        <h3>Production et Besoins de Logements 2010-2019</h3></div>
         <div id="graphiquesConstructionsLogementsChartContainer"      class="center"  style="width:100%; max-width:600px; max-height:500px;"></div>
 
     <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
@@ -451,10 +470,29 @@ function openFneOzan(evt, tabName) {
 
 <div id="Population"        class="w3-container city w3-animate-opacity">
 
-    <h2>Population</h2>
+    <br>
+    <div class="w3-dropdown-hover w3-mobile w3-block ">
+    <button class="w3-button w3-round-large  w3-block w3-left-align w3-hover-teal"><h2>Population <i class="fa fa-caret-down"></i></h2></button>
+    <div class="w3-dropdown-content">
+    <br>
+    <p>L’évaluation de la population future d’un territoire est fondamentale pour l’élaboration d’un document d’urbanisme.
+        Cette évaluation s’appuie normalement d’abord sur le constat des évolutions passées (recensements INSEE à utiliser
+        par période quinquennale ex : 2013-2018) puis tient compte des volontés politiques locales à condition
+        que le document donne les moyens correspondants.
+    </p>
+    <p>Au delà de ce 1er indicateur qu’est la population totale, la démographie fournit aussi bien d’autres éléments
+        sur le passé mais aussi sur le futur car la population ne se renouvelle que lentement : migrations
+        résidentielles par ex, répartition par âge avec ses conséquences sur l’indicateur fondamental qu’est la taille
+        moyenne des ménages qui conditionne  le besoin en logements, à condition de ne pas prendre en compte la population
+        totale mais seulement celle des ménages (dans la région 97,5 % de la population totale mais parfois bien moins)
+    </p>
+    <p>Au passage, on trouvera ci-dessous des informations sur la population des ménages Enfin, toute analyse pour
+        un territoire ne peut faire l’impasse sur les territoires voisins (Cf « Sélectionner un territoire »).</p>
+    </div>
+    </div>
 
     <div v-if="this.data_s != null">
-         <p><a target="_blank" :href="ds.DOSSIER_INSEE">Dossier Insee Complet {{ nom }}</a></p>
+         <p><a class="w3-btn" target="_blank" :href="ds.DOSSIER_INSEE">Dossier Insee Complet {{ nom }}</a></p>
          <div class="w3-container w3-section w3-teal w3-padding-16 w3-round-large">
          <h2>Evolution de la Population</h2></div>
          <p>Population Légale : {{ ds.POP_LEGALE_2019 }}</a></p>
@@ -597,7 +635,7 @@ function openFneOzan(evt, tabName) {
          <div class="w3-container w3-section w3-teal w3-padding-16 w3-round-large">
          <h2>Flux annuel de population (Déménagements)</h2></div>
          <p v-if="this.territoire == 'Commune'">    Pour une commune, représente le nombre de déménagements inter-communaux (depuis et vers le département, l'EPCI, ou d'autres départements).</p>
-         <p v-if="this.territoire == 'EPCI'">       Pour une EPCI, représente le nombre de déménagements inter-communaux (depuis et vers le département, intra EPCI, ou d'autres départements).</p>
+         <p v-if="this.territoire == 'EPCI'">       Pour un EPCI, représente le nombre de déménagements inter-communaux (depuis et vers le département, intra EPCI, ou d'autres départements).</p>
          <p v-if="this.territoire == 'Departement'">Pour un département, représente le nombre de déménagements inter-communaux dans le département (intra départemental, inter EPCI, inter départemental).</p>
          <br>
          <table class="w3-table-all w3-hoverable w3-card-4">
@@ -606,33 +644,33 @@ function openFneOzan(evt, tabName) {
                 <th style="color:white">Données INSEE Moyenne Annuelle 2013-2018</th>
                 <th class="w3-center-align" style="color:white">Part de la Population :</th>
                 <th class="w3-right-align" style="color:white">Total : </th>
+                <th class="w3-right-align" style="color:white">de / vers l'EPCI :</th>
                 <th class="w3-right-align" style="color:white">de / vers le Département :</th>
-                <th class="w3-right-align" style="color:white">- dont de / vers l'EPCI :</th>
                 <th class="w3-right-align" style="color:white">En dehors du Département :</th>
             </tr>
             <tr>
                 <td>Population Entrante</td>
                 <td class="w3-center-align">{{f_taux(ds.FLUX_1418_ENTRANT_POPULATION*100)}}</td>
-                <td class="w3-right-align">{{f_round(ds.FLUX_1418_ENTRANT / 5)}}</td>
-                <td class="w3-right-align">{{f_round(ds.FLUX_1418_ENTRANT_DPT / 5)}}</td>
-                <td class="w3-right-align">{{f_round(ds.FLUX_1418_ENTRANT_EPCI / 5)}}</td>
-                <td class="w3-right-align">{{f_round((ds.FLUX_1418_ENTRANT_FRANCE + ds.FLUX_1418_ENTRANT_INTERNATIONAL) / 5)}}</td>
+                <td class="w3-right-align">+{{f_round(ds.FLUX_1418_ENTRANT / 5)}}</td>
+                <td class="w3-right-align">+{{f_round(ds.FLUX_1418_ENTRANT_EPCI / 5)}}</td>
+                <td class="w3-right-align">+{{f_round(ds.FLUX_1418_ENTRANT_DPT / 5)}}</td>
+                <td class="w3-right-align">+{{f_round((ds.FLUX_1418_ENTRANT_FRANCE + ds.FLUX_1418_ENTRANT_INTERNATIONAL) / 5)}}</td>
             </tr>
             <tr>
                 <td>Population Sortante</td>
                 <td class="w3-center-align">{{f_taux(-(ds.FLUX_1418_SORTANT_POPULATION*100))}}</td>
-                <td class="w3-right-align">{{f_round(ds.FLUX_1418_SORTANT / 5)}}</td>
-                <td class="w3-right-align">{{f_round(ds.FLUX_1418_SORTANT_DPT / 5)}}</td>
-                <td class="w3-right-align">{{f_round(ds.FLUX_1418_SORTANT_EPCI / 5)}}</td>
-                <td class="w3-right-align">{{f_round(ds.FLUX_1418_SORTANT_FRANCE / 5)}}</td>
+                <td class="w3-right-align">-{{f_round(ds.FLUX_1418_SORTANT / 5)}}</td>
+                <td class="w3-right-align">-{{f_round(ds.FLUX_1418_SORTANT_EPCI / 5)}}</td>
+                <td class="w3-right-align">-{{f_round(ds.FLUX_1418_SORTANT_DPT / 5)}}</td>
+                <td class="w3-right-align">-{{f_round(ds.FLUX_1418_SORTANT_FRANCE / 5)}}</td>
             </tr>
             <tr>
                 <td>Solde - entrées moins sorties</td>
                 <td class="w3-center-align">{{f_taux(ds.FLUX_1418_SOLDE_POPULATION*100)}}</td>
                 <td class="w3-right-align">{{f_val(f_round((ds.FLUX_1418_ENTRANT - ds.FLUX_1418_SORTANT) / 5))}}</td>
-                <td class="w3-right-align">{{f_val(f_round((ds.FLUX_1418_ENTRANT_DPT - ds.FLUX_1418_SORTANT_DPT) / 5))}}</td>
                 <td class="w3-right-align">{{f_val(f_round((ds.FLUX_1418_ENTRANT_EPCI - ds.FLUX_1418_SORTANT_EPCI) / 5))}}</td>
-                <td class="w3-right-align">{{f_val(f_round((ds.FLUX_1418_ENTRANT_FRANCE + ds.FLUX_1418_ENTRANT_INTERNATIONAL - ds.FLUX_2018_SORTANT_FRANCE) / 5))}}</td>
+                <td class="w3-right-align">{{f_val(f_round((ds.FLUX_1418_ENTRANT_DPT - ds.FLUX_1418_SORTANT_DPT) / 5))}}</td>
+                <td class="w3-right-align">{{f_val(f_round((ds.FLUX_1418_ENTRANT_FRANCE + ds.FLUX_1418_ENTRANT_INTERNATIONAL - ds.FLUX_1418_SORTANT_FRANCE) / 5))}}</td>
             </tr>
             </tbody>
         </table>
@@ -643,36 +681,38 @@ function openFneOzan(evt, tabName) {
                 <th style="color:white">Données INSEE 2018</th>
                 <th class="w3-center-align" style="color:white">Part de la Population :</th>
                 <th class="w3-right-align" style="color:white">Total : </th>
+                <th class="w3-right-align" style="color:white">de / vers l'EPCI :</th>
                 <th class="w3-right-align" style="color:white">de / vers le Département :</th>
-                <th class="w3-right-align" style="color:white">- dont de / vers l'EPCI :</th>
                 <th class="w3-right-align" style="color:white">En dehors du Département :</th>
             </tr>
             <tr>
                 <td>Population Entrante</td>
                 <td class="w3-center-align">{{f_taux(ds.FLUX_2018_ENTRANT_POPULATION*100)}}</td>
-                <td class="w3-right-align">{{ds.FLUX_2018_ENTRANT}}</td>
-                <td class="w3-right-align">{{ds.FLUX_2018_ENTRANT_DPT}}</td>
-                <td class="w3-right-align">{{ds.FLUX_2018_ENTRANT_EPCI}}</td>
-                <td class="w3-right-align">{{ds.FLUX_2018_ENTRANT_FRANCE + ds.FLUX_2018_ENTRANT_INTERNATIONAL}}</td>
+                <td class="w3-right-align">+{{ds.FLUX_2018_ENTRANT}}</td>
+                <td class="w3-right-align">+{{ds.FLUX_2018_ENTRANT_DPT}}</td>
+                <td class="w3-right-align">+{{ds.FLUX_2018_ENTRANT_EPCI}}</td>
+                <td class="w3-right-align">+{{ds.FLUX_2018_ENTRANT_FRANCE + ds.FLUX_2018_ENTRANT_INTERNATIONAL}}</td>
             </tr>
             <tr>
                 <td>Population Sortante</td>
                 <td class="w3-center-align">{{f_taux(-(ds.FLUX_2018_SORTANT_POPULATION*100))}}</td>
-                <td class="w3-right-align">{{ds.FLUX_2018_SORTANT}}</td>
-                <td class="w3-right-align">{{ds.FLUX_2018_SORTANT_DPT}}</td>
-                <td class="w3-right-align">{{ds.FLUX_2018_SORTANT_EPCI}}</td>
-                <td class="w3-right-align">{{ds.FLUX_2018_SORTANT_FRANCE}}</td>
+                <td class="w3-right-align">-{{ds.FLUX_2018_SORTANT}}</td>
+                <td class="w3-right-align">-{{ds.FLUX_2018_SORTANT_EPCI}}</td>
+                <td class="w3-right-align">-{{ds.FLUX_2018_SORTANT_DPT}}</td>
+                <td class="w3-right-align">-{{ds.FLUX_2018_SORTANT_FRANCE}}</td>
             </tr>
             <tr>
                 <td>Solde Migratoire - entrées moins sorties</td>
                 <td class="w3-center-align">{{f_taux(ds.FLUX_2018_SOLDE_POPULATION*100)}}</td>
                 <td class="w3-right-align">{{f_val(ds.FLUX_2018_ENTRANT - ds.FLUX_2018_SORTANT)}}</td>
-                <td class="w3-right-align">{{f_val(ds.FLUX_2018_ENTRANT_DPT - ds.FLUX_2018_SORTANT_DPT)}}</td>
                 <td class="w3-right-align">{{f_val(ds.FLUX_2018_ENTRANT_EPCI - ds.FLUX_2018_SORTANT_EPCI)}}</td>
+                <td class="w3-right-align">{{f_val(ds.FLUX_2018_ENTRANT_DPT - ds.FLUX_2018_SORTANT_DPT)}}</td>
                 <td class="w3-right-align">{{f_val(ds.FLUX_2018_ENTRANT_FRANCE + ds.FLUX_2018_ENTRANT_INTERNATIONAL - ds.FLUX_2018_SORTANT_FRANCE)}}</td>
             </tr>
             </tbody>
         </table>
+         <br>
+         <p>Le solde migratoire ne comprend pas les personnes qui ont quitté le territoire pour l’étranger (pour info, ce flux particulier représentait durant l’année 2017 de l’ordre de 10 % du total des sortants, avec forcément des disparités selon les territoires).</p>
          <br>
     </div>
 
@@ -684,7 +724,7 @@ function openFneOzan(evt, tabName) {
          <div class="w3-container w3-section w3-teal w3-padding-16 w3-round-large">
          <h2>Déplacements Domicile Travail</h2></div>
          <p v-if="this.territoire == 'Commune'">    Pour une commune, représente le nombre de déplacements inter-communaux (depuis et vers le département, l'EPCI, ou d'autres départements).</p>
-         <p v-if="this.territoire == 'EPCI'">       Pour une EPCI, représente le nombre de déplacements inter-communaux (depuis et vers le département, intra EPCI, ou d'autres départements).</p>
+         <p v-if="this.territoire == 'EPCI'">       Pour un EPCI, représente le nombre de déplacements inter-communaux (depuis et vers le département, intra EPCI, ou d'autres départements).</p>
          <p v-if="this.territoire == 'Departement'">Pour un département, représente le nombre de déplacements inter-communaux dans le département (intra départemental, inter EPCI, inter départemental).</p>
          <br>
          <table class="w3-table-all w3-hoverable w3-card-4">
@@ -692,29 +732,29 @@ function openFneOzan(evt, tabName) {
             <tr class="w3-teal">
                 <th style="color:white">Déplacements Domicile Travail 2018</th>
                 <th class="w3-right-align" style="color:white">Total : </th>
+                <th class="w3-right-align" style="color:white">de / vers l'EPCI :</th>
                 <th class="w3-right-align" style="color:white">de / vers le Département :</th>
-                <th class="w3-right-align" style="color:white">- dont de / vers l'EPCI :</th>
                 <th class="w3-right-align" style="color:white">En dehors du Département :</th>
             </tr>
             <tr>
-                <td>Travailleurs résidents hors de la commune :</td>
+                <td>Résidents d’une commune travaillant dans une autre commune :</td>
                 <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_ENTRANT)}}</td>
-                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_ENTRANT_DPT)}}</td>
                 <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_ENTRANT_EPCI)}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_ENTRANT_DPT)}}</td>
                 <td class="w3-right-align">{{f_round((ds.FLUXPRO_2018_ENTRANT_FRANCE + ds.FLUXPRO_2018_ENTRANT_INTERNATIONAL))}}</td>
             </tr>
             <tr>
-                <td>Résidents travaillant hors de leur commune :</td>
+                <td>Travailleurs dans la commune résidant hors de cette commune :</td>
                 <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_SORTANT)}}</td>
-                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_SORTANT_DPT)}}</td>
                 <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_SORTANT_EPCI)}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_SORTANT_DPT)}}</td>
                 <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_SORTANT_FRANCE)}}</td>
             </tr>
             <tr>
-                <td>Déplacements quotidiens inter-communaux</td>
+                <td>Déplacements liés au travail : </td>
                 <td class="w3-right-align">{{f_round((ds.FLUXPRO_2018_ENTRANT + ds.FLUXPRO_2018_SORTANT))}}</td>
-                <td class="w3-right-align">{{f_round((ds.FLUXPRO_2018_ENTRANT_DPT + ds.FLUXPRO_2018_SORTANT_DPT))}}</td>
-                <td class="w3-right-align">{{f_round((ds.FLUXPRO_2018_ENTRANT_EPCI + ds.FLUXPRO_2018_SORTANT_EPCI))}}</td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
                 <td class="w3-right-align">{{f_round((ds.FLUXPRO_2018_ENTRANT_FRANCE + ds.FLUXPRO_2018_ENTRANT_INTERNATIONAL + ds.FLUXPRO_2018_SORTANT_FRANCE))}}</td>
             </tr>
             </tbody>
@@ -732,7 +772,22 @@ function openFneOzan(evt, tabName) {
 
 <div id="Logements"         class="w3-container city w3-animate-opacity">
 
-    <h2>Logements</h2>
+    <br>
+    <button class="w3-button w3-round-large  w3-block w3-left-align w3-hover-teal"onclick="hideShowLOG_function()">
+        <h2>Parc de Logements <i class="fa fa-caret-down"></i></h2></button>
+    <div id="myLOGDIV"  style="display:none" >
+    <br>
+    <p>Les principales données disponibles sur le parc de logements proviennent des recensements de l’INSEE
+        dont les résultats sont à utiliser par période quinquennale (par ex 2013-2018).
+        D’autres données sont également utiles notamment sur les logements sociaux (voir Onglet SRU),
+        sur l’artificialisation due à l’habitat (voir Onglet Artificialisation), sur le renouvellement du parc
+        (par ex transformation de logements en bureaux ou l’inverse, regroupements de plusieurs logements en un seul, …)
+        (voir Onglet Construction).</p>
+    <p>Les besoins en résidences principales s’évaluent en tenant principalement compte de la démographie et
+        de l’évolution de la taille moyenne des ménages (voir Onglet Population).</p>
+    <p>Les besoins totaux en logements doivent aussi tenir compte des évolutions prévues concernant les résidences
+        secondaires et la vacance des logements.</p>
+    </div>
 
     <div v-if="this.data_s != null">
          <p><a target="_blank" :href="ds.DOSSIER_INSEE">Dossier Insee Complet {{ nom }}</a></p>
@@ -802,7 +857,27 @@ function openFneOzan(evt, tabName) {
 </div>
 <div id="Constructions"     class="w3-container city w3-animate-opacity">
 
-    <h2>Constructions</h2>
+    <br>
+    <div class="w3-dropdown-hover w3-mobile w3-block ">
+    <button class="w3-button w3-round-large  w3-block w3-left-align w3-hover-teal"><h2>Constructions Neuves <i class="fa fa-caret-down"></i></h2></button>
+    <div class="w3-dropdown-content">
+    <br>
+    <p>Le parc de logements d’un territoire évolue essentiellement du fait de la construction neuve.</p>
+    <p>Les nombres annuels de logements commencés par territoire sont collectés par le ministère en charge du logement
+        et présentés dans la base de données SITADEL2. Cette statistique ne distingue pas la destination de ces
+        logements, par exemple entre futures résidences principales ou résidences secondaires.</p>
+    <p>Mais le parc peut aussi évoluer par démolition de logements, ou transformation de locaux commerciaux ou de
+        bureaux en logement ou l’inverse, par regroupement de logements voisins en un seul et inversement, …
+        On parle alors de « renouvellement du parc ». Il n’existe pas d’information directe sur ce renouvellement
+        mais on peut en avoir une idée en comparant l’évolution du parc mesurée par les recensements (cf Onglet Parc
+        de logements) avec la construction neuve (SITADEL2), toutefois cette comparaison reste assez aléatoire parce
+        que les deux sources sont très différentes et ne peut donc donner une bonne indication que sur des territoires
+        assez vastes.</p>
+    <p>Une autre source indiquant le nombre de logements sociaux construits peut être mobilisée sur les communes
+        concernées par la loi SRU (+ de 3500 habitants dans un EPCI de + de 50 000 habitants). </p>
+    </div>
+    </div>
+
 
     <div v-if="this.data_s != null">
          <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
@@ -853,7 +928,7 @@ function openFneOzan(evt, tabName) {
                         <td class="w3-right-align">{{ds.LOG_2020}}</td>
                     </tr>
                     <tr>
-                        <td><b>Production</b> en Logements :</td>
+                        <td><b>Production</b> en Logements (commencés sur la période) :</td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"><b>{{ds.PROD_LOG_1318}}</b></td>
                         <td class="w3-right-align"></td>
@@ -869,7 +944,7 @@ function openFneOzan(evt, tabName) {
                         <td class="w3-right-align">({{ Math.round( ((ds.TX_PROD_LLS_1320 * 10000).toFixed(4)) ) / 100  }}%)</td>
                     </tr>
                     <tr>
-                        <td><b>Excédents</b> de Logements Construits par rapport aux besoins :</td>
+                        <td><b>Excédents</b> de Logements Commencés par rapport aux besoins pour le logement des habitants :</td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"><b><i>{{ds.EXCES_BESOINS_1318}}</i></b></td>
                         <td class="w3-right-align"></td>
@@ -892,17 +967,49 @@ function openFneOzan(evt, tabName) {
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
                     </tr>
+                    <tr>
+                        <td><b>Renouvellement </b> du Parc de Logements :</td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align"><b><i>{{ds.log_1318 - ds.PROD_LOG_1318}}</i></b></td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align"></td>
+                    </tr>
+                    <tr>
+                        <td> -> Evolution du parc 2013-2018 :</td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align">{{f_round(ds.log_1318,0)}} log.</td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align"></td>
+                    </tr>
+                    <tr>
+                        <td> -&gt; Nombre de logements commencés 2012-2017 :</td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align">{{ds.PROD_LOG_1318}} log.</td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align"></td>
+                    </tr>
+                    <tr>
+                        <td> -&gt; Renouvellement annuel du parc : </td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align">{{f_round((ds.log_1318 -ds.PROD_LOG_1318)/5,0)}} log.</td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align"></td>
+                        <td class="w3-right-align"></td>
+                    </tr>
                     </tbody>
                 </table>
          <br>
     </div>
-
+    <!--
     <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
         <h3>Besoins et Production de Logements</h3></div>
         <div id="constructionsProductionBesoinsLogementsChartContainer"  class="center" style="width:100%;max-width:700px; max-height:700px;"></div>
-
+   -->
     <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
-        <h3>Constructions de Logements 2010-2019</h3></div>
+        <h3>Besoins et Constructions de Logements 2010-2019</h3></div>
         <div id="constructionsConstructionsLogementsChartContainer"      class="center"  style="width:100%; max-width:600px; max-height:500px;"></div>
 
     <div v-if="this.data_s != null">
@@ -914,21 +1021,23 @@ function openFneOzan(evt, tabName) {
 
     <h2>Artificialisation</h2>
 
-    <p>L'artificialisation étant une préoccupation récente, les donnees qui y sont relatives sont dévirées de sources approximatives
-        et peu précises. Elles donnent néanmoins une indication des tendances en cours.</p>
+    <p>L'artificialisation étant une préoccupation récente, les données qui y sont relatives sont dérivées de sources
+        approximatives et peu précises. Elles donnent néanmoins une indication des tendances en cours.</p>
 
-    <p>Le taux d'artificialisation pour l'ensemble de PACA sur les 10 dernières années est de 0,3%.</p>
+    <p>Le taux d'artificialisation pour l'ensemble de PACA sur le total des 5 dernières années (2015 à 2020) est
+        de 0,23% de la surface totale de la région, un peu plus faible que sur les 5 années précédentes 0,25 %.
+        Soit 0,5% en 10 ans. </p>
 
     <div v-if="this.data_s != null">
         <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
         <h3>Artificialisation des sols sur bases fiscales en 10 ans (2009-2020)</h3></div>
         <p>Artificialisation : <a target="_blank" :href="ds.URL_SOURCE_ARTIFICIALISATION"> Dossier Cerema </a></p>
         <p> Parmi les sources disponibles, les données issues des fichiers fiscaux traitées par le CEREMA offrent
-             l'avantage d'être annuelles et disponibles pour tout le territoire de manière comparable même si elles ne
-             sont pas très précises. Elles comptabilisent les parcelles cadastrales nouvellement
-             artificialisées en distinguant notamment celles destinées à l'habitat et aux activités économiques,
-             mais pas précisément les surfaces artificialisées comme pourra le faire la future base de données
-             cartographiques Occupation du sol à grande échelle (OCS GE) actuellement en chantier.</p>
+            l'avantage d'être annuelles et disponibles pour tout le territoire de manière comparable même si elles
+            ne sont pas très précises. Elles comptabilisent les parcelles cadastrales nouvellement artificialisées
+            en distinguant notamment celles destinées à l'habitat et aux activités économiques, mais pas précisément
+            les surfaces artificialisées comme pourra le faire la future base de données cartographiques Occupation
+            du sol à grande échelle (OCS GE) actuellement en chantier. Et promise pour 2024.</p>
         <table class="w3-table-all w3-hoverable w3-card-4">
             <tbody>
             <tr class="w3-teal">
@@ -980,15 +1089,21 @@ function openFneOzan(evt, tabName) {
             </tr>
             <tr>
                 <td>Nouveaux logements (Résidences principales, secondaires et vacantes) :</td>
+                <div v-if="ds.ART_LOG1318 > 0">
                 <td class="w3-right-align">{{ ds.ART_LOG1318 }}</td>
+                </div>
             </tr>
             <tr>
                 <td>- Nouveaux logements par hectare artificialisé :</td>
+                <div v-if="ds.ART_LOG_HECT > 0">
                 <td class="w3-right-align">{{ ds.ART_LOG_HECT }} log/ha</td>
+                </div>
             </tr>
             <tr>
-                <td>M2 artificialisés résidence principale supplémentaire :</td>
+                <td>M2 artificialisés par résidence principale supplémentaire :</td>
+                <div v-if="ds.ART_HECT_RP > 0">
                 <td class="w3-right-align">{{ ds.ART_HECT_RP }} m2</td>
+                </div>
             </tr>
             <tr>
                 <td>M2 artificialisés par habitant supplémentaire :</td>
@@ -1298,50 +1413,60 @@ function openFneOzan(evt, tabName) {
             </ul>
             <div v-if="diag.type == 'NOTE' && diag.message != ''" >
                  <div v-if='diag.value == true' class="w3-panel w3-pale-yellow w3-topbar w3-rightbar w3-border-yellow w3-border">
+                                <br>
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.message}}</p>
                  </div>
                  <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-leftbar w3-border-yellow w3-border">
+                                <br>
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.message}}</p>
                  </div>
             </div>
             <div v-if="diag.type == 'BLUE' && diag.message != ''" >
                  <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
-                                    <p>{{diag.description}}</p>
-                                    <p>{{diag.message}}</p>
+                                <br>
+                                <p>{{diag.description}}</p>
+                                <p>{{diag.message}}</p>
                  </div>
                  <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
-                                    <p>{{diag.description}}</p>
-                                    <p>{{diag.message}}</p>
+                                <br>
+                                <p>{{diag.description}}</p>
+                                <p>{{diag.message}}</p>
                  </div>
             </div>
             <div v-if="diag.type == 'ORANGE' && diag.message != ''" >
                  <div v-if='diag.value == true' class="w3-panel w3-sand w3-topbar w3-rightbar w3-border-orange w3-border">
-                                    <p>{{diag.description}}</p>
-                                    <p>{{diag.message}}</p>
+                                <br>
+                                <p>{{diag.description}}</p>
+                                <p>{{diag.message}}</p>
                  </div>
                  <div v-else class="w3-panel w3-sand w3-bottombar w3-leftbar w3-border-orange w3-border">
-                                    <p>{{diag.description}}</p>
-                                    <p>{{diag.message}}</p>
+                                <br>
+                                <p>{{diag.description}}</p>
+                                <p>{{diag.message}}</p>
                  </div>
             </div>
             <div v-if="diag.type == 'DIAG' && diag.message != ''" >
                  <div v-if='diag.value == true' class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border">
+                                <br>
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.message}}</p>
                  </div>
                  <div v-else class="w3-panel w3-pale-red w3-bottombar w3-border-red w3-border">
+                                <br>
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.message}}</p>
                  </div>
             </div>
             <div v-if="diag.type == 'TEST' && diag.message != ''">
                 <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-border">
+                                <br>
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.message}}</p>
                 </div>
                 <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-border-blue w3-border">
+                                <br>
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.message}}</p>
                 </div>
@@ -1838,20 +1963,20 @@ function openFneOzan(evt, tabName) {
             </tr>
             <tr>
                 <td>Parc de logements vacants</td>
-                <td class="w3-right-align"> <input type="number"min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_vac_depart"></td>
-                <td class="w3-right-align"> <input type="number"min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_vac_arrivee"></td>
+                <td class="w3-right-align"> <input type="number" min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_vac_depart"></td>
+                <td class="w3-right-align"> <input type="number" min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_vac_arrivee"></td>
                 <td class="w3-right-align">{{this.ds.oz_scen_parc_res_vac_variation}}</td>
             </tr>
             <tr>
                 <td>Parc de résidences secondaires</td>
-                <td class="w3-right-align"> <input type="number"min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_sec_depart"></td>
-                <td class="w3-right-align"> <input type="number"min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_sec_arrivee"></td>
+                <td class="w3-right-align"> <input type="number" min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_sec_depart"></td>
+                <td class="w3-right-align"> <input type="number" min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_sec_arrivee"></td>
                 <td class="w3-right-align">{{this.ds.oz_scen_parc_res_sec_variation}}</td>
             </tr>
             <tr>
                 <td>Désaffectations</td>
                 <td class="w3-right-align"></td>
-                <td class="w3-right-align"> <input type="number"min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_desaffectations"></td>
+                <td class="w3-right-align"> <input type="number" min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_desaffectations"></td>
                 <td class="w3-right-align">{{this.ds.oz_scen_desaffectations}}</td>
             </tr>
             </tbody>
@@ -2244,8 +2369,8 @@ function openFneOzan(evt, tabName) {
             </tr>
             <tr>
                 <td>Personnes par ménage</td>
-                <td class="w3-right-align"> <input type="number"min="0" max="99999" step="0.01" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.oz_scen_tm_depart"></td>
-                <td class="w3-right-align"> <input type="number"min="0" max="99999" step="0.01" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.oz_scen_tm_arrivee"></td>
+                <td class="w3-right-align"> <input type="number" min="0" max="99999" step="0.01" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.oz_scen_tm_depart"></td>
+                <td class="w3-right-align"> <input type="number" min="0" max="99999" step="0.01" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.oz_scen_tm_arrivee"></td>
                 <td class="w3-right-align">{{this.ds.oz_scen_tm_variation}}</td>
             </tr>
             <tr>
@@ -2268,20 +2393,20 @@ function openFneOzan(evt, tabName) {
             </tr>
             <tr>
                 <td>Logements vacants</td>
-                <td class="w3-right-align"> <input type="number"min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_vac_depart"></td>
-                <td class="w3-right-align"> <input type="number"min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_vac_arrivee"></td>
+                <td class="w3-right-align"> <input type="number" min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_vac_depart"></td>
+                <td class="w3-right-align"> <input type="number" min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_vac_arrivee"></td>
                 <td class="w3-right-align">{{this.ds.oz_scen_parc_res_vac_variation}}</td>
             </tr>
             <tr>
                 <td>Résidences secondaires</td>
-                <td class="w3-right-align"> <input type="number"min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_sec_depart"></td>
-                <td class="w3-right-align"> <input type="number"min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_sec_arrivee"></td>
+                <td class="w3-right-align"> <input type="number" min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_sec_depart"></td>
+                <td class="w3-right-align"> <input type="number" min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_sec_arrivee"></td>
                 <td class="w3-right-align">{{this.ds.oz_scen_parc_res_sec_variation}}</td>
             </tr>
             <tr>
                 <td>Désaffectations</td>
                 <td class="w3-right-align"></td>
-                <td class="w3-right-align"> <input type="number"min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_desaffectations"></td>
+                <td class="w3-right-align"> <input type="number" min="0" max="99999999" style="text-align: right;" v-on:blur="recalc"  v-model.number="this.ds.oz_scen_desaffectations"></td>
                 <td class="w3-right-align">{{this.ds.oz_scen_desaffectations}}</td>
             </tr>
             </tbody>
@@ -2465,7 +2590,7 @@ function openFneOzan(evt, tabName) {
 <h4> Méthode proposée par France Nature Environnement.</h4>
 <p>  France Nature Environnement est une fédération nationale d'associations de protection de l'environnement.</p>
 <p>  Le Gadseca est un groupement départemental d'associations de protection de l'environnement dans les Alpes-Maritimes.</p>
-<div>
+</div>
 <div class="w3-border">
 <div class="w3-bar w3-theme w3-right">
 <button class="w3-bar-item w3-button fneozanbtn w3-padding-16"                     onclick="openFneOzan(event,'FneInsee')">         Insee </button>

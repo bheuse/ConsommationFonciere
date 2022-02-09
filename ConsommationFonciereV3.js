@@ -23,6 +23,7 @@ function get_dataset(dataset_id) {
 // Execute script in private context
 function evalInContext(script, context) {
    var js_expr = pythonToJavaScript(script);
+    console.log("evalInContext : "+js_expr);
    return (new Function("with(this) { return " + js_expr + "}")).call(context);
 }
 
@@ -39,6 +40,7 @@ function stringInContext(text, context) {
 function pythonToJavaScript(expr) {
     var new_expr = expr.replace("TRUE", "true").replace("True", "true");
     new_expr = new_expr.replace("FALSE", "false").replace("False", "false");
+    new_expr = new_expr.replace(" and ", " && ").replace(" or ", " || ").replace("not ", "! ");
     new_expr = new_expr.replace(/\${([A-Z0-9a-z-_]*)}/g, '$1');
     return new_expr
 }
@@ -88,11 +90,11 @@ function f_percent(part, full, rounding=1, suffix = "%", format = "") {
             return 0
         }
         var   percent = (part / full) * 100 ;
-        var f_percent = percent.toFixed(rounding);
-        if (format=="")           return f_percent+suffix ;
-        if (format.includes("+") && (percent>0)) f_percent = "+"+f_percent
-        if (format.includes("(")) return "("+f_percent+suffix+") "+part.toString() ;
-        return "("+f_percent+suffix+") "+ part.toString() ;
+        var percent_f = percent.toFixed(rounding);
+        if (format=="")           return percent_f+suffix ;
+        if (format.includes("+") && (percent>0)) percent_f = "+"+percent_f
+        if (format.includes("(")) return "("+percent_f+suffix+") "+part.toString() ;
+        return "("+percent_f+suffix+") "+ part.toString() ;
 }
 
 function f_diff(after, before, format = "+") {
@@ -186,9 +188,9 @@ function run_calculs(dataset, full = false, filter = "*"){
             continue
             }
         js_expr = value.JavaScript ;
-        // console.log("Calculs : " + key + " : " + js_expr + " =" );
+        console.log("Calculs : " + key + " : " + js_expr + " =" );
         the_value = evalInContext(js_expr, dataset.total);
-        // console.log(the_value);
+        console.log(the_value);
         tkey = key.trim();
         dataset.total[tkey] = the_value;
         dataset.Data[tkey]  = [];
@@ -220,7 +222,7 @@ function run_diagnostics(dataset, filter = "*"){
             continue
             }
         js_expr = value.Test ;
-        // console.log("Diagnostics : " + key + " : " + js_expr + " =" );
+        console.log("Diagnostics : " + key + " : " + js_expr + " =" );
         the_value = evalInContext(js_expr, dataset.total);
         // console.log(the_value);
         diag = {}
@@ -382,12 +384,12 @@ const vm = Vue.createApp({
             if (isNaN(full) || (full === Infinity)) {
                 return 0
             }
-            var   percent = (part / full) * 100 ;
-            var f_percent = percent.toFixed(rounding);
-            if (format=="")           return f_percent+suffix ;
-            if (format.includes("+") && (percent>0)) f_percent = "+"+f_percent
-            if (format.includes("(")) return "("+f_percent+suffix+") "+part.toString() ;
-            return "("+f_percent+suffix+") "+ part.toString() ;
+            var percent   = (part / full) * 100 ;
+            var percent_f = percent.toFixed(rounding);
+            if (format=="")           return percent_f+suffix ;
+            if (format.includes("+") && (percent>0)) percent_f = "+"+percent_f
+            if (format.includes("(")) return "("+percent_f+suffix+") "+part.toString() ;
+            return "("+percent_f+suffix+") "+ part.toString() ;
         },
         loadData(){
             this.select_message = select_message ;
@@ -576,11 +578,13 @@ vm.component('diagnostics', {
          <div v-if="( type == 'ALL' || type == 'NOTE')  && diag.type == 'NOTE' && diag.message != ''" >
              <div v-if="categorie == 'ALL' || categorie == diag.categorie" >
                  <div v-if='diag.value == true' class="w3-panel w3-pale-yellow w3-topbar w3-rightbar w3-border-yellow w3-border">
+                                <br>
                                 <!-- <p>{{diag.key}} - {{diag.categorie}}</p> -->
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.messageSiVrai}}</p>
                  </div>
                  <div v-else class="w3-panel w3-pale-yellow w3-bottombar w3-leftbar w3-border-yellow w3-border">
+                                <br>
                                 <!-- <p>{{diag.key}} - {{diag.categorie}}</p> -->
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.messageSiFaux}}</p>
@@ -590,11 +594,13 @@ vm.component('diagnostics', {
          <div v-if="( type == 'ALL' || type == 'BLUE')  && diag.type == 'BLUE' && diag.message != ''" >
              <div v-if="categorie == 'ALL' || categorie == diag.categorie" >
                  <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
+                                <br>
                                 <!-- <p>{{diag.key}} - {{diag.categorie}}</p> -->
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.messageSiVrai}}</p>
                  </div>
                  <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
+                                <br>
                                 <!-- <p>{{diag.key}} - {{diag.categorie}}</p> -->
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.messageSiFaux}}</p>
@@ -604,11 +610,13 @@ vm.component('diagnostics', {
          <div v-if="( type == 'ALL' || type == 'ORANGE')  && diag.type == 'ORANGE' && diag.message != ''" >
              <div v-if="categorie == 'ALL' || categorie == diag.categorie" >
                  <div v-if='diag.value == true' class="w3-panel w3-sand w3-topbar w3-rightbar w3-border-orange w3-border">
+                                <br>
                                 <!-- <p>{{diag.key}} - {{diag.categorie}}</p> -->
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.messageSiVrai}}</p>
                  </div>
                  <div v-else class="w3-panel w3-sand w3-bottombar w3-leftbar w3-border-orange w3-border">
+                                <br>
                                 <!-- <p>{{diag.key}} - {{diag.categorie}}</p> -->
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.messageSiFaux}}</p>
@@ -618,11 +626,13 @@ vm.component('diagnostics', {
          <div v-if="( type == 'ALL' || type == 'TEST')  && diag.type == 'TEST' && diag.message != ''" >
              <div v-if="categorie == 'ALL' || categorie == diag.categorie" >
                  <div v-if='diag.value == true' class="w3-panel w3-pale-blue w3-topbar w3-rightbar w3-border-blue w3-border">
+                                <br>
                                 <!-- <p>{{diag.key}} - {{diag.categorie}}</p> -->
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.messageSiVrai}}</p>
                  </div>
                  <div v-else class="w3-panel w3-pale-blue w3-bottombar w3-leftbar w3-border-blue w3-border">
+                                <br>
                                 <!-- <p>{{diag.key}} - {{diag.categorie}}</p> -->
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.messageSiFaux}}</p>
@@ -632,11 +642,13 @@ vm.component('diagnostics', {
          <div v-if="( type == 'ALL' || type == 'DIAG')  && diag.type == 'DIAG' && diag.message != ''" >
              <div v-if="categorie == 'ALL' || categorie == diag.categorie" >
                  <div v-if='diag.value == true' class="w3-panel w3-pale-green w3-leftbar w3-border-green w3-border">
+                                <br>
                                 <!-- <p>{{diag.key}} - {{diag.categorie}}</p> -->
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.messageSiVrai}}</p>
                  </div>
                  <div v-else class="w3-panel w3-pale-red w3-bottombar w3-border-red w3-border">
+                                <br>
                                 <!-- <p>{{diag.key}} - {{diag.categorie}}</p> -->
                                 <p>{{diag.description}}</p>
                                 <p>{{diag.messageSiFaux}}</p>
@@ -1298,7 +1310,7 @@ vm.component('table-stat', {
                 <td class="w3-right-align">{{this.ds.f_rp_2050}}</td>
             </tr>
             <tr>
-                <td><i>- Lie a la croissance demographique</td>
+                <td><i>- Lie a la croissance demographique</i></td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
@@ -1592,14 +1604,14 @@ function chartRepartitionNouveauxLogements(ds, container) {
     if (ds=== null) { return ; }
 
     var data = google.visualization.arrayToDataTable([
-      ['Répartition des Nouveaux Logements sur ' + ds.LIBELLE, 'Logements'],
+      ['Evolution du parc entre 2008 et 2018 selon ses composants sur ' + ds.LIBELLE, 'Logements'],
       ['Nouvelles Résidences Principales', (ds.P18_RP      - ds.P08_RP>0)      ? (ds.P18_RP - ds.P08_RP) : 0],
       ['Nouvelles Résidences Secondaires', (ds.P18_RSECOCC - ds.P08_RSECOCC>0) ? (ds.P18_RSECOCC - ds.P08_RSECOCC) : 0],
-      ['Nouvelles Résidences Vacantes',    (ds.P18_LOGVAC  - ds.P08_LOGVAC>0)  ? (ds.P18_LOGVAC - ds.P08_LOGVAC) : 0 ]
+      ['Nouveaux Logements Vacants',    (ds.P18_LOGVAC  - ds.P08_LOGVAC>0)  ? (ds.P18_LOGVAC - ds.P08_LOGVAC) : 0 ]
     ]);
 
     var options = {
-      title:'Répartition des Nouveaux Logements sur ' + ds.LIBELLE,
+      title:'Evolution du parc entre 2008 et 2018 selon ses composants \nsur ' + ds.LIBELLE,
       is3D: true,
       titleTextStyle: {
            color: theme_color,
@@ -1628,7 +1640,7 @@ function chartProductionBesoinsLogements(ds, container) {
 
     var data = [
     {
-        name   : "Résidences Principales des ménages - Historique",
+        name   : "Résidences Principales des ménages - Historique (Source INSEE)",
         mode   : 'lines',
         line: {shape: 'spline', dash: 'solid', width: 3, color : res_principales_color },
         x : [2008, 2013, 2018, 2020],
@@ -1638,7 +1650,7 @@ function chartProductionBesoinsLogements(ds, container) {
              ds.LOG_2020 - ds.P08_RP],
     },
     {
-        name   : "Résidences Principales des ménages - Projection des Besoins",
+        name   : "Résidences Principales des ménages - Projection des Besoins (Source INSEE - Omphale)",
         mode: 'lines',
         line: {shape: 'spline', dash: 'dot', width: 3, color : res_principales_color },
         visible : 'legendonly',
@@ -1647,7 +1659,7 @@ function chartProductionBesoinsLogements(ds, container) {
              ds.LOG_2030 - ds.P08_RP],
     },
     {
-        name   : "Résidences Secondaires + Vacantes",
+        name   : "Résidences Secondaires + Vacantes (Source INSEE)",
         mode: 'lines',
         line: {shape: 'spline', dash: 'solid', width: 3, color : log_sec_vac_color},
         x : [2008, 2013, 2018],
@@ -1656,16 +1668,16 @@ function chartProductionBesoinsLogements(ds, container) {
              ds.P18_RSECOCC - ds.P08_RSECOCC + ds.P18_LOGVAC - ds.P08_LOGVAC],
     },
     {
-        name   : "Résidences Principales + Secondaires + Vacantes",
+        name   : "Résidences Principales + Secondaires + Vacantes (Source INSEE)",
         mode: 'lines',
-        line: {shape: 'spline', dash: 'solid', width: 6, color : logements_color},
+        line: {shape: 'spline', dash: 'solid', width: 4, color : logements_color},
         x : [2008, 2013, 2018],
         y : [ds.P08_RP - ds.P08_RP + ds.P08_RSECOCC - ds.P08_RSECOCC + ds.P08_LOGVAC - ds.P08_LOGVAC,
              ds.P13_RP - ds.P08_RP + ds.P13_RSECOCC - ds.P08_RSECOCC + ds.P13_LOGVAC - ds.P08_LOGVAC,
              ds.P18_RP - ds.P08_RP + ds.P18_RSECOCC - ds.P08_RSECOCC + ds.P18_LOGVAC - ds.P08_LOGVAC],
     },
   {
-        name : "Logements Construits / Commencés",
+        name : "Logements Construits / Commencés (Source Sitadel)",
         mode: 'lines',
         line: {shape: 'spline', dash: 'solid', width: 4, color : log_construits_color},
         x : [2008, 2013, 2016, 2020],
@@ -1674,7 +1686,7 @@ function chartProductionBesoinsLogements(ds, container) {
              offset_construits + ds.NB_LGT_TOT_COMMENCES_1316 + ds.NB_LGT_TOT_COMMENCES_1721]
   },
   {
-        name : "Logements Non-Affectés / En Construction",
+        name : "Logements Non-Affectés / En Construction (Source Sitadel)",
         mode: 'lines',
         line: {shape: 'spline', dash: 'dot', width: 4, color : '#74248f'},
         x : [2018, 2020],
@@ -1718,7 +1730,7 @@ function chartProductionBesoinsLogements(ds, container) {
       data.push(
          {
             "Condition" : "(SRU_CARENCE_2020 != 0) or ((NB_LGT_PRET_LOC_SOCIAL_1316+ NB_LGT_PRET_LOC_SOCIAL_1721) != 0)",
-            name : "Logements Sociaux Construits",
+            name : "Logements Sociaux Construits (Source DREAL)",
             mode: 'lines',
             line: {shape: 'spline', dash: 'solid', width: 3, color : log_sru_color },
             x : [2013, 2016, 2020],
@@ -1769,7 +1781,7 @@ function chartRepartitionTypesLogements(ds, container) {
     var trace3 = {
       x: ["2008", "2013", "2018"],
       y: [ds.P08_LOGVAC, ds.P13_LOGVAC, ds.P18_LOGVAC],
-      name: 'Residences Vacantes',
+      name: 'Logements Vacants',
       marker: { color: res_vacantes_color },
       type: 'bar'
     };
@@ -1823,15 +1835,31 @@ function chartConstructions(ds, container) {
                     ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015,
                     ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015 + ds.LOG_COMMENCES_2016,
                     ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015 + ds.LOG_COMMENCES_2016 + ds.LOG_COMMENCES_2017,
-                    ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015 + ds.LOG_COMMENCES_2016 + ds.LOG_COMMENCES_2017+
-                    ds.LOG_COMMENCES_2018,
+                    ds.LOG_COMMENCES_1014 + ds.LOG_COMMENCES_2015 + ds.LOG_COMMENCES_2016 + ds.LOG_COMMENCES_2017 + ds.LOG_COMMENCES_2018,
                     ds.LOG_COMMENCES_1019],
           fill: false,
           tension: 0.5,
           borderColor: border_Color,
           backgroundColor: background_Color,
-        }
-      ]
+        },
+        {
+          label: "Besoins en Logements des Habitants - Cumul",
+          data: [   ds.BESOIN_LOG_ANNUEL_0813 * 1 ,
+                    ds.BESOIN_LOG_ANNUEL_0813 * 2 ,
+                    ds.BESOIN_LOG_ANNUEL_0813 * 3 ,
+                    ds.BESOIN_LOG_ANNUEL_0813 * 3 + ds.BESOIN_LOG_ANNUEL_1318 * 1 ,
+                    ds.BESOIN_LOG_ANNUEL_0813 * 3 + ds.BESOIN_LOG_ANNUEL_1318 * 2 ,
+                    ds.BESOIN_LOG_ANNUEL_0813 * 3 + ds.BESOIN_LOG_ANNUEL_1318 * 3 ,
+                    ds.BESOIN_LOG_ANNUEL_0813 * 3 + ds.BESOIN_LOG_ANNUEL_1318 * 4 ,
+                    ds.BESOIN_LOG_ANNUEL_0813 * 3 + ds.BESOIN_LOG_ANNUEL_1318 * 5 ,
+                    ds.BESOIN_LOG_ANNUEL_0813 * 3 + ds.BESOIN_LOG_ANNUEL_1318 * 5 + ds.BESOIN_LOG_ANNUEL_1820 * 1 ,
+                    ds.BESOIN_LOG_ANNUEL_0813 * 3 + ds.BESOIN_LOG_ANNUEL_1318 * 5 + ds.BESOIN_LOG_ANNUEL_1820 * 2 ],
+          hidden: true,
+          fill: false,
+          tension: 0.5,
+          borderColor: logements_color,
+          backgroundColor: "#9370DB",
+        }      ]
     };
 
     const config = {
@@ -1845,7 +1873,7 @@ function chartConstructions(ds, container) {
           },
           title: {
             display: true, color: theme_color,
-            text: 'Logements Construits sur ' + ds.LIBELLE,
+            text: 'Logements Construits sur ' + ds.LIBELLE + ' (source SITADEL)',
           }
         },
         scales: {
@@ -1869,9 +1897,9 @@ function chartConstructions(ds, container) {
     var myChart = new Chart($("#"+container+"Canvas").get(0).getContext("2d"), config);
 }
 
-function chartArtificialisation(ds, container) {
+function chartArtificialisationTotale(ds, container) {
 
-    // Graphique Artificialisation de Logements 2009-2020 (ChartJS)
+    // Graphique Artificialisation Totale 2009-2020 (ChartJS)
     $('#'+container).html('');
     if (ds=== null) { return ; }
 
@@ -1880,7 +1908,7 @@ function chartArtificialisation(ds, container) {
       labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"],
       datasets: [
         {
-          label: "Artificialisation - Ha / Par an",
+          label: "Artificialisation Totale - Ha / Par an",
           data: [ds.ART_NAF09ART10, ds.ART_NAF10ART11, ds.ART_NAF11ART12, ds.ART_NAF12ART13,
                  ds.ART_NAF13ART14, ds.ART_NAF14ART15, ds.ART_NAF15ART16, ds.ART_NAF16ART17,
                  ds.ART_NAF17ART18, ds.ART_NAF18ART19, ds.ART_NAF19ART20],
@@ -1891,7 +1919,7 @@ function chartArtificialisation(ds, container) {
           backgroundColor: background_Color,
         },
         {
-          label: "Artificialisation - Cumul",
+          label: "Artificialisation Totale - Cumul",
           data: [ ds.ART_NAF09ART10 ,
                   ds.ART_NAF09ART10 + ds.ART_NAF10ART11,
                   ds.ART_NAF09ART10 + ds.ART_NAF10ART11 + ds.ART_NAF11ART12,
@@ -1907,6 +1935,103 @@ function chartArtificialisation(ds, container) {
           tension: 0.5,
           borderColor: border_Color,
           backgroundColor: background_Color,
+        }
+      ]
+    };
+
+    const config = {
+      type: 'line',
+      data: data,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true, color: theme_color,
+            text: 'Artificialisation Totale sur ' + ds.LIBELLE,
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: false, color: theme_color,
+              text: 'Annees'
+            }
+          },
+          y: {
+            title: {
+              display: true, color: theme_color,
+              text: 'Hectares Artificialises'
+            },
+          }
+        },
+      },
+    };
+
+    $('<canvas id="'+container+'Canvas"></canvas>').appendTo($('#'+container));
+    var myChart = new Chart($("#"+container+"Canvas").get(0).getContext("2d"), config);
+}
+
+function chartArtificialisation(ds, container) {
+
+    // Graphique Artificialisation de Logements 2009-2020 (ChartJS)
+    $('#'+container).html('');
+    if (ds=== null) { return ; }
+
+    ART1015_LOG = ds.ART_ART09HAB10 + ds.ART_ART10HAB11 + ds.ART_ART11HAB12 + ds.ART_ART12HAB13 + ds.ART_ART13HAB14 + ds.ART_ART14HAB15
+    ART1015_TOT = ds.ART_NAF09ART10 + ds.ART_NAF10ART11 + ds.ART_NAF11ART12 + ds.ART_NAF12ART13 + ds.ART_NAF13ART14 + ds.ART_NAF14ART15
+    const data = {
+      labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"],
+      datasets: [
+        {
+          label: "Artificialisation Logements - Ha / Par an",
+          data: [ds.ART_ART09HAB10, ds.ART_ART10HAB11, ds.ART_ART11HAB12, ds.ART_ART12HAB13,
+                 ds.ART_ART13HAB14, ds.ART_ART14HAB15, ds.ART_ART15HAB16, ds.ART_ART16HAB17,
+                 ds.ART_ART17HAB18, ds.ART_ART18HAB19, ds.ART_ART19HAB20],
+          fill: false,
+          tension: 0.5,
+          borderDash: [5, 5],
+          borderColor: border_Color,
+          backgroundColor: background_Color,
+        },
+        {
+          label: "Artificialisation Logements - Cumul",
+          data: [ ds.ART_ART09HAB10 ,
+                  ds.ART_ART09HAB10 + ds.ART_ART10HAB11,
+                  ds.ART_ART09HAB10 + ds.ART_ART10HAB11 + ds.ART_ART11HAB12,
+                  ds.ART_ART09HAB10 + ds.ART_ART10HAB11 + ds.ART_ART11HAB12 + ds.ART_ART12HAB13,
+                  ds.ART_ART09HAB10 + ds.ART_ART10HAB11 + ds.ART_ART11HAB12 + ds.ART_ART12HAB13 + ds.ART_ART13HAB14,
+                  ART1015_LOG ,
+                  ART1015_LOG + ds.ART_ART15HAB16 ,
+                  ART1015_LOG + ds.ART_ART15HAB16 + ds.ART_ART16HAB17,
+                  ART1015_LOG + ds.ART_ART15HAB16 + ds.ART_ART16HAB17 + ds.ART_ART17HAB18 ,
+                  ART1015_LOG + ds.ART_ART15HAB16 + ds.ART_ART16HAB17 + ds.ART_ART17HAB18 + ds.ART_ART18HAB19,
+                  ART1015_LOG + ds.ART_ART15HAB16 + ds.ART_ART16HAB17 + ds.ART_ART17HAB18 + ds.ART_ART18HAB19 + ds.ART_ART19HAB20],
+          fill: false,
+          tension: 0.5,
+          borderColor: border_Color,
+          backgroundColor: background_Color,
+        },
+        {
+          label: "Artificialisation Totale - Cumul avec Activités",
+          data: [ ds.ART_NAF09ART10 ,
+                  ds.ART_NAF09ART10 + ds.ART_NAF10ART11,
+                  ds.ART_NAF09ART10 + ds.ART_NAF10ART11 + ds.ART_NAF11ART12,
+                  ds.ART_NAF09ART10 + ds.ART_NAF10ART11 + ds.ART_NAF11ART12 + ds.ART_NAF12ART13,
+                  ds.ART_NAF09ART10 + ds.ART_NAF10ART11 + ds.ART_NAF11ART12 + ds.ART_NAF12ART13 + ds.ART_NAF13ART14,
+                  ART1015_TOT ,
+                  ART1015_TOT + ds.ART_NAF15ART16 ,
+                  ART1015_TOT + ds.ART_NAF15ART16 + ds.ART_NAF16ART17,
+                  ART1015_TOT + ds.ART_NAF15ART16 + ds.ART_NAF16ART17 + ds.ART_NAF17ART18 ,
+                  ART1015_TOT + ds.ART_NAF15ART16 + ds.ART_NAF16ART17 + ds.ART_NAF17ART18 + ds.ART_NAF18ART19,
+                  ART1015_TOT + ds.ART_NAF15ART16 + ds.ART_NAF16ART17 + ds.ART_NAF17ART18 + ds.ART_NAF18ART19 + ds.ART_NAF19ART20],
+          fill: false,
+          hidden: true,
+          tension: 0.5,
+          borderColor: logements_color,
+          backgroundColor: "#9370DB",
         }
       ]
     };
@@ -1946,6 +2071,7 @@ function chartArtificialisation(ds, container) {
     var myChart = new Chart($("#"+container+"Canvas").get(0).getContext("2d"), config);
 }
 
+
 function chartFluxPopulation(ds, container) {
 
     // Graphique Flux de Population (ChartJS)
@@ -1962,7 +2088,7 @@ function chartFluxPopulation(ds, container) {
           fill: false,
           tension: 0.5,
           borderColor: theme_color,
-          backgroundColor: theme_color,
+          backgroundColor: background_Color,
         },
         {
           label: "Flux Sortant",
@@ -1970,7 +2096,7 @@ function chartFluxPopulation(ds, container) {
           fill: false,
           tension: 0.5,
           borderColor: logements_color,
-          backgroundColor: logements_color,
+          backgroundColor: "#9370DB",
         }
       ]
     };
@@ -1999,7 +2125,7 @@ function chartFluxPopulation(ds, container) {
           y: {
             title: {
               display: true, color: theme_color,
-              text: 'Demenagements'
+              text: 'Flux de Population'
             },
           }
         },
@@ -2061,7 +2187,7 @@ function chartTailleDesMenages(ds, container) {
             }
           },
           y: {
-            suggestedMin: 1 , suggestedMax: 3 ,
+            suggestedMin: 1.5 , suggestedMax: 2.8 ,
             title: {
               display: true, color: theme_color,
               text: 'Taille des Ménages' ,
@@ -2143,7 +2269,7 @@ function chartGraphiquePopulation(ds, container) {
 function chartsUpdate(ds) {
 
     // Tab Constructions
-    chartProductionBesoinsLogements(ds,   'constructionsProductionBesoinsLogementsChartContainer')
+    // chartProductionBesoinsLogements(ds,   'constructionsProductionBesoinsLogementsChartContainer')
     chartConstructions(ds,                'constructionsConstructionsLogementsChartContainer')
 
     // chartProductionBesoinsLogements(ds,   'logementsPlotlyChartContainer2')
@@ -2157,7 +2283,6 @@ function chartsUpdate(ds) {
 
     // Tab Artificialisation
     chartArtificialisation(ds,            'artificialisationArtificialisationChartContainer')
-
 
     // Tab Logements
     chartRepartitionNouveauxLogements(ds, 'logementsRepartitionNouveauxLogementsChartContainer')

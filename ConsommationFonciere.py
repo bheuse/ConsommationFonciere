@@ -2667,6 +2667,8 @@ def ftp_push_file(filename):
                 ftp.storbinary('STOR ' + file.replace("\\" , "/"), open(file, 'rb'))
             ftp.close()
         except Exception as e:
+            print_red("FTP Upload Failed for : "+str(filename))
+            print_red(str(e))
             logging.error("FTP Upload Failed for : "+str(filename))
             logging.error(str(e))
             ftp.close()
@@ -2676,19 +2678,20 @@ def ftp_push_files():
     global FAST
     filelist = ["input/plots.json",             "output/select.json",
                 "output/calculations.json",     "output/datametrics.json",  "output/diagnostics.json",
-                "index.html",  "ConsommationFonciereV3.html",  "ConsommationFonciereV3.js"
+                # "index.html",
+                "ConsommationFonciereV3.html",  "ConsommationFonciereV3.js"
                ]
     if not FAST:
         filelist.extend([
                 "input/Configuration.xlsx",
-                "index.html",
+                # "index.html",
                 "output/france.json",
                 "Header.png", "Body.png",
                 "README.md",  "README.html",    "README.dillinger.html",
                 "ConsommationFonciere.py",
-                "input/QuestionnerUnProjetDePLU-SCoT.pdf", "input/Alpes-Maritimes-NoteExcedentsLogements.pdf",
-                "input/Guide_Pratique_Artif_complet.pdf",  "input/GuideSF_6_ZCZAE_web.pdf",
-                "input/GuideSF_16_Observatoires_web.pdf",  "input/GuideSF_17_fiscalite_web.pdf",
+                # "input/QuestionnerUnProjetDePLU-SCoT.pdf", "input/Alpes-Maritimes-NoteExcedentsLogements.pdf",
+                # "input/Guide_Pratique_Artif_complet.pdf",  "input/GuideSF_6_ZCZAE_web.pdf",
+                # "input/GuideSF_16_Observatoires_web.pdf",  "input/GuideSF_17_fiscalite_web.pdf",
                 "ConsommationFonciere.html",    "ConsommationFonciere.js",
                 "ConsommationFonciereV2.html",  "ConsommationFonciereV2.js",
                 "input/Legend_Logements.png",   "input/CommentCaMarche.png",
@@ -3092,6 +3095,8 @@ class TestConsommation(unittest.TestCase):
         report_paca()
 
     def testFTP_Push_Files(self):
+        global FAST
+        FAST = True
         ftp_push_files()
 
     def testData(self):
