@@ -221,6 +221,7 @@
             <div class="w3-container w3-teal w3-cell w3-mobile w3-cell-middle w3-quarter w3-padding-16">
                 <p class="w3-padding-8 w3-right-align"> Departement : </p>
                 <p class="w3-padding-8 w3-right-align"> EPCI : </p>
+                <p class="w3-padding-8 w3-right-align"> SCoT / Zone : </p>
                 <p class="w3-padding-8 w3-right-align"> Commune : </p>
             </div>
             <div class="w3-container w3-teal w3-cell w3-mobile w3-cell-middle w3-threequarter w3-padding-16">
@@ -234,6 +235,12 @@
                 <option disabled="" value="" disabled selected> Sélectionner un EPCI</option>
                 <div v-if="this.data_s !== null">
                     <option v-for='item in this.selectEpcis' :content="item.nom" >{{ item.nom }}</option>
+                </div>
+            </select>
+            <select class="w3-theme w3-select w3-hover-green" searchable="w3-select Rechercher ici ..." v-model="selectedZone"   @change="selectZoneEvent($event)">
+                <option disabled="" value="" disabled selected> Sélectionner un SCoT ou une Zone Territoriale</option>
+                <div v-if="this.data_s !== null">
+                    <option v-for='item in this.selectZones' :content="item.nom" >{{ item.nom }}</option>
                 </div>
             </select>
             <select class="w3-theme w3-select w3-hover-green" searchable="w3-select Rechercher ici ..."v-model="selectedCommune" @change="selectCommuneEvent($event)">
@@ -384,8 +391,23 @@ function hideShowLOG_function() {
     <h2>Pour aller plus Loin ... </h2>
 
         <p><a class="w3-btn"  target="_blank"
+              href="https://www.gadseca.org/nos-dossiers/urbanisation/">
+              Le Dossier Urbanisation des Alpes-Maritimes du Gadseca.
+        </a></p>
+
+        <p><a class="w3-btn"  target="_blank"
+              href="https://mysophiaantipolis.jimdofree.com/2022/02/16/la-fiche-de-nice">
+              La fiche d'analyse de Nice.
+        </a></p>
+
+        <p><a class="w3-btn"  target="_blank"
               href="https://scotenaction.fedescot.org/visualiser/explorer#layers=41de78c9edca6fa366388e09b171bf7b&tree=false&map=8.72/43.5056/6.8652">
               La carte des SCoTs.
+        </a></p>
+
+        <p><a class="w3-btn"  target="_blank"
+              href="input/Urbascope.pdf">
+              L'Urbascope de FNE Paca.
         </a></p>
 
         <p><a class="w3-btn"  target="_blank"
@@ -1117,6 +1139,7 @@ function hideShowLOG_function() {
             </tbody>
         </table>
         <br>
+
         <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
         <h3>Artificialisation sur base des Permis de Construire (2013-2021)</h3></div>
         <p>Artificialisation : <a target="_blank" :href="ds.URL_SOURCE_SITADEL"> Dossier Sitadel </a></p>
@@ -1155,6 +1178,56 @@ function hideShowLOG_function() {
             </tr>
             </tbody>
         </table>
+        <br>
+
+        <div v-if="ds.SCOT_2030_OBJ != -1">
+        <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
+        <h3>Objectifs SCoT Ouest Alpes-Maritimes</h3></div>
+        <p>SCoT Ouest : <a target="_blank" href="https://cloud.paysdegrasse.fr/index.php/s/4jrNnfwokzSTo6a"> Document D'Objectifs </a></p>
+        <p> Le SCoT Ouest Alpes-Maritimes s'est donné comme objectif de limiter son artificialisation par commune.</p>
+        <p> Cette table est issue des données des permis de construire autorisés depuis sa mise en place, le 20 Mai 2021.</p>
+        <table class="w3-table-all w3-hoverable w3-card-4">
+            <tbody>
+            <tr class="w3-teal">
+                <th style="color:white">Données Sitadel</th>
+                <th style="color:white" class="w3-right-align">Depuis le 20 Mai 2021</th>
+            </tr>
+            <tr>
+                <td>Nombre de Permis Autorisés :</td>
+                <td class="w3-right-align">{{ f_round(ds.SCOT_OUEST_LOG_COUNT,0) }} </td>
+            </tr>
+            <tr>
+                <td>Nombre de logements nouveaux :</td>
+                <td class="w3-right-align">{{ f_round(ds.SCOT_OUEST_LOG_LOGEMENTS,0)  }} </td>
+            </tr>
+            <tr>
+                <td>Nombre de logements sociaux :</td>
+                <td class="w3-right-align">{{ f_round(ds.SCOT_OUEST_LOG_LOG_SOCIAUX,0)  }} </td>
+            </tr>
+            <tr>
+                <td>Total des superficies des parcelles autorisées a la construction :</td>
+                <td class="w3-right-align">{{ f_round(ds.SCOT_OUEST_LOG_SUPERFICIE / 10000,2)  }} ha  </td>
+            </tr>
+            <tr>
+                <td>Consommation autorisée jusqu'en 2030 :</td>
+                <td class="w3-right-align">{{ f_round(ds.SCOT_2030 / 10000,2)  }} ha  </td>
+            </tr>
+            <tr>
+                <td>Part de l'objectif consommé :</td>
+                <td class="w3-right-align">{{ f_round(ds.SCOT_2030_OBJ*100,0)  }} %  </td>
+            </tr>
+            <tr>
+                <td>Budget foncier résiduel jusqu'en 2030 :</td>
+                <td class="w3-right-align">{{ f_round(ds.SCOT_2030 - ds.SCOT_OUEST_LOG_SUPERFICIE)  }} m2  </td>
+            </tr>
+            <tr>
+                <td>Budget foncier 2030-2040 :</td>
+                <td class="w3-right-align">{{ f_round(ds.SCOT_2040 / 10000,2)  }} ha  </td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+
         <br>
         <diagnostics :diags=this.data_s.Diagnostics type="ALL" categorie="ART"></diagnostics>
     </div>

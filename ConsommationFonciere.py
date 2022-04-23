@@ -70,13 +70,14 @@ sitadelSource1316File = "https://www.data.gouv.fr/es/datasets/r/67dd4ee1-0d73-46
 sitadelSource1721File = "https://www.data.gouv.fr/es/datasets/r/1fa467ef-5e3a-456f-b961-be9032cfa3df"
 sitadelSourceMetaFile = "https://www.data.gouv.fr/es/datasets/r/9d7d6728-c3bc-44e4-8105-7335ad70d52e"
 sitadel1316File       = data_dir + "PC_DP_creant_logements_2013_2016.csv"
-sitadel1721File       = data_dir + "PC_DP_creant_logements_2017_2021.csv"
+sitadel1721File       = data_dir + "PC_DP_creant_logements_2017_2022.csv"
 sitadelMetaFile       = data_dir + "dictionnaire_variables_logements_permis_construire.xls"
 
 
 sitadel1316 = None
 sitadel1721 = None
 sitadelMeta = None
+sitadel1321 = None
 
 # Logements
 # "REG";"DEP";"COMM";"Type_DAU";"Num_DAU";"Etat_DAU";"DATE_REELLE_AUTORISATION";"DATE_REELLE_DOC";"DATE_REELLE_DAACT";"DPC_AUT";"DPC_DOC";"DPC_DERN";"APE_DEM";"CJ_DEM";"DENOM_DEM";"SIREN_DEM";"SIRET_DEM";"CODPOST_DEM";"LOCALITE_DEM";"REC_ARCHI";"ADR_NUM_TER";"ADR_TYPEVOIE_TER";"ADR_LIBVOIE_TER";"ADR_LIEUDIT_TER";"ADR_LOCALITE_TER";"ADR_CODPOST_TER";"sec_cadastre1";"num_cadastre1";"sec_cadastre2";"num_cadastre2";"sec_cadastre3";"num_cadastre3";"SUPERFICIE_TERRAIN";"ZONE_OP";"NATURE_PROJET";"I_EXTENSION";"I_SURELEVATION";"I_NIVSUPP";"NB_NIV_MAX";"NB_CHAMBRES";"SURF_HAB_AVANT";"SURF_HAB_CREEE";"SURF_HAB_ISSUE_TRANSFO";"SURF_HAB_DEMOLIE";"SURF_HAB_TRANSFORMEE";"SURF_LOC_AVANT";"SURF_LOC_CREEE";"SURF_LOC_ISSUE_TRANSFO";"SURF_LOC_DEMOLIE";"SURF_LOC_TRANSFORMEE";"SURF_HEB_AVANT";"SURF_HEB_CREEE";"SURF_HEB_ISSUE_TRANSFO";"SURF_HEB_DEMOLIE";"SURF_HEB_TRANSFORMEE";"SURF_BUR_AVANT";"SURF_BUR_CREEE";"SURF_BUR_ISSUE_TRANSFO";"SURF_BUR_DEMOLIE";"SURF_BUR_TRANSFORMEE";"SURF_COM_AVANT";"SURF_COM_CREEE";"SURF_COM_ISSUE_TRANSFO";"SURF_COM_DEMOLIE";"SURF_COM_TRANSFORMEE";"SURF_ART_AVANT";"SURF_ART_CREEE";"SURF_ART_ISSUE_TRANSFO";"SURF_ART_DEMOLIE";"SURF_ART_TRANSFORMEE";"SURF_IND_AVANT";"SURF_IND_CREEE";"SURF_IND_ISSUE_TRANSFO";"SURF_IND_DEMOLIE";"SURF_IND_TRANSFORMEE";"SURF_AGR_AVANT";"SURF_AGR_CREEE";"SURF_AGR_ISSUE_TRANSFO";"SURF_AGR_DEMOLIE";"SURF_AGR_TRANSFORMEE";"SURF_ENT_AVANT";"SURF_ENT_CREEE";"SURF_ENT_ISSUE_TRANSFO";"SURF_ENT_DEMOLIE";"SURF_ENT_TRANSFORMEE";"SURF_PUB_AVANT";"SURF_PUB_CREEE";"SURF_PUB_ISSUE_TRANSFO";"SURF_PUB_DEMOLIE";"SURF_PUB_TRANSFORMEE";"TYPE_SERVICE_PUBLIC"
@@ -85,19 +86,26 @@ sitadelMeta = None
 def load_sitadel(sitadel1316_file:  str = sitadel1316File,
                  sitadel1721_file:  str = sitadel1721File,
                  sitadel_meta_file: str = sitadelMetaFile):
-    global sitadel1316, sitadel1721, sitadelMeta
+    global sitadel1316, sitadel1721, sitadelMeta, sitadel1321
     if (sitadel1316 is None) or (sitadel1721 is None)  or (sitadelMeta is None):
         downloadFile(sitadelSource1316File, sitadel1316File, zip=True, zipped_file="PC_DP_créant_logements_2013_2016.csv")
         downloadFile(sitadelSource1721File, sitadel1721File, zip=True, zipped_file="PC_DP_créant_logements_2017_2021.csv")
         downloadFile(sitadelSourceMetaFile, sitadelMetaFile)
         print_blue("Lecture Sitadel Logements 2013-2016 : " + sitadel1316_file + " ...")
         sitadel1316 = pd.read_csv(sitadel1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str})
-        print_blue("Lecture Sitadel Logements 2017-2021 : " + sitadel1721_file + " ...")
+        sitadel1316["Parcelles"] = sitadel1316['sec_cadastre1'].map(str) + sitadel1316['num_cadastre1'].map(str)+" "+\
+                                   sitadel1316['sec_cadastre2'].map(str) + sitadel1316['num_cadastre2'].map(str)+" "+\
+                                   sitadel1316['sec_cadastre3'].map(str) + sitadel1316['num_cadastre3'].map(str)
+        print_blue("Lecture Sitadel Logements 2017-2022 : " + sitadel1721_file + " ...")
         sitadel1721 = pd.read_csv(sitadel1721_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "ADR_LOCALITE_TER" : str, "ADR_CODPOST_TER" : str})
+        sitadel1721["Parcelles"] = sitadel1721['sec_cadastre1'].map(str) + sitadel1721['num_cadastre1'].map(str)+" "+\
+                                   sitadel1721['sec_cadastre2'].map(str) + sitadel1721['num_cadastre2'].map(str)+" "+\
+                                   sitadel1721['sec_cadastre3'].map(str) + sitadel1721['num_cadastre3'].map(str)
         print_blue("Lecture Meta Logements Sitadel : " + sitadel_meta_file + " ...")
+        sitadel1321 = pd.concat([sitadel1316, sitadel1721])
         xls = pd.ExcelFile(sitadel_meta_file)
         sitadelMeta = pd.read_excel(xls, 'Variables_Logements', index_col=0)
-    return sitadel1316, sitadel1721, sitadelMeta
+    return sitadel1316, sitadel1721, sitadelMeta, sitadel1321
 
 
 ##########################
@@ -108,12 +116,13 @@ sitadelLocauxSource1316File = "https://www.data.gouv.fr/es/datasets/r/3b987380-d
 sitadelLocauxSource1721File = "https://www.data.gouv.fr/es/datasets/r/98ff9fd3-a14e-474d-bb8f-12bde12d9f70"
 sitadelLocauxSourceMetaFile = "https://www.data.gouv.fr/es/datasets/r/b3ffee5b-fd75-4345-a086-02ded2018705"
 sitadelLocaux1316File = data_dir + "PC_DP_creant_locaux_2013_2016.csv"
-sitadelLocaux1721File = data_dir + "PC_DP_creant_locaux_2017_2021.csv"
+sitadelLocaux1721File = data_dir + "PC_DP_creant_locaux_2017_2022.csv"
 sitadelLocauxMetaFile = data_dir + "dictionnaire_variables_locaux_permis_construire.xls"
 
 sitadel_locaux_1316 = None
 sitadel_locaux_1721 = None
 sitadel_locaux_Meta = None
+sitadel_locaux_1321 = None
 
 # Locaux
 # "REG";"DEP";"COMM";"Type_DAU";"Num_DAU";"Etat_DAU";"DATE_REELLE_AUTORISATION";"DATE_REELLE_DOC";"DATE_REELLE_DAACT";"DPC_AUT";"DPC_DOC";"DPC_DERN";"APE_DEM";"CJ_DEM";"DENOM_DEM";"SIREN_DEM";"SIRET_DEM";"CODPOST_DEM";"LOCALITE_DEM";"REC_ARCHI";"ADR_NUM_TER";"ADR_TYPEVOIE_TER";"ADR_LIBVOIE_TER";"ADR_LIEUDIT_TER";"ADR_LOCALITE_TER";"ADR_CODPOST_TER";"sec_cadastre1";"num_cadastre1";"sec_cadastre2";"num_cadastre2";"sec_cadastre3";"num_cadastre3";"SUPERFICIE_TERRAIN";"ZONE_OP";"NATURE_PROJET";"I_EXTENSION";"I_SURELEVATION";"I_NIVSUPP";"NB_NIV_MAX";"NB_CHAMBRES";"SURF_HAB_AVANT";"SURF_HAB_CREEE";"SURF_HAB_ISSUE_TRANSFO";"SURF_HAB_DEMOLIE";"SURF_HAB_TRANSFORMEE";"SURF_LOC_AVANT";"SURF_LOC_CREEE";"SURF_LOC_ISSUE_TRANSFO";"SURF_LOC_DEMOLIE";"SURF_LOC_TRANSFORMEE";"SURF_HEB_AVANT";"SURF_HEB_CREEE";"SURF_HEB_ISSUE_TRANSFO";"SURF_HEB_DEMOLIE";"SURF_HEB_TRANSFORMEE";"SURF_BUR_AVANT";"SURF_BUR_CREEE";"SURF_BUR_ISSUE_TRANSFO";"SURF_BUR_DEMOLIE";"SURF_BUR_TRANSFORMEE";"SURF_COM_AVANT";"SURF_COM_CREEE";"SURF_COM_ISSUE_TRANSFO";"SURF_COM_DEMOLIE";"SURF_COM_TRANSFORMEE";"SURF_ART_AVANT";"SURF_ART_CREEE";"SURF_ART_ISSUE_TRANSFO";"SURF_ART_DEMOLIE";"SURF_ART_TRANSFORMEE";"SURF_IND_AVANT";"SURF_IND_CREEE";"SURF_IND_ISSUE_TRANSFO";"SURF_IND_DEMOLIE";"SURF_IND_TRANSFORMEE";"SURF_AGR_AVANT";"SURF_AGR_CREEE";"SURF_AGR_ISSUE_TRANSFO";"SURF_AGR_DEMOLIE";"SURF_AGR_TRANSFORMEE";"SURF_ENT_AVANT";"SURF_ENT_CREEE";"SURF_ENT_ISSUE_TRANSFO";"SURF_ENT_DEMOLIE";"SURF_ENT_TRANSFORMEE";"SURF_PUB_AVANT";"SURF_PUB_CREEE";"SURF_PUB_ISSUE_TRANSFO";"SURF_PUB_DEMOLIE";"SURF_PUB_TRANSFORMEE";"TYPE_SERVICE_PUBLIC"
@@ -122,19 +131,26 @@ sitadel_locaux_Meta = None
 def load_sitadel_locaux(sitadelLocaux1316_file:  str = sitadelLocaux1316File,
                         sitadelLocaux1721_file:  str = sitadelLocaux1721File,
                         sitadelLocaux_meta_file: str = sitadelLocauxMetaFile):
-    global sitadel_locaux_1316, sitadel_locaux_1721, sitadel_locaux_Meta
+    global sitadel_locaux_1316, sitadel_locaux_1721, sitadel_locaux_Meta, sitadel_locaux_1321
     if (sitadel_locaux_1316 is None) or (sitadel_locaux_1721 is None)  or (sitadel_locaux_Meta is None):
         downloadFile(sitadelLocauxSource1316File, sitadelLocaux1316File, zip=True, zipped_file="PC_DP_créant_locaux_2013_2016.csv")
         downloadFile(sitadelLocauxSource1721File, sitadelLocaux1721File, zip=True, zipped_file="PC_DP_créant_locaux_2017_2021.csv")
         downloadFile(sitadelLocauxSourceMetaFile, sitadelLocauxMetaFile)
         print_blue("Lecture Sitadel Locaux 2013-2016 : " + sitadelLocaux1316_file + " ...")
         sitadel_locaux_1316 = pd.read_csv(sitadelLocaux1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "ZONE_OP": str, "NATURE_PROJET": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float})
-        print_blue("Lecture Sitadel Locaux 2017-2021 : " + sitadelLocaux1721_file + " ...")
+        sitadel_locaux_1316["Parcelles"] = sitadel_locaux_1316['sec_cadastre1'].map(str) + sitadel_locaux_1316['num_cadastre1'].map(str)+" "+\
+                                           sitadel_locaux_1316['sec_cadastre2'].map(str) + sitadel_locaux_1316['num_cadastre2'].map(str)+" "+\
+                                           sitadel_locaux_1316['sec_cadastre3'].map(str) + sitadel_locaux_1316['num_cadastre3'].map(str)
+        print_blue("Lecture Sitadel Locaux 2017-2022 : " + sitadelLocaux1721_file + " ...")
         sitadel_locaux_1721 = pd.read_csv(sitadelLocaux1721_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "ADR_LOCALITE_TER" : str, "ADR_CODPOST_TER" : str, "NATURE_PROJET" : str, "ZONE_OP": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float})
+        sitadel_locaux_1721["Parcelles"] = sitadel_locaux_1721['sec_cadastre1'].map(str) + sitadel_locaux_1721['num_cadastre1'].map(str)+" "+\
+                                           sitadel_locaux_1721['sec_cadastre2'].map(str) + sitadel_locaux_1721['num_cadastre2'].map(str)+" "+\
+                                           sitadel_locaux_1721['sec_cadastre3'].map(str) + sitadel_locaux_1721['num_cadastre3'].map(str)
+        sitadel_locaux_1321 = pd.concat([sitadel_locaux_1316, sitadel_locaux_1721])
         print_blue("Lecture Meta Locaux Sitadel : " + sitadelLocaux_meta_file + " ...")
         xls = pd.ExcelFile(sitadelLocaux_meta_file)
         sitadel_locaux_Meta = pd.read_excel(xls, 'Variables_Locaux', index_col=0)
-    return sitadel1316, sitadel1721, sitadelMeta
+    return sitadel_locaux_1316, sitadel_locaux_1721, sitadel_locaux_Meta, sitadel_locaux_1321
 
 ############################
 ### Logements Paca 2010-2019
@@ -285,6 +301,47 @@ def load_interco(interco_file: str = intercoFile):
         intercoEPCI    = pd.read_excel(xls, 'EPCI', index_col=0)
     return intercoDossier, intercoEPCI
 
+####################
+### SCoT
+####################
+
+SCoT_File = data_dir + "Table_EPCI_SCoT.xls"
+SCOT_DATA = None
+
+
+def load_scot_data(SCoT_File: str = SCoT_File):
+    global SCOT_DATA
+    if (SCOT_DATA is None):
+        SCOT_DATA = {}
+        print_blue("Lecture Donnees SCoT : " + SCoT_File + " ...")
+        xls = pd.ExcelFile(SCoT_File)
+        COMMUNES_HORS_PACA = pd.read_excel(xls, 'Commmunes hors PACA', dtype={"EPCI": str, "LIBEPCI": str,  "Commune": str,  "CODGEO": str })
+        EPCI_SCOT          = pd.read_excel(xls, 'EPCI - SCoT', dtype={"SCoT": str, "LIBEPCI": str})
+        GROUPEMENTS        = pd.read_excel(xls, 'Groupements', dtype={"Type": str, "DEPT": str, "EPCI": str, "REG": str, "NOM": str, "Territoires": str})
+        SCOT_DATA["SCOT_EPCI"] = {}
+        for index, row in EPCI_SCOT.iterrows():
+            if (index == 0) : continue
+            EPCI = row['Table de passage EPCI --> SCoT']
+            SCOT = row['Unnamed: 2']
+            if (SCOT == '////') : SCOT = "SCoT " + EPCI
+            if (SCOT not in SCOT_DATA["SCOT_EPCI"]) : SCOT_DATA["SCOT_EPCI"][SCOT] = []
+            SCOT_DATA["SCOT_EPCI"][SCOT].append(EPCI)
+        SCOT_DATA["EPCI_AVEC_COMM_HORS_PACA"] = {}
+        for index, row in COMMUNES_HORS_PACA.iterrows():
+            if (index == 0) : continue
+            COMM = row['Liste des communes hors PACA appartenant à des EPCI de PACA']
+            EPCI = row['Unnamed: 3']
+            if (EPCI not in SCOT_DATA["EPCI_AVEC_COMM_HORS_PACA"]): SCOT_DATA["EPCI_AVEC_COMM_HORS_PACA"][EPCI] = []
+            SCOT_DATA["EPCI_AVEC_COMM_HORS_PACA"][EPCI].append(COMM)
+        SCOT_DATA["GROUPEMENTS"] = {}
+        for index, row in GROUPEMENTS.iterrows():
+            NOM  = row['Nom']
+            if (NOM not in SCOT_DATA["GROUPEMENTS"]): SCOT_DATA["GROUPEMENTS"][NOM] = {}
+            SCOT_DATA["GROUPEMENTS"][NOM]["TYPE"] = row['Type']
+            SCOT_DATA["GROUPEMENTS"][NOM]["NOM"]  = row['Nom']
+            SCOT_DATA["GROUPEMENTS"][NOM]["LIST"] = row['Territoires']
+    return SCOT_DATA
+
 #################
 ### Codes Postaux
 #################
@@ -414,15 +471,15 @@ flux2018SourcePage = "https://www.insee.fr/fr/statistiques/5393826"
 flux2018SourceFile = "https://www.insee.fr/fr/statistiques/fichier/5393826/base-csv-flux-mobilite-residentielle-2018.zip"
 flux2018SourceMeta = "https://www.insee.fr/fr/statistiques/5393826#dictionnaire"
 
-flux2018SourceFile = data_dir + "base-flux-mobilite-residentielle-2018.csv"
+flux2018SourceData = data_dir + "base-flux-mobilite-residentielle-2018.csv"
 flux2018 = None
 
 
-def load_flux_2018(flux2018SourceFile:  str = flux2018SourceFile):
+def load_flux_2018(p_flux2018SourceFile:  str = flux2018SourceData):
     global flux2018
     if (flux2018 is None) :
-        print_blue("Lecture Flux Mobilite Residentielle 2018 : " + flux2018SourceFile + " ...")
-        flux2018 = pd.read_csv(flux2018SourceFile, delimiter=';', dtype={'CODGEO': str, 'LIBGEO': str,
+        print_blue("Lecture Flux Mobilite Residentielle 2018 : " + p_flux2018SourceFile + " ...")
+        flux2018 = pd.read_csv(p_flux2018SourceFile, delimiter=';', dtype={'CODGEO': str, 'LIBGEO': str,
                                                                          'DCRAN': str, 'L_DCRAN': str,
                                                                          'NBFLUX_C18_POP01P' : float })
     return flux2018
@@ -435,15 +492,15 @@ flux2017SourcePage = "https://www.insee.fr/fr/statistiques/4509335"
 flux2017SourceFile = "https://www.insee.fr/fr/statistiques/fichier/4509335/base-csv-flux-mobilite-residentielle-2017.zip"
 flux2017SourceMeta = "https://www.insee.fr/fr/statistiques/4509335#dictionnaire"
 
-flux2017SourceFile = data_dir + "base-flux-mobilite-residentielle-2017.csv"
+flux2017SourceData = data_dir + "base-flux-mobilite-residentielle-2017.csv"
 flux2017 = None
 
 
-def load_flux_2017(flux2017SourceFile:  str = flux2017SourceFile):
+def load_flux_2017(p_flux2017SourceFile:  str = flux2017SourceData):
     global flux2017
     if (flux2017 is None) :
-        print_blue("Lecture Flux Mobilite Residentielle 2017 : " + flux2017SourceFile + " ...")
-        flux2017 = pd.read_csv(flux2017SourceFile, delimiter=';', dtype={'CODGEO': str, 'LIBGEO': str,
+        print_blue("Lecture Flux Mobilite Residentielle 2017 : " + p_flux2017SourceFile + " ...")
+        flux2017 = pd.read_csv(p_flux2017SourceFile, delimiter=';', dtype={'CODGEO': str, 'LIBGEO': str,
                                                                          'DCRAN': str, 'L_DCRAN': str,
                                                                          'NBFLUX_C17_POP01P' : float })
     return flux2017
@@ -503,15 +560,15 @@ fluxpro2018SourcePage = "https://www.insee.fr/fr/statistiques/5393835"
 fluxpro2018SourceFile = "https://www.insee.fr/fr/statistiques/fichier/5393835/base-csv-flux-mobilite-domicile-lieu-travail-2018.zip"
 fluxpro2018SourceMeta = "https://www.insee.fr/fr/statistiques/5393835#dictionnaire"
 
-fluxpro2018SourceFile = data_dir + "base-flux-mobilite-domicile-lieu-travail-2018.csv"
+fluxpro2018SourceData = data_dir + "base-flux-mobilite-domicile-lieu-travail-2018.csv"
 fluxpro2018 = None
 
 # CODGEO;LIBGEO;DCLT;L_DCLT;NBFLUX_C18_ACTOCC15P
-def load_fluxpro_2018(fluxpro2018SourceFile:  str = fluxpro2018SourceFile):
+def load_fluxpro_2018(p_fluxpro2018SourceFile:  str = fluxpro2018SourceData):
     global fluxpro2018
     if (fluxpro2018 is None) :
-        print_blue("Lecture Flux Mobilite Domicile Travail 2018 : " + fluxpro2018SourceFile + " ...")
-        fluxpro2018 = pd.read_csv(fluxpro2018SourceFile, delimiter=';', dtype={'CODGEO': str, 'LIBGEO': str,
+        print_blue("Lecture Flux Mobilite Domicile Travail 2018 : " + p_fluxpro2018SourceFile + " ...")
+        fluxpro2018 = pd.read_csv(p_fluxpro2018SourceFile, delimiter=';', dtype={'CODGEO': str, 'LIBGEO': str,
                                                                          'DCRAN': str, 'L_DCRAN': str,
                                                                          'NBFLUX_C18_POP01P' : float })
     return fluxpro2018
@@ -523,15 +580,15 @@ def load_fluxpro_2018(fluxpro2018SourceFile:  str = fluxpro2018SourceFile):
 pop2019SourcePage = "https://www.insee.fr/fr/statistiques/6011070?sommaire=6011075"
 pop2019SourceFile = "https://www.insee.fr/fr/statistiques/fichier/6011070/ensemble.zip"
 
-pop2019SourceFile = data_dir + "donnees_communes_pop_2019.csv"
+pop2019SourceData = data_dir + "donnees_communes_pop_2019.csv"
 pop2019 = None
 
 # REG;DEP;COM;PMUN;PCAP;PTOT
-def load_pop2019(pop2019SourceFile:  str = pop2019SourceFile):
+def load_pop2019(p_pop2019SourceFile:  str = pop2019SourceData):
     global pop2019
     if (pop2019 is None) :
-        print_blue("Lecture Populations Légales 2019 : " + pop2019SourceFile + " ...")
-        pop2019 = pd.read_csv(pop2019SourceFile, index_col=2, delimiter=';', dtype={'REG': str, 'DEP': str,
+        print_blue("Lecture Populations Légales 2019 : " + p_pop2019SourceFile + " ...")
+        pop2019 = pd.read_csv(p_pop2019SourceFile, index_col=2, delimiter=';', dtype={'REG': str, 'DEP': str,
                                                                        'COM': str, 'PMUN': int,
                                                                        'PCAP' : int, 'PTOT' : int })
     return pop2019
@@ -544,15 +601,15 @@ stock2018SourcePage = "https://www.insee.fr/fr/statistiques/5542867?sommaire=539
 stock2018SourceFile = "https://www.insee.fr/fr/statistiques/fichier/5542867/RP2018_LOGEMTZE_csv.zip"
 stock2018SourceMeta = "https://www.insee.fr/fr/statistiques/fichier/5542867/dictionnaire_logemt_rp2018.pdf"
 
-stock2018SourceFile = data_dir + "FD_LOGEMTZE_2018.csv"
+stock2018SourceData = data_dir + "FD_LOGEMTZE_2018.csv"
 stock2018 = None
 
-def load_stock_2018(stock2018SourceFile:  str = stock2018SourceFile):
+def load_stock_2018(p_stock2018SourceFile:  str = stock2018SourceData):
     global stock2018
     if (stock2018 is None) :
-        downloadFile(stock2018SourceFile, stock2018SourceFile, zip=True, zipped_file="FD_LOGEMTZE_2018.csv")
+        downloadFile(stock2018SourceFile, stock2018SourceData, zip=True, zipped_file="FD_LOGEMTZE_2018.csv")
         print_blue("Lecture Besoins de Logements en Stock 2018 : " + stock2018SourceFile + " ...")
-        stock2018 = pd.read_csv(stock2018SourceFile, delimiter=';', dtype={'CODGEO': str, 'LIBGEO': str,
+        stock2018 = pd.read_csv(p_stock2018SourceFile, delimiter=';', dtype={'CODGEO': str, 'LIBGEO': str,
                                                                          'DCRAN': str, 'L_DCRAN': str,
                                                                          'NBFLUX_C18_POP01P' : float })
     return stock2018
@@ -562,23 +619,25 @@ def load_stock_2018(stock2018SourceFile:  str = stock2018SourceFile):
 ### Collect Data Description
 ###
 
-collectDataFile    = configurationFile
+collectDataFile     = configurationFile
 collectDataMetrics  = None
 collectDiagnostics  = None
 collectCalculations = None
+SCOT_OUEST          = None
 
 # Key	Description	Source	Type	Data	Total
 # Key	Description	Test    Message
 
 
 def load_collectData(collect_file: str = collectDataFile):
-    global collectDataMetrics, collectDiagnostics, collectCalculations
+    global collectDataMetrics, collectDiagnostics, collectCalculations, SCOT_OUEST
     if (collectDataMetrics is None) :
         print_blue("Lecture Data Metrics : " + collect_file + " ...")
         xls = pd.ExcelFile(collect_file)
         collectDataMetrics  = pd.read_excel(xls, 'Collect',    index_col=0, dtype=str)
         collectDiagnostics  = pd.read_excel(xls, 'Diagnostic', index_col=0, dtype=str)
         collectCalculations = pd.read_excel(xls, 'Calculs',    index_col=0, dtype=str)
+        SCOT_OUEST          = pd.read_excel(xls, 'SCOT_OUEST', index_col=0, dtype={'Budget 2030': float, 'Budget 2040': float })
 
         print_yellow("  - Generation : " + "datametrics.json" + " ...")
         dm = pd.read_excel(xls, 'Collect', index_col=0, dtype=str).fillna('')
@@ -735,7 +794,7 @@ def print_red(text):
 def print_verbose(text):
     global VERBOSE
     if (VERBOSE) :
-       print(colored(text, "magenta"))
+        print(colored(text, "magenta"))
     logging.debug(text)
 
 
@@ -889,11 +948,28 @@ def get_code_insee_commune(code_postal) -> Union[int, str]:
     load_codes()
     the_list = codesPostaux.index[codesPostaux['Code_postal'] == code_postal].tolist()
     if (not the_list):
-        return "Pas de Code Postal pour code Postal "+str(code_postal), "Pas de Commune pour code Postal "+str(code_postal)
+        return "Pas de Code INSEE pour code Postal "+str(code_postal)
     code_insee = the_list[0]
     commune = codesPostaux["Nom_commune"][code_insee]
     if not isinstance(commune, str) : commune = commune[0]
     return code_insee, commune
+
+
+## Data Access
+def is_code_insee_commune(code_insee) -> bool:
+    """ Retourne True si le code insee est celui d'une commune """
+    load_codes()
+    return (code_insee in codesPostaux.index)
+
+
+def get_code_insee_commune_nom(nom_commune) -> int :
+    """ Retourne le code insee et le nom de la commune """
+    load_codes()
+    the_list = codesPostaux.index[codesPostaux['Nom_commune'] == nom_commune.upper()].tolist()
+    if (not the_list):
+        return 0
+    code_insee = the_list[0]
+    return code_insee
 
 
 def get_code_postal_commune(code_insee) -> Union[int, str]:
@@ -914,17 +990,14 @@ def get_code_postal_commune(code_insee) -> Union[int, str]:
 
 
 def get_code_postal(code_insee) -> Union[int, str]:
-    code, comm = get_code_postal_commune(code_insee)
-    return code
+    code_postal, comm = get_code_postal_commune(code_insee)
+    return code_postal
 
 
 def get_code_insee(code_postal : Union[int, str]) -> int:
     """ Le Code INSEE du Code Postal """
-    load_codes()
-    if (isinstance(codesPostaux["Code_commune_INSEE"][code_postal], str)):
-        code_insee = codesPostaux["Code_commune_INSEE"][code_postal]
-    else:
-        code_insee = codesPostaux["Code_commune_INSEE"][code_postal][0]
+    code_insee = get_code_insee_commune(code_postal)
+    if str(code_insee).startswith("Pas de"): return 0
     return code_insee
 
 
@@ -955,9 +1028,28 @@ def nom_epci(code_epci, clean=False) -> str:
     """ Le nom de l'EPCI """
     if (code_epci == 0) : return "Pas de Nom"
     load_interco()
-    nom = intercoDossier[intercoDossier["Unnamed: 2"] == code_epci].head(1)["Unnamed: 3"][0]
-    if (clean): return nom
-    return clean_name(nom) + "_" + str(code_epci)
+    epci_list    = intercoDossier[intercoDossier["Unnamed: 2"] == code_epci].head(1)["Unnamed: 3"]
+    if epci_list.empty : return None
+    if (not clean): return epci_list[0]
+    return clean_name(epci_list[0])
+
+
+def code_epci(nom_epci : str) -> str:
+    """ Le code de l'EPCI """
+    load_interco()
+    if (nom_epci == None) or (nom_epci.strip() == "") : return 0
+    epci_list    = intercoDossier[intercoDossier["Unnamed: 3"] == nom_epci].head(1)["Unnamed: 2"]
+    if epci_list.empty : return 0
+    return epci_list[0]
+
+
+def code_commune(nom_commune : str) -> str:
+    """ Le code de la Commune """
+    load_interco()
+    if (nom_commune == None) or (nom_commune.strip() == "") : return 0
+    comm_list    = intercoDossier[intercoDossier["Unnamed: 1"] == nom_commune].head(1)["Unnamed: 2"]
+    if comm_list.empty : return 0
+    return comm_list[0]
 
 
 def nom_dept(code_dept, clean=False) -> str:
@@ -965,8 +1057,16 @@ def nom_dept(code_dept, clean=False) -> str:
     if (code_dept == 0) : return "Pas de Nom"
     load_departements()
     nom = departements["nom_departement"][code_dept]
-    if (clean): return nom
-    return clean_name(nom) + "_" + str(code_dept)
+    if (not clean): return nom
+    return clean_name(nom)
+
+
+def code_dept(nom_dept) -> str:
+    """ Le code du Departement """
+    if (nom_dept == None) : return 0
+    load_departements()
+    if (len(departements[departements["nom_departement"]==nom_dept])==0): return 0
+    return departements[departements["nom_departement"]==nom_dept].index[0]
 
 
 def nom_commune(code_insee=None, code_postal=None, clean=False) -> str:
@@ -976,8 +1076,8 @@ def nom_commune(code_insee=None, code_postal=None, clean=False) -> str:
     if   (code_insee)  : code_postal, commune = get_code_postal_commune(code_insee)
     elif (code_postal) : code_insee,  commune = get_code_insee_commune(code_postal)
     nom = str(commune).title()
-    if (clean): return nom
-    return clean_name(nom) + "_" + str(code_insee)
+    if (not clean): return nom
+    return clean_name(nom)
 
 
 def nom_region(code_region, clean=False) -> str:
@@ -985,8 +1085,8 @@ def nom_region(code_region, clean=False) -> str:
     if (code_region == 0) : return "Pas de Nom"
     load_departements()
     nom     = departements[departements["code_region"] == code_region]['nom_region'].to_list()[0]
-    if (clean): return nom
-    return clean_name(nom) + "_" + str(code_region)
+    if (not clean): return nom
+    return clean_name(nom)
 
 
 def communes_epci(code_epci) -> list[int]:
@@ -1017,6 +1117,81 @@ def communes_region(code_reg) -> list[int]:
     epci_indices = index[condition]
     epci_indices_list = epci_indices.tolist()
     return sorted(epci_indices_list)
+
+
+def list_zones() -> list[str]:
+    """ List des Zones """
+    return scot_consolidation()["GROUPES_COMMUNES"].keys()
+
+
+def list_zones_dept(code_dept="06") -> list[str]:
+    """ List des Zones dans DEPT """
+    global SCOT_DATA
+    code_dept = str(code_dept)
+    list_zone = list()
+    for zone in list_zones() :
+        if (SCOT_DATA["GROUPES_COMMUNES"][zone]["DEPT"] == code_dept) :
+            list_zone.append(zone)
+    return list_zone
+
+
+def communes_zone(nom_zone) -> list[int]:
+    """ Les Codes INSEE des Communes d'une Zone """
+    SCOT_DATA = scot_consolidation()
+    if (nom_zone not in list_zones()) : return []
+    return SCOT_DATA["GROUPES_COMMUNES"][nom_zone]["COMMUNES"]
+
+
+def communes_territoire(territoire:str) -> [list[str], str]:
+    """ Les Codes INSEE des Communes d'un Territoire, le type de territoire """
+    """ Territoire =  nom scot, code dept, nom dept """
+    # code epci, nom epci, nom commune, code commune,
+    load_interco()
+
+    territoire = territoire.strip()
+    code_territoire = []
+    type_territoire = ""
+    if nom_epci(territoire):
+        # Territoire = Nom epci
+        code_territoire = communes_epci(territoire)
+        type_territoire = "EPCI"
+    elif code_epci(territoire):
+        # Territoire = Code epci
+        code_territoire = communes_epci(code_epci(territoire))
+        type_territoire = "EPCI"
+    elif get_code_insee_commune_nom(territoire):
+        # Territoire = Nom Commune
+        code_territoire = get_code_insee_commune_nom(territoire)
+        type_territoire = "COMMUNE"
+    elif is_code_insee_commune(territoire):
+        # Territoire = Code INSEE Commune
+        code_territoire = territoire
+        type_territoire = "COMMUNE"
+    elif get_code_insee(territoire):
+        # Territoire = Code Postal Commune
+        code_territoire, nom = get_code_insee_commune(territoire)
+        type_territoire = "COMMUNE"
+    elif len(communes_dept(territoire))!=0:
+        # Territoire = Code Dept
+        code_territoire = communes_dept(territoire)
+        type_territoire = "DEPT"
+    elif code_dept(territoire):
+        # Territoire = Nom Dept
+        code_territoire = communes_dept(code_dept(territoire))
+        type_territoire = "DEPT"
+    elif len(communes_region(territoire))!=0:
+        # Territoire = Code Region
+        code_territoire = communes_region(territoire)
+        type_territoire = "REG"
+    elif (territoire.lower()=="paca"):
+        # Territoire = Code Region
+        code_territoire = communes_region("93")
+        type_territoire = "REG"
+
+    if isinstance(code_territoire, list):
+        return code_territoire, type_territoire
+    else:
+        return [code_territoire], type_territoire
 
 
 def epci_dept(code_dept) -> list[int]:
@@ -1112,6 +1287,54 @@ def get_art(key, code_insee, rounding=6):
         return 0
 
 
+def scot_consolidation() -> dict:
+    """ La liste des Zones de Communes """
+    global SCOT_DATA
+    load_interco()
+    load_scot_data()
+    if ("GROUPES_COMMUNES" in SCOT_DATA): return SCOT_DATA
+    SCOT_DATA["GROUPES_COMMUNES"] = {}
+    for scot in SCOT_DATA["SCOT_EPCI"].keys():
+        zone = clean_name(scot)
+        SCOT_DATA["GROUPES_COMMUNES"][zone] = {}
+        SCOT_DATA["GROUPES_COMMUNES"][zone]["TYPE"]  = "SCOT"
+        SCOT_DATA["GROUPES_COMMUNES"][zone]["CLEAN"] = zone
+        SCOT_DATA["GROUPES_COMMUNES"][zone]["NAME"]  = scot
+        SCOT_DATA["GROUPES_COMMUNES"][zone]["COMMUNES"] = []
+        SCOT_DATA["GROUPES_COMMUNES"][zone]["EPCI"] = []
+        for epci in SCOT_DATA["SCOT_EPCI"][scot]:
+            c_epci   = code_epci(epci)
+            c_dept   = dept_epci(c_epci)
+            c_reg    = region_epci(c_epci)
+            communes = communes_epci(c_epci)
+            SCOT_DATA["GROUPES_COMMUNES"][zone]["COMMUNES"].extend(communes)
+            SCOT_DATA["GROUPES_COMMUNES"][zone]["EPCI"].append(c_epci)
+            SCOT_DATA["GROUPES_COMMUNES"][zone]["DEPT"] = c_dept
+            SCOT_DATA["GROUPES_COMMUNES"][zone]["REG"]  = c_reg
+    for groupe in SCOT_DATA["GROUPEMENTS"].keys():
+        zone = clean_name(groupe)
+        territoires = SCOT_DATA["GROUPEMENTS"][groupe]["LIST"]
+        SCOT_DATA["GROUPES_COMMUNES"][zone] = {}
+        SCOT_DATA["GROUPES_COMMUNES"][zone]["TYPE"] = SCOT_DATA["GROUPEMENTS"][groupe]["TYPE"]
+        SCOT_DATA["GROUPES_COMMUNES"][zone]["NAME"] = groupe
+        SCOT_DATA["GROUPES_COMMUNES"][zone]["COMMUNES"] = []
+        SCOT_DATA["GROUPES_COMMUNES"][zone]["EPCI"] = []
+        for territoire in str(territoires).split(',') :
+            # code commune, nom commune, code epci, nom epci, nom scot, code dept, nom dept
+            communes, type = communes_territoire(territoire)
+            if (communes is None) or (len(communes) == 0) :
+                print_error("Territoire inconnu : " + territoire)
+                continue
+            c_epci   = epci_commune(communes[0])
+            c_dept   = dept_epci(c_epci)
+            c_reg    = region_epci(c_epci)
+            SCOT_DATA["GROUPES_COMMUNES"][zone]["COMMUNES"] = sorted(list(set(SCOT_DATA["GROUPES_COMMUNES"][zone]["COMMUNES"]) | set(communes)))
+            SCOT_DATA["GROUPES_COMMUNES"][zone]["EPCI"].append(c_epci)
+            SCOT_DATA["GROUPES_COMMUNES"][zone]["DEPT"] = c_dept
+            SCOT_DATA["GROUPES_COMMUNES"][zone]["REG"]  = c_reg
+    save_file(to_json(SCOT_DATA,  indent=4), output_dir + os.sep + "a-scot.json")
+    return SCOT_DATA
+
 ###
 ### Data Collection and Consolidation
 ###
@@ -1128,6 +1351,7 @@ source_evol    = "EVOL"
 source_sit     = "SIT"
 
 mode_sum       = "SUM"
+mode_concat    = "CONCAT"
 mode_ignore    = "IGNORE"
 mode_equal     = "EQUAL"
 mode_count     = "COUNT"
@@ -1146,6 +1370,7 @@ entite_epci    = "EPCI"
 entite_dept    = "DEPT"
 entite_region  = "REGION"
 entite_scot    = "SCOT"
+entite_zone    = "ZONE"
 
 DataStoreCache = {}
 
@@ -1154,8 +1379,8 @@ class DataStore():
 
     def __init__(self, store_name : str, store_type : str, store_code : str):
         self.store_name  = store_name   # Name of Commune, EPCI, DEPT, REGION ...
-        self.store_type  = store_type   # Type of Entity for Store :  "COMMUNE", "EPCI", "DEPT", "REGION"
-        self.store_code  = store_code   # Code INSEE for "COMMUNE", "EPCI", for pour "DEPT", "REGION"
+        self.store_type  = store_type   # Type of Entity for Store :  "COMMUNE", "EPCI", "DEPT", "REGION", "ZONE"
+        self.store_code  = store_code   # Code INSEE for "COMMUNE", "EPCI", for pour "DEPT", "REGION", "ZONE"
         self.store_index = store_code   # Working Index : Code INSEE for "COMMUNE", "total" pour tables multi-communes
         if (self.store_type != entite_commune) : self.store_index = "total"
         self.data_frame  = pd.DataFrame()
@@ -1163,7 +1388,7 @@ class DataStore():
         self.meta_dict   = {}  # Semantic of this indicator / metric
         self.type_dict   = {}  # { "INT", "STR",    "TAUX",  "PERCENT", "FLOAT" }
         self.source_dict = {}  # { "SRU", "INSEE",  "ART",   "SIT",     "DATA", "PROJ", "EVOL", "CALC" }
-        self.mode_dict   = {}  # { "SUM", "IGNORE", "EQUAL", "COUNT",   "CUSTOM", "N/A", "AVG" }
+        self.mode_dict   = {}  # { "SUM", "CONCAT", "IGNORE", "EQUAL", "COUNT",   "CUSTOM", "N/A", "AVG" }
         self.expr_dict   = {}  # Expression Used for Calculations
         self.error_dict  = {}  # Error while processing this indicator / metric
         self.metric_list = []  # List of Metrics for Rendering
@@ -1206,13 +1431,17 @@ class DataStore():
             elif (self.type_dict[key] == "PERCENT") : return self.add_value(key, index, float(data))
             else:
                 self.error_dict[key] = "Invalid Type  [" + str(index) + "][" + str(key) + "] - Not a " + str(self.type_dict[key]) + " :  " + str(data)
+                print_red("else")
                 print_red(self.error_dict[key])
+                print_error("add_data Else : " + self.error_dict[key])
                 self.add_value(key, index, str(data))
                 # quit()
                 return None
         except Exception as e:
             self.error_dict[key] = "Type Error [" + str(index) + "][" + str(key) + "] - Not a " + self.type_dict[key] + " :  " + str(data) + " : " + str(e)
+            print_red("Exception")
             print_red(self.error_dict[key])
+            print_error("add_data Exception : " + self.error_dict[key])
             self.add_value(key, index, str(data))
             # quit()
             return None
@@ -1246,7 +1475,10 @@ class DataStore():
 
     def get_fullname(self):
         """ Base file name for DataStore.  """
-        fullname = str(self.store_type) + "_" + str(self.store_name) + "_" + str(self.store_code)
+        if (self.store_type == "ZONE") :
+            fullname = str(self.store_type) + "_" + str(self.store_name)
+        else:
+            fullname = str(self.store_type) + "_" + str(self.store_name) + "_" + str(self.store_code)
         return clean_name(fullname)
 
     def save_data(self):
@@ -1310,9 +1542,28 @@ class DataStore():
         with open(output_dir + self.get_fullname() + "_s.json", 'w') as f:
             data_s = summary_data.to_dict(orient='index')
             data_s["Data"] = all
+            if ('__warningregistry__' in data_s["Data"]):
+                data_s["Data"].pop('__warningregistry__', None)
+            if ('__warningregistry__' in data_s["total"]):
+                data_s["total"].pop('__warningregistry__', None)
+            if ('__warningregistry__' in data_s["mode"]):
+                data_s["mode"].pop('__warningregistry__', None)
+            if ('__warningregistry__' in data_s["type"]):
+                data_s["type"].pop('__warningregistry__', None)
+            if ('__warningregistry__' in data_s["source"]):
+                data_s["source"].pop('__warningregistry__', None)
+            if ('__warningregistry__' in data_s["expr"]):
+                data_s["expr"].pop('__warningregistry__', None)
+            for k in data_s["Data"].keys():
+                print_verbose(k)
+                print_verbose(str(data_s["Data"][k]))
             data_s["Diagnostics"] = self.diagnostics
             global_context["JSON_DATA_SET_S"] = summary_data.to_dict(orient='index')
-            f.write(to_json(data_s, indent=4))
+            try:
+                f.write(to_json(data_s, indent=4))
+            except Exception as e:
+                print(str(e))
+
 
     def load_data(self):
         """ Load DataStore data from xlsx file  """
@@ -1588,6 +1839,7 @@ class DataStore():
                 print_verbose("  - Evaluating Total Line " + str(_line) + ": [" + str(key) + "] Mode : " + str(mode))
                 if (key == "CODE_INSEE"): total_dict[key] = self.store_index
                 elif (mode == "SUM"):     total_dict[key] = data_clean[key].sum()
+                elif (mode == "CONCAT"):  total_dict[key] = data_clean[key].str.cat(sep=', ')
                 elif (mode == "EQUAL"):   total_dict[key] = data_clean[key][0]
                 elif (mode == "COUNT"):   total_dict[key] = data_clean.shape[0]
                 elif (mode == "IGNORE"):  total_dict[key] = "IGNORE"
@@ -1626,7 +1878,7 @@ class DataStore():
             total_dict["LIBELLE"]       = self.store_name
             total_dict["CODE_INSEE"]    = self.store_code
             total_dict["CODE_POSTAL"]   = "EPCI"
-            total_dict["NOM_COMMUNE"]   = "EPCI"
+            # total_dict["NOM_COMMUNE"]   = "EPCI"
             total_dict["EPCI"]          = self.store_code
             total_dict["LIBEPCI"]       = self.store_name
             total_dict["TYPE_EPCI"]     = "EPCI"
@@ -1686,10 +1938,33 @@ class DataStore():
             total_dict["URL_LINTERNAUTE"]        = "https://fr.wikipedia.org/wiki/Provence-Alpes-C%C3%B4te_d%27Azur"
             total_dict["URL_GOOGLE"]             = "https://www.google.com/search?q="+total_dict["LIBELLE"]
 
+        if (self.store_type == "ZONE"):
+            total_dict["BASE_NAME"]     = self.get_fullname()
+            total_dict["LIBELLE"]       = self.store_name
+            total_dict["CODE_INSEE"]    = self.store_code
+            total_dict["CODE_POSTAL"]   = "ZONE"
+            # total_dict["NOM_COMMUNE"]   = "ZONE"
+            total_dict["EPCI"]          = self.store_name
+            total_dict["LIBEPCI"]       = self.store_name
+            total_dict["TYPE_EPCI"]     = "ZONE"
+            total_dict["EPCI_COMMUNES"] = communes_zone(self.store_name)
+            total_dict["DEP"]           = SCOT_DATA["GROUPES_COMMUNES"][self.store_name]["DEPT"]
+            total_dict["DEP_NOM"]       = nom_dept(SCOT_DATA["GROUPES_COMMUNES"][self.store_name]["DEPT"])
+            total_dict["REG"]           = SCOT_DATA["GROUPES_COMMUNES"][self.store_name]["REG"]
+            total_dict["REG_NOM"]       = nom_region(SCOT_DATA["GROUPES_COMMUNES"][self.store_name]["REG"])
+            url_dossier = "https://www.insee.fr/"
+            total_dict["DOSSIER_INSEE"]          = url_dossier
+            global_context["URL_SOURCE_DOSSIER"] = url_dossier
+            total_dict["URL_VILLE_DATA"]         = "https://www.google.com/search?q="+total_dict["LIBELLE"]
+            total_dict["URL_LINTERNAUTE"]        = "https://www.google.com/search?q="+total_dict["LIBELLE"]
+            total_dict["URL_GOOGLE"]             = "https://www.google.com/search?q="+total_dict["LIBELLE"]
+
+
         for key in self.key_datas:
             mode = self.mode_dict[key]
             if (key == "CODE_INSEE"): continue
             elif (mode == "SUM"):     continue
+            elif (mode == "CONCAT"):  continue
             elif (mode == "EQUAL"):   continue
             elif (mode == "COUNT"):   continue
             elif (mode == "IGNORE"):  continue
@@ -1769,7 +2044,7 @@ class DataStore():
                 self.add_metric(_key, _description, source=_source, mode=_python, data=value, type=_type, expr=_python)
             except Exception as e :
                 print_error("Error evaluating Calcul : Line " + str(_line) + " Key = " + str(_key) + " + expr : " + str(_python) + " - Error : " + str(e))
-                self.add_metric(_key, _description, source=_source, mode=_python, data=error, type=_type, expr=_python)
+                self.add_metric(_key, _description, source=_source, mode=_python, data=str(e), type=_type, expr=_python)
         self.store_index = save_index
         self.add_meta_data()
         self.calc_done = True
@@ -1844,8 +2119,8 @@ class DataStore():
                     self.collect_data(code_insee=commune)
                 self.total_data(meta=True)
                 self.store_index = 'total'
-            if (self.store_type == entite_region):
-                for commune in communes_region(self.store_code):
+            if (self.store_type == entite_zone) or (self.store_type == entite_scot):
+                for commune in communes_zone(self.store_code):
                     self.collect_data(code_insee=commune)
                 self.total_data(meta=True)
                 self.store_index = 'total'
@@ -1868,6 +2143,40 @@ class DataStore():
             display_in_browser(html_report_file)
 
         return self
+
+
+def scot_ouest(code_insee, start_date="2021-05-20"):
+    load_sitadel()
+    # Annee / Log Aut / Log Commences / Nbre Log / Surface Terrain
+    com_2021   = sitadel1721[(sitadel1721['COMM'] == str(code_insee)) &
+                             (sitadel1721["NATURE_PROJET"] == 1) &
+                             (sitadel1721["Etat_DAU"] != 4) &
+                             (sitadel1721["Type_DAU"] == "PC") &
+                             (sitadel1721["DATE_REELLE_AUTORISATION"] > start_date)]
+
+
+    superficie = sum(com_2021["SUPERFICIE_TERRAIN"])
+    logements  = sum(com_2021["NB_LGT_TOT_CREES"])
+    logsoc     = sum(com_2021["NB_LGT_PRET_LOC_SOCIAL"])
+
+    count      = len(com_2021.index)
+    count0     = len(com_2021.loc[com_2021["SUPERFICIE_TERRAIN"] == 0].index)
+    superficie0 = round0(superficie + ((superficie/(count-count0))*count0), 0)
+    parcelles  = ""
+    for index, row in com_2021.iterrows():
+        com_2021.at[index, "Parcelles"] = str(row['sec_cadastre1'])+str(row['num_cadastre1'])+" "+str(row['sec_cadastre2'])+str(row['num_cadastre2'])+" "+str(row['sec_cadastre3'])+str(row['num_cadastre3'])
+        parcelles = parcelles + +" "+ com_2021.at[index, "Parcelles"]
+    com_2021 = com_2021[["DEP", "COMM", "Type_DAU", "Etat_DAU", "NATURE_PROJET", "NB_LGT_TOT_CREES",
+                         "SUPERFICIE_TERRAIN", "DATE_REELLE_AUTORISATION",
+                         "Parcelles", "NATURE_PROJET", "NB_LGT_TOT_CREES", "NB_LGT_PRET_LOC_SOCIAL"]]
+    com_2021.at["Total/Count", "SUPERFICIE_TERRAIN"] = superficie0
+    com_2021.at["Total/Count", "Type_DAU"] = count
+    com_2021.at["Total/Count", "NB_LGT_TOT_CREES"] = logements
+    com_2021.at["Total/Count", "NB_LGT_PRET_LOC_SOCIAL"] = logsoc
+    com_2021.at["Total/Count", "Parcelles"] = parcelles
+    com_2021.to_csv("scot_ouest_"+str(code_insee)+"-"+start_date+".csv")
+    return superficie0
+
 
 def excel_flux():
     # Donnees Flux
@@ -2649,21 +2958,30 @@ def ftp_push_ds(ds : DataStore):
     ftp_push_file(file_list)
 
 
-def ftp_push_file(filename):
+def ftp_push_file(filename, p_host = "ftpupload.net", p_user = "epiz_30239961", p_password = "oqEwtTaACCaANF", p_directory = "htdocs"):
+    host = p_host
+    user = p_user
+    password = p_password
+    directory = p_directory
+    if (FTP_PROD):
+        host = "sobrietefonciere.fnepaca.fr"
+        user = "sobrietefonciere@fnepaca.fr"
+        password = "6TlHc!cjmd8u"
+        directory = ""
     if (isinstance(filename, str)):
         filename = [filename]
     if (isinstance(filename, list)):
-        ftp = ftplib.FTP("ftpupload.net")
+        ftp = ftplib.FTP(host)
         try:
-            ftp.login("epiz_30239961", "oqEwtTaACCaANF")
-            ftp.cwd("htdocs")
+            ftp.login(user, password)
+            ftp.cwd(directory)
             # remote_files = ftp.nlst()
             # print(remote_files)
             for file in filename:
                 if (not os.path.exists(file)):
                     print_red("File not found : "+ file)
                     continue
-                print_blue("FTP Push : " + file)
+                print_blue("FTP Push [" + host + "] : " + file)
                 ftp.storbinary('STOR ' + file.replace("\\" , "/"), open(file, 'rb'))
             ftp.close()
         except Exception as e:
@@ -2726,6 +3044,20 @@ def report_commune(code_insee : str = None, code_postal: str = None, force=True,
     return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force, data_only=data_only, ftp_push=ftp_push)
 
 
+def report_zone(zone_name: str = "SCoT_Ouest_Littoral", force=True, with_communes=False, data_only : bool = False, ftp_push : bool = False):
+    """ Generates Report for a Zone identified by Zone Name  """
+    entite = entite_zone
+    name   = clean_name(zone_name)
+    code   = clean_name(zone_name)
+    if ((not name) or (str(name).startswith("Pas")) or (zone_name not in list_zones())):
+        print_red("Zone non trouvee pour code :  [" + str(zone_name) + "]")
+        return None
+    if (with_communes):
+        for commune in communes_zone(name):
+            report_commune(code_insee=str(commune), force=force, data_only=data_only, ftp_push=ftp_push)
+    return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force, data_only=data_only, ftp_push=ftp_push)
+
+
 def report_epci(epci_id: str = "200039915", force=True, with_communes=False, data_only : bool = False, ftp_push : bool = False):
     """ Generates Report for a EPCI identified by Code INSEE  """
     entite = entite_epci
@@ -2752,7 +3084,9 @@ def report_dept(dept_id: str = "06", force=True, with_communes=False, data_only 
         for commune in communes_dept(dept_id):
             report_commune(code_insee=str(commune), force=force, data_only=data_only, ftp_push=ftp_push)
         for epci in epci_dept(dept_id):
-            report_epci(str(epci), force, with_communes=False, data_only=data_only, ftp_push=ftp_push)
+            report_epci(epci_id=str(epci), force=force, with_communes=False, data_only=data_only, ftp_push=ftp_push)
+        for zone in list_zones_dept(dept_id):
+            report_zone(zone_name=str(zone), force=force, with_communes=False, data_only=data_only, ftp_push=ftp_push)
     return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force, data_only=data_only, ftp_push=ftp_push)
 
 
@@ -2804,6 +3138,9 @@ def report_paca(force=True, data_only : bool = False, ftp_push : bool = False):
         report_epci(str(epci), force=force, data_only=data_only, ftp_push=ftp_push)
     report_dept("84", force=force, data_only=data_only, ftp_push=ftp_push)
 
+    for zone in list_zones():
+        report_zone(str(zone), force=force, data_only=data_only, ftp_push=ftp_push)
+
     print_yellow("REGION 93 - Region PACA : ")
     report_region("93", force=force, data_only=data_only, ftp_push=ftp_push)
 
@@ -2821,7 +3158,7 @@ Region
 """
 
 
-def report_select_dict(region=None, filename=None, force=False, ftp_push=False) -> dict:
+def report_select_dict(region=None, filename=None, force=False) -> dict:
     global report_select
     if str(region) in report_select: return report_select[str(region)]
 
@@ -2843,13 +3180,14 @@ def report_select_dict(region=None, filename=None, force=False, ftp_push=False) 
         rd = {}
         rd["TYPE"]   = "REGION"
         rd["INSEE"]  = str(r)
-        rd["Nom"]    = nom_region(r, clean=True)
-        rd["Clean"]  = "REGION_" + nom_region(r, clean=False)
+        rd["Nom"]    = nom_region(r, clean=False)
+        rd["Clean"]  = "REGION_" + nom_region(r, clean=True) + "_" + rd["INSEE"]
         rd["Region"] = str(r)
         rd["DEPARTEMENTS"] = []
         rd["DEPARTEMENTS_CODES"] = list_dept(r)
         rd["EPCIS"] = []
         rd["EPCIS_CODES"] = epci_region(r)
+        rd["ZONES_CODES"] = list_zones()
         rd["COMMUNES"] = []
         rd["COMMUNES_CODES"] = communes_region(r)
         for c in rd["COMMUNES_CODES"]  :
@@ -2859,26 +3197,39 @@ def report_select_dict(region=None, filename=None, force=False, ftp_push=False) 
             pos, lib       = get_code_postal_commune(c)
             cd["Postal"]   = pos
             cd["Libelle"]  = lib
-            cd["Nom"]      = nom_commune(code_insee=c, clean=True)
-            cd["Clean"]    = "COMMUNE_" + nom_commune(code_insee=c, clean=False)
+            cd["Nom"]      = nom_commune(code_insee=c, clean=False)
+            cd["Clean"]    = "COMMUNE_" + nom_commune(code_insee=c, clean=True) + "_" + cd["INSEE"]
             rd["COMMUNES"].append(cd)
         for d in rd["DEPARTEMENTS_CODES"]:
             dd = {}
             dd["TYPE"]     = "DEPT"
             dd["INSEE"]    = str(d)
-            dd["Nom"]      = nom_dept(d, clean=True)
-            dd["Clean"]    = "DEPT_" + nom_dept(d, clean=False)
+            dd["Nom"]      = nom_dept(d, clean=False)
+            dd["Clean"]    = "DEPT_" + nom_dept(d, clean=True) + "_" + dd["INSEE"]
             dd["COMMUNES_CODES"] = communes_dept(d)
             dd["EPCIS_CODES"]    = epci_dept(d)
+            dd["ZONES_CODES"]    = list_zones_dept(str(d))
             rd["DEPARTEMENTS"].append(dd)
         for e in rd["EPCIS_CODES"]:
             de = {}
             de["TYPE"]     = "EPCI"
             de["INSEE"]    = str(e)
-            de["Nom"]      = nom_epci(e, clean=True)
-            de["Clean"]    = "EPCI_" + nom_epci(e, clean=False)
+            de["Nom"]      = nom_epci(e, clean=False)
+            de["Clean"]    = "EPCI_" + nom_epci(e, clean=True) + "_" + de["INSEE"]
             de["COMMUNES_CODES"] = communes_epci(e)
             rd["EPCIS"].append(de)
+        scot_data = scot_consolidation()
+        rd["ZONES"] = []
+        rd["ZONES_CODES"] = []
+        for zone_name in scot_data["GROUPES_COMMUNES"]:
+            zone = {}
+            zone["TYPE"]           = scot_data["GROUPES_COMMUNES"][zone_name]["TYPE"]
+            zone["Nom"]            = scot_data["GROUPES_COMMUNES"][zone_name]["NAME"]
+            zone["INSEE"]          = clean_name(zone["Nom"])
+            zone["Clean"]          = "ZONE_" + clean_name(zone["Nom"])
+            zone["COMMUNES_CODES"] = scot_data["GROUPES_COMMUNES"][zone_name]["COMMUNES"]
+            rd["ZONES"].append(zone)
+            rd["ZONES_CODES"].append(zone["Clean"])
     select["REGIONS"].append(rd)
     if (filename):
         save_file(to_json(select, indent=4), filename)
@@ -2912,8 +3263,8 @@ def report_region_dict(region=None, filename=None, force=False) -> dict:
         rd = {}
         rd["TYPE"]   = "REGION"
         rd["INSEE"]  = str(r)
-        rd["Nom"]    = nom_region(r, clean=True)
-        rd["Clean"]  = "REGION_" + nom_region(r, clean=False)
+        rd["Nom"]    = nom_region(r, clean=False)
+        rd["Clean"]  = "REGION_" + nom_region(r, clean=True)
         rd["Region"] = str(r)
         rd["DEPARTEMENTS"] = []
         france["REGIONS"].append(rd)
@@ -2921,8 +3272,8 @@ def report_region_dict(region=None, filename=None, force=False) -> dict:
             dd = {}
             dd["TYPE"] = "DEPT"
             dd["INSEE"] = str(d)
-            dd["Nom"]   = nom_dept(d, clean=True)
-            dd["Clean"] = "DEPT_" + nom_dept(d, clean=False)
+            dd["Nom"]   = nom_dept(d, clean=False)
+            dd["Clean"] = "DEPT_" + nom_dept(d, clean=True)
             dd["Departement"] = str(d)
             dd["Region"] = str(r)
             dd["Nom_Region"] = nom_region(r, clean=True)
@@ -2933,12 +3284,12 @@ def report_region_dict(region=None, filename=None, force=False) -> dict:
                 de = {}
                 de["TYPE"]   = "EPCI"
                 de["INSEE"]  = str(e)
-                de["Nom"]    = nom_epci(e,   clean=True)
-                de["Clean"]  = "EPCI_" + nom_epci(e, clean=False)
+                de["Nom"]    = nom_epci(e,   clean=False)
+                de["Clean"]  = "EPCI_" + nom_epci(e, clean=True)
                 de["Departement"]     = str(d)
-                de["Nom_Departement"] = nom_dept(d, clean=True)
+                de["Nom_Departement"] = nom_dept(d, clean=False)
                 de["Region"]          = str(r)
-                de["Nom_Region"]      = nom_region(r, clean=True)
+                de["Nom_Region"]      = nom_region(r, clean=False)
                 de["COMMUNES"]        = []
                 dd["EPCI"].append(de)
                 for c in communes_epci(e):
@@ -2948,12 +3299,12 @@ def report_region_dict(region=None, filename=None, force=False) -> dict:
                     pos, lib      = get_code_postal_commune(c)
                     cd["Postal"]  = pos
                     cd["Libelle"] = lib
-                    cd["Nom"]     = nom_commune(code_insee=c, clean=True)
-                    cd["Clean"]   = "COMMUNE_" + nom_commune(code_insee=c, clean=False)
+                    cd["Nom"]     = nom_commune(code_insee=c, clean=False)
+                    cd["Clean"]   = "COMMUNE_" + nom_commune(code_insee=c, clean=True)
                     cd["Departement"]     = str(d)
-                    cd["Nom_Departement"] = nom_dept(d, clean=True)
+                    cd["Nom_Departement"] = nom_dept(d, clean=False)
                     cd["Region"]          = str(r)
-                    cd["Nom_Region"]      = nom_region(r, clean=True)
+                    cd["Nom_Region"]      = nom_region(r, clean=False)
                     cd["EPCI"]            = epci_commune(c)
                     cd["Nom_EPCI"]        = nom_epci(epci_commune(c))
                     de["COMMUNES"].append(cd)
@@ -2964,12 +3315,12 @@ def report_region_dict(region=None, filename=None, force=False) -> dict:
                 pos, lib      = get_code_postal_commune(c)
                 cd["Postal"]  = pos
                 cd["Libelle"] = lib 
-                cd["Nom"]     = nom_commune(code_insee=c,   clean=True)
-                cd["Clean"]   = "COMMUNE_" + nom_commune(code_insee=c, clean=False)
+                cd["Nom"]     = nom_commune(code_insee=c,   clean=False)
+                cd["Clean"]   = "COMMUNE_" + nom_commune(code_insee=c, clean=True)
                 cd["Departement"]     = str(d)
-                cd["Nom_Departement"] = nom_dept(d, clean=True)
+                cd["Nom_Departement"] = nom_dept(d, clean=False)
                 cd["Region"]          = str(r)
-                cd["Nom_Region"]      = nom_region(r, clean=True)
+                cd["Nom_Region"]      = nom_region(r, clean=False)
                 cd["EPCI"]            = epci_commune(c)
                 cd["Nom_EPCI"]        = nom_epci(epci_commune(c))
                 dd["COMMUNES"].append(cd)
@@ -2981,9 +3332,10 @@ def report_region_dict(region=None, filename=None, force=False) -> dict:
 
 
 def load_min_data():
-    load_codes()
     load_departements()
+    load_codes()
     load_interco()
+    load_scot_data()
     load_collectData()
 
 
@@ -3017,6 +3369,12 @@ class TestConsommation(unittest.TestCase):
         load_min_data()
         print_red("< Setup")
 
+    def testScot_Ouest(self):
+        print_yellow("> La Roquette-sur-Siagne")
+        scot_ouest(code_insee="06108") # 06108 / 06085
+        scot_ouest(code_insee="06085") # 06108 / 06085
+        print_yellow("< La Roquette-sur-Siagne")
+
     def testSaintTropez(self):
         print_yellow("> Saint-Tropez")
         ds = report_commune(code_postal="83990", force=False)
@@ -3025,9 +3383,8 @@ class TestConsommation(unittest.TestCase):
 
     def testMougins(self):
         print_yellow("> Mougins")
+        scot_consolidation()
         ds = report_commune(code_postal="06250", force=True)
-        # ds = report_commune(code_insee="06138", force=True)
-        # ds = report_commune(code_insee="85113", force=True)
         self.assertEqual(ds.get("NOM_COMMUNE"), "MOUGINS")
         print_yellow("< Mougins")
 
@@ -3045,11 +3402,25 @@ class TestConsommation(unittest.TestCase):
         print_yellow("< Cannes")
 
     def testCAPL(self):
+        global FAST
+        FAST = True
+        sel = report_select_dict("93", filename=selection_file, force=True)
         print_yellow("> CA Cannes Pays de Lerins")
         ds = report_epci(epci_id="200039915", force=True, with_communes=True)
         self.assertEqual(str(ds.get("EPCI")), "200039915")
-        self.assertEqual(str(ds.get("NOM_COMMUNE")), "EPCI")
+        self.assertEqual(str(ds.get("NOM_COMMUNE")), "CANNES, LE CANNET, MANDELIEU LA NAPOULE, MOUGINS, THEOULE SUR MER")
         print_yellow("< CA Cannes Pays de Lerins")
+
+    def testZone(self):
+        global FAST
+        FAST = True
+        sel = report_select_dict("93", filename=selection_file, force=True)
+        lz = list_zones_dept("06")
+        print_yellow("> SCoT Ouest Littoral")
+        ds  = report_zone(zone_name="SCoT_Ouest_Littoral", force=True, with_communes=True)
+        self.assertEqual(str(ds.get("EPCI")), "SCoT_Ouest_Littoral")
+        self.assertEqual(str(ds.get("NOM_COMMUNE")), "ZONE")
+        print_yellow("< SCoT Ouest Littoral")
 
     def testCAPLReport(self):
         global DISPLAY_HTML
@@ -3057,6 +3428,9 @@ class TestConsommation(unittest.TestCase):
         self.testCAPL()
 
     def testAlpesMaritimes(self):
+        global FAST
+        FAST = True
+        sel = report_select_dict("93", filename=selection_file, force=True)
         print_yellow("> Departement Alpes Maritimes")
         ds = report_dept(dept_id="06", force=False, with_communes=True)
         self.assertEqual(str(ds.get("NOM_COMMUNE")), "Alpes-Maritimes")
@@ -3073,11 +3447,11 @@ class TestConsommation(unittest.TestCase):
         self.assertEqual(str(ds.get("NOM_COMMUNE")), "946")
         print_yellow("< Region Provence Alpes Cote d'Azur")
 
-    def test_report_region_dict(self):
-        _all = report_select_dict("93", filename=selection_file, force=True, ftp_push=False)
-        print_yellow(to_json(_all, indent=4))
-        _all = report_region_dict("93", filename=france_file, force=True, ftp_push=True)
-        print_blue(to_json(_all, indent=4))
+    def testSelectReportRegion(self):
+        selection_data = report_select_dict("93", filename=selection_file, force=True)
+        print_yellow(to_json(selection_data, indent=4))
+        region_data = report_region_dict("93", filename=france_file, force=True)
+        print_blue(to_json(region_data, indent=4))
 
     def test_render_index(self):
         global DISPLAY_HTML
@@ -3097,6 +3471,12 @@ class TestConsommation(unittest.TestCase):
     def testFTP_Push_Files(self):
         global FAST
         FAST = True
+        ftp_push_files()
+
+    def testFTP_Push_Prod(self):
+        global FAST, FTP_PROD
+        FAST = True
+        FTP_PROD = True
         ftp_push_files()
 
     def testData(self):
@@ -3142,39 +3522,39 @@ class TestConsommation(unittest.TestCase):
         self.assertIn("04022", communes_region("93"))
 
         print_yellow("> Nom Region 93")
-        nom = nom_region("93", clean=False)
-        print(nom)
-        self.assertEqual("Provence-Alpes-Cote_d_Azur_93", nom)
         nom = nom_region("93", clean=True)
+        print(nom)
+        self.assertEqual("Provence-Alpes-Cote_d_Azur", nom)
+        nom = nom_region("93", clean=False)
         print(nom)
         self.assertEqual("Provence-Alpes-Côte d'Azur", nom)
 
         print_yellow("> Nom EPCI 200039915")
-        nom = nom_epci("200039915", clean=False)
-        print(nom)
-        self.assertEqual("CA_Cannes_Pays_de_Lerins_200039915", nom)
         nom = nom_epci("200039915", clean=True)
+        print(nom)
+        self.assertEqual("CA_Cannes_Pays_de_Lerins", nom)
+        nom = nom_epci("200039915", clean=False)
         print(nom)
         self.assertEqual("CA Cannes Pays de Lérins", nom)
 
         print_yellow("> Nom Departement 06")
-        nom = nom_dept("06", clean=False)
-        print(nom)
-        self.assertEqual("Alpes-Maritimes_06", nom)
         nom = nom_dept("06", clean=True)
+        print(nom)
+        self.assertEqual("Alpes-Maritimes", nom)
+        nom = nom_dept("06", clean=False)
         print(nom)
         self.assertEqual("Alpes-Maritimes", nom)
 
         print_yellow("> Nom Commune 06250")
         nom = nom_commune(code_postal="06250", clean=False)
         print(nom)
-        self.assertEqual("Mougins_06085", nom)
+        self.assertEqual("Mougins", nom)
         nom = nom_commune(code_postal="06250", clean=True)
         print(nom)
         self.assertEqual("Mougins", nom)
         nom = nom_commune(code_insee="06085", clean=False)
         print(nom)
-        self.assertEqual("Mougins_06085", nom)
+        self.assertEqual("Mougins", nom)
         nom = nom_commune(code_insee="06085", clean=True)
         print(nom)
         self.assertEqual("Mougins", nom)
@@ -3258,26 +3638,29 @@ WITH_COMMUNES      = False
 LIST_COMMUNE       = False
 DATA_ONLY          = False
 FTP_PUSH           = False
+FTP_PROD           = False
 FAST               = False
 VERBOSE            = False
 
 
 def read_command_line_args(argv):
     global DISPLAY_HTML, FORCE, DEBUG, WITH_COMMUNES, LIST_COMMUNE
-    global CONFIGURATION_FILE, TEMPLATE_FILE, DATA_ONLY, FTP_PUSH, FAST
+    global CONFIGURATION_FILE, TEMPLATE_FILE, DATA_ONLY, FTP_PUSH, FTP_PROD, FAST
     global CODE_COMMUNE, CODE_EPCI, CODE_DEPT, CODE_REGION, VERBOSE
     # print_yellow("Command Line Arguments : " + str(argv))
 
     usage = """
-    Usage: -v -f -a -p -n -b -t -m -l -c -t <commune_code> -e <epci_code> -d <dept_code> -r <region_code>   
-           -l --list         : List for all communes/epci/dept in Territory       
+    Usage: -v -f -a -p -n -b -t -m -l -c -t <commune_code> -e <epci_code> -d <dept_code> -r <region_code> -z <zone_name>    
+           -l --list        : List for all communes/epci/dept/zone in Territory       
            -c --commune <c> : Report for Commune Code INSEE 'c'                 
            -e --ecpi    <e> : Report for ECPI Code INSEE 'e'                      
            -d --dept    <d> : Report for Departement Code INSEE 'd'                 
            -r --region  <r> : Report for Region Code INSEE 'r'          
+           -z --zone    <z> : Report for Zone or Scot 'z'          
            -a --all         : Report for all communes in Territory           
            -n --data        : No report - Generate only data & Graphics        
            -p --push        : FTP Push Data to Infinity Free Host WebSite         
+           -s --prod        : FTP Push Data to Production Sobriete Fonciere         
            -f --force       : Report reading source data (cache ignored)     
            -t --fast        : FasT (Only Data Refresh during Dev)     
            -m --meta        : Meta (Only Meta Refresh during Dev)     
@@ -3289,7 +3672,7 @@ def read_command_line_args(argv):
     """
 
     try:
-        opts, args = getopt.getopt(argv, "hanlbmptfc:e:d:r:", ["help", "list", "data" , "fast" , "push" , "clean" , "meta" , "commune=", "epci=", "dep=", "reg=", "no_debug"])
+        opts, args = getopt.getopt(argv, "hanlbmpstfc:e:d:r:", ["help", "list", "data" , "fast" , "push" , "prod" , "clean" , "meta" , "commune=", "epci=", "dep=", "reg=", "no_debug"])
     except getopt.GetoptError:
         print(usage)
         sys.exit(2)
@@ -3305,6 +3688,9 @@ def read_command_line_args(argv):
             continue
         elif opt in ("-p", "-P", "-push", "-PUSH", "-ftp", "-FTP"):
             FTP_PUSH = True
+            continue
+        elif opt in ("-s", "-S", "-prod", "-PROD", "-sobriete", "-SOBRIETE"):
+            FTP_PROD = True
             continue
         elif opt in ("-v", "-V", "-verbose", "-VERBOSE"):
             VERBOSE = True
@@ -3371,6 +3757,17 @@ def read_command_line_args(argv):
                 report_epci(CODE_EPCI, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY, ftp_push=FTP_PUSH)
                 print_yellow("< EPCI " + str(CODE_EPCI))
                 quit()
+        elif opt in ("-z", "--zone"):
+                ZONE_NAME = arg
+                if (LIST_COMMUNE):
+                    print_commune(communes_zone(ZONE_NAME))
+                else:
+                    print_yellow("> Zone " + str(ZONE_NAME))
+                    report_select_dict("93", filename=selection_file, force=True)
+                    if (not FAST): report_region_dict("93", filename=france_file, force=True)
+                    report_zone(ZONE_NAME, force=FORCE, with_communes=WITH_COMMUNES, data_only=DATA_ONLY,ftp_push=FTP_PUSH)
+                    print_yellow("< Zone " + str(ZONE_NAME))
+                    quit()
         elif opt in ("-d", "--dept"):
             CODE_DEPT = arg
             if (LIST_COMMUNE):

@@ -295,7 +295,7 @@ const vm = Vue.createApp({
         return {
             message    : default_message ,
             select_message : select_message ,
-            territoire : "Departement",         // Type of entity (Region, Departement, EPCI, Commune)
+            territoire : "Departement",         // Type of entity (Region, Departement, EPCI, Commune, ZONE)
             nom        : "Alpes-Maritimes",     // Name of entity
             code       : "06" ,                 // INSEE Code of entity
             postal     : no_postal ,            // Code Postal of entity
@@ -306,6 +306,7 @@ const vm = Vue.createApp({
             selectedRegion      : "" ,
             selectedDepartement : "" ,
             selectedEPCI        : "" ,
+            selectedZone        : "" ,
             selectedCommune     : "" ,
             selectRegions    : [ // Regions (Currently not used)
                { id: 1, code : '93' , postal : no_postal , nom : 'Provence Alpes Cote d Azur'        , entity : 'REGION_Provence_Alpes_Cote_d_Azur_93' }
@@ -319,6 +320,7 @@ const vm = Vue.createApp({
                { id: 6, code : '84' , postal : no_postal , nom : 'Vaucluse'                          , entity : 'DEPT_Vaucluse_84' }
                ],
             selectEpcis      : [], // EPCIs of current Region / Departement
+            selectZones      : [], // Zones of current Region / Departement
             selectCommunes   : [], // Communes of current Departement / EPCIs
             eoo : "End of Object"
             }
@@ -332,26 +334,37 @@ const vm = Vue.createApp({
           var commune     = urlParams.get('COMMUNE')
           var dept        = urlParams.get('DEPT')
           var epci        = urlParams.get('EPCI')
+          var zone        = urlParams.get('ZONE')
           var region      = urlParams.get('REGION')
           if (type_entity != null) { code_insee = code_insee ; type_entity=type_entity} ;
           if (region != null)      { code_insee = region     ; type_entity="REGION"} ;
           if (dept != null)        { code_insee = dept       ; type_entity="DEPT"} ;
           if (epci != null)        { code_insee = epci       ; type_entity="EPCI"} ;
+          if (zone != null)        { code_insee = zone       ; type_entity="ZONE"} ;
           if (commune != null)     { code_insee = commune    ; type_entity="COMMUNE"} ;
           if (code_postal != null) {
               this.selectCommunePostal(code_postal)
+              this.updateChildren()
               return
           }
           if (type_entity=="COMMUNE") {
               this.selectCommuneCode(code_insee)
+              this.updateChildren()
               return
           }
           if (type_entity=="EPCI") {
               this.selectEpciCode(code_insee)
+              this.updateChildren()
+              return
+          }
+          if (type_entity=="ZONE") {
+              this.selectEpciCode(code_insee)
+              this.updateChildren()
               return
           }
           if (type_entity=="DEPT") {
               this.selectDeptCode(code_insee)
+              this.updateChildren()
               return
           }
      },
@@ -458,7 +471,7 @@ const vm = Vue.createApp({
             // Locate Dept in Select JSON
             depts = select["REGIONS"][0]["DEPARTEMENTS"];
             dept  = depts[depts.findIndex(x => x.Nom === this.nom)];
-            // List EPCIs
+            // List EPCIs in Dept
             this.selectedEPCI        = "";
             this.selectEpcis = [];
             for (var i = 0; i < dept["EPCIS_CODES"].length; i++) {
@@ -467,6 +480,20 @@ const vm = Vue.createApp({
                 ep   = select["REGIONS"][0]["EPCIS"][ep]
                 epci = { id: i, code : ep.INSEE , postal : no_postal , nom : ep.Nom, entity : ep.Clean, data : ep };
                 this.selectEpcis.push(epci);
+                }
+            // List Zones
+            zones = select["REGIONS"][0]["ZONES_CODES"];
+            this.selectedZone   = "";
+            this.selectZones = [];
+            console.log("Zones  ");
+            // for (var i = 0; i < zones.length; i++) {
+            for (var i = 0; i < dept["ZONES_CODES"].length; i++) {
+                // zone_code =  zones[i]
+                zone_code =  "ZONE_"+dept["ZONES_CODES"][i]
+                zo   = select["REGIONS"][0]["ZONES"].findIndex(x => x.Clean === zone_code);
+                zo   = select["REGIONS"][0]["ZONES"][zo]
+                zone = { id: i, code : zo.INSEE , postal : no_postal , nom : zo.Nom, entity : zo.Clean, data : zo };
+                this.selectZones.push(zone);
                 }
             // List Communes
             this.selectedCommune = "";
@@ -508,6 +535,27 @@ const vm = Vue.createApp({
             // Locate EPCI in Select JSON
             epcis = select["REGIONS"][0]["EPCIS"];
             epci  = epcis[epcis.findIndex(x => x.Nom === this.nom)];
+            // List Zone
+            // this.selectZone   = "";
+            // this.selectZones  = [];
+
+            // List Zones
+            depts = select["REGIONS"][0]["DEPARTEMENTS"];
+            dept  = depts[depts.findIndex(x => x.Nom === this.selectedDepartement)];
+            zones = select["REGIONS"][0]["ZONES_CODES"];
+            this.selectedZone   = "";
+            this.selectZones = [];
+            console.log("Zones  ");
+            // for (var i = 0; i < zones.length; i++) {
+            for (var i = 0; i < dept["ZONES_CODES"].length; i++) {
+                // zone_code =  zones[i]
+                zone_code =  "ZONE_"+dept["ZONES_CODES"][i]
+                zo   = select["REGIONS"][0]["ZONES"].findIndex(x => x.Clean === zone_code);
+                zo   = select["REGIONS"][0]["ZONES"][zo]
+                zone = { id: i, code : zo.INSEE , postal : no_postal , nom : zo.Nom, entity : zo.Clean, data : zo };
+                this.selectZones.push(zone);
+                }
+
             // List Communes
             this.selectedCommune = "";
             this.selectCommunes  = [];
@@ -521,9 +569,58 @@ const vm = Vue.createApp({
             // console.log(this.selectCommunes);
             console.log("Done selectEpci "+this.entity);
             },
-        selectCommuneEvent(event){
-            console.log("selectCommune : "+event.target.value);
-            this.selectCommuneName(event.target.value);
+        selectZoneEvent(event){
+            console.log("selectZone : "+event.target.value);
+            zone_index  = this.selectZones.findIndex(x => x.nom === event.target.value);
+            zone        = this.selectZones[zone_index]
+            this.selectZone(zone)
+            },
+        selectZoneCode(zone_code){
+            console.log("selectZoneCode : "+zone_code);
+            zone_index  = select["REGIONS"][0]["ZONES"].findIndex(x => x.INSEE === zone_code);
+            zone        = select["REGIONS"][0]["ZONES"][zone_index]
+            this.selectZone(zone)
+            },
+        selectZoneName(zone_name){
+            console.log("selectZoneName : "+zone_name);
+            zone_index = select["REGIONS"][0]["ZONES"].findIndex(x => x.Nom === zone_name);
+            zone       = select["REGIONS"][0]["ZONES"][zone_index]
+            this.selectZone(zone)
+            },
+        selectZone(zone){
+            this.territoire  = "ZONE";
+            this.nom         = zone.nom;
+            this.code        = zone.code ;
+            this.entity      = this.selectZones[zone_index].entity;
+            console.log(this.nom + " entity : " + this.entity);
+            this.loadData()
+            // Locate ZONE in Select JSON
+            zones = select["REGIONS"][0]["ZONES"];
+            zone  = zones[zones.findIndex(x => x.Nom === this.nom)];
+            // List EPCIs in Dept
+            depts = select["REGIONS"][0]["DEPARTEMENTS"];
+            dept  = depts[depts.findIndex(x => x.Nom === this.selectedDepartement)];
+            this.selectedEPCI        = "";
+            this.selectEpcis = [];
+            for (var i = 0; i < dept["EPCIS_CODES"].length; i++) {
+                epci_code =  dept["EPCIS_CODES"][i]
+                ep   = select["REGIONS"][0]["EPCIS"].findIndex(x => x.INSEE === epci_code);
+                ep   = select["REGIONS"][0]["EPCIS"][ep]
+                epci = { id: i, code : ep.INSEE , postal : no_postal , nom : ep.Nom, entity : ep.Clean, data : ep };
+                this.selectEpcis.push(epci);
+                }
+            // List Communes
+            this.selectedCommune = "";
+            this.selectCommunes  = [];
+            for (var i = 0; i < zone["COMMUNES_CODES"].length; i++) {
+                commune_code =  zone["COMMUNES_CODES"][i]
+                co   =  select["REGIONS"][0]["COMMUNES"].findIndex(x => x.INSEE === commune_code);
+                co   =  select["REGIONS"][0]["COMMUNES"][co]
+                commune = { id: i, code : co.INSEE , nom : co.Nom, entity : co.Clean, data : co };
+                this.selectCommunes.push(commune);
+                }
+            // console.log(this.selectCommunes);
+            console.log("Done selectEpci "+this.entity);
             },
         selectCommuneEvent(event){
             console.log("selectCommune : "+event.target.value);
