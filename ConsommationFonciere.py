@@ -89,7 +89,7 @@ def load_sitadel(sitadel1316_file:  str = sitadel1316File,
     global sitadel1316, sitadel1721, sitadelMeta, sitadel1321
     if (sitadel1316 is None) or (sitadel1721 is None)  or (sitadelMeta is None):
         downloadFile(sitadelSource1316File, sitadel1316File, zip=True, zipped_file="PC_DP_créant_logements_2013_2016.csv")
-        downloadFile(sitadelSource1721File, sitadel1721File, zip=True, zipped_file="PC_DP_créant_logements_2017_2021.csv")
+        downloadFile(sitadelSource1721File, sitadel1721File, zip=True, zipped_file="PC_DP_créant_logements_2017_2022.csv")
         downloadFile(sitadelSourceMetaFile, sitadelMetaFile)
         print_blue("Lecture Sitadel Logements 2013-2016 : " + sitadel1316_file + " ...")
         sitadel1316 = pd.read_csv(sitadel1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str})
@@ -134,7 +134,7 @@ def load_sitadel_locaux(sitadelLocaux1316_file:  str = sitadelLocaux1316File,
     global sitadel_locaux_1316, sitadel_locaux_1721, sitadel_locaux_Meta, sitadel_locaux_1321
     if (sitadel_locaux_1316 is None) or (sitadel_locaux_1721 is None)  or (sitadel_locaux_Meta is None):
         downloadFile(sitadelLocauxSource1316File, sitadelLocaux1316File, zip=True, zipped_file="PC_DP_créant_locaux_2013_2016.csv")
-        downloadFile(sitadelLocauxSource1721File, sitadelLocaux1721File, zip=True, zipped_file="PC_DP_créant_locaux_2017_2021.csv")
+        downloadFile(sitadelLocauxSource1721File, sitadelLocaux1721File, zip=True, zipped_file="PC_DP_créant_locaux_2017_2022.csv")
         downloadFile(sitadelLocauxSourceMetaFile, sitadelLocauxMetaFile)
         print_blue("Lecture Sitadel Locaux 2013-2016 : " + sitadelLocaux1316_file + " ...")
         sitadel_locaux_1316 = pd.read_csv(sitadelLocaux1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "ZONE_OP": str, "NATURE_PROJET": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float})
