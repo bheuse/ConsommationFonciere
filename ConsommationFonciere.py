@@ -1223,14 +1223,14 @@ def communes_territoire(territoire:str) -> [list[str], str]:
 def epci_dept(code_dept) -> list[int]:
     """ Les Codes INSEE des EPCI d'un Departement """
     load_interco()
-    epci_list    = intercoDossier[intercoDossier["Unnamed: 4"] == code_dept]["Unnamed: 2"]
+    epci_list = intercoDossier[intercoDossier["Unnamed: 4"] == code_dept]["Unnamed: 2"]
     return sorted(list(set(epci_list)))
 
 
 def dept_epci(code_epci) -> int :
     """ Le Code de Departement de l'EPCI """
     load_interco()
-    epci_list    = intercoDossier[intercoDossier["Unnamed: 2"] == code_epci]["Unnamed: 4"]
+    epci_list = intercoDossier[intercoDossier["Unnamed: 2"] == code_epci]["Unnamed: 4"]
     if epci_list.empty : return 0
     return epci_list[0]
 
@@ -1238,7 +1238,7 @@ def dept_epci(code_epci) -> int :
 def region_epci(code_epci) -> int :
     """ Le Code de Region de l'EPCI """
     load_interco()
-    epci_list    = intercoDossier[intercoDossier["Unnamed: 2"] == code_epci]["Unnamed: 5"]
+    epci_list = intercoDossier[intercoDossier["Unnamed: 2"] == code_epci]["Unnamed: 5"]
     if epci_list.empty : return 0
     return epci_list[0]
 
@@ -1246,7 +1246,7 @@ def region_epci(code_epci) -> int :
 def region_dept(code_dept) -> int :
     """ Le Code de Region du Departement """
     load_interco()
-    reg_list    = intercoDossier[intercoDossier["Unnamed: 4"] == code_dept]["Unnamed: 5"]
+    reg_list = intercoDossier[intercoDossier["Unnamed: 4"] == code_dept]["Unnamed: 5"]
     if reg_list.empty : return 0
     return reg_list[0]
 
@@ -2984,16 +2984,17 @@ def ftp_push_ds(ds : DataStore):
     ftp_push_file(file_list)
 
 
-def ftp_push_file(filename, p_host = "ftpupload.net", p_user = "epiz_30239961", p_password = "oqEwtTaACCaANF", p_directory = "htdocs"):
+def ftp_push_file(filename, p_host="ftpupload.net", p_user="epiz_30239961", p_password="oqEwtTaACCaANF", p_directory="htdocs", prod=FTP_PROD):
     host = p_host
     user = p_user
     password = p_password
     directory = p_directory
-    if (FTP_PROD):
+    if (prod):
         host = "sobrietefonciere.fnepaca.fr"
         user = "sobrietefonciere@fnepaca.fr"
         password = "6TlHc!cjmd8u"
         directory = ""
+        ftp_push_file(filename, prod=False)
     if (isinstance(filename, str)):
         filename = [filename]
     if (isinstance(filename, list)):
@@ -3022,20 +3023,21 @@ def ftp_push_files():
     global FAST
     filelist = ["input/plots.json",             "output/select.json",
                 "output/calculations.json",     "output/datametrics.json",  "output/diagnostics.json",
-                # "index.html",
+                "index.html",
                 "ConsommationFonciereV3.html",  "ConsommationFonciereV3.js"
                ]
     if not FAST:
         filelist.extend([
                 "input/Configuration.xlsx",
-                # "index.html",
+                "index.html",
                 "output/france.json",
                 "Header.png", "Body.png",
                 "README.md",  "README.html",    "README.dillinger.html",
                 "ConsommationFonciere.py",
-                # "input/QuestionnerUnProjetDePLU-SCoT.pdf", "input/Alpes-Maritimes-NoteExcedentsLogements.pdf",
-                # "input/Guide_Pratique_Artif_complet.pdf",  "input/GuideSF_6_ZCZAE_web.pdf",
-                # "input/GuideSF_16_Observatoires_web.pdf",  "input/GuideSF_17_fiscalite_web.pdf",
+                "input/QuestionnerUnProjetDePLU-SCoT.pdf", "input/Alpes-Maritimes-NoteExcedentsLogements.pdf",
+                "input/Guide_Pratique_Artif_complet.pdf",  "input/GuideSF_6_ZCZAE_web.pdf",
+                "input/GuideSF_16_Observatoires_web.pdf",  "input/GuideSF_17_fiscalite_web.pdf",
+                "input/Urbascope.pdf",
                 "ConsommationFonciere.html",    "ConsommationFonciere.js",
                 "ConsommationFonciereV2.html",  "ConsommationFonciereV2.js",
                 "input/Legend_Logements.png",   "input/CommentCaMarche.png",
@@ -3496,12 +3498,12 @@ class TestConsommation(unittest.TestCase):
 
     def testFTP_Push_Files(self):
         global FAST
-        FAST = True
+        FAST = False
         ftp_push_files()
 
     def testFTP_Push_Prod(self):
         global FAST, FTP_PROD
-        FAST = True
+        FAST = False
         FTP_PROD = True
         ftp_push_files()
 
