@@ -360,7 +360,7 @@ def load_codes():
     global codesPostaux
     if (codesPostaux is None) :
         downloadFile(codesPostauxSourceFile, codesPostauxFile)
-        print_blue("Lecture Codes Postaux Donnees Communes : " + metaDossierFile + " ...")
+        print_blue("Lecture Codes Postaux Donnees Communes : " + codesPostauxFile + " ...")
         codesPostaux = pd.read_csv(codesPostauxFile, delimiter=';', index_col=0, dtype=str)
     return codesPostaux
 
@@ -1839,9 +1839,9 @@ class DataStore():
             except Exception as e :
                 error = "collect_data Error evaluating metrique : Line " + str(_line) + " Key = " + str(_key) + " expr : " + str(_expr) + " - Error : " + str(e)
                 print_error(error)
-                if (_data.startswith("error0")) :
-                    error = 0
-                self.add_metric(_key, _description, source=_source, mode=_total, data=error, type=_type, expr=_expr)
+                if (_expr.startswith("error0")) :
+                    value = 0
+                self.add_metric(_key, _description, source=_source, mode=_total, data=value, type=_type, expr=_expr)
 
         update_DataStoreCache(self)
         self.store_index = save_index
@@ -1860,7 +1860,7 @@ class DataStore():
         for key in self.key_datas:
             _line = _line + 1
             total_dict[key] = "ERROR Invalid Mode"
-            mode = self.mode_dict[key]
+            mode = self.mode_dict[key].strip()
             try:
                 print_verbose("  - Evaluating Total Line " + str(_line) + ": [" + str(key) + "] Mode : " + str(mode))
                 if (key == "CODE_INSEE"): total_dict[key] = self.store_index
