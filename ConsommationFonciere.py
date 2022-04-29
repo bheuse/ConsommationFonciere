@@ -95,12 +95,12 @@ def load_sitadel(sitadel1316_file:  str = sitadel1316File,
         downloadFile(sitadelSource1721File, sitadel1721File, zip=True, zipped_file="PC_DP_creant_logements_2017_2022.csv")
         downloadFile(sitadelSourceMetaFile, sitadelMetaFile)
         print_blue("Lecture Sitadel Logements 2013-2016 : " + sitadel1316_file + " ...")
-        sitadel1316 = pd.read_csv(sitadel1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str})
+        sitadel1316 = pd.read_csv(sitadel1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "Etat_DAU": str, "DPC_AUT": str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str})
         sitadel1316["Parcelles"] = sitadel1316['sec_cadastre1'].map(str) + sitadel1316['num_cadastre1'].map(str)+" "+\
                                    sitadel1316['sec_cadastre2'].map(str) + sitadel1316['num_cadastre2'].map(str)+" "+\
                                    sitadel1316['sec_cadastre3'].map(str) + sitadel1316['num_cadastre3'].map(str)
         print_blue("Lecture Sitadel Logements 2017-2022 : " + sitadel1721_file + " ...")
-        sitadel1721 = pd.read_csv(sitadel1721_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "ADR_LOCALITE_TER" : str, "ADR_CODPOST_TER" : str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str})
+        sitadel1721 = pd.read_csv(sitadel1721_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "Etat_DAU": str, "DPC_AUT": str, "ADR_LOCALITE_TER" : str, "ADR_CODPOST_TER" : str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str})
         sitadel1721["Parcelles"] = sitadel1721['sec_cadastre1'].map(str) + sitadel1721['num_cadastre1'].map(str)+" "+\
                                    sitadel1721['sec_cadastre2'].map(str) + sitadel1721['num_cadastre2'].map(str)+" "+\
                                    sitadel1721['sec_cadastre3'].map(str) + sitadel1721['num_cadastre3'].map(str)
@@ -140,12 +140,12 @@ def load_sitadel_locaux(sitadelLocaux1316_file:  str = sitadelLocaux1316File,
         downloadFile(sitadelLocauxSource1721File, sitadelLocaux1721File, zip=True, zipped_file="PC_DP_creant_locaux_2017_2022.csv")
         downloadFile(sitadelLocauxSourceMetaFile, sitadelLocauxMetaFile)
         print_blue("Lecture Sitadel Locaux 2013-2016 : " + sitadelLocaux1316_file + " ...")
-        sitadel_locaux_1316 = pd.read_csv(sitadelLocaux1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "ZONE_OP": str, "NATURE_PROJET": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float})
+        sitadel_locaux_1316 = pd.read_csv(sitadelLocaux1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "Etat_DAU": str,"ZONE_OP": str, "NATURE_PROJET": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float})
         sitadel_locaux_1316["Parcelles"] = sitadel_locaux_1316['sec_cadastre1'].map(str) + sitadel_locaux_1316['num_cadastre1'].map(str)+" "+\
                                            sitadel_locaux_1316['sec_cadastre2'].map(str) + sitadel_locaux_1316['num_cadastre2'].map(str)+" "+\
                                            sitadel_locaux_1316['sec_cadastre3'].map(str) + sitadel_locaux_1316['num_cadastre3'].map(str)
         print_blue("Lecture Sitadel Locaux 2017-2022 : " + sitadelLocaux1721_file + " ...")
-        sitadel_locaux_1721 = pd.read_csv(sitadelLocaux1721_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "ADR_LOCALITE_TER" : str, "ADR_CODPOST_TER" : str, "NATURE_PROJET" : str, "ZONE_OP": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float})
+        sitadel_locaux_1721 = pd.read_csv(sitadelLocaux1721_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "Etat_DAU": str, "DPC_AUT": str, "ADR_LOCALITE_TER" : str, "ADR_CODPOST_TER" : str, "NATURE_PROJET" : str, "ZONE_OP": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float})
         sitadel_locaux_1721["Parcelles"] = sitadel_locaux_1721['sec_cadastre1'].map(str) + sitadel_locaux_1721['num_cadastre1'].map(str)+" "+\
                                            sitadel_locaux_1721['sec_cadastre2'].map(str) + sitadel_locaux_1721['num_cadastre2'].map(str)+" "+\
                                            sitadel_locaux_1721['sec_cadastre3'].map(str) + sitadel_locaux_1721['num_cadastre3'].map(str)
@@ -563,7 +563,7 @@ def load_flux_2015(flux2015SourceFile:  str = flux2015SourceFile):
         flux2015 = pd.read_csv(flux2015SourceFile, delimiter=';', encoding = "ISO-8859-1",
                                                                   dtype={'CODGEO': str, 'LIBGEO': str,
                                                                          'DCRAN': str, 'L_DCRAN': str,
-                                                                         'NBFLUX_C15_POP01P' : float })
+                                                                         'NBFLUX_C15_POP01P' : float})
     return flux2015
 
 flux2014SourceFile = data_dir + "base-texte-flux-mobilite-residentielle-2014.csv"
@@ -1842,14 +1842,14 @@ class DataStore():
         com_sitadel1316   = sitadel1316.loc[sitadel1316['COMM'] == str(code_insee)]
         com_sitadel1721   = sitadel1721.loc[sitadel1721['COMM'] == str(code_insee)]
         com_sitadel       = pd.concat([com_sitadel1316, com_sitadel1721])
-        log_commences     = com_sitadel.loc[com_sitadel['Etat_DAU'] == 5]
-        log_termines      = com_sitadel.loc[com_sitadel['Etat_DAU'] == 6]
-        log_commences1316 = com_sitadel1316.loc[com_sitadel1316['Etat_DAU'] == 5]
-        log_termines1316  = com_sitadel1316.loc[com_sitadel1316['Etat_DAU'] == 6]
-        log_commences1721 = com_sitadel1721.loc[com_sitadel1721['Etat_DAU'] == 5]
-        log_termines1721  = com_sitadel1721.loc[com_sitadel1721['Etat_DAU'] == 6]
-        log_renouv        = com_sitadel.loc[com_sitadel['NATURE_PROJET'] == 2]
-        log_nouveau       = com_sitadel.loc[com_sitadel['NATURE_PROJET'] == 1]
+        log_commences     = com_sitadel.loc[com_sitadel['Etat_DAU'] == "5"]
+        log_termines      = com_sitadel.loc[com_sitadel['Etat_DAU'] == "6"]
+        log_commences1316 = com_sitadel1316.loc[com_sitadel1316['Etat_DAU'] == "5"]
+        log_termines1316  = com_sitadel1316.loc[com_sitadel1316['Etat_DAU'] == "6"]
+        log_commences1721 = com_sitadel1721.loc[com_sitadel1721['Etat_DAU'] == "5"]
+        log_termines1721  = com_sitadel1721.loc[com_sitadel1721['Etat_DAU'] == "6"]
+        log_renouv        = com_sitadel.loc[com_sitadel['NATURE_PROJET'] == "2"]
+        log_nouveau       = com_sitadel.loc[com_sitadel['NATURE_PROJET'] == "1"]
         log_principal     = com_sitadel.loc[com_sitadel['RES_PRINCIP_OU_SECOND'] == 1]
         log_secondaire    = com_sitadel.loc[com_sitadel['RES_PRINCIP_OU_SECOND'] == 2]
         log_particuliers  = com_sitadel.loc[com_sitadel['CAT_DEM'].isin([10, 11, 12])]
@@ -1862,14 +1862,14 @@ class DataStore():
         com_sitadelLocaux1 = sitadel_locaux_1316.loc[sitadel_locaux_1316['COMM'] == str(code_insee)]
         com_sitadelLocaux2 = sitadel_locaux_1721.loc[sitadel_locaux_1721['COMM'] == str(code_insee)]
         com_sitadelLocaux  = pd.concat([com_sitadelLocaux1, com_sitadelLocaux2])
-        loc_commences      = com_sitadelLocaux.loc[com_sitadelLocaux['Etat_DAU'] == 5]
-        loc_termines       = com_sitadelLocaux.loc[com_sitadelLocaux['Etat_DAU'] == 6]
-        loc_commences1316  = com_sitadelLocaux1.loc[com_sitadelLocaux1['Etat_DAU'] == 5]
-        loc_termines1316   = com_sitadelLocaux1.loc[com_sitadelLocaux1['Etat_DAU'] == 6]
-        loc_commences1721  = com_sitadelLocaux2.loc[com_sitadelLocaux2['Etat_DAU'] == 5]
-        loc_termines1721   = com_sitadelLocaux2.loc[com_sitadelLocaux2['Etat_DAU'] == 6]
-        loc_nouveau        = com_sitadelLocaux.loc[com_sitadelLocaux['NATURE_PROJET'] == 1]
-        loc_renouv         = com_sitadelLocaux.loc[com_sitadelLocaux['NATURE_PROJET'] == 2]
+        loc_commences      = com_sitadelLocaux.loc[com_sitadelLocaux['Etat_DAU'] == "5"]
+        loc_termines       = com_sitadelLocaux.loc[com_sitadelLocaux['Etat_DAU'] == "6"]
+        loc_commences1316  = com_sitadelLocaux1.loc[com_sitadelLocaux1['Etat_DAU'] == "5"]
+        loc_termines1316   = com_sitadelLocaux1.loc[com_sitadelLocaux1['Etat_DAU'] == "6"]
+        loc_commences1721  = com_sitadelLocaux2.loc[com_sitadelLocaux2['Etat_DAU'] == "5"]
+        loc_termines1721   = com_sitadelLocaux2.loc[com_sitadelLocaux2['Etat_DAU'] == "6"]
+        loc_nouveau        = com_sitadelLocaux.loc[com_sitadelLocaux['NATURE_PROJET'] == "1"]
+        loc_renouv         = com_sitadelLocaux.loc[com_sitadelLocaux['NATURE_PROJET'] == "2"]
 
         # Donnees Logements Paca 2010-2019
         load_logements_paca()
@@ -2300,10 +2300,10 @@ def scot_ouest(code_insee, start_date="2021-05-20"):
     for index, row in com_2021.iterrows():
         com_2021.loc[index, "Parcelles"] = str(row['sec_cadastre1'])+str(row['num_cadastre1'])+" "+str(row['sec_cadastre2'])+str(row['num_cadastre2'])+" "+str(row['sec_cadastre3'])+str(row['num_cadastre3'])
         parcelles = parcelles + " " + com_2021.loc[index, "Parcelles"]
-        if   (row['Etat_DAU'] == 2) : com_2021.loc[index, "Etat"]   = "Autorisé"
-        elif (row['Etat_DAU'] == 4) : com_2021.loc[index, "Etat"]   = "Annulé"
-        elif (row['Etat_DAU'] == 5) : com_2021.loc[index, "Etat"]   = "Commencé"
-        elif (row['Etat_DAU'] == 6) : com_2021.loc[index, "Etat"]   = "Terminé"
+        if   (row['Etat_DAU'] == "2") : com_2021.loc[index, "Etat"]   = "Autorisé"
+        elif (row['Etat_DAU'] == "4") : com_2021.loc[index, "Etat"]   = "Annulé"
+        elif (row['Etat_DAU'] == "5") : com_2021.loc[index, "Etat"]   = "Commencé"
+        elif (row['Etat_DAU'] == "6") : com_2021.loc[index, "Etat"]   = "Terminé"
         else : com_2021.loc[index, "Etat"] = "NR"
         com_2021.loc[index, "Nature"]     = "UNA" if (int(row['NATURE_PROJET']) == 1) else "RU"
         com_2021.loc[index, "Extension"]  = int(row['I_EXTENSION']) + int(row['I_SURELEVATION']) + int(row['I_NIVSUPP'])
@@ -2314,8 +2314,8 @@ def scot_ouest(code_insee, start_date="2021-05-20"):
 
     com_2021 = com_2021[["DEP", "COMM", "Type_DAU", "Etat_DAU", "NATURE_PROJET", "NB_LGT_TOT_CREES",
                          "SUPERFICIE_TERRAIN", "DATE_REELLE_AUTORISATION", "NB_LGT_PRET_LOC_SOCIAL",
-                         "SURF_HAB_DEMOLIE", "SURF_LOC_DEMOLIE", "SURF_HAB_AVANT", "SURF_LOC_AVANT",
-                         "NB_LGT_ACC_SOC_HORS_PTZ", "NB_LGT_PTZ", "SURF_HAB_CREEE", "SURF_LOC_CREEE",
+                         "SURF_HAB_DEMOLIE", "SURF_LOC_DEMOLIE", "SURF_HAB_AVANT", "SURF_LOC_AVANT", "I_EXTENSION",
+                         "NB_LGT_ACC_SOC_HORS_PTZ", "NB_LGT_PTZ", "SURF_HAB_CREEE", "SURF_LOC_CREEE","I_SURELEVATION",
                          "Parcelles", "Nature", "Etat", "Extension", "Renouv", "Artif"]]
     com_2021.sort_values("DATE_REELLE_AUTORISATION")
 
@@ -2339,10 +2339,12 @@ def scot_ouest(code_insee, start_date="2021-05-20"):
     com_2021.loc["Total/Count", "Type_DAU"]               = count
     com_2021.loc["Total/Count", "NB_LGT_TOT_CREES"]       = logements
     com_2021.loc["Total/Count", "NB_LGT_PRET_LOC_SOCIAL"] = logsoc
-    com_2021.loc["Total/Count", "Parcelles"]              = parcelles
+    # com_2021.loc["Total/Count", "Parcelles"]            = parcelles
     com_2021.loc["Total/Count", "Artif"]                  = artif
     com_2021.loc["Total/Budget 2030", "Artif"]            = BUDGET_2030
     com_2021.loc["Total/Budget 2040", "Artif"]            = BUDGET_2040
+    com_2021.loc["Total/Budget 2030", "COMM"]             = BUDGET_2030
+    com_2021.loc["Total/Budget 2040", "COMM"]             = BUDGET_2040
     com_2021.loc["Total/2020-01-01", "Artif"]             = artif_20
     com_2021.loc["Total/2021-01-01", "Artif"]             = artif_21
     com_2021.loc["Total/2021-05-20", "Artif"]             = artif_SO
@@ -3615,6 +3617,15 @@ class TestConsommation(unittest.TestCase):
         self.assertEqual(str(ds.get("EPCI")), "200039915")
         self.assertEqual(str(ds.get("NOM_COMMUNE")), "CANNES, LE CANNET, MANDELIEU LA NAPOULE, MOUGINS, THEOULE SUR MER")
         print_yellow("< CA Cannes Pays de Lerins")
+
+    def testSCoT_Ouest(self):
+        global FAST
+        FAST = True
+        sel = report_select_dict("93", filename=selection_file, force=True)
+        print_yellow("> SCoT Ouest")
+        ds = report_zone(zone_name="SCoT_Ouest", force=True, with_communes=True)
+        self.assertEqual(str(ds.get("EPCI")), "SCoT_Ouest")
+        print_yellow("< SCoT Ouest")
 
     def testZone(self):
         global FAST

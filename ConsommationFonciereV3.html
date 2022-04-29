@@ -1226,7 +1226,7 @@ function hideShowLOG_function() {
             </tr>
             <tr>
                 <td>Budget foncier résiduel jusqu'en 2030 :</td>
-                <td class="w3-right-align">{{ f_round(ds.SCOT_2030 - ds.SCOT_OUEST_LOG_SUPERFICIE)  }} m2  </td>
+                <td class="w3-right-align">{{ f_round((ds.SCOT_2030 - ds.SCOT_OUEST_LOG_SUPERFICIE) / 10000,2)  }} ha  </td>
             </tr>
             <tr>
                 <td>Budget foncier 2030-2040 :</td>
