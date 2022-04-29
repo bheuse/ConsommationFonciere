@@ -15,5 +15,7 @@ pyyaml
 requests
 scipy
 markdown
+xlsxwriter
+
 
 

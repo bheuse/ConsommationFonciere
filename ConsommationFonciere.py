@@ -4,6 +4,7 @@ import yaml
 import jk_commentjson as jsonc
 import matplotlib.pyplot as plt
 import pandas as pd
+import xlsxwriter
 import webbrowser
 import requests
 import io
@@ -806,6 +807,15 @@ def clean_name(name: str,sep="_") -> str:
     return unidecode.unidecode(name).replace(" ", sep).replace("\\", sep).replace("'", sep)
 
 
+def str_list(the_list: list,sep=", ") -> str:
+    string = ""
+    s = ""
+    for elem in the_list :
+        string = string + s + str(elem)
+        s = sep
+    return string
+
+
 ### Print
 def print_green(text):
     print(colored(text, "green"))
@@ -1125,6 +1135,30 @@ def communes_epci(code_epci) -> list[int]:
     return sorted(epci_indices_list)
 
 
+def list_nom_communes(codes : list) -> list[str]:
+    """ Les noms des Communes de la liste des codes INSEE """
+    list_nom = list()
+    for code in codes :
+        list_nom.append(nom_commune(code_insee=code))
+    return list_nom
+
+
+def list_nom_epci(codes : list) -> list[str]:
+    """ Les noms des EPCI de la liste des codes INSEE """
+    list_nom = list()
+    for code in codes :
+        list_nom.append(nom_epci(code, clean=False))
+    return list_nom
+
+
+def list_nom_zone(codes : list) -> list[str]:
+    """ Les noms des Zones de la liste des codes Zone """
+    list_nom = list()
+    for code in codes :
+        list_nom.append(nom_zone(code, clean=False))
+    return list_nom
+
+
 def communes_dept(code_dept) -> list[int]:
     """ Les Codes INSEE des Communes d'un Departement """
     load_interco()
@@ -1168,10 +1202,31 @@ def communes_zone(nom_zone) -> list[int]:
     return SCOT_DATA["GROUPES_COMMUNES"][nom_zone]["COMMUNES"]
 
 
+def dept_zone(nom_zone) :
+    """ Le Code DEPT d'une Zone """
+    SCOT_DATA = scot_consolidation()
+    if (nom_zone in SCOT_DATA["GROUPES_COMMUNES"]) :
+        return SCOT_DATA["GROUPES_COMMUNES"][nom_zone]["DEPT"]
+    else:
+        return "99"
+
+
+def nom_zone(key, clean=False) -> str :
+    """ Le nom d'une Zone """
+    SCOT_DATA = scot_consolidation()
+    if (key in SCOT_DATA["GROUPES_COMMUNES"]) :
+        nom = SCOT_DATA["GROUPES_COMMUNES"][key]["NAME"]
+        if (not clean): return nom
+        return clean_name(nom)
+    else:
+        return "NZ"
+
+
 def communes_territoire(territoire:str) -> [list[str], str]:
     """ Les Codes INSEE des Communes d'un Territoire, le type de territoire """
-    """ Territoire =  nom scot, code dept, nom dept """
-    # code epci, nom epci, nom commune, code commune,
+    # Territoire =  nom scot, code dept, nom dept
+    #               code epci, nom epci, nom commune, code commune
+
     load_interco()
 
     territoire = territoire.strip()
@@ -1190,9 +1245,9 @@ def communes_territoire(territoire:str) -> [list[str], str]:
         code_territoire = get_code_insee_commune_nom(territoire)
         type_territoire = "COMMUNE"
     elif is_code_insee_commune(territoire):
-        # Territoire = Code INSEE Commune
-        code_territoire = territoire
-        type_territoire = "COMMUNE"
+       # Territoire = Code INSEE Commune
+       code_territoire = territoire
+       type_territoire = "COMMUNE"
     elif get_code_insee(territoire):
         # Territoire = Code Postal Commune
         code_territoire, nom = get_code_insee_commune(territoire)
@@ -1384,6 +1439,8 @@ mode_count     = "COUNT"
 mode_custom    = "CUSTOM"
 mode_na        = "N/A"
 mode_average   = "AVG"
+mode_max       = "MAX"
+mode_min       = "MIN"
 
 type_int       = "INT"
 type_str       = "STR"
@@ -1414,7 +1471,7 @@ class DataStore():
         self.meta_dict   = {}  # Semantic of this indicator / metric
         self.type_dict   = {}  # { "INT", "STR",    "TAUX",  "PERCENT", "FLOAT" }
         self.source_dict = {}  # { "SRU", "INSEE",  "ART",   "SIT",     "DATA", "PROJ", "EVOL", "CALC" }
-        self.mode_dict   = {}  # { "SUM", "CONCAT", "IGNORE", "EQUAL", "COUNT",   "CUSTOM", "N/A", "AVG" }
+        self.mode_dict   = {}  # { "SUM", "CONCAT", "IGNORE", "EQUAL", "COUNT",   "CUSTOM", "N/A", "AVG", "MAX", "MIN" }
         self.expr_dict   = {}  # Expression Used for Calculations
         self.error_dict  = {}  # Error while processing this indicator / metric
         self.metric_list = []  # List of Metrics for Rendering
@@ -1726,17 +1783,26 @@ class DataStore():
         self.add_metric("BASE_NAME",      "Nom Unique",                source=source_codes,    mode=mode_custom, data=self.get_fullname(), type="STR")
 
         # Donnees EPCI
-        self.add_metric("EPCI",      "Code EPCI - Métropole",          source=source_interco,  mode=mode_count, data=intercoDossier["Unnamed: 2"][code_insee],       type="STR")
-        self.add_metric("LIBEPCI",   "Libellé de l'EPCI / Métropole",  source=source_interco,  mode=mode_count, data=intercoDossier["Unnamed: 3"][code_insee],       type="STR")
+        self.add_metric("EPCI",      "Code EPCI - Métropole",          source=source_interco,  mode=mode_count, data=intercoDossier["Unnamed: 2"][code_insee],         type="STR")
+        self.add_metric("LIBEPCI",   "Libellé de l'EPCI / Métropole",  source=source_interco,  mode=mode_count, data=intercoDossier["Unnamed: 3"][code_insee],         type="STR")
         self.add_metric("TYPE_EPCI", "Nature d'EPCI",                  source=source_interco,  mode=mode_count, data=intercoEPCI["Unnamed: 2"][self.get("EPCI")],      type="STR")
         self.add_metric("EPCI_COMMUNES", "Nombre communes EPCI",       source=source_interco,  mode=mode_count, data=intercoEPCI["Unnamed: 3"][self.get("EPCI")],      type="INT")
-        self.add_metric("DEP",       "Departement",                    source=source_interco,  mode=mode_count, data=intercoDossier["Unnamed: 4"][code_insee],       type="STR")
+        self.add_metric("DEP",       "Departement",                    source=source_interco,  mode=mode_count, data=intercoDossier["Unnamed: 4"][code_insee],         type="STR")
         self.add_metric("DEP_NOM",   "Nom Departement",                source=source_interco,  mode=mode_count, data=departements["nom_departement"][self.get("DEP")], type="STR")
-        self.add_metric("REG",       "Region",                         source=source_interco,  mode=mode_count, data=intercoDossier["Unnamed: 5"][code_insee],       type="STR")
+        self.add_metric("REG",       "Region",                         source=source_interco,  mode=mode_count, data=intercoDossier["Unnamed: 5"][code_insee],         type="STR")
         self.add_metric("REG_NOM",   "Nom Région",                     source=source_interco,  mode=mode_count, data=departements["nom_region"][self.get("DEP")],      type="STR")
         url_dossier = "https://www.insee.fr/fr/statistiques/2011101?geo=COM-" + self.str("CODE_INSEE")
         self.add_metric("DOSSIER_INSEE", "Dossier Complet INSEE",      source=source_insee,    mode=mode_custom, data=url_dossier,      type="STR")
         global_context["URL_SOURCE_DOSSIER"] = url_dossier
+
+        # Donnees Display
+        self.add_metric("DISPLAY_TYPE",   "Type de Territoire",             source=source_interco,  mode=mode_count, data="Pas de Type",     type="STR")
+        self.add_metric("DISPLAY_COMM",   "Nom de Commune",                 source=source_interco,  mode=mode_count, data="Pas de Nom",      type="STR")
+        self.add_metric("DISPLAY_EPCI",   "Nom de l'EPCI / Métropole",      source=source_interco,  mode=mode_count, data="Pas de Nom",      type="STR")
+        self.add_metric("DISPLAY_ZONE",   "Nom de la Zone",                 source=source_interco,  mode=mode_count, data="Pas de Nom",      type="STR")
+        self.add_metric("DISPLAY_DEPT",   "Nom du Departement",             source=source_interco,  mode=mode_count, data="Pas de Nom",      type="STR")
+        self.add_metric("DISPLAY_REG",    "Nom de la Region",               source=source_interco,  mode=mode_count, data="Pas de Nom",      type="STR")
+        self.add_metric("DISPLAY_NAME",   "Nom du Territoire",              source=source_interco,  mode=mode_count, data="Pas de Nom",      type="STR")
 
         # Donnees INSEE Commune
         load_communes()
@@ -1871,6 +1937,8 @@ class DataStore():
                 elif (mode == "IGNORE"):  total_dict[key] = "IGNORE"
                 elif (mode == "N/A"):     total_dict[key] = "N/A"
                 elif (mode == "AVG"):     total_dict[key] = data_clean[key].average()
+                elif (mode == "MIN"):     total_dict[key] = data_clean[key].min()
+                elif (mode == "MAX"):     total_dict[key] = data_clean[key].max()
                 elif (mode == "CUSTOM"):  total_dict[key] = "CUSTOM not Implemented"
                 else:                     total_dict[key] = "CUSTOM not evaluated"
                 print_verbose("  - Evaluating Total Line " + str(_line) + ": [" + str(key) + "] Value : " + str(total_dict[key]))
@@ -1878,6 +1946,14 @@ class DataStore():
                 print_error("Exception Evaluating Total Line : [" + str(mode) + " ] for key : [" + str(key) + "] : " + str(e))
 
         if (self.store_type == "COMMUNE"):
+            total_dict["DISPLAY_TYPE"]  = "COMMUNE"
+            total_dict["DISPLAY_NAME"]  = nom_commune(code_insee=self.store_code, clean=False)
+            total_dict["DISPLAY_COMM"]  = nom_commune(code_insee=self.store_code, clean=False)
+            total_dict["DISPLAY_EPCI"]  = nom_epci(epci_commune(self.store_code), clean=False)
+            total_dict["DISPLAY_ZONE"]  = nom_epci(epci_commune(self.store_code), clean=False)
+            total_dict["DISPLAY_DEPT"]  = nom_dept(dept_epci(epci_commune(self.store_code)), clean=False)
+            total_dict["DISPLAY_REG"]   = nom_region(region_epci(epci_commune(self.store_code)), clean=False)
+
             total_dict["BASE_NAME"]     = self.get_fullname()
             total_dict["LIBELLE"]       = self.store_name
             total_dict["TYPE_EPCI"]     = "COMMUNE"
@@ -1893,13 +1969,21 @@ class DataStore():
             total_dict["DEP_NOM"]       = nom_dept(dept_epci(total_dict["EPCI"]), clean=True)
             total_dict["REG"]           = region_epci(total_dict["EPCI"])
             total_dict["REG_NOM"]       = nom_region(region_epci(total_dict["EPCI"]), clean=True)
-            URL_VILLE_DATA = "https://ville-data.com/"+clean_name(str(total_dict["LIBELLE"]) , sep="-").title().replace("-Le-" , "-le-").replace("-La-" , "-la-")+"-"+str(total_dict["CODE_POSTAL"])+".html"
+            URL_VILLE_DATA = "https://ville-data.com/"+clean_name(nom_commune(code_insee=self.store_code) , sep="-").title().replace("-Le-" , "-le-").replace("-La-" , "-la-")+"-"+str(total_dict["CODE_POSTAL"])+".html"
             total_dict["URL_VILLE_DATA"]         = URL_VILLE_DATA
-            URL_LINTERNAUTE = "https://www.linternaute.com/ville/"+clean_name(str(total_dict["LIBELLE"]) , sep="-").lower()+"/ville-"+str(self.store_code)
+            URL_LINTERNAUTE = "https://www.linternaute.com/ville/"+clean_name(nom_commune(code_insee=self.store_code) , sep="-").lower()+"/ville-"+str(self.store_code)
             total_dict["URL_LINTERNAUTE"]        = URL_LINTERNAUTE
             total_dict["URL_GOOGLE"]             = "https://www.google.com/search?q="+total_dict["LIBELLE"]
 
         if (self.store_type == "EPCI"):
+            total_dict["DISPLAY_TYPE"]  = "EPCI"
+            total_dict["DISPLAY_NAME"]  = nom_epci(self.store_code, clean=False)
+            total_dict["DISPLAY_COMM"]  = str_list(list_nom_communes(communes_epci(self.store_code)))
+            total_dict["DISPLAY_EPCI"]  = nom_epci(self.store_code, clean=False)
+            total_dict["DISPLAY_ZONE"]  = nom_epci(self.store_code, clean=False)
+            total_dict["DISPLAY_DEPT"]  = nom_dept(dept_epci(self.store_code), clean=False)
+            total_dict["DISPLAY_REG"]   = nom_region(region_epci(self.store_code), clean=False)
+
             total_dict["BASE_NAME"]     = self.get_fullname()
             total_dict["LIBELLE"]       = self.store_name
             total_dict["CODE_INSEE"]    = self.store_code
@@ -1911,6 +1995,7 @@ class DataStore():
             total_dict["EPCI_COMMUNES"] = len(communes_epci(self.store_code))
             total_dict["DEP"]           = dept_epci(self.store_code)
             total_dict["DEP_NOM"]       = nom_dept(dept_epci(self.store_code), clean=True)
+
             total_dict["REG"]           = region_epci(self.store_code)
             total_dict["REG_NOM"]       = nom_region(region_epci(self.store_code), clean=True)
             url_dossier = "https://www.insee.fr/fr/statistiques/2011101?geo=EPCI-" + str(self.store_code)
@@ -1921,6 +2006,14 @@ class DataStore():
             total_dict["URL_GOOGLE"]             = "https://www.google.com/search?q="+total_dict["LIBELLE"]
 
         if (self.store_type == "DEPT"):
+            total_dict["DISPLAY_TYPE"]  = "DEPT"
+            total_dict["DISPLAY_NAME"]  = nom_dept(self.store_code, clean=False)
+            total_dict["DISPLAY_COMM"]  = str_list(list_nom_communes(communes_dept(self.store_code)))
+            total_dict["DISPLAY_EPCI"]  = str_list(epci_dept(self.store_code))
+            total_dict["DISPLAY_ZONE"]  = str_list(list_zones_dept(self.store_code))
+            total_dict["DISPLAY_DEPT"]  = nom_dept(self.store_code, clean=False)
+            total_dict["DISPLAY_REG"]   = nom_region(region_dept(self.store_code), clean=False)
+
             total_dict["BASE_NAME"]     = self.get_fullname()
             total_dict["LIBELLE"]       = self.store_name
             total_dict["CODE_INSEE"]    = self.store_code
@@ -1944,6 +2037,14 @@ class DataStore():
             total_dict["URL_GOOGLE"]             = "https://www.google.com/search?q="+total_dict["LIBELLE"]
 
         if (self.store_type == "REGION"):
+            total_dict["DISPLAY_TYPE"]  = "REGION"
+            total_dict["DISPLAY_NAME"]  = nom_region(self.store_code, clean=False)
+            total_dict["DISPLAY_COMM"]  = str_list(list_nom_communes(communes_region(self.store_code)))
+            total_dict["DISPLAY_EPCI"]  = str_list(epci_region(self.store_code))
+            total_dict["DISPLAY_ZONE"]  = str_list(list_zones(self.store_code))
+            total_dict["DISPLAY_DEPT"]  = str_list(list_dept(self.store_code, clean=False))
+            total_dict["DISPLAY_REG"]   = nom_region(self.store_code, clean=False)
+
             total_dict["BASE_NAME"]     = self.get_fullname()
             total_dict["LIBELLE"]       = self.store_name
             total_dict["CODE_INSEE"]    = self.store_code
@@ -1965,6 +2066,14 @@ class DataStore():
             total_dict["URL_GOOGLE"]             = "https://www.google.com/search?q="+total_dict["LIBELLE"]
 
         if (self.store_type == "ZONE"):
+            total_dict["DISPLAY_TYPE"]  = "ZONE"
+            total_dict["DISPLAY_NAME"]  = self.store_code
+            total_dict["DISPLAY_COMM"]  = str_list(list_nom_communes(communes_zone(self.store_code)))
+            total_dict["DISPLAY_EPCI"]  = self.store_code
+            total_dict["DISPLAY_ZONE"]  = self.store_code
+            total_dict["DISPLAY_DEPT"]  = nom_dept(dept_zone(self.store_code), clean=False)
+            total_dict["DISPLAY_REG"]   = nom_region(region_epci(self.store_code), clean=False)
+
             total_dict["BASE_NAME"]     = self.get_fullname()
             total_dict["LIBELLE"]       = self.store_name
             total_dict["CODE_INSEE"]    = self.store_code
@@ -1985,11 +2094,12 @@ class DataStore():
             total_dict["URL_LINTERNAUTE"]        = "https://www.google.com/search?q="+total_dict["LIBELLE"]
             total_dict["URL_GOOGLE"]             = "https://www.google.com/search?q="+total_dict["LIBELLE"]
 
-
         for key in self.key_datas:
             mode = self.mode_dict[key]
             if (key == "CODE_INSEE"): continue
             elif (mode == "SUM"):     continue
+            elif (mode == "MIN"):     continue
+            elif (mode == "MAX"):     continue
             elif (mode == "CONCAT"):  continue
             elif (mode == "EQUAL"):   continue
             elif (mode == "COUNT"):   continue
@@ -2174,34 +2284,88 @@ class DataStore():
 def scot_ouest(code_insee, start_date="2021-05-20"):
     load_sitadel()
     # Annee / Log Aut / Log Commences / Nbre Log / Surface Terrain
-    com_2021   = sitadel1721[(sitadel1721['COMM'] == str(code_insee)) &
-                             (sitadel1721["NATURE_PROJET"] == 1) &
-                             (sitadel1721["Etat_DAU"] != 4) &
-                             (sitadel1721["Type_DAU"] == "PC") &
-                             (sitadel1721["DATE_REELLE_AUTORISATION"] > start_date)]
+    com_2021 = sitadel1721[(sitadel1721['COMM'] == str(code_insee)) &
+                           (sitadel1721["DATE_REELLE_AUTORISATION"] > start_date)]
 
+    # (sitadel1721["NATURE_PROJET"] == 1) &
+    # (sitadel1721["Etat_DAU"] != 4) &
+    # (sitadel1721["Type_DAU"] == "PC") &
+
+    parcelles   = ""
+    for index, row in com_2021.iterrows():
+        com_2021.at[index, "Parcelles"] = str(row['sec_cadastre1'])+str(row['num_cadastre1'])+" "+str(row['sec_cadastre2'])+str(row['num_cadastre2'])+" "+str(row['sec_cadastre3'])+str(row['num_cadastre3'])
+        parcelles = parcelles + " " + com_2021.at[index, "Parcelles"]
+        if   (row['Etat_DAU'] == 2) : com_2021.at[index, "Etat"]   = "Autorisé"
+        elif (row['Etat_DAU'] == 4) : com_2021.at[index, "Etat"]   = "Annulé"
+        elif (row['Etat_DAU'] == 5) : com_2021.at[index, "Etat"]   = "Commencé"
+        elif (row['Etat_DAU'] == 6) : com_2021.at[index, "Etat"]   = "Terminé"
+        else : com_2021.at[index, "Etat"] = "NR"
+        com_2021.at[index, "Nature"]     = "UNA" if (row['NATURE_PROJET'] == 1) else "RU"
+        com_2021.at[index, "Extension"]  = row['I_EXTENSION'] + row['I_SURELEVATION'] + row['I_NIVSUPP']
+        com_2021.at[index, "Renouv"]     = row['SURF_HAB_DEMOLIE'] + row['SURF_LOC_DEMOLIE'] + row['SURF_HAB_AVANT'] + row['NB_LGT_DEMOLIS'] + row['SURF_LOC_AVANT']
+
+    for index, row in com_2021.iterrows():
+        com_2021.at[index, "Artif"]      = row['SUPERFICIE_TERRAIN'] if ((row['Extension'] == 0) and (row['Renouv'] == 0) and (row['Etat_DAU'] != 4)) else 0
+
+    com_2021 = com_2021[["DEP", "COMM", "Type_DAU", "Etat_DAU", "NATURE_PROJET", "NB_LGT_TOT_CREES",
+                         "SUPERFICIE_TERRAIN", "DATE_REELLE_AUTORISATION", "NB_LGT_PRET_LOC_SOCIAL",
+                         "SURF_HAB_DEMOLIE", "SURF_LOC_DEMOLIE", "SURF_HAB_AVANT", "SURF_LOC_AVANT",
+                         "NB_LGT_ACC_SOC_HORS_PTZ", "NB_LGT_PTZ", "SURF_HAB_CREEE", "SURF_LOC_CREEE",
+                         "Parcelles", "Nature", "Etat", "Extension", "Renouv", "Artif"]]
+    com_2021.sort_values("DATE_REELLE_AUTORISATION")
 
     superficie = sum(com_2021["SUPERFICIE_TERRAIN"])
     logements  = sum(com_2021["NB_LGT_TOT_CREES"])
     logsoc     = sum(com_2021["NB_LGT_PRET_LOC_SOCIAL"])
+    artif      = sum(com_2021["Artif"])
+    artif_20   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2020-01-01")]["Artif"])
+    artif_21   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2021-01-01")]["Artif"])
+    artif_SO   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2021-05-20")]["Artif"])
 
-    count      = len(com_2021.index)
-    count0     = len(com_2021.loc[com_2021["SUPERFICIE_TERRAIN"] == 0].index)
-    superficie0 = round0(superficie + ((superficie/(count-count0))*count0), 0)
-    parcelles  = ""
-    for index, row in com_2021.iterrows():
-        com_2021.at[index, "Parcelles"] = str(row['sec_cadastre1'])+str(row['num_cadastre1'])+" "+str(row['sec_cadastre2'])+str(row['num_cadastre2'])+" "+str(row['sec_cadastre3'])+str(row['num_cadastre3'])
-        parcelles = parcelles + +" "+ com_2021.at[index, "Parcelles"]
-    com_2021 = com_2021[["DEP", "COMM", "Type_DAU", "Etat_DAU", "NATURE_PROJET", "NB_LGT_TOT_CREES",
-                         "SUPERFICIE_TERRAIN", "DATE_REELLE_AUTORISATION",
-                         "Parcelles", "NATURE_PROJET", "NB_LGT_TOT_CREES", "NB_LGT_PRET_LOC_SOCIAL"]]
-    com_2021.at["Total/Count", "SUPERFICIE_TERRAIN"] = superficie0
-    com_2021.at["Total/Count", "Type_DAU"] = count
-    com_2021.at["Total/Count", "NB_LGT_TOT_CREES"] = logements
+    count       = len(com_2021.index)
+    count0      = len(com_2021.loc[com_2021["SUPERFICIE_TERRAIN"] == 0].index)
+    superficie0 = round0(superficie + ((superficie/(count-count0))*count0), 0) if (count !=count0) else superficie
+
+    NOM_COMMUNE = nom_commune(code_insee=code_insee).upper()
+    BUDGET_2030 = SCOT_OUEST['Budget 2030'][NOM_COMMUNE] * 10000 if (NOM_COMMUNE in SCOT_OUEST.index) else 0
+    BUDGET_2040 = SCOT_OUEST['Budget 2040'][NOM_COMMUNE] * 10000 if (NOM_COMMUNE in SCOT_OUEST.index) else 0
+
+    com_2021.at["Total/Count", "SUPERFICIE_TERRAIN"]     = superficie0
+    com_2021.at["Total/Count", "Type_DAU"]               = count
+    com_2021.at["Total/Count", "NB_LGT_TOT_CREES"]       = logements
     com_2021.at["Total/Count", "NB_LGT_PRET_LOC_SOCIAL"] = logsoc
-    com_2021.at["Total/Count", "Parcelles"] = parcelles
-    com_2021.to_csv("scot_ouest_"+str(code_insee)+"-"+start_date+".csv")
-    return superficie0
+    com_2021.at["Total/Count", "Parcelles"]              = parcelles
+    com_2021.at["Total/Count", "Artif"]                  = artif
+    com_2021.at["Total/Budget 2030", "Artif"]            = BUDGET_2030
+    com_2021.at["Total/Budget 2040", "Artif"]            = BUDGET_2040
+    com_2021.at["Total/2020-01-01", "Artif"]             = artif_20
+    com_2021.at["Total/2021-01-01", "Artif"]             = artif_21
+    com_2021.at["Total/2021-05-20", "Artif"]             = artif_SO
+    com_2021.at["Total/2020-01-01", "COMM"]              = artif_20
+    com_2021.at["Total/2021-01-01", "COMM"]              = artif_21
+    com_2021.at["Total/2021-05-20", "COMM"]              = artif_SO
+    com_2021.at["Total/2020-01-01", "Artif%"]            = str(round0(((artif_20/BUDGET_2030)*100), 0))+"%"
+    com_2021.at["Total/2021-01-01", "Artif%"]            = str(round0(((artif_21/BUDGET_2030)*100), 0))+"%"
+    com_2021.at["Total/2021-05-20", "Artif%"]            = str(round0(((artif_SO/BUDGET_2030)*100), 0))+"%"
+    com_2021.at["Total/2020-01-01", "Type_DAU"]          = str(round0(((artif_20 / BUDGET_2030) * 100), 0)) + "%"
+    com_2021.at["Total/2021-01-01", "Type_DAU"]          = str(round0(((artif_21 / BUDGET_2030) * 100), 0)) + "%"
+    com_2021.at["Total/2021-05-20", "Type_DAU"]          = str(round0(((artif_SO / BUDGET_2030) * 100), 0)) + "%"
+
+    file_name = "scot_ouest_"+clean_name(NOM_COMMUNE)+".xlsx"
+    writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
+    com_2021.to_excel(writer, sheet_name=NOM_COMMUNE)
+    worksheet1 = writer.sheets[NOM_COMMUNE]
+    worksheet1.set_tab_color('green')
+    red_format = writer.book.add_format({'bg_color': 'red'})
+    worksheet1.conditional_format('H1:H1000', {'type': 'cell', 'criteria': 'equal to', 'value': 0, 'format': red_format})
+    writer.save()
+
+    file_scot = "scot_ouest"+".xlsx"
+    writer = pd.ExcelWriter(file_scot, engine='openpyxl', mode='a', if_sheet_exists='replace')
+    com_2021.to_excel(writer, sheet_name=NOM_COMMUNE)
+    writer.save()
+
+    return file_name
 
 
 def excel_flux():
@@ -2984,7 +3148,7 @@ def ftp_push_ds(ds : DataStore):
     ftp_push_file(file_list)
 
 
-def ftp_push_file(filename, p_host="ftpupload.net", p_user="epiz_30239961", p_password="oqEwtTaACCaANF", p_directory="htdocs", prod=FTP_PROD):
+def ftp_push_file(filename, p_host="ftpupload.net", p_user="epiz_30239961", p_password="oqEwtTaACCaANF", p_directory="htdocs", prod=True):
     host = p_host
     user = p_user
     password = p_password
@@ -3066,6 +3230,10 @@ def report_commune(code_insee : str = None, code_postal: str = None, force=True,
     if ((not commune) or (str(commune).startswith("Pas"))):
         print_red("COMMUNE non trouvee pour code : INSEE ["+str(code_insee+"] POSTAL : ["+str(code_postal)+"]"))
         return None
+
+    if (code_insee in communes_zone("SCoT_Ouest")):
+        scot_ouest(code_insee=code_insee, start_date="2020-01-01")
+
     entite = entite_commune
     name   = commune
     code   = code_insee
@@ -3398,10 +3566,10 @@ class TestConsommation(unittest.TestCase):
         print_red("< Setup")
 
     def testScot_Ouest(self):
-        print_yellow("> La Roquette-sur-Siagne")
-        scot_ouest(code_insee="06108") # 06108 / 06085
-        scot_ouest(code_insee="06085") # 06108 / 06085
-        print_yellow("< La Roquette-sur-Siagne")
+        print_yellow("> Scot Ouest")
+        scot_ouest(code_insee="06108", start_date="2020-01-01") # 06108 / 06085
+        scot_ouest(code_insee="06085", start_date="2020-01-01") # 06108 / 06085
+        print_yellow("< Scot Ouest")
 
     def testSaintTropez(self):
         print_yellow("> Saint-Tropez")
@@ -3442,12 +3610,49 @@ class TestConsommation(unittest.TestCase):
     def testZone(self):
         global FAST
         FAST = True
-        sel = report_select_dict("93", filename=selection_file, force=True)
-        lz = list_zones_dept("06")
+        report_select_dict("93", filename=selection_file, force=True)
+        lz = list_zones()
+        self.assertIn("SCoT_Ouest_Littoral", lz)
+        self.assertIn("Zone_Menton", lz)
+        self.assertIn("Zone_04", lz)
+        lz06 = list_zones_dept("06")
+        self.assertIn("SCoT_Ouest_Littoral", lz06)
+        self.assertIn("Zone_Menton", lz06)
+        self.assertNotIn("Zone_04", lz06)
+        self.assertEqual(nom_zone("Zone_Menton"), "Zone Menton")
+        self.assertEqual(dept_zone("Zone_Menton"), "06")
+        lz04 = list_zones_dept("04")
+        self.assertNotIn("Zone_Menton", lz04)
+        self.assertIn("Zone_04", lz04)
+
+        lz06 = list_nom_zone(list_zones_dept("06"))
+        self.assertIn("SCoT Ouest Littoral", lz06)
+        self.assertIn("Zone Menton", lz06)
+        self.assertNotIn("Zone 04", lz06)
+
+        cz06 = communes_zone("SCoT_Ouest_Littoral")
+        self.assertIn("06004", cz06)
+        self.assertIn("06085", cz06)
+        self.assertNotIn("06000", cz06)
+
+        strl = str_list(communes_zone("SCoT_Ouest_Littoral"))
+        self.assertEqual(strl, "06004, 06085")
+
         print_yellow("> SCoT Ouest Littoral")
         ds  = report_zone(zone_name="SCoT_Ouest_Littoral", force=True, with_communes=True)
         self.assertEqual(str(ds.get("EPCI")), "SCoT_Ouest_Littoral")
-        self.assertEqual(str(ds.get("NOM_COMMUNE")), "ZONE")
+        self.assertEqual(str(ds.get("NOM_COMMUNE")), "ANTIBES, MOUGINS")
+        dpt = dept_zone("SCoT_Ouest_Littoral")
+        self.assertEqual(str(dpt), "06")
+        print_yellow("< SCoT Ouest Littoral")
+
+    def testDataListZone(self):
+        global FAST
+        FAST = True
+        sel = report_select_dict("93", filename=selection_file, force=True)
+        lz = list_zones_dept("06")
+        dpt = dept_zone("SCoT_Ouest_Littoral")
+        self.assertEqual(str(dpt), "06")
         print_yellow("< SCoT Ouest Littoral")
 
     def testCAPLReport(self):
@@ -3538,6 +3743,12 @@ class TestConsommation(unittest.TestCase):
         self.assertNotIn("04022", the_list)
         dept = dept_epci("200039915")
         self.assertEqual("06",    dept)
+
+        print_yellow("> Liste Communes EPCI  200039915")
+        the_list = list_nom_communes(communes_epci("200039915"))
+        print(the_list)
+        self.assertIn("Mougins",   the_list)
+        self.assertNotIn("Grasse", the_list)
 
         print_yellow("> Liste Communes Departement  06")
         print(communes_dept("06"))

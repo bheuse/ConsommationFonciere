@@ -1165,16 +1165,24 @@ function hideShowLOG_function() {
                 <td class="w3-right-align">{{ ds.NB_LGT_RENOUVELLEMENT  }} </td>
             </tr>
             <tr>
-                <td>Superficie des terrains dédiés aux logements :</td>
-                <td class="w3-right-align">{{ f_round(ds.SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN / 10000,2)  }} ha</td>
+                <td>Superficie des nouveaux terrains dédiés aux logements :</td>
+                <td class="w3-right-align">{{ f_round(ds.SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN_NOUVEAU / 10000,2)  }} ha</td>
+            </tr>
+            <tr>
+                <td>Superficie des terrains en renouvellement pour des logements :</td>
+                <td class="w3-right-align">{{ f_round(ds.SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN_RENOUVEAU / 10000,2)  }} ha</td>
             </tr>
             <tr>
                 <td>Logements par hectares :</td>
                 <td class="w3-right-align">{{ f_round(ds.NB_LGT_NOUVEAU / (ds.SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN / 10000),1)  }} log / ha</td>
             </tr>
             <tr>
-                <td>Superficie des terrains dédiés aux activités :</td>
-                <td class="w3-right-align">{{ Math.round( ((ds.SITADEL_LOCAUX_SUPERFICIE_TERRAIN / 100 ).toFixed(2)) ) / 100  }} ha</td>
+                <td>Superficie des nouveaux terrains dédiés aux activités :</td>
+                <td class="w3-right-align">{{ f_round(ds.SITADEL_LOCAUX_SUPERFICIE_TERRAIN_NOUVEAU / 10000,2)  }} ha</td>
+            </tr>
+            <tr>
+                <td>Superficie des terrains en renouvellement pour des activités :</td>
+                <td class="w3-right-align">{{ f_round(ds.SITADEL_LOCAUX_SUPERFICIE_TERRAIN_RENOUVEAU / 10000,2)  }} ha</td>
             </tr>
             </tbody>
         </table>
