@@ -3153,11 +3153,12 @@ def ftp_push_file(filename, p_host="ftpupload.net", p_user="epiz_30239961", p_pa
     user = p_user
     password = p_password
     directory = p_directory
-    if (prod):
+    if (FTP_PROD and (prod==True)):
         host = "sobrietefonciere.fnepaca.fr"
         user = "sobrietefonciere@fnepaca.fr"
         password = "6TlHc!cjmd8u"
         directory = ""
+    if (FTP_PROD and (prod==True)):
         ftp_push_file(filename, prod=False)
     if (isinstance(filename, str)):
         filename = [filename]
