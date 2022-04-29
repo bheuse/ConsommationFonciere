@@ -2294,6 +2294,8 @@ def scot_ouest(code_insee, start_date="2021-05-20"):
     # (sitadel1721["Etat_DAU"] != 4) &
     # (sitadel1721["Type_DAU"] == "PC") &
 
+    com_2021.fillna(0)
+
     parcelles   = ""
     for index, row in com_2021.iterrows():
         com_2021.loc[index, "Parcelles"] = str(row['sec_cadastre1'])+str(row['num_cadastre1'])+" "+str(row['sec_cadastre2'])+str(row['num_cadastre2'])+" "+str(row['sec_cadastre3'])+str(row['num_cadastre3'])
@@ -2303,9 +2305,9 @@ def scot_ouest(code_insee, start_date="2021-05-20"):
         elif (row['Etat_DAU'] == 5) : com_2021.loc[index, "Etat"]   = "Commencé"
         elif (row['Etat_DAU'] == 6) : com_2021.loc[index, "Etat"]   = "Terminé"
         else : com_2021.loc[index, "Etat"] = "NR"
-        com_2021.loc[index, "Nature"]     = "UNA" if (row['NATURE_PROJET'] == 1) else "RU"
-        com_2021.loc[index, "Extension"]  = row['I_EXTENSION'] + row['I_SURELEVATION'] + row['I_NIVSUPP']
-        com_2021.loc[index, "Renouv"]     = row['SURF_HAB_DEMOLIE'] + row['SURF_LOC_DEMOLIE'] + row['SURF_HAB_AVANT'] + row['NB_LGT_DEMOLIS'] + row['SURF_LOC_AVANT']
+        com_2021.loc[index, "Nature"]     = "UNA" if (int(row['NATURE_PROJET']) == 1) else "RU"
+        com_2021.loc[index, "Extension"]  = int(row['I_EXTENSION']) + int(row['I_SURELEVATION']) + int(row['I_NIVSUPP'])
+        com_2021.loc[index, "Renouv"]     = float(row['SURF_HAB_DEMOLIE']) + float(row['SURF_LOC_DEMOLIE']) + float(row['SURF_HAB_AVANT']) + float(row['NB_LGT_DEMOLIS']) + float(row['SURF_LOC_AVANT'])
 
     for index, row in com_2021.iterrows():
         com_2021.loc[index, "Artif"]      = row['SUPERFICIE_TERRAIN'] if ((row['Extension'] == 0) and (row['Renouv'] == 0) and (row['Etat_DAU'] != 4)) else 0
