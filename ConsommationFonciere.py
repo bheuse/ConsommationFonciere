@@ -90,7 +90,7 @@ def load_sitadel(sitadel1316_file:  str = sitadel1316File,
     global sitadel1316, sitadel1721, sitadelMeta, sitadel1321
     if (sitadel1316 is None) or (sitadel1721 is None)  or (sitadelMeta is None):
         downloadFile(sitadelSource1316File, sitadel1316File, zip=True, zipped_file="PC_DP_créant_logements_2013_2016.csv")
-        downloadFile(sitadelSource1721File, sitadel1721File, zip=True, zipped_file="PC_DP_créant_logements_2017_2022.csv")
+        downloadFile(sitadelSource1721File, sitadel1721File, zip=True, zipped_file="PC_DP_creant_logements_2017_2022.csv")
         downloadFile(sitadelSourceMetaFile, sitadelMetaFile)
         print_blue("Lecture Sitadel Logements 2013-2016 : " + sitadel1316_file + " ...")
         sitadel1316 = pd.read_csv(sitadel1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str})
@@ -98,7 +98,7 @@ def load_sitadel(sitadel1316_file:  str = sitadel1316File,
                                    sitadel1316['sec_cadastre2'].map(str) + sitadel1316['num_cadastre2'].map(str)+" "+\
                                    sitadel1316['sec_cadastre3'].map(str) + sitadel1316['num_cadastre3'].map(str)
         print_blue("Lecture Sitadel Logements 2017-2022 : " + sitadel1721_file + " ...")
-        sitadel1721 = pd.read_csv(sitadel1721_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "ADR_LOCALITE_TER" : str, "ADR_CODPOST_TER" : str})
+        sitadel1721 = pd.read_csv(sitadel1721_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "ADR_LOCALITE_TER" : str, "ADR_CODPOST_TER" : str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str})
         sitadel1721["Parcelles"] = sitadel1721['sec_cadastre1'].map(str) + sitadel1721['num_cadastre1'].map(str)+" "+\
                                    sitadel1721['sec_cadastre2'].map(str) + sitadel1721['num_cadastre2'].map(str)+" "+\
                                    sitadel1721['sec_cadastre3'].map(str) + sitadel1721['num_cadastre3'].map(str)
@@ -135,7 +135,7 @@ def load_sitadel_locaux(sitadelLocaux1316_file:  str = sitadelLocaux1316File,
     global sitadel_locaux_1316, sitadel_locaux_1721, sitadel_locaux_Meta, sitadel_locaux_1321
     if (sitadel_locaux_1316 is None) or (sitadel_locaux_1721 is None)  or (sitadel_locaux_Meta is None):
         downloadFile(sitadelLocauxSource1316File, sitadelLocaux1316File, zip=True, zipped_file="PC_DP_créant_locaux_2013_2016.csv")
-        downloadFile(sitadelLocauxSource1721File, sitadelLocaux1721File, zip=True, zipped_file="PC_DP_créant_locaux_2017_2022.csv")
+        downloadFile(sitadelLocauxSource1721File, sitadelLocaux1721File, zip=True, zipped_file="PC_DP_creant_locaux_2017_2022.csv")
         downloadFile(sitadelLocauxSourceMetaFile, sitadelLocauxMetaFile)
         print_blue("Lecture Sitadel Locaux 2013-2016 : " + sitadelLocaux1316_file + " ...")
         sitadel_locaux_1316 = pd.read_csv(sitadelLocaux1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "ZONE_OP": str, "NATURE_PROJET": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float})
@@ -2293,19 +2293,19 @@ def scot_ouest(code_insee, start_date="2021-05-20"):
 
     parcelles   = ""
     for index, row in com_2021.iterrows():
-        com_2021.at[index, "Parcelles"] = str(row['sec_cadastre1'])+str(row['num_cadastre1'])+" "+str(row['sec_cadastre2'])+str(row['num_cadastre2'])+" "+str(row['sec_cadastre3'])+str(row['num_cadastre3'])
-        parcelles = parcelles + " " + com_2021.at[index, "Parcelles"]
-        if   (row['Etat_DAU'] == 2) : com_2021.at[index, "Etat"]   = "Autorisé"
-        elif (row['Etat_DAU'] == 4) : com_2021.at[index, "Etat"]   = "Annulé"
-        elif (row['Etat_DAU'] == 5) : com_2021.at[index, "Etat"]   = "Commencé"
-        elif (row['Etat_DAU'] == 6) : com_2021.at[index, "Etat"]   = "Terminé"
-        else : com_2021.at[index, "Etat"] = "NR"
-        com_2021.at[index, "Nature"]     = "UNA" if (row['NATURE_PROJET'] == 1) else "RU"
-        com_2021.at[index, "Extension"]  = row['I_EXTENSION'] + row['I_SURELEVATION'] + row['I_NIVSUPP']
-        com_2021.at[index, "Renouv"]     = row['SURF_HAB_DEMOLIE'] + row['SURF_LOC_DEMOLIE'] + row['SURF_HAB_AVANT'] + row['NB_LGT_DEMOLIS'] + row['SURF_LOC_AVANT']
+        com_2021.loc[index, "Parcelles"] = str(row['sec_cadastre1'])+str(row['num_cadastre1'])+" "+str(row['sec_cadastre2'])+str(row['num_cadastre2'])+" "+str(row['sec_cadastre3'])+str(row['num_cadastre3'])
+        parcelles = parcelles + " " + com_2021.loc[index, "Parcelles"]
+        if   (row['Etat_DAU'] == 2) : com_2021.loc[index, "Etat"]   = "Autorisé"
+        elif (row['Etat_DAU'] == 4) : com_2021.loc[index, "Etat"]   = "Annulé"
+        elif (row['Etat_DAU'] == 5) : com_2021.loc[index, "Etat"]   = "Commencé"
+        elif (row['Etat_DAU'] == 6) : com_2021.loc[index, "Etat"]   = "Terminé"
+        else : com_2021.loc[index, "Etat"] = "NR"
+        com_2021.loc[index, "Nature"]     = "UNA" if (row['NATURE_PROJET'] == 1) else "RU"
+        com_2021.loc[index, "Extension"]  = row['I_EXTENSION'] + row['I_SURELEVATION'] + row['I_NIVSUPP']
+        com_2021.loc[index, "Renouv"]     = row['SURF_HAB_DEMOLIE'] + row['SURF_LOC_DEMOLIE'] + row['SURF_HAB_AVANT'] + row['NB_LGT_DEMOLIS'] + row['SURF_LOC_AVANT']
 
     for index, row in com_2021.iterrows():
-        com_2021.at[index, "Artif"]      = row['SUPERFICIE_TERRAIN'] if ((row['Extension'] == 0) and (row['Renouv'] == 0) and (row['Etat_DAU'] != 4)) else 0
+        com_2021.loc[index, "Artif"]      = row['SUPERFICIE_TERRAIN'] if ((row['Extension'] == 0) and (row['Renouv'] == 0) and (row['Etat_DAU'] != 4)) else 0
 
     com_2021 = com_2021[["DEP", "COMM", "Type_DAU", "Etat_DAU", "NATURE_PROJET", "NB_LGT_TOT_CREES",
                          "SUPERFICIE_TERRAIN", "DATE_REELLE_AUTORISATION", "NB_LGT_PRET_LOC_SOCIAL",
@@ -2324,34 +2324,34 @@ def scot_ouest(code_insee, start_date="2021-05-20"):
 
     count       = len(com_2021.index)
     count0      = len(com_2021.loc[com_2021["SUPERFICIE_TERRAIN"] == 0].index)
-    superficie0 = round0(superficie + ((superficie/(count-count0))*count0), 0) if (count !=count0) else superficie
+    superficie0 = round0(superficie + ((superficie/(count-count0))*count0), 0) if (count != count0) else superficie
 
     NOM_COMMUNE = nom_commune(code_insee=code_insee).upper()
     BUDGET_2030 = SCOT_OUEST['Budget 2030'][NOM_COMMUNE] * 10000 if (NOM_COMMUNE in SCOT_OUEST.index) else 0
     BUDGET_2040 = SCOT_OUEST['Budget 2040'][NOM_COMMUNE] * 10000 if (NOM_COMMUNE in SCOT_OUEST.index) else 0
 
-    com_2021.at["Total/Count", "SUPERFICIE_TERRAIN"]     = superficie0
-    com_2021.at["Total/Count", "Type_DAU"]               = count
-    com_2021.at["Total/Count", "NB_LGT_TOT_CREES"]       = logements
-    com_2021.at["Total/Count", "NB_LGT_PRET_LOC_SOCIAL"] = logsoc
-    com_2021.at["Total/Count", "Parcelles"]              = parcelles
-    com_2021.at["Total/Count", "Artif"]                  = artif
-    com_2021.at["Total/Budget 2030", "Artif"]            = BUDGET_2030
-    com_2021.at["Total/Budget 2040", "Artif"]            = BUDGET_2040
-    com_2021.at["Total/2020-01-01", "Artif"]             = artif_20
-    com_2021.at["Total/2021-01-01", "Artif"]             = artif_21
-    com_2021.at["Total/2021-05-20", "Artif"]             = artif_SO
-    com_2021.at["Total/2020-01-01", "COMM"]              = artif_20
-    com_2021.at["Total/2021-01-01", "COMM"]              = artif_21
-    com_2021.at["Total/2021-05-20", "COMM"]              = artif_SO
-    com_2021.at["Total/2020-01-01", "Artif%"]            = str(round0(((artif_20/BUDGET_2030)*100), 0))+"%"
-    com_2021.at["Total/2021-01-01", "Artif%"]            = str(round0(((artif_21/BUDGET_2030)*100), 0))+"%"
-    com_2021.at["Total/2021-05-20", "Artif%"]            = str(round0(((artif_SO/BUDGET_2030)*100), 0))+"%"
-    com_2021.at["Total/2020-01-01", "Type_DAU"]          = str(round0(((artif_20 / BUDGET_2030) * 100), 0)) + "%"
-    com_2021.at["Total/2021-01-01", "Type_DAU"]          = str(round0(((artif_21 / BUDGET_2030) * 100), 0)) + "%"
-    com_2021.at["Total/2021-05-20", "Type_DAU"]          = str(round0(((artif_SO / BUDGET_2030) * 100), 0)) + "%"
+    com_2021.loc["Total/Count", "SUPERFICIE_TERRAIN"]     = superficie0
+    com_2021.loc["Total/Count", "Type_DAU"]               = count
+    com_2021.loc["Total/Count", "NB_LGT_TOT_CREES"]       = logements
+    com_2021.loc["Total/Count", "NB_LGT_PRET_LOC_SOCIAL"] = logsoc
+    com_2021.loc["Total/Count", "Parcelles"]              = parcelles
+    com_2021.loc["Total/Count", "Artif"]                  = artif
+    com_2021.loc["Total/Budget 2030", "Artif"]            = BUDGET_2030
+    com_2021.loc["Total/Budget 2040", "Artif"]            = BUDGET_2040
+    com_2021.loc["Total/2020-01-01", "Artif"]             = artif_20
+    com_2021.loc["Total/2021-01-01", "Artif"]             = artif_21
+    com_2021.loc["Total/2021-05-20", "Artif"]             = artif_SO
+    com_2021.loc["Total/2020-01-01", "COMM"]              = artif_20
+    com_2021.loc["Total/2021-01-01", "COMM"]              = artif_21
+    com_2021.loc["Total/2021-05-20", "COMM"]              = artif_SO
+    com_2021.loc["Total/2020-01-01", "Artif%"]            = str(round0(((artif_20/BUDGET_2030)*100), 0))+"%"
+    com_2021.loc["Total/2021-01-01", "Artif%"]            = str(round0(((artif_21/BUDGET_2030)*100), 0))+"%"
+    com_2021.loc["Total/2021-05-20", "Artif%"]            = str(round0(((artif_SO/BUDGET_2030)*100), 0))+"%"
+    com_2021.loc["Total/2020-01-01", "Type_DAU"]          = str(round0(((artif_20 / BUDGET_2030) * 100), 0)) + "%"
+    com_2021.loc["Total/2021-01-01", "Type_DAU"]          = str(round0(((artif_21 / BUDGET_2030) * 100), 0)) + "%"
+    com_2021.loc["Total/2021-05-20", "Type_DAU"]          = str(round0(((artif_SO / BUDGET_2030) * 100), 0)) + "%"
 
-    file_name = "scot_ouest_"+clean_name(NOM_COMMUNE)+".xlsx"
+    file_name = output_dir + os.sep + "scot_ouest_"+clean_name(NOM_COMMUNE)+".xlsx"
     writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
     com_2021.to_excel(writer, sheet_name=NOM_COMMUNE)
     worksheet1 = writer.sheets[NOM_COMMUNE]
@@ -2361,9 +2361,10 @@ def scot_ouest(code_insee, start_date="2021-05-20"):
     writer.save()
 
     file_scot = "scot_ouest"+".xlsx"
-    writer = pd.ExcelWriter(file_scot, engine='openpyxl', mode='a', if_sheet_exists='replace')
-    com_2021.to_excel(writer, sheet_name=NOM_COMMUNE)
-    writer.save()
+    writer_scot = pd.ExcelWriter(file_scot, engine='openpyxl', mode='a', if_sheet_exists='replace')
+    com_2021.to_excel(writer_scot, sheet_name=NOM_COMMUNE)
+    writer_scot.save()
+    writer_scot.close()
 
     return file_name
 
@@ -3233,6 +3234,7 @@ def report_commune(code_insee : str = None, code_postal: str = None, force=True,
         return None
 
     if (code_insee in communes_zone("SCoT_Ouest")):
+        print_blue("Scot Ouest pour Commune "+str(commune)+" : INSEE ["+str(code_insee+"]"))
         scot_ouest(code_insee=code_insee, start_date="2020-01-01")
 
     entite = entite_commune
