@@ -40,8 +40,10 @@ matplotlib.use('Agg')
 warnings.filterwarnings("ignore")
 warnings.simplefilter(action='ignore', category=pd.errors.PerformanceWarning)
 
+
 from warnings import simplefilter
 simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
+pd.options.mode.chained_assignment = None
 
 # Working Directories
 output_dir = "output" + os.sep
@@ -2287,6 +2289,7 @@ def scot_ouest(code_insee, start_date="2021-05-20"):
     com_2021 = sitadel1721[(sitadel1721['COMM'] == str(code_insee)) &
                            (sitadel1721["DATE_REELLE_AUTORISATION"] > start_date)]
 
+    if (com_2021.size == 0) : return None
     # (sitadel1721["NATURE_PROJET"] == 1) &
     # (sitadel1721["Etat_DAU"] != 4) &
     # (sitadel1721["Type_DAU"] == "PC") &
@@ -2358,7 +2361,8 @@ def scot_ouest(code_insee, start_date="2021-05-20"):
     worksheet1.set_tab_color('green')
     red_format = writer.book.add_format({'bg_color': 'red'})
     worksheet1.conditional_format('H1:H1000', {'type': 'cell', 'criteria': 'equal to', 'value': 0, 'format': red_format})
-    writer.save()
+    # writer.save()
+    writer.close()
 
     file_scot = "scot_ouest"+".xlsx"
     writer_scot = pd.ExcelWriter(file_scot, engine='openpyxl', mode='a', if_sheet_exists='replace')
