@@ -545,16 +545,16 @@ const vm = Vue.createApp({
             zones = select["REGIONS"][0]["ZONES_CODES"];
             this.selectedZone   = "";
             this.selectZones = [];
-            console.log("Zones  ");
+            // console.log("Zones  ");
             // for (var i = 0; i < zones.length; i++) {
-            for (var i = 0; i < dept["ZONES_CODES"].length; i++) {
+            // for (var i = 0; i < dept["ZONES_CODES"].length; i++) {
                 // zone_code =  zones[i]
-                zone_code =  "ZONE_"+dept["ZONES_CODES"][i]
-                zo   = select["REGIONS"][0]["ZONES"].findIndex(x => x.Clean === zone_code);
-                zo   = select["REGIONS"][0]["ZONES"][zo]
-                zone = { id: i, code : zo.INSEE , postal : no_postal , nom : zo.Nom, entity : zo.Clean, data : zo };
-                this.selectZones.push(zone);
-                }
+            //     zone_code =  "ZONE_"+dept["ZONES_CODES"][i]
+            //     zo   = select["REGIONS"][0]["ZONES"].findIndex(x => x.Clean === zone_code);
+            //     zo   = select["REGIONS"][0]["ZONES"][zo]
+            //     zone = { id: i, code : zo.INSEE , postal : no_postal , nom : zo.Nom, entity : zo.Clean, data : zo };
+            //     this.selectZones.push(zone);
+            //     }
 
             // List Communes
             this.selectedCommune = "";

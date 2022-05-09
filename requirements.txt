@@ -16,6 +16,7 @@ requests
 scipy
 markdown
 xlsxwriter
+openpyxl
 
 
 
