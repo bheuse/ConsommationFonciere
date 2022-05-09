@@ -2144,7 +2144,7 @@ function chartArtificialisation(ds, container) {
           },
           title: {
             display: true, color: theme_color,
-            text: 'Artificialisation sur ' + ds.LIBELLE,
+            text: 'Artificialisation sur ' + ds.DISPLAY_NAME,
           }
         },
         scales: {
@@ -2168,6 +2168,93 @@ function chartArtificialisation(ds, container) {
     var myChart = new Chart($("#"+container+"Canvas").get(0).getContext("2d"), config);
 }
 
+
+function chartAutorisationsConso(ds, container) {
+
+    // Graphique Autorisations Consommation Fonciere pour les Logements 2017-2022 (ChartJS)
+    $('#'+container).html('');
+    if (ds=== null) { return ; }
+
+    TOT16 = ds.CONSO_LOG_SUPERFICIE2013 + ds.CONSO_LOG_SUPERFICIE2014 + ds.CONSO_LOG_SUPERFICIE2015 + ds.CONSO_LOG_SUPERFICIE2015
+    TOT19 = TOT16 + ds.CONSO_LOG_SUPERFICIE2017 + ds.CONSO_LOG_SUPERFICIE2018 + ds.CONSO_LOG_SUPERFICIE2019
+    LAST  = ds.CONSO_LOG_LAST_DATE
+    const data = {
+      labels: [ "2013", "2014", "2015", "2016", "2016", "2017", "2018", "2019", "2020", "2021", LAST],
+      datasets: [
+        {
+          label: "Consommation Fonciere - Ha / Par an",
+          data: [0,
+                 f_round(ds.CONSO_LOG_SUPERFICIE2013/10000,1),
+                 f_round(ds.CONSO_LOG_SUPERFICIE2014/10000,1),
+                 f_round(ds.CONSO_LOG_SUPERFICIE2015/10000,1),
+                 f_round(ds.CONSO_LOG_SUPERFICIE2016/10000,1),
+                 f_round(ds.CONSO_LOG_SUPERFICIE2017/10000,1),
+                 f_round(ds.CONSO_LOG_SUPERFICIE2018/10000,1),
+                 f_round(ds.CONSO_LOG_SUPERFICIE2019/10000,1),
+                 f_round(ds.CONSO_LOG_SUPERFICIE2020/10000,1),
+                 f_round(ds.CONSO_LOG_SUPERFICIE2021/10000,1),
+                 f_round(ds.CONSO_LOG_SUPERFICIE2022/10000,1)],
+          fill: false,
+          tension: 0.5,
+          borderDash: [5, 5],
+          borderColor: border_Color,
+          backgroundColor: background_Color,
+        },
+        {
+          label: "Consommation Fonciere - Cumul",
+          data: [ 0,
+                  f_round((ds.CONSO_LOG_SUPERFICIE2013)/10000,1) ,
+                  f_round((ds.CONSO_LOG_SUPERFICIE2013 + ds.CONSO_LOG_SUPERFICIE2014)/10000,1) ,
+                  f_round((ds.CONSO_LOG_SUPERFICIE2013 + ds.CONSO_LOG_SUPERFICIE2014 + ds.CONSO_LOG_SUPERFICIE2015)/10000,1) ,
+                  f_round((TOT16)/10000,1) ,
+                  f_round((TOT16 + ds.CONSO_LOG_SUPERFICIE2017)/10000,1) ,
+                  f_round((TOT16 + ds.CONSO_LOG_SUPERFICIE2017 + ds.CONSO_LOG_SUPERFICIE2018)/10000,1),
+                  f_round((TOT16 + ds.CONSO_LOG_SUPERFICIE2017 + ds.CONSO_LOG_SUPERFICIE2018 + ds.CONSO_LOG_SUPERFICIE2019)/10000,1),
+                  f_round((TOT19 + ds.CONSO_LOG_SUPERFICIE2020)/10000,1) ,
+                  f_round((TOT19 + ds.CONSO_LOG_SUPERFICIE2020 + ds.CONSO_LOG_SUPERFICIE2021) /10000,1),
+                  f_round((TOT19 + ds.CONSO_LOG_SUPERFICIE2020 + ds.CONSO_LOG_SUPERFICIE2021 + ds.CONSO_LOG_SUPERFICIE2022)/10000,1)],
+          fill: false,
+          tension: 0.5,
+          borderColor: border_Color,
+          backgroundColor: background_Color,
+        }
+      ]
+    };
+
+    const config = {
+      type: 'line',
+      data: data,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true, color: theme_color,
+            text: 'Autorisations de Consommation Fonciere sur terrains vierges sur ' + ds.DISPLAY_NAME,
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: false, color: theme_color,
+              text: 'Annees'
+            }
+          },
+          y: {
+            title: {
+              display: true, color: theme_color,
+              text: 'Hectares Artificialises'
+            },
+          }
+        },
+      },
+    };
+
+    $('<canvas id="'+container+'Canvas"></canvas>').appendTo($('#'+container));
+    var myChart = new Chart($("#"+container+"Canvas").get(0).getContext("2d"), config);
+}
 
 function chartFluxPopulation(ds, container) {
 
@@ -2380,6 +2467,7 @@ function chartsUpdate(ds) {
 
     // Tab Artificialisation
     chartArtificialisation(ds,            'artificialisationArtificialisationChartContainer')
+    chartAutorisationsConso(ds,           'artificialisationAutorisationsConsoChartContainer')
 
     // Tab Logements
     chartRepartitionNouveauxLogements(ds, 'logementsRepartitionNouveauxLogementsChartContainer')

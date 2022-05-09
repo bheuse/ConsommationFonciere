@@ -1165,11 +1165,11 @@ function hideShowLOG_function() {
                 <td class="w3-right-align">{{ ds.NB_LGT_RENOUVELLEMENT  }} </td>
             </tr>
             <tr>
-                <td>Superficie des nouveaux terrains dédiés aux logements :</td>
+                <td>Superficie des terrains dédiés aux nouveaux logements :</td>
                 <td class="w3-right-align">{{ f_round(ds.SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN_NOUVEAU / 10000,2)  }} ha</td>
             </tr>
             <tr>
-                <td>Superficie des terrains en renouvellement pour des logements :</td>
+                <td>Superficie des terrains pour des logements en renouvellement :</td>
                 <td class="w3-right-align">{{ f_round(ds.SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN_RENOUVEAU / 10000,2)  }} ha</td>
             </tr>
             <tr>
@@ -1177,17 +1177,22 @@ function hideShowLOG_function() {
                 <td class="w3-right-align">{{ f_round(ds.NB_LGT_NOUVEAU / (ds.SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN / 10000),1)  }} log / ha</td>
             </tr>
             <tr>
-                <td>Superficie des nouveaux terrains dédiés aux activités :</td>
+                <td>Superficie des terrains dédiés aux nouvelles activités :</td>
                 <td class="w3-right-align">{{ f_round(ds.SITADEL_LOCAUX_SUPERFICIE_TERRAIN_NOUVEAU / 10000,2)  }} ha</td>
             </tr>
             <tr>
-                <td>Superficie des terrains en renouvellement pour des activités :</td>
+                <td>Superficie des terrains pour des activités en renouvellement :</td>
                 <td class="w3-right-align">{{ f_round(ds.SITADEL_LOCAUX_SUPERFICIE_TERRAIN_RENOUVEAU / 10000,2)  }} ha</td>
             </tr>
             </tbody>
         </table>
         <br>
+    </div>
 
+    <div id="artificialisationAutorisationsConsoChartContainer"      class="center"  style="width:100%; max-width:600px; max-height:500px;"></div>
+    <br>
+
+    <div v-if="this.data_s != null">
         <div v-if="ds.SCOT_2030_OBJ != -1">
         <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
         <h3>Objectifs SCoT Ouest Alpes-Maritimes</h3></div>
@@ -1199,6 +1204,10 @@ function hideShowLOG_function() {
             <tr class="w3-teal">
                 <th style="color:white">Données Sitadel</th>
                 <th style="color:white" class="w3-right-align">Depuis le 20 Mai 2021</th>
+            </tr>
+            <tr>
+                <td>Dernière autorisation prise en compte :</td>
+                <td class="w3-right-align">{{ ds.SCOT_LAST_DATE }} </td>
             </tr>
             <tr>
                 <td>Nombre de Permis Autorisés :</td>
@@ -1213,7 +1222,7 @@ function hideShowLOG_function() {
                 <td class="w3-right-align">{{ f_round(ds.SCOT_OUEST_LOG_LOG_SOCIAUX,0)  }} </td>
             </tr>
             <tr>
-                <td>Total des superficies des parcelles autorisées a la construction :</td>
+                <td>Total des superficies des parcelles autorisées à la construction :</td>
                 <td class="w3-right-align">{{ f_round(ds.SCOT_OUEST_LOG_SUPERFICIE / 10000,2)  }} ha  </td>
             </tr>
             <tr>
@@ -1221,12 +1230,20 @@ function hideShowLOG_function() {
                 <td class="w3-right-align">{{ f_round(ds.SCOT_2030 / 10000,2)  }} ha  </td>
             </tr>
             <tr>
+                <td>Consommation hors objectif (parcelles < 2500 m2) :</td>
+                <td class="w3-right-align">{{ f_round(ds.SCOT_OUEST_LOG_SUPERFICIE_SMALL / 10000,2)  }} ha  </td>
+            </tr>
+            <tr>
+                <td>Consommation dans l'objectif (parcelles > 2500 m2) :</td>
+                <td class="w3-right-align">{{ f_round(ds.SCOT_OUEST_LOG_SUPERFICIE2500 / 10000,2)  }} ha  </td>
+            </tr>
+            <tr>
                 <td>Part de l'objectif consommé :</td>
                 <td class="w3-right-align">{{ f_round(ds.SCOT_2030_OBJ*100,0)  }} %  </td>
             </tr>
             <tr>
                 <td>Budget foncier résiduel jusqu'en 2030 :</td>
-                <td class="w3-right-align">{{ f_round((ds.SCOT_2030 - ds.SCOT_OUEST_LOG_SUPERFICIE) / 10000,2)  }} ha  </td>
+                <td class="w3-right-align">{{ f_round((ds.SCOT_2030 - ds.SCOT_OUEST_LOG_SUPERFICIE2500) / 10000,2)  }} ha  </td>
             </tr>
             <tr>
                 <td>Budget foncier 2030-2040 :</td>

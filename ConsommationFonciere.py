@@ -98,14 +98,14 @@ def load_sitadel(sitadel1316_file:  str = sitadel1316File,
         downloadFile(sitadelSourceMetaFile, sitadelMetaFile)
         print_blue("Lecture Sitadel Logements 2013-2016 : " + sitadel1316_file + " ...")
         sitadel1316 = pd.read_csv(sitadel1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "Etat_DAU": str, "DPC_AUT": str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str})
-        sitadel1316["Parcelles"] = sitadel1316['sec_cadastre1'].map(str) + sitadel1316['num_cadastre1'].map(str)+" "+\
-                                   sitadel1316['sec_cadastre2'].map(str) + sitadel1316['num_cadastre2'].map(str)+" "+\
-                                   sitadel1316['sec_cadastre3'].map(str) + sitadel1316['num_cadastre3'].map(str)
+        sitadel1316["Parcelles"] = sitadel1316['sec_cadastre1'].map(str) + "-" + sitadel1316['num_cadastre1'].map(str)+" "+\
+                                   sitadel1316['sec_cadastre2'].map(str) + "-" + sitadel1316['num_cadastre2'].map(str)+" "+\
+                                   sitadel1316['sec_cadastre3'].map(str) + "-" + sitadel1316['num_cadastre3'].map(str)
         print_blue("Lecture Sitadel Logements 2017-2022 : " + sitadel1721_file + " ...")
         sitadel1721 = pd.read_csv(sitadel1721_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "Etat_DAU": str, "DPC_AUT": str, "ADR_LOCALITE_TER" : str, "ADR_CODPOST_TER" : str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str})
-        sitadel1721["Parcelles"] = sitadel1721['sec_cadastre1'].map(str) + sitadel1721['num_cadastre1'].map(str)+" "+\
-                                   sitadel1721['sec_cadastre2'].map(str) + sitadel1721['num_cadastre2'].map(str)+" "+\
-                                   sitadel1721['sec_cadastre3'].map(str) + sitadel1721['num_cadastre3'].map(str)
+        sitadel1721["Parcelles"] = sitadel1721['sec_cadastre1'].map(str) + "-" + sitadel1721['num_cadastre1'].map(str)+" "+\
+                                   sitadel1721['sec_cadastre2'].map(str) + "-" + sitadel1721['num_cadastre2'].map(str)+" "+\
+                                   sitadel1721['sec_cadastre3'].map(str) + "-" + sitadel1721['num_cadastre3'].map(str)
         print_blue("Lecture Meta Logements Sitadel : " + sitadel_meta_file + " ...")
         sitadel1321 = pd.concat([sitadel1316, sitadel1721])
         xls = pd.ExcelFile(sitadel_meta_file)
@@ -668,7 +668,7 @@ def load_collectData(collect_file: str = collectDataFile):
         collectDataMetrics  = pd.read_excel(xls, 'Collect',    index_col=0, dtype=str)
         collectDiagnostics  = pd.read_excel(xls, 'Diagnostic', index_col=0, dtype=str)
         collectCalculations = pd.read_excel(xls, 'Calculs',    index_col=0, dtype=str)
-        SCOT_OUEST          = pd.read_excel(xls, 'SCOT_OUEST', index_col=0, dtype={'Budget 2030': float, 'Budget 2040': float })
+        SCOT_OUEST          = pd.read_excel(xls, 'SCOT_OUEST', index_col=0, dtype={'Budget 2030': float, 'Budget 2040': float})
 
         print_yellow("  - Generation : " + "datametrics.json" + " ...")
         dm = pd.read_excel(xls, 'Collect', index_col=0, dtype=str).fillna('')
@@ -1937,7 +1937,7 @@ class DataStore():
                 print_verbose("  - Evaluating Total Line " + str(_line) + ": [" + str(key) + "] Mode : " + str(mode))
                 if (key == "CODE_INSEE"): total_dict[key] = self.store_index
                 elif (mode == "SUM"):     total_dict[key] = data_clean[key].sum()
-                elif (mode == "CONCAT"):  total_dict[key] = data_clean[key].str.cat(sep=', ')
+                elif (mode == "CONCAT"):  total_dict[key] = re.sub(' +', ' ',data_clean[key].str.cat(sep=', '))
                 elif (mode == "EQUAL"):   total_dict[key] = data_clean[key][0]
                 elif (mode == "COUNT"):   total_dict[key] = data_clean.shape[0]
                 elif (mode == "IGNORE"):  total_dict[key] = "IGNORE"
@@ -2291,6 +2291,7 @@ def scot_ouest(code_insee, start_date="2021-05-20", file="scot_ouest"):
     global SCOT_OUEST
     load_sitadel()
     load_scot_data()
+    load_collectData()
     # Annee / Log Aut / Log Commences / Nbre Log / Surface Terrain
     com_2021 = sitadel1721[(sitadel1721['COMM'] == str(code_insee)) &
                            (sitadel1721["DATE_REELLE_AUTORISATION"] > start_date)]
