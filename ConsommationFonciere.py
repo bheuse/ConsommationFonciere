@@ -2136,12 +2136,11 @@ class DataStore():
             elif (mode == "AVG"):     continue
             elif (mode == "CUSTOM"):  continue
             else:
+                if (mode == "SAME"):
+                    mode = self.expr_dict[key]
                 try:
                     print_verbose("  - Evaluating Total Line : [" + str(key) + "] Mode : " + str(mode))
-                    mode = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', mode)    # Replace ${VAR} by VAR
-                    if ("hmen_2020" == key) :
-                        print_verbose(total_dict["pop_2020"])
-                        print_verbose(total_dict["txhmen_2020"])
+                    mode  = re.sub("\${([A-Z0-9a-z-_]*)}", '\\1', mode)    # Replace ${VAR} by VAR
                     value = eval(mode, total_dict, globals())
                     print_verbose("  - Evaluating Total Line : [" + str(key) + "] Value : " + str(value) + " - " + str(type(value)))
                     total_dict[key] = value
