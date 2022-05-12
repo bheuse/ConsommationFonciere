@@ -17,6 +17,8 @@ scipy
 markdown
 xlsxwriter
 openpyxl
+python-dateutil
+
 
 
 

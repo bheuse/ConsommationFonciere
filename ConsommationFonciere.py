@@ -24,6 +24,7 @@ import warnings
 import zipfile
 import shutil
 from importlib import reload
+from importlib import reload
 import matplotlib
 from scipy.interpolate import make_interp_spline, BSpline
 import numpy as np
@@ -31,6 +32,7 @@ import ftplib
 import markdown
 import logging
 import datetime
+from dateutil import parser
 
 timestamp = datetime.datetime.now().strftime("%y%m%d-%H%M%S")
 logFile   = "output"+os.sep+"_ConsommationFonciere_"+timestamp+".log"
@@ -68,12 +70,12 @@ global_context     = {}
 ### Sitadel Logements
 ##########################
 
-sitadelSourcePage     = "https://www.data.gouv.fr/es/datasets/base-des-permis-de-construire-et-autres-autorisations-durbanisme-sitadel"
+sitadelSourcePage     = "https://www.data.gouv.fr/fr/datasets/base-des-permis-de-construire-et-autres-autorisations-durbanisme-sitadel"
 global_context["URL_SOURCE_SITADEL"] = sitadelSourcePage
 
-sitadelSource1316File = "https://www.data.gouv.fr/es/datasets/r/67dd4ee1-0d73-4676-a90f-854fe9012f5d"
-sitadelSource1721File = "https://www.data.gouv.fr/es/datasets/r/1fa467ef-5e3a-456f-b961-be9032cfa3df"
-sitadelSourceMetaFile = "https://www.data.gouv.fr/es/datasets/r/9d7d6728-c3bc-44e4-8105-7335ad70d52e"
+sitadelSource1316File = "https://www.data.gouv.fr/fr/datasets/r/67dd4ee1-0d73-4676-a90f-854fe9012f5d"
+sitadelSource1721File = "https://www.data.gouv.fr/fr/datasets/r/1fa467ef-5e3a-456f-b961-be9032cfa3df"
+sitadelSourceMetaFile = "https://www.data.gouv.fr/fr/datasets/r/9d7d6728-c3bc-44e4-8105-7335ad70d52e"
 sitadel1316File       = data_dir + "PC_DP_creant_logements_2013_2016.csv"
 sitadel1721File       = data_dir + "PC_DP_creant_logements_2017_2022.csv"
 sitadelMetaFile       = data_dir + "dictionnaire_variables_logements_permis_construire.xls"
@@ -98,14 +100,14 @@ def load_sitadel(sitadel1316_file:  str = sitadel1316File,
         downloadFile(sitadelSourceMetaFile, sitadelMetaFile)
         print_blue("Lecture Sitadel Logements 2013-2016 : " + sitadel1316_file + " ...")
         sitadel1316 = pd.read_csv(sitadel1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "Etat_DAU": str, "DPC_AUT": str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str})
-        sitadel1316["Parcelles"] = sitadel1316['sec_cadastre1'].map(str) + "-" + sitadel1316['num_cadastre1'].map(str)+" "+\
-                                   sitadel1316['sec_cadastre2'].map(str) + "-" + sitadel1316['num_cadastre2'].map(str)+" "+\
-                                   sitadel1316['sec_cadastre3'].map(str) + "-" + sitadel1316['num_cadastre3'].map(str)
+        sitadel1316["Parcelles"] = sitadel1316['sec_cadastre1'].map(str) + sitadel1316['num_cadastre1'].map(str)+" "+\
+                                   sitadel1316['sec_cadastre2'].map(str) + sitadel1316['num_cadastre2'].map(str)+" "+\
+                                   sitadel1316['sec_cadastre3'].map(str) + sitadel1316['num_cadastre3'].map(str)
         print_blue("Lecture Sitadel Logements 2017-2022 : " + sitadel1721_file + " ...")
         sitadel1721 = pd.read_csv(sitadel1721_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "Etat_DAU": str, "DPC_AUT": str, "ADR_LOCALITE_TER" : str, "ADR_CODPOST_TER" : str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str})
-        sitadel1721["Parcelles"] = sitadel1721['sec_cadastre1'].map(str) + "-" + sitadel1721['num_cadastre1'].map(str)+" "+\
-                                   sitadel1721['sec_cadastre2'].map(str) + "-" + sitadel1721['num_cadastre2'].map(str)+" "+\
-                                   sitadel1721['sec_cadastre3'].map(str) + "-" + sitadel1721['num_cadastre3'].map(str)
+        sitadel1721["Parcelles"] = sitadel1721['sec_cadastre1'].map(str) + sitadel1721['num_cadastre1'].map(str)+" "+\
+                                   sitadel1721['sec_cadastre2'].map(str) + sitadel1721['num_cadastre2'].map(str)+" "+\
+                                   sitadel1721['sec_cadastre3'].map(str) + sitadel1721['num_cadastre3'].map(str)
         print_blue("Lecture Meta Logements Sitadel : " + sitadel_meta_file + " ...")
         sitadel1321 = pd.concat([sitadel1316, sitadel1721])
         xls = pd.ExcelFile(sitadel_meta_file)
@@ -117,9 +119,9 @@ def load_sitadel(sitadel1316_file:  str = sitadel1316File,
 ### Sitadel Locaux
 ##########################
 
-sitadelLocauxSource1316File = "https://www.data.gouv.fr/es/datasets/r/3b987380-d1cf-4047-8dc5-1a19a3ecf812"
-sitadelLocauxSource1721File = "https://www.data.gouv.fr/es/datasets/r/98ff9fd3-a14e-474d-bb8f-12bde12d9f70"
-sitadelLocauxSourceMetaFile = "https://www.data.gouv.fr/es/datasets/r/b3ffee5b-fd75-4345-a086-02ded2018705"
+sitadelLocauxSource1316File = "https://www.data.gouv.fr/fr/datasets/r/3b987380-d1cf-4047-8dc5-1a19a3ecf812"
+sitadelLocauxSource1721File = "https://www.data.gouv.fr/fr/datasets/r/98ff9fd3-a14e-474d-bb8f-12bde12d9f70"
+sitadelLocauxSourceMetaFile = "https://www.data.gouv.fr/fr/datasets/r/b3ffee5b-fd75-4345-a086-02ded2018705"
 sitadelLocaux1316File = data_dir + "PC_DP_creant_locaux_2013_2016.csv"
 sitadelLocaux1721File = data_dir + "PC_DP_creant_locaux_2017_2022.csv"
 sitadelLocauxMetaFile = data_dir + "dictionnaire_variables_locaux_permis_construire.xls"
@@ -312,10 +314,12 @@ def load_interco(interco_file: str = intercoFile):
 
 SCoT_File = data_dir + "Table_EPCI_SCoT.xls"
 SCOT_DATA = None
-
+COMMUNES_HORS_PACA = None
+EPCI_SCOT          = None
+GROUPEMENTS        = None
 
 def load_scot_data(SCoT_File: str = SCoT_File):
-    global SCOT_DATA
+    global SCOT_DATA, COMMUNES_HORS_PACA, EPCI_SCOT, GROUPEMENTS
     if (SCOT_DATA is None):
         SCOT_DATA = {}
         print_blue("Lecture Donnees SCoT : " + SCoT_File + " ...")
@@ -340,6 +344,7 @@ def load_scot_data(SCoT_File: str = SCoT_File):
             SCOT_DATA["EPCI_AVEC_COMM_HORS_PACA"][EPCI].append(COMM)
         SCOT_DATA["GROUPEMENTS"] = {}
         for index, row in GROUPEMENTS.iterrows():
+            if (str(row['Type']).startswith("#")) : continue
             NOM  = row['Nom']
             if (NOM not in SCOT_DATA["GROUPEMENTS"]): SCOT_DATA["GROUPEMENTS"][NOM] = {}
             SCOT_DATA["GROUPEMENTS"][NOM]["TYPE"] = row['Type']
@@ -985,6 +990,22 @@ def f_round(value, rounding=0) -> str :
 
 
 ## Data Access
+def is_scot_ouest(code_insee) -> bool:
+    if (code_insee in communes_zone("SCoT_Ouest")): return True
+    if (str(code_insee) == "200039915"): return True
+    return False
+
+
+def is_commune_hors_paca(code_insee) -> bool:
+    global COMMUNES_HORS_PACA
+    load_scot_data()
+    for index, row in COMMUNES_HORS_PACA.iterrows():
+        if (index == 0): continue
+        COMM = row['Liste des communes hors PACA appartenant à des EPCI de PACA']
+        if (COMM == code_insee) : return True
+    return False
+
+
 def get_code_insee_commune(code_postal) -> Union[int, str]:
     """ Retourne le code insee et le nom de la commune """
     load_codes()
@@ -1477,7 +1498,7 @@ class DataStore():
         self.meta_dict   = {}  # Semantic of this indicator / metric
         self.type_dict   = {}  # { "INT", "STR",    "TAUX",  "PERCENT", "FLOAT" }
         self.source_dict = {}  # { "SRU", "INSEE",  "ART",   "SIT",     "DATA", "PROJ", "EVOL", "CALC" }
-        self.mode_dict   = {}  # { "SUM", "CONCAT", "IGNORE", "EQUAL", "COUNT",   "CUSTOM", "N/A", "AVG", "MAX", "MIN" }
+        self.mode_dict   = {}  # { "SUM", "CONCAT", "IGNORE", "EQUAL", "COUNT", "CUSTOM", "N/A", "AVG", "MAX", "MIN", "SAME" }
         self.expr_dict   = {}  # Expression Used for Calculations
         self.error_dict  = {}  # Error while processing this indicator / metric
         self.metric_list = []  # List of Metrics for Rendering
@@ -1576,50 +1597,8 @@ class DataStore():
         if ("__builtins__" in self.data_frame.columns):
             self.data_frame.drop("__builtins__", axis=1,inplace=True)
         print_green("> Saving Data   : "+self.get_fullname())
-        # DF TO EXCEL
-        if (not FAST):
-            print_yellow("  - Saving Data : "+self.get_fullname()+ ".xlsx")
-            writer = pd.ExcelWriter(output_dir + self.get_fullname() + ".xlsx")
-            self.data_frame.to_excel(writer, "Data")
-            pivot = self.data_frame.transpose()
-            pivot.to_excel(writer, "Pivot")
-            diag_df = self.data_frame.from_dict(self.diagnostics)
-            diag_df.to_excel(writer, "Diagnotics")
-            writer.save()
-            writer.close()
-        # DF TO CSV
-        if (not FAST):
-            print_yellow("  - Saving Data : "+self.get_fullname()+ ".csv")
-            self.data_frame.to_csv(output_dir + self.get_fullname() + ".csv", sep=',')
-            # DF TO JSON
-            ## _d.json
-            self.data_frame.to_csv(output_dir + self.get_fullname() + "_d.json", sep=',')
-            with open(output_dir + self.get_fullname() + "_d.json", 'w') as f:
-                global_context["JSON_DIAGNOSTICS"] = " { \"Diagnostic\" : "+to_json(jsonc.loads(jsonc.dumps(self.diagnostics)), indent=4) + "}"
-                f.write(global_context["JSON_DIAGNOSTICS"])
-        ## _m.json
-        if (not FAST):
-            print_yellow("  - Saving Data : "+self.get_fullname()+ "_m.json")
-            all = {}
-            for name, values in self.data_frame.iteritems():
-                all[name] = {}
-                for name2, value2 in values.iteritems():
-                    all[name][name2] = value2
-            with open(output_dir + self.get_fullname() + "_m.json", 'w') as f:
-                global_context["JSON_DATA_SET_M"] = to_json(all, indent=4)
-                f.write(global_context["JSON_DATA_SET_M"])
-        ## _c.json
-        if (not FAST):
-            print_yellow("  - Saving Data : "+self.get_fullname()+ "_c.json")
-            with open(output_dir + self.get_fullname() + "_c.json", 'w') as f:
-                data_c = self.data_frame.fillna('').to_dict(orient='index')
-                data_c["Data"] = all
-                data_c["Diagnostics"] = self.diagnostics
-                global_context["JSON_DATA_SET_C"] = self.data_frame.to_dict(orient='index')
-                # global_context["JSON_DATA_SET_C"] = to_json(jsonc.loads(self.data_frame.to_json(orient='index')), indent=4)
-                # f.write(global_context["JSON_DATA_SET_C"])
-                f.write(to_json(data_c, indent=4))
-        ## _s.json
+        # DF TO JSON
+        ## _s.json (Summary - used by GUI)
         print_yellow("  - Saving Data : "+self.get_fullname()+ "_s.json")
         self.data_frame.to_csv(output_dir + self.get_fullname() + "_s.json", sep=',')
         all = dict()
@@ -1652,6 +1631,48 @@ class DataStore():
                 f.write(to_json(data_s, indent=4))
             except Exception as e:
                 print(str(e))
+        # DF TO EXCEL
+        if (not FAST):
+            print_yellow("  - Saving Data : "+self.get_fullname()+ ".xlsx")
+            writer = pd.ExcelWriter(output_dir + self.get_fullname() + ".xlsx")
+            self.data_frame.to_excel(writer, "Data")
+            pivot = self.data_frame.transpose()
+            pivot.to_excel(writer, "Pivot")
+            diag_df = self.data_frame.from_dict(self.diagnostics)
+            diag_df.to_excel(writer, "Diagnotics")
+            writer.save()
+            writer.close()
+        # DF TO CSV
+        if (not FAST):
+            print_yellow("  - Saving Data : "+self.get_fullname() + ".csv")
+            self.data_frame.to_csv(output_dir + self.get_fullname() + ".csv", sep=',')
+        # DF TO JSON
+        ## _d.json (Diagnostics)
+        if (not FAST and FAST):
+            self.data_frame.to_csv(output_dir + self.get_fullname() + "_d.json", sep=',')
+            with open(output_dir + self.get_fullname() + "_d.json", 'w') as f:
+                global_context["JSON_DIAGNOSTICS"] = " { \"Diagnostic\" : "+to_json(jsonc.loads(jsonc.dumps(self.diagnostics)), indent=4) + "}"
+                f.write(global_context["JSON_DIAGNOSTICS"])
+        ## _m.json
+        if (not FAST and FAST):
+            print_yellow("  - Saving Data : "+self.get_fullname()+ "_m.json")
+            all = {}
+            for name, values in self.data_frame.iteritems():
+                all[name] = {}
+                for name2, value2 in values.iteritems():
+                    all[name][name2] = value2
+            with open(output_dir + self.get_fullname() + "_m.json", 'w') as f:
+                global_context["JSON_DATA_SET_M"] = to_json(all, indent=4)
+                f.write(global_context["JSON_DATA_SET_M"])
+        ## _c.json
+        if (not FAST and FAST):
+            print_yellow("  - Saving Data : "+self.get_fullname()+ "_c.json")
+            with open(output_dir + self.get_fullname() + "_c.json", 'w') as f:
+                data_c = self.data_frame.fillna('').to_dict(orient='index')
+                data_c["Data"] = all
+                data_c["Diagnostics"] = self.diagnostics
+                global_context["JSON_DATA_SET_C"] = self.data_frame.to_dict(orient='index')
+                f.write(to_json(data_c, indent=4))
 
 
     def load_data(self):
@@ -1852,10 +1873,10 @@ class DataStore():
         log_termines1316  = com_sitadel1316.loc[com_sitadel1316['Etat_DAU'] == "6"]
         log_commences1721 = com_sitadel1721.loc[com_sitadel1721['Etat_DAU'] == "5"]
         log_termines1721  = com_sitadel1721.loc[com_sitadel1721['Etat_DAU'] == "6"]
-        log_renouv        = com_sitadel.loc[com_sitadel['NATURE_PROJET'] == "2"]
-        log_nouveau       = com_sitadel.loc[com_sitadel['NATURE_PROJET'] == "1"]
-        log_principal     = com_sitadel.loc[com_sitadel['RES_PRINCIP_OU_SECOND'] == 1]
-        log_secondaire    = com_sitadel.loc[com_sitadel['RES_PRINCIP_OU_SECOND'] == 2]
+        log_renouv        = com_sitadel.loc[(com_sitadel['NATURE_PROJET'] == "2") & (com_sitadel['Etat_DAU'] != "4")]
+        log_nouveau       = com_sitadel.loc[(com_sitadel['NATURE_PROJET'] == "1") & (com_sitadel['Etat_DAU'] != "4")]
+        log_principal     = com_sitadel.loc[(com_sitadel['RES_PRINCIP_OU_SECOND'] == 1) & (com_sitadel['Etat_DAU'] != "4")]
+        log_secondaire    = com_sitadel.loc[(com_sitadel['RES_PRINCIP_OU_SECOND'] == 2) & (com_sitadel['Etat_DAU'] != "4")]
         log_particuliers  = com_sitadel.loc[com_sitadel['CAT_DEM'].isin([10, 11, 12])]
         log_organismes    = com_sitadel.loc[~com_sitadel['CAT_DEM'].isin([10, 11, 12])]
         res_sociales      = com_sitadel.loc[com_sitadel['RESIDENCE_SERVICE'].isin([1, 2, 4, 5, 6])]
@@ -1872,8 +1893,8 @@ class DataStore():
         loc_termines1316   = com_sitadelLocaux1.loc[com_sitadelLocaux1['Etat_DAU'] == "6"]
         loc_commences1721  = com_sitadelLocaux2.loc[com_sitadelLocaux2['Etat_DAU'] == "5"]
         loc_termines1721   = com_sitadelLocaux2.loc[com_sitadelLocaux2['Etat_DAU'] == "6"]
-        loc_nouveau        = com_sitadelLocaux.loc[com_sitadelLocaux['NATURE_PROJET'] == "1"]
-        loc_renouv         = com_sitadelLocaux.loc[com_sitadelLocaux['NATURE_PROJET'] == "2"]
+        loc_nouveau        = com_sitadelLocaux.loc[(com_sitadelLocaux['NATURE_PROJET'] == "1") & (com_sitadelLocaux['Etat_DAU'] != "4")]
+        loc_renouv         = com_sitadelLocaux.loc[(com_sitadelLocaux['NATURE_PROJET'] == "2") & (com_sitadelLocaux['Etat_DAU'] != "4")]
 
         # Donnees Logements Paca 2010-2019
         load_logements_paca()
@@ -1939,6 +1960,7 @@ class DataStore():
                 elif (mode == "SUM"):     total_dict[key] = data_clean[key].sum()
                 elif (mode == "CONCAT"):  total_dict[key] = re.sub(' +', ' ',data_clean[key].str.cat(sep=', '))
                 elif (mode == "EQUAL"):   total_dict[key] = data_clean[key][0]
+                elif (mode == "SAME"):    total_dict[key] = "SAME not evaluated"
                 elif (mode == "COUNT"):   total_dict[key] = data_clean.shape[0]
                 elif (mode == "IGNORE"):  total_dict[key] = "IGNORE"
                 elif (mode == "N/A"):     total_dict[key] = "N/A"
@@ -2269,7 +2291,7 @@ class DataStore():
 
         global FAST
         html_report_file = None
-        if (not FAST):
+        if (not FAST and FAST): # Disabling HTML Reports
             self.run_calculs()
             self.run_diagnostic()
             self.run_plots()
@@ -3238,7 +3260,7 @@ def ftp_push_ds(ds : DataStore):
     file_list = list()
     file_dir     = output_dir
     file_prefix  = ds.get_fullname()
-    file_exts     = ["_s.json"] if FAST else [".xlsx", ".csv", "_s.json", "_tracker.html"]
+    file_exts     = ["_s.json"] if FAST else [".xlsx", ".csv", "_s.json" ]
     for file_ext in file_exts :
         file_list.append(file_dir + file_prefix + file_ext)
     if (not FAST):
@@ -3357,7 +3379,11 @@ def report_zone(zone_name: str = "SCoT_Ouest_Littoral", force=True, with_commune
         print_red("Zone non trouvee pour code :  [" + str(zone_name) + "]")
         return None
     if (with_communes):
+        comm_len = len(communes_zone(name))
+        comm_idx = 0
         for commune in communes_zone(name):
+            comm_idx = comm_idx + 1
+            print_grey("###> Commune " + str(comm_idx) + "/" + str(comm_len))
             report_commune(code_insee=str(commune), force=force, data_only=data_only, ftp_push=ftp_push)
     return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force, data_only=data_only, ftp_push=ftp_push)
 
@@ -3371,7 +3397,11 @@ def report_epci(epci_id: str = "200039915", force=True, with_communes=False, dat
         print_red("EPCI non trouvee pour code :  [" + str(epci_id) + "]")
         return None
     if (with_communes):
+        comm_len = len(communes_epci(epci_id))
+        comm_idx = 0
         for commune in communes_epci(epci_id):
+            comm_idx = comm_idx + 1
+            print_grey("###> Commune " + str(comm_idx) + "/" + str(comm_len))
             report_commune(code_insee=str(commune), force=force, data_only=data_only, ftp_push=ftp_push)
     return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force, data_only=data_only, ftp_push=ftp_push)
 
@@ -3385,11 +3415,23 @@ def report_dept(dept_id: str = "06", force=True, with_communes=False, data_only 
         print_red("DEPT non trouve pour code :  [" + str(dept_id) + "]")
         return None
     if (with_communes):
+        comm_len = len(communes_dept(dept_id))
+        comm_idx = 0
+        epci_len = len(epci_dept(dept_id))
+        epci_idx = 0
+        zone_len = len(list_zones_dept(dept_id))
+        zone_idx = 0
         for commune in communes_dept(dept_id):
+            comm_idx = comm_idx + 1
+            print_grey("###> Commune " + str(comm_idx) + "/" + str(comm_len) + " # EPCI " + str(epci_idx) + "/" + str(epci_len) + " # Zone " + str(zone_idx) + "/" + str(zone_len))
             report_commune(code_insee=str(commune), force=force, data_only=data_only, ftp_push=ftp_push)
         for epci in epci_dept(dept_id):
+            epci_idx = epci_idx + 1
+            print_grey("###> Commune " + str(comm_idx) + "/" + str(comm_len) + " # EPCI " + str(epci_idx) + "/" + str(epci_len) + " # Zone " + str(zone_idx) + "/" + str(zone_len))
             report_epci(epci_id=str(epci), force=force, with_communes=False, data_only=data_only, ftp_push=ftp_push)
         for zone in list_zones_dept(dept_id):
+            zone_idx = zone_idx + 1
+            print_grey("###> Commune " + str(comm_idx) + "/" + str(comm_len) + " # EPCI " + str(epci_idx) + "/" + str(epci_len) + " # Zone " + str(zone_idx) + "/" + str(zone_len))
             report_zone(zone_name=str(zone), force=force, with_communes=False, data_only=data_only, ftp_push=ftp_push)
     return DataStore(store_name=name, store_type=entite, store_code=code).report(force=force, data_only=data_only, ftp_push=ftp_push)
 
@@ -4085,7 +4127,7 @@ def read_command_line_args(argv):
     """
 
     try:
-        opts, args = getopt.getopt(argv, "hanlbmpstfc:e:d:r:", ["help", "list", "data" , "fast" , "push" , "prod" , "clean" , "meta" , "commune=", "epci=", "dep=", "reg=", "no_debug"])
+        opts, args = getopt.getopt(argv, "hanlbmpstfc:e:d:r:z:", ["help", "list", "data" , "fast" , "push" , "prod" , "clean" , "meta" , "commune=", "epci=", "dep=", "reg=", "zone=", "no_debug"])
     except getopt.GetoptError:
         print(usage)
         sys.exit(2)

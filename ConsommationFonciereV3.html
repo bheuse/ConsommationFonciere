@@ -1141,7 +1141,7 @@ function hideShowLOG_function() {
         <br>
 
         <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
-        <h3>Artificialisation sur base des Permis de Construire (2013-2021)</h3></div>
+        <h3>Artificialisation sur base des Permis de Construire (2013-2022)</h3></div>
         <p>Artificialisation : <a target="_blank" :href="ds.URL_SOURCE_SITADEL"> Dossier Sitadel </a></p>
         <p> Une autre source est celle issue des données des permis de construire, collectées dans la base Sitadel.
              Comme celle du CEREMA, elles sont annuelles mais ne sont pas très précises. Elles comptabilisent les
@@ -1150,7 +1150,7 @@ function hideShowLOG_function() {
             <tbody>
             <tr class="w3-teal">
                 <th style="color:white">Données Sitadel</th>
-                <th style="color:white" class="w3-right-align">2013 - 2021</th>
+                <th style="color:white" class="w3-right-align">2013 - 2022</th>
             </tr>
             <tr>
                 <td>Surface du Territoire :</td>
@@ -1165,11 +1165,11 @@ function hideShowLOG_function() {
                 <td class="w3-right-align">{{ ds.NB_LGT_RENOUVELLEMENT  }} </td>
             </tr>
             <tr>
-                <td>Superficie des terrains dédiés aux nouveaux logements :</td>
+                <td>Superficie totale des terrains dédiés aux nouveaux logements (y compris extensions) :</td>
                 <td class="w3-right-align">{{ f_round(ds.SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN_NOUVEAU / 10000,2)  }} ha</td>
             </tr>
             <tr>
-                <td>Superficie des terrains pour des logements en renouvellement :</td>
+                <td>Superficie des terrains pour des logements en renouvellement (y compris extensions):</td>
                 <td class="w3-right-align">{{ f_round(ds.SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN_RENOUVEAU / 10000,2)  }} ha</td>
             </tr>
             <tr>
@@ -1177,12 +1177,24 @@ function hideShowLOG_function() {
                 <td class="w3-right-align">{{ f_round(ds.NB_LGT_NOUVEAU / (ds.SITADEL_LOGEMENTS_SUPERFICIE_TERRAIN / 10000),1)  }} log / ha</td>
             </tr>
             <tr>
-                <td>Superficie des terrains dédiés aux nouvelles activités :</td>
+                <td>Superficie des terrains vierges autorisés pour de nouveaux logements :</td>
+                <td class="w3-right-align">{{ f_round(ds.CONSO_LOG_SUPERFICIE / 10000,2)  }} ha</td>
+            </tr>
+            <tr>
+                <td>Taux de réalisation des autorisations sur terrains vierges :</td>
+                <td class="w3-right-align">{{ f_taux(ds.CONSO_LOG_TAUX_REA)  }} ha</td>
+            </tr>
+            <tr>
+                <td>Superficie des terrains dédiés aux nouvelles activités (y compris extensions) :</td>
                 <td class="w3-right-align">{{ f_round(ds.SITADEL_LOCAUX_SUPERFICIE_TERRAIN_NOUVEAU / 10000,2)  }} ha</td>
             </tr>
             <tr>
-                <td>Superficie des terrains pour des activités en renouvellement :</td>
+                <td>Superficie des terrains pour des activités en renouvellement (y compris extensions) :</td>
                 <td class="w3-right-align">{{ f_round(ds.SITADEL_LOCAUX_SUPERFICIE_TERRAIN_RENOUVEAU / 10000,2)  }} ha</td>
+            </tr>
+            <tr>
+                <td>Superficie des terrains vierges autorisés pour de nouvelles activités :</td>
+                <td class="w3-right-align">{{ f_round(ds.CONSO_LOC_SUPERFICIE_TOT / 10000,2)  }} ha</td>
             </tr>
             </tbody>
         </table>
@@ -1198,7 +1210,18 @@ function hideShowLOG_function() {
         <h3>Objectifs SCoT Ouest Alpes-Maritimes</h3></div>
         <p>SCoT Ouest : <a target="_blank" href="https://cloud.paysdegrasse.fr/index.php/s/4jrNnfwokzSTo6a"> Document D'Objectifs </a></p>
         <p> Le SCoT Ouest Alpes-Maritimes s'est donné comme objectif de limiter son artificialisation par commune.</p>
-        <p> Cette table est issue des données des permis de construire autorisés depuis sa mise en place, le 20 Mai 2021.</p>
+        <p> Cette table est issue des données des permis de construire autorisés depuis la mise en place du SCoT, le 20 Mai 2021.</p>
+        <p> C'est la surface des parcelles sujettes a PC qui est prise en compte. Ne sont pas comptés :
+            les PC avant l’approbation du SCoT, les Déclarations Préalables, les PC annulés, les PC avec surface existante ou démolition
+	        les PC avec indication d'extension ou de surélévation, les PC sur logements existant, les PC pour les locaux commerciaux ou industriels,
+            les PC dont la superficie des parcelles n'est pas renseignée</p>
+        <p> C'est donc la surface totale des parcelles sur lesquelles il n'y avait rien auparavant qui sont comptabilisées :
+            ce n'est pas l'emprise au sol imperméabilisée ou minéralisée, mais l’artificialisation correspondant à la définition
+            d’artificialisation du décret n° 2022-763 du 29 avril 2022, qui comprend les surfaces espaces verts comme les jardins.</p>
+        <p> Le SCoT se veut ne comptabiliser que les parcelles de plus de 2500 m2 dans le budget disponible.
+            Mais comme la plupart des parcelles sont de moins de 2500 m2, qui constituent la majorité de la consommation,
+            les petites surfaces consommées sont aussi indiquées dans la table ci-dessous.</p>
+
         <table class="w3-table-all w3-hoverable w3-card-4">
             <tbody>
             <tr class="w3-teal">
@@ -1219,43 +1242,47 @@ function hideShowLOG_function() {
             </tr>
             <tr>
                 <td>Nombre de logements sociaux :</td>
-                <td class="w3-right-align">{{ f_round(ds.SCOT_OUEST_LOG_LOG_SOCIAUX,0)  }} </td>
+                <td class="w3-right-align">{{ f_percent(ds.SCOT_OUEST_LOG_LOG_SOCIAUX , ds.SCOT_OUEST_LOG_LOGEMENTS, rounding=0, suffix = "%", format = "()" )  }} </td>
             </tr>
             <tr>
-                <td>Total des superficies des parcelles autorisées à la construction :</td>
+                <td>Consommation en parcelles vierges autorisées (toutes superficies) :</td>
                 <td class="w3-right-align">{{ f_round(ds.SCOT_OUEST_LOG_SUPERFICIE / 10000,2)  }} ha  </td>
             </tr>
             <tr>
-                <td>Consommation autorisée jusqu'en 2030 :</td>
-                <td class="w3-right-align">{{ f_round(ds.SCOT_2030 / 10000,2)  }} ha  </td>
+                <td><b>Objectif de consommation jusqu'en 2030 (parcelles > 2500 m2) :</b></td>
+                <td class="w3-right-align"><b>{{ f_round(ds.SCOT_2030 / 10000,2)  }} ha  </b></td>
             </tr>
             <tr>
-                <td>Consommation hors objectif (parcelles < 2500 m2) :</td>
-                <td class="w3-right-align">{{ f_round(ds.SCOT_OUEST_LOG_SUPERFICIE_SMALL / 10000,2)  }} ha  </td>
+                <td>- Consommation dans le budget de l'objectif (parcelles > 2500 m2) :</td>
+                <td class="w3-right-align">{{ f_percent(f_round(ds.SCOT_OUEST_LOG_SUPERFICIE_2500 / 10000,2) , ds.SCOT_2030 / 10000, rounding=0, suffix = "%", format = "()")  }}  ha </td>
             </tr>
             <tr>
-                <td>Consommation dans l'objectif (parcelles > 2500 m2) :</td>
-                <td class="w3-right-align">{{ f_round(ds.SCOT_OUEST_LOG_SUPERFICIE2500 / 10000,2)  }} ha  </td>
+                <td>- Budget foncier résiduel jusqu'en 2030 (parcelles > 2500 m2) :</td>
+                <td class="w3-right-align">{{ f_round((ds.SCOT_2030 - ds.SCOT_OUEST_LOG_SUPERFICIE_2500) / 10000,2)  }} ha  </td>
             </tr>
             <tr>
-                <td>Part de l'objectif consommé :</td>
-                <td class="w3-right-align">{{ f_round(ds.SCOT_2030_OBJ*100,0)  }} %  </td>
+                <td>- Consommation hors budget (parcelles < 2500 m2) :</td>
+                <td class="w3-right-align">{{ f_percent(f_round(ds.SCOT_OUEST_LOG_SUPERFICIE_SMALL / 10000,2), ds.SCOT_OUEST_LOG_SUPERFICIE_ALL / 10000, rounding=0, suffix = "%", format = "()") }} ha </td>
             </tr>
             <tr>
-                <td>Budget foncier résiduel jusqu'en 2030 :</td>
-                <td class="w3-right-align">{{ f_round((ds.SCOT_2030 - ds.SCOT_OUEST_LOG_SUPERFICIE2500) / 10000,2)  }} ha  </td>
+                <td>- Part des petites parcelles (parcelles < 2500 m2) :</td>
+                <td class="w3-right-align">{{ f_taux(ds.SCOT_OUEST_LOG_COUNT_PART*100, rounding=0, suffix = "%", format = "") }}  </td>
             </tr>
             <tr>
-                <td>Budget foncier 2030-2040 :</td>
-                <td class="w3-right-align">{{ f_round(ds.SCOT_2040 / 10000,2)  }} ha  </td>
+                <td><b>Budget foncier 2030-2040  (parcelles > 2500 m2) :</b></td>
+                <td class="w3-right-align"><b>{{ f_round(ds.SCOT_2040 / 10000,2)  }} ha  </b></td>
             </tr>
             </tbody>
         </table>
         </div>
 
         <br>
+        <div id="artificialisationSCoTOuest"      class="center"  style="width:100%; max-width:600px; max-height:500px;"></div>
+
+        <br>
         <diagnostics :diags=this.data_s.Diagnostics type="ALL" categorie="ART"></diagnostics>
     </div>
+
 
 
 </div>
