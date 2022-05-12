@@ -271,10 +271,16 @@
 
         <div class="w3-container">
             <div v-if="ds.LIBEPCI != 'DEPT'">
-                <p> EPCI : {{ ds.LIBEPCI}} - {{ ds.EPCI}}  </p>
+                <p> EPCI : {{ ds.DISPLAY_EPCI}} - {{ ds.EPCI}}  </p>
             </div>
-            <p> Departement : {{ ds.DEP_NOM}} - {{ ds.DEP}} </p>
-            <p> Region :      {{ ds.REG_NOM}} - {{ ds.REG }}  </p>
+            <p> Departement : {{ ds.DISPLAY_DEPT}} - {{ ds.DEP}} </p>
+            <p> Region :      {{ ds.DISPLAY_REG}} - {{ ds.REG }}  </p>
+        </div>
+        <div class="w3-container">
+            <div v-if="ds.HORS_PACA != '0'">
+                <p style="color:red"><b> ATTENTION : Ce territoire contient {{ ds.HORS_PACA }} communes HORS PACA / Region Sud. </b></p>
+                <p style="color:red"><b> Les donnees d'artificialisation et de logements construits pour ces communes ne sont pas prises en compte.</b></p>
+            </div>
         </div>
         <p class="w3-container w3-theme">Pour imprimer ou obtenir un fichier PDF: CTRL-P, Imprimer ou Sauver comme PDF - ne garder que les cinq premieres pages.</p>
         <p class="w3-container"> <b>Avertissement :</b> Les donnees peuvent être incohérentes car les différentes sources officielles dont elles sont issues ne partent pas des mêmes bases.</p>
