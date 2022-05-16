@@ -247,6 +247,7 @@ function run_diagnostics(dataset, filter = "*"){
     console.log("< run_diagnostics");
     console.log(dataset.diag);
     console.log(dataset);
+    console.log("<<< run_diagnostics");
     return dataset
     }
 
@@ -483,8 +484,8 @@ const vm = Vue.createApp({
                 }
             // List Zones
             zones = select["REGIONS"][0]["ZONES_CODES"];
-            this.selectedZone   = "";
-            this.selectZones = [];
+            this.selectedZone = "";
+            this.selectZones  = [];
             console.log("Zones  ");
             // for (var i = 0; i < zones.length; i++) {
             for (var i = 0; i < dept["ZONES_CODES"].length; i++) {
@@ -516,7 +517,7 @@ const vm = Vue.createApp({
         selectEpciCode(epci_code){
             console.log("selectEpciCode : "+epci_code);
             epci_index  = select["REGIONS"][0]["EPCIS"].findIndex(x => x.INSEE === epci_code);
-            epci        =  select["REGIONS"][0]["EPCIS"][epci_index]
+            epci        = select["REGIONS"][0]["EPCIS"][epci_index]
             this.selectEpci(epci)
             },
         selectEpciName(epci_name){
@@ -536,25 +537,24 @@ const vm = Vue.createApp({
             epcis = select["REGIONS"][0]["EPCIS"];
             epci  = epcis[epcis.findIndex(x => x.Nom === this.nom)];
             // List Zone
-            // this.selectZone   = "";
-            // this.selectZones  = [];
+            this.selectedZone = "";
+            this.selectZones  = [];
 
             // List Zones
             depts = select["REGIONS"][0]["DEPARTEMENTS"];
             dept  = depts[depts.findIndex(x => x.Nom === this.selectedDepartement)];
             zones = select["REGIONS"][0]["ZONES_CODES"];
-            this.selectedZone   = "";
-            this.selectZones = [];
-            // console.log("Zones  ");
-            // for (var i = 0; i < zones.length; i++) {
-            // for (var i = 0; i < dept["ZONES_CODES"].length; i++) {
-                // zone_code =  zones[i]
-            //     zone_code =  "ZONE_"+dept["ZONES_CODES"][i]
-            //     zo   = select["REGIONS"][0]["ZONES"].findIndex(x => x.Clean === zone_code);
-            //     zo   = select["REGIONS"][0]["ZONES"][zo]
-            //     zone = { id: i, code : zo.INSEE , postal : no_postal , nom : zo.Nom, entity : zo.Clean, data : zo };
-            //     this.selectZones.push(zone);
-            //     }
+            this.selectedZone = "";
+            this.selectZones  = [];
+            console.log("Zones  ");
+            for (var i = 0; i < dept["ZONES_CODES"].length; i++) {
+                zone_code =  zones[i]
+                zone_code =  "ZONE_"+dept["ZONES_CODES"][i]
+                zo   = select["REGIONS"][0]["ZONES"].findIndex(x => x.Clean === zone_code);
+                zo   = select["REGIONS"][0]["ZONES"][zo]
+                zone = { id: i, code : zo.INSEE , postal : no_postal , nom : zo.Nom, entity : zo.Clean, data : zo };
+                this.selectZones.push(zone);
+                }
 
             // List Communes
             this.selectedCommune = "";
@@ -600,8 +600,8 @@ const vm = Vue.createApp({
             // List EPCIs in Dept
             depts = select["REGIONS"][0]["DEPARTEMENTS"];
             dept  = depts[depts.findIndex(x => x.Nom === this.selectedDepartement)];
-            this.selectedEPCI        = "";
-            this.selectEpcis = [];
+            this.selectedEPCI = "";
+            this.selectEpcis  = [];
             for (var i = 0; i < dept["EPCIS_CODES"].length; i++) {
                 epci_code =  dept["EPCIS_CODES"][i]
                 ep   = select["REGIONS"][0]["EPCIS"].findIndex(x => x.INSEE === epci_code);
