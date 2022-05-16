@@ -1673,6 +1673,7 @@ vm.mount('#app');
 function onPageLoaded() {
   const queryString = window.location.search;
   console.log("onPageLoaded : " + queryString);
+  google.charts.load('current', {'packages':['corechart']});
 }
 
 // ################################
@@ -1682,20 +1683,25 @@ function onPageLoaded() {
 google.charts.load('current', {'packages':['corechart']});
 
 // https://www.w3schools.com/w3css/w3css_color_fashion.asp
-theme_color             = "#008080" ; // teal
-res_principales_color   = '#00A170' ;
-res_secondaires_color   = '#2AA9DB' ;
-res_vacantes_color      = '#7E7E7E' ;
-logements_color         = '#8E44AD' ;
-log_sec_vac_color       = '#798EA4' ;
-res_principales_color   = '#00A170' ;
-log_construits_color    = '#61443A' ;
-log_sru_color           = '#E91E63' ;
+var theme_color             = "#008080" ; // teal
+var res_principales_color   = '#00A170' ;
+var res_secondaires_color   = '#2AA9DB' ;
+var res_vacantes_color      = '#7E7E7E' ;
+var logements_color         = '#8E44AD' ;
+var log_sec_vac_color       = '#798EA4' ;
+var res_principales_color   = '#00A170' ;
+var log_construits_color    = '#61443A' ;
+var log_sru_color           = '#E91E63' ;
 
-border_Color     = "#006e6d" ;
-background_Color = "#56C6A9" ; //"#99ffff" ;
+var border_Color     = "#006e6d" ;
+var background_Color = "#56C6A9" ; //"#99ffff" ;
 
 function chartRepartitionNouveauxLogements(ds, container) {
+    google.charts.load('current', {'packages':['corechart']});
+    // Load the Visualization API library and the piechart library.
+    google.load('visualization', 'current', {'packages':['corechart']});
+    // google.setOnLoadCallback(drawChart);
+
     // Répartition des nouveaux Logements de 2008 a 2018
     $('#'+container).html('');
     if (ds=== null) { return ; }
@@ -1704,7 +1710,7 @@ function chartRepartitionNouveauxLogements(ds, container) {
       ['Evolution du parc entre 2008 et 2018 selon ses composants sur ' + ds.LIBELLE, 'Logements'],
       ['Nouvelles Résidences Principales', (ds.P18_RP      - ds.P08_RP>0)      ? (ds.P18_RP - ds.P08_RP) : 0],
       ['Nouvelles Résidences Secondaires', (ds.P18_RSECOCC - ds.P08_RSECOCC>0) ? (ds.P18_RSECOCC - ds.P08_RSECOCC) : 0],
-      ['Nouveaux Logements Vacants',    (ds.P18_LOGVAC  - ds.P08_LOGVAC>0)  ? (ds.P18_LOGVAC - ds.P08_LOGVAC) : 0 ]
+      ['Nouveaux Logements Vacants',       (ds.P18_LOGVAC  - ds.P08_LOGVAC>0)  ? (ds.P18_LOGVAC - ds.P08_LOGVAC) : 0 ]
     ]);
 
     var options = {
