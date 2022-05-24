@@ -956,11 +956,11 @@ function hideShowLOG_function() {
                     </tr>
                     <tr>
                         <td>- Besoins en Résidences Principales : </td>
-                        <td class="w3-right-align">{{ds.P13_RP}}</td>
-                        <td class="w3-right-align"><b>{{f_val(ds.BESOINS_LOG_1318)}}</b></td>
-                        <td class="w3-right-align">{{ds.P18_RP}}</td>
-                        <td class="w3-right-align"><b>{{f_val(ds.BESOINS_LOG_1320)}}</b></td>
-                        <td class="w3-right-align">{{ds.LOG_2020}}</td>
+                        <td class="w3-right-align">{{ds.C13_MEN}}</td>
+                        <td class="w3-right-align"><b>{{f_val(ds.C18_MEN - ds.C13_MEN)}}</b></td>
+                        <td class="w3-right-align">{{ds.C18_MEN}}</td>
+                        <td class="w3-right-align"><b>{{f_val(ds.men_2020 - ds.C18_MEN)}}</b></td>
+                        <td class="w3-right-align">{{ds.men_2020}}</td>
                     </tr>
                     <tr>
                         <td><b>Production</b> en Logements (commencés sur la période) :</td>

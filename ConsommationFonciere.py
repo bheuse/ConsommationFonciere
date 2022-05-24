@@ -3275,26 +3275,27 @@ def ftp_push_file(filename, p_host="ftpupload.net", p_user="epiz_30239961", p_pa
     user = p_user
     password = p_password
     directory = p_directory
-    if (FTP_PROD and (prod==True)):
+    if (FTP_PROD and (prod == True)):
         host = "sobrietefonciere.fnepaca.fr"
         user = "sobrietefonciere@fnepaca.fr"
         password = "6TlHc!cjmd8u"
         directory = ""
-    if (FTP_PROD and (prod==True)):
+    if (FTP_PROD and (prod == True)):
         # ftp_push_file(filename, prod=False)
         pass
     if (isinstance(filename, str)):
         filename = [filename]
     if (isinstance(filename, list)):
-        ftp = ftplib.FTP(host)
+        ftp = None
         try:
+            ftp = ftplib.FTP(host)
             ftp.login(user, password)
             ftp.cwd(directory)
             # remote_files = ftp.nlst()
             # print(remote_files)
             for file in filename:
                 if (not os.path.exists(file)):
-                    print_red("File not found : "+ file)
+                    print_red("File not found : " + file)
                     continue
                 print_blue("FTP Push [" + host + "] : " + file)
                 ftp.storbinary('STOR ' + file.replace("\\" , "/"), open(file, 'rb'))
@@ -3304,7 +3305,7 @@ def ftp_push_file(filename, p_host="ftpupload.net", p_user="epiz_30239961", p_pa
             print_red(str(e))
             logging.error("FTP Upload Failed for  [" + host + "] : " + str(filename))
             logging.error(str(e))
-            ftp.close()
+            if (ftp) : ftp.close()
 
 
 def ftp_push_files():
