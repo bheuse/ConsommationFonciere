@@ -95,7 +95,7 @@ def load_sitadel(sitadel1316_file:  str = sitadel1316File,
                  sitadel_meta_file: str = sitadelMetaFile):
     global sitadel1316, sitadel1721, sitadelMeta, sitadel1321
     if (sitadel1316 is None) or (sitadel1721 is None)  or (sitadelMeta is None):
-        downloadFile(sitadelSource1316File, sitadel1316File, zip=True, zipped_file="PC_DP_créant_logements_2013_2016.csv")
+        downloadFile(sitadelSource1316File, sitadel1316File, zip=True, zipped_file="PC_DP_creant_logements_2013_2016.csv")
         downloadFile(sitadelSource1721File, sitadel1721File, zip=True, zipped_file="PC_DP_creant_logements_2017_2022.csv")
         downloadFile(sitadelSourceMetaFile, sitadelMetaFile)
         print_blue("Lecture Sitadel Logements 2013-2016 : " + sitadel1316_file + " ...")
@@ -103,11 +103,15 @@ def load_sitadel(sitadel1316_file:  str = sitadel1316File,
         sitadel1316["Parcelles"] = sitadel1316['sec_cadastre1'].map(str) + sitadel1316['num_cadastre1'].map(str)+" "+\
                                    sitadel1316['sec_cadastre2'].map(str) + sitadel1316['num_cadastre2'].map(str)+" "+\
                                    sitadel1316['sec_cadastre3'].map(str) + sitadel1316['num_cadastre3'].map(str)
+        sitadel1316["NATURE_PROJET"]     = sitadel1316["NATURE_PROJET_DECLAREE"]
+        sitadel1316["RESIDENCE_SERVICE"] = sitadel1316["RESIDENCE"]
         print_blue("Lecture Sitadel Logements 2017-2022 : " + sitadel1721_file + " ...")
         sitadel1721 = pd.read_csv(sitadel1721_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "Etat_DAU": str, "DPC_AUT": str, "ADR_LOCALITE_TER" : str, "ADR_CODPOST_TER" : str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str})
         sitadel1721["Parcelles"] = sitadel1721['sec_cadastre1'].map(str) + sitadel1721['num_cadastre1'].map(str)+" "+\
                                    sitadel1721['sec_cadastre2'].map(str) + sitadel1721['num_cadastre2'].map(str)+" "+\
                                    sitadel1721['sec_cadastre3'].map(str) + sitadel1721['num_cadastre3'].map(str)
+        sitadel1721["NATURE_PROJET"]     = sitadel1721["NATURE_PROJET_DECLAREE"]
+        sitadel1721["RESIDENCE_SERVICE"] = sitadel1721["RESIDENCE"]
         print_blue("Lecture Meta Logements Sitadel : " + sitadel_meta_file + " ...")
         sitadel1321 = pd.concat([sitadel1316, sitadel1721])
         xls = pd.ExcelFile(sitadel_meta_file)
@@ -140,7 +144,7 @@ def load_sitadel_locaux(sitadelLocaux1316_file:  str = sitadelLocaux1316File,
                         sitadelLocaux_meta_file: str = sitadelLocauxMetaFile):
     global sitadel_locaux_1316, sitadel_locaux_1721, sitadel_locaux_Meta, sitadel_locaux_1321
     if (sitadel_locaux_1316 is None) or (sitadel_locaux_1721 is None)  or (sitadel_locaux_Meta is None):
-        downloadFile(sitadelLocauxSource1316File, sitadelLocaux1316File, zip=True, zipped_file="PC_DP_créant_locaux_2013_2016.csv")
+        downloadFile(sitadelLocauxSource1316File, sitadelLocaux1316File, zip=True, zipped_file="PC_DP_creant_locaux_2013_2016.csv")
         downloadFile(sitadelLocauxSource1721File, sitadelLocaux1721File, zip=True, zipped_file="PC_DP_creant_locaux_2017_2022.csv")
         downloadFile(sitadelLocauxSourceMetaFile, sitadelLocauxMetaFile)
         print_blue("Lecture Sitadel Locaux 2013-2016 : " + sitadelLocaux1316_file + " ...")
@@ -148,11 +152,13 @@ def load_sitadel_locaux(sitadelLocaux1316_file:  str = sitadelLocaux1316File,
         sitadel_locaux_1316["Parcelles"] = sitadel_locaux_1316['sec_cadastre1'].map(str) + sitadel_locaux_1316['num_cadastre1'].map(str)+" "+\
                                            sitadel_locaux_1316['sec_cadastre2'].map(str) + sitadel_locaux_1316['num_cadastre2'].map(str)+" "+\
                                            sitadel_locaux_1316['sec_cadastre3'].map(str) + sitadel_locaux_1316['num_cadastre3'].map(str)
+        sitadel_locaux_1316["NATURE_PROJET"]     = sitadel_locaux_1316["NATURE_PROJET_DECLAREE"]
         print_blue("Lecture Sitadel Locaux 2017-2022 : " + sitadelLocaux1721_file + " ...")
         sitadel_locaux_1721 = pd.read_csv(sitadelLocaux1721_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "Etat_DAU": str, "DPC_AUT": str, "ADR_LOCALITE_TER" : str, "ADR_CODPOST_TER" : str, "NATURE_PROJET" : str, "ZONE_OP": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float})
         sitadel_locaux_1721["Parcelles"] = sitadel_locaux_1721['sec_cadastre1'].map(str) + sitadel_locaux_1721['num_cadastre1'].map(str)+" "+\
                                            sitadel_locaux_1721['sec_cadastre2'].map(str) + sitadel_locaux_1721['num_cadastre2'].map(str)+" "+\
                                            sitadel_locaux_1721['sec_cadastre3'].map(str) + sitadel_locaux_1721['num_cadastre3'].map(str)
+        sitadel_locaux_1721["NATURE_PROJET"]     = sitadel_locaux_1721["NATURE_PROJET_DECLAREE"]
         sitadel_locaux_1321 = pd.concat([sitadel_locaux_1316, sitadel_locaux_1721])
         print_blue("Lecture Meta Locaux Sitadel : " + sitadelLocaux_meta_file + " ...")
         xls = pd.ExcelFile(sitadelLocaux_meta_file)
@@ -2333,13 +2339,13 @@ def scot_ouest(code_insee, start_date="2021-05-20", file="scot_ouest"):
         elif (row['Etat_DAU'] == "5") : com_2021.loc[index, "Etat"]   = "Commencé"
         elif (row['Etat_DAU'] == "6") : com_2021.loc[index, "Etat"]   = "Terminé"
         else : com_2021.loc[index, "Etat"] = "NR"
-        com_2021.loc[index, "Nature"]     = "UNA" if (row['NATURE_PROJET'] == "1") else "RU"
-        com_2021.loc[index, "Extension"]  = int(row['I_EXTENSION']) + int(row['I_SURELEVATION']) + int(row['I_NIVSUPP'])
-        com_2021.loc[index, "Renouv"]     = 1 if ((float(row['SURF_HAB_DEMOLIE']) + float(row['SURF_LOC_DEMOLIE']) + float(row['SURF_HAB_AVANT']) + float(row['NB_LGT_DEMOLIS']) + float(row['SURF_LOC_AVANT']))>0) else 0
+        com_2021.loc[index, "Nature"]      = "UNA" if (row['NATURE_PROJET'] == "1") else "RU"
+        com_2021.loc[index, "Extension"]   = int(row['I_EXTENSION']) + int(row['I_SURELEVATION']) + int(row['I_NIVSUPP'])
+        com_2021.loc[index, "Renouv"]      = 1 if ((float(row['SURF_HAB_DEMOLIE']) + float(row['SURF_LOC_DEMOLIE']) + float(row['SURF_HAB_AVANT']) + float(row['NB_LGT_DEMOLIS']) + float(row['SURF_LOC_AVANT']))>0) else 0
 
     for index, row in com_2021.iterrows():
-        com_2021.loc[index, "Artif"]      = row['SUPERFICIE_TERRAIN'] if ((row['Extension'] == 0) and (row['Renouv'] == 0) and (row['Etat_DAU'] != 4)) else 0
-        com_2021.loc[index, "Date"]       = row['DATE_REELLE_AUTORISATION']
+        com_2021.loc[index, "Artif"]       = row['SUPERFICIE_TERRAIN'] if ((row['Extension'] == 0) and (row['Renouv'] == 0) and (row['Etat_DAU'] != 4)) else 0
+        com_2021.loc[index, "Date"]        = row['DATE_REELLE_AUTORISATION']
 
     com_2021 = com_2021[["Date", "Nature", "Extension", "Renouv", "Etat", "Artif", "Parcelles",
                          "DEP", "COMM", "Type_DAU", "Etat_DAU", "NATURE_PROJET",
