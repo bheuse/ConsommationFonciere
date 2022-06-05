@@ -599,16 +599,16 @@ function hideShowLOG_function() {
     <p>L’évaluation de la population future d’un territoire est fondamentale pour l’élaboration d’un document d’urbanisme.
         Cette évaluation s’appuie normalement d’abord sur le constat des évolutions passées (recensements INSEE à utiliser
         par période quinquennale ex : 2013-2018) puis tient compte des volontés politiques locales à condition
-        que le document donne les moyens correspondants.
+        que le document se donne les moyens correspondants.
     </p>
-    <p>Au delà de ce 1er indicateur qu’est la population totale, la démographie fournit aussi bien d’autres éléments
-        sur le passé mais aussi sur le futur car la population ne se renouvelle que lentement : migrations
-        résidentielles par ex, répartition par âge avec ses conséquences sur l’indicateur fondamental qu’est la taille
-        moyenne des ménages qui conditionne  le besoin en logements, à condition de ne pas prendre en compte la population
-        totale mais seulement celle des ménages (dans la région 97,5 % de la population totale mais parfois bien moins)
+    <p>Au delà de ce premier indicateur qu’est la population totale, la démographie fournit aussi bien d’autres éléments
+        sur le passé, mais aussi sur le futur, car la population ne se renouvelle que lentement : migrations
+        résidentielles par exemple, répartition par âge avec ses conséquences sur l’indicateur fondamental qu’est la taille
+        moyenne des ménages qui conditionne le besoin en logements, à condition de ne pas prendre en compte la population
+        totale, mais seulement celle des ménages (dans la région 97,5 % de la population totale, mais parfois bien moins)
     </p>
-    <p>Au passage, on trouvera ci-dessous des informations sur la population des ménages Enfin, toute analyse pour
-        un territoire ne peut faire l’impasse sur les territoires voisins (Cf « Sélectionner un territoire »).</p>
+    <p>Au passage, on trouvera ci-dessous des informations sur la population des ménages. Enfin, toute analyse pour
+        un territoire ne peut faire l’impasse sur les territoires voisins (cf. « Sélectionner un territoire »).</p>
     </div>
     </div>
 
@@ -616,7 +616,8 @@ function hideShowLOG_function() {
          <p><a class="w3-btn" target="_blank" :href="ds.DOSSIER_INSEE">Dossier Insee Complet {{ nom }}</a></p>
          <div class="w3-container w3-section w3-teal w3-padding-16 w3-round-large">
          <h2>Evolution de la Population</h2></div>
-         <p>Population Légale : {{ ds.POP_LEGALE_2019 }}</a></p>
+         <p class="w3-tooltip">Population Légale : {{ ds.POP_LEGALE_2019 }} <span class="w3-text w3-tag w3-round-large w3-small w3-teal"><em>POP_LEGALE_2019</em></span></p>
+
          <table class="w3-table-all w3-hoverable w3-card-4">
             <tbody>
             <tr class="w3-teal">
@@ -627,21 +628,21 @@ function hideShowLOG_function() {
             </tr>
             <tr>
                 <td><b>Population</b></td>
-                <td class="w3-right-align">{{ds.P08_POP}}</td>
-                <td class="w3-right-align">{{ds.P13_POP}}</td>
-                <td class="w3-right-align">{{ds.P18_POP}}</td>
+                <td class="w3-right-align w3-tooltip">{{ds.P08_POP}} <span class="w3-text w3-tag w3-round-large w3-small w3-teal"><em>P08_POP</em></span></td>
+                <td class="w3-right-align w3-tooltip">{{ds.P13_POP}} <span class="w3-text w3-tag w3-round-large w3-small w3-teal"><em>P13_POP</em></span></td>
+                <td class="w3-right-align w3-tooltip">{{ds.P18_POP}} <span class="w3-text w3-tag w3-round-large w3-small w3-teal"><em>P18_POP</em></span></td>
             </tr>
             <tr>
-                <td><i><small>- Evolution en nombre en 5 ans</i></small></td>
-                <td class="w3-right-align"><i><small>-</i></small></td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.POP_EVOL_0813)}}</i></small></td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.POP_EVOL_1318)}}</i></small></td>
+                <td><i><small>- Evolution en nombre en 5 ans</small></i></td>
+                <td class="w3-right-align w3-tooltip"><i><small>- </small></i></td>
+                <td class="w3-right-align w3-tooltip"><i><small>{{ f_val(ds.POP_EVOL_0813)}}  </small></i><span class="w3-text w3-tag w3-round-large w3-small w3-teal"><em>POP_EVOL_0813</em></span></td>
+                <td class="w3-right-align w3-tooltip"><i><small>{{ f_val(ds.POP_EVOL_1318)}}  </small></i><span class="w3-text w3-tag w3-round-large w3-small w3-teal"><em>POP_EVOL_1318</em></span></td>
             </tr>
             <tr>
-                <td><i><small>- Evolution en % / an</i></small></td>
-                <td class="w3-right-align"><i><small>-</i></small></td>
-                <td class="w3-right-align"><i><small>{{ f_val(Math.round( ((ds.TXPOP_0813 * 100).toFixed(2)) ) / 100  )}}%</i></small></td>
-                <td class="w3-right-align"><i><small>{{ f_val(Math.round( ((ds.TXPOP_1318 * 100).toFixed(2)) ) / 100  )}}%</i></small></td>
+                <td><i><small>- Evolution en % / an</small></i></td>
+                <td class="w3-right-align w3-tooltip"><i><small>- </small></i></td>
+                <td class="w3-right-align w3-tooltip"><i><small>{{ f_val(Math.round( ((ds.TXPOP_0813 * 100).toFixed(2)) ) / 100  )}}% </small></i><span class="w3-text w3-tag w3-round-large w3-small w3-teal"><em>TXPOP_0813</em></span></td>
+                <td class="w3-right-align w3-tooltip"><i><small>{{ f_val(Math.round( ((ds.TXPOP_1318 * 100).toFixed(2)) ) / 100  )}}% </small></i><span class="w3-text w3-tag w3-round-large w3-small w3-teal"><em>TXPOP_1318</em></span></td>
             </tr>
             <tr>
                 <td>Population Hors Ménages</td>
