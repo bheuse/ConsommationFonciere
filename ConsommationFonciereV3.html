@@ -622,87 +622,98 @@ function hideShowLOG_function() {
          <table class="w3-table-all w3-hoverable w3-card-4">
             <tbody>
             <tr class="w3-teal">
-                <th style="color:white" >Données INSEE</th>
+                <th style="color:white" >Données INSEE :</th>
                 <th class="w3-right-align" style="color:white">2008</th>
                 <th class="w3-right-align" style="color:white"><i><small>Evolution 08-13</small></i></th>
                 <th class="w3-right-align" style="color:white">2013</th>
                 <th class="w3-right-align" style="color:white"><i><small>Evolution 13-18</small></i></th>
                 <th class="w3-right-align" style="color:white">2018</th>
+                <th class="w3-right-align" style="color:white"><i><small>Evolution 08-18</small></i></th>
             </tr>
             <tr>
-                <td><b>Population</b></td>
+                <td><b>Population :</b></td>
                 <td class="w3-right-align"><b>{{ds.P08_POP}}</b></td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P13_POP-ds.P08_POP)}} ({{f_val(Math.round( ((ds.TXPOP_0813 * 100).toFixed(2)) ) / 100  )}} % / an)</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P13_POP-ds.P08_POP)}} ({{f_val(Math.round( ((ds.TXPOP_0813 * 100).toFixed(2)) ) / 100  )}} %/an)</small></i></td>
                 <td class="w3-right-align"><b>{{ds.P13_POP}}</b></td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P18_POP-ds.P13_POP)}} ({{f_val(Math.round( ((ds.TXPOP_1318 * 100).toFixed(2)) ) / 100  )}} % / an)</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_POP-ds.P13_POP)}} ({{f_val(Math.round( ((ds.TXPOP_1318 * 100).toFixed(2)) ) / 100  )}} %/an)</small></i></td>
                 <td class="w3-right-align"><b>{{ds.P18_POP}}</b></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_POP-ds.P08_POP)}} ({{f_val(Math.round( ((ds.TXPOP_0818 * 100).toFixed(2)) ) / 100  )}} %/an)</small></i></td>
             </tr>
             <tr>
-                <td>Population Hors Ménages</td>
+                <td>Population Hors Ménages :</td>
                 <td class="w3-right-align">{{f_percent(ds.C08_HORS_MEN, ds.P08_POP, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.C13_HORS_MEN-ds.C08_HORS_MEN)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.C13_HORS_MEN, ds.P13_POP, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.C18_HORS_MEN-ds.C13_HORS_MEN)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.C18_HORS_MEN, ds.P18_POP, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.C18_HORS_MEN-ds.C08_HORS_MEN)}}</small></i></td>
             </tr>
             <tr>
-                <td>Population des Ménages</td>
+                <td>Population des Ménages :</td>
                 <td class="w3-right-align">{{ds.C08_PMEN}}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.C13_PMEN-ds.C08_PMEN)}}</small></i></td>
                 <td class="w3-right-align">{{ds.C13_PMEN}}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.C18_PMEN-ds.C13_PMEN)}}</small></i></td>
                 <td class="w3-right-align">{{ds.C18_PMEN}}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.C18_PMEN-ds.C08_PMEN)}}</small></i></td>
             </tr>
             <tr>
-                <td>Taille des Ménages</td>
+                <td>Taille des Ménages :</td>
                 <td class="w3-right-align">{{ds.TM_2008}}</td>
                 <td class="w3-right-align"><i><small>{{f_round(ds.TM_2013-ds.TM_2008,3)}} ({{f_val(Math.round( ((ds.TXTM_0813 * 100).toFixed(2)) ) / 100  )}} %/an)</small></i></td>
                 <td class="w3-right-align">{{ds.TM_2013}}</td>
                 <td class="w3-right-align"><i><small>{{f_round(ds.TM_2018-ds.TM_2013,3)}} ({{f_val(Math.round( ((ds.TXTM_1318 * 100).toFixed(2)) ) / 100  )}} %/an)</small></i></td>
                 <td class="w3-right-align">{{ds.TM_2018}}</td>
+                <td class="w3-right-align"><i><small>{{f_round(ds.TM_2018-ds.TM_2008,3)}} ({{f_val(Math.round( ((ds.TXTM_0818 * 100).toFixed(2)) ) / 100  )}} %/an)</small></i></td>
             </tr>
             <tr>
-                <td>Nombre de Ménages</td>
+                <td>Nombre de Ménages :</td>
                 <td class="w3-right-align">{{ds.C08_MEN}}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.C13_MEN-ds.C08_MEN)}}</small></i></td>
                 <td class="w3-right-align">{{ds.C13_MEN}}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.C18_MEN-ds.C13_MEN)}}</small></i></td>
                 <td class="w3-right-align">{{ds.C18_MEN}}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.C18_MEN-ds.C08_MEN)}}</small></i></td>
             </tr>
             <tr>
-                <td><b>Logements</b></td>
+                <td><b>Types de Résidences :</b></td>
                 <td class="w3-right-align"><b>{{ds.P08_LOG}}</b></td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_LOG-ds.P08_LOG)}}</small></i></td>
                 <td class="w3-right-align"><b>{{ds.P13_LOG}}</b></td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P18_LOG-ds.P13_LOG)}}</small></i></td>
                 <td class="w3-right-align"><b>{{ds.P18_LOG}}</b></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_LOG-ds.P08_LOG)}}</small></i></td>
             </tr>
             <tr>
-                <td>- Résidences Principales</td>
+                <td>- Résidences Principales :</td>
                 <td class="w3-right-align">{{f_percent(ds.P08_RP, ds.P08_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_RP-ds.P08_RP)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P13_RP, ds.P13_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P18_RP-ds.P13_RP)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P18_RP, ds.P18_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RP-ds.P08_RP)}}</small></i></td>
             </tr>
             <tr>
-                <td>- Résidences Secondaires</td>
+                <td>- Résidences Secondaires :</td>
                 <td class="w3-right-align">{{f_percent(ds.P08_RSECOCC, ds.P08_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_RSECOCC-ds.P08_RSECOCC)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P13_RSECOCC, ds.P13_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P18_RSECOCC-ds.P13_RSECOCC)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P18_RSECOCC, ds.P18_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RSECOCC-ds.P08_RSECOCC)}}</small></i></td>
             </tr>
             <tr>
-                <td>- Logements Vacants</td>
+                <td>- Logements Vacants :</td>
                 <td class="w3-right-align">{{f_percent(ds.P08_LOGVAC, ds.P08_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_LOGVAC-ds.P08_LOGVAC)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P13_LOGVAC, ds.P13_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P18_LOGVAC-ds.P13_LOGVAC)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P18_LOGVAC, ds.P18_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_LOGVAC-ds.P08_LOGVAC)}}</small></i></td>
             </tr>
             <tr>
-                <td><b>Résidences Principales</b></td>
+                <td><b>Types de Logements :</b></td>
+                <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
@@ -710,36 +721,67 @@ function hideShowLOG_function() {
                 <td class="w3-right-align"></td>
             </tr>
             <tr>
-                <td>- Maisons</td>
+                <td>- Maisons :</td>
                 <td class="w3-right-align">{{f_percent(ds.P08_MAISON, ds.P08_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_MAISON-ds.P08_MAISON)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P13_MAISON, ds.P13_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P18_MAISON-ds.P13_MAISON)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P18_MAISON, ds.P18_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_MAISON-ds.P08_MAISON)}}</small></i></td>
             </tr>
             <tr>
-                <td>- Appartements</td>
+                <td>- Appartements :</td>
                 <td class="w3-right-align">{{f_percent(ds.P08_APPART, ds.P08_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_APPART-ds.P08_APPART)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P13_APPART, ds.P13_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P18_APPART-ds.P13_APPART)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P18_APPART, ds.P18_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_APPART-ds.P08_APPART)}}</small></i></td>
             </tr>
             <tr>
-                <td>- Propriétaires</td>
-                <td class="w3-right-align">{{f_percent(ds.P08_RP_PROP, ds.P08_RP_PROP + ds.P08_RP_LOC, rounding=1, suffix = "%", format = "()") }}</td>
+                <td>- Autres :</td>
+                <td class="w3-right-align">{{f_percent(ds.P08_LOG - ds.P08_APPART - ds.P08_MAISON, ds.P08_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val((ds.P13_LOG - ds.P13_APPART - ds.P13_MAISON)-(ds.P08_LOG - ds.P08_APPART - ds.P08_MAISON))}}</small></i></td>
+                <td class="w3-right-align">{{f_percent(ds.P13_LOG - ds.P13_APPART - ds.P13_MAISON, ds.P13_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val((ds.P18_LOG - ds.P18_APPART - ds.P18_MAISON)-(ds.P13_LOG - ds.P13_APPART - ds.P13_MAISON))}}</small></i></td>
+                <td class="w3-right-align">{{f_percent(ds.P18_LOG - ds.P18_APPART - ds.P18_MAISON, ds.P18_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val((ds.P18_LOG - ds.P18_APPART - ds.P18_MAISON)-(ds.P08_LOG - ds.P08_APPART - ds.P08_MAISON))}}</small></i></td>
+            </tr>
+            <tr>
+                <td><b>Résidences Principales :</b></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+                <td class="w3-right-align"></td>
+            </tr>
+            <tr>
+                <td>- Propriétaires :</td>
+                <td class="w3-right-align">{{f_percent(ds.P08_RP_PROP, ds.P08_RP, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_RP_PROP-ds.P08_RP_PROP)}}</small></i></td>
-                <td class="w3-right-align">{{f_percent(ds.P13_RP_PROP, ds.P13_RP_PROP + ds.P13_RP_LOC, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align">{{f_percent(ds.P13_RP_PROP, ds.P13_RP, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P18_RP_PROP-ds.P13_RP_PROP)}}</small></i></td>
-                <td class="w3-right-align">{{f_percent(ds.P18_RP_PROP, ds.P18_RP_PROP + ds.P18_RP_LOC, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align">{{f_percent(ds.P18_RP_PROP, ds.P18_RP, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RP_PROP-ds.P08_RP_PROP)}}</small></i></td>
             </tr>
             <tr>
-                <td>- Locataires</td>
-                <td class="w3-right-align">{{f_percent(ds.P08_RP_LOC, ds.P08_RP_PROP + ds.P08_RP_LOC, rounding=1, suffix = "%", format = "()") }}</td>
+                <td>- Locataires :</td>
+                <td class="w3-right-align">{{f_percent(ds.P08_RP_LOC, ds.P08_RP, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_RP_LOC-ds.P08_RP_LOC)}}</small></i></td>
-                <td class="w3-right-align">{{f_percent(ds.P13_RP_LOC, ds.P13_RP_PROP + ds.P13_RP_LOC, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align">{{f_percent(ds.P13_RP_LOC, ds.P13_RP, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P18_RP_LOC-ds.P13_RP_LOC)}}</small></i></td>
-                <td class="w3-right-align">{{f_percent(ds.P18_RP_LOC, ds.P18_RP_PROP + ds.P18_RP_LOC, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align">{{f_percent(ds.P18_RP_LOC, ds.P18_RP, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RP_LOC-ds.P08_RP_LOC)}}</small></i></td>
+            </tr>
+            <tr>
+                <td>- Logés gratuitement :</td>
+                <td class="w3-right-align">{{f_percent(ds.P08_RP - ds.P08_RP_PROP - ds.P08_RP_LOC, ds.P08_RP, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val((ds.P13_RP - ds.P13_RP_PROP - ds.P13_RP_LOC)-(ds.P08_RP - ds.P08_RP_PROP - ds.P08_RP_LOC))}}</small></i></td>
+                <td class="w3-right-align">{{f_percent(ds.P13_RP - ds.P13_RP_PROP - ds.P13_RP_LOC, ds.P13_RP, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val((ds.P18_RP - ds.P18_RP_PROP - ds.P18_RP_LOC)-(ds.P13_RP - ds.P13_RP_PROP - ds.P13_RP_LOC))}}</small></i></td>
+                <td class="w3-right-align">{{f_percent(ds.P18_RP - ds.P18_RP_PROP - ds.P18_RP_LOC, ds.P18_RP, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val((ds.P18_RP - ds.P18_RP_PROP - ds.P18_RP_LOC)-(ds.P08_RP - ds.P08_RP_PROP - ds.P08_RP_LOC))}}</small></i></td>
             </tr>
             </tbody>
         </table>
@@ -748,6 +790,12 @@ function hideShowLOG_function() {
 
     <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
         <h3>Evolution de la Population</h3></div>
+        <p>Les projections d'évolution de la population sont issues de l'INSEE, et de son étude Omphale.
+           Le scenario central est retenu ci-dessous.
+           Les taux d'évolution appliqués au territoire sont les projections du niveau départemental.
+           Pour PACA, les projections détaillées par territoire peuvent être consultes ici :
+         <a target="_blank" href="https://www.insee.fr/fr/statistiques/fichier/3202958/Fiches_chiffresdetailles.zip">Dossier Insee 2030-2050</a>
+        </p>
         <div id="populationChartContainer"                  class="center"  style="width:100%; max-width:600px; max-height:500px;"></div>
 
     <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
@@ -836,6 +884,7 @@ function hideShowLOG_function() {
         </table>
          <br>
          <p>Le solde migratoire ne comprend pas les personnes qui ont quitté le territoire pour l’étranger (pour info, ce flux particulier représentait durant l’année 2017 de l’ordre de 10 % du total des sortants, avec forcément des disparités selon les territoires).</p>
+         <p>Un territoire dans lequel s'installe définitivement des retraités verra un flux entrant plus important, sans flux sortant correspondant.</p>
          <br>
     </div>
 
@@ -887,7 +936,6 @@ function hideShowLOG_function() {
          <br>
     </div>
 
-
     <div v-if="this.data_s != null">
         <diagnostics :diags=this.data_s.Diagnostics type="ALL" categorie="POP"></diagnostics>
     </div>
@@ -916,50 +964,58 @@ function hideShowLOG_function() {
          <p><a target="_blank" :href="ds.DOSSIER_INSEE">Dossier Insee Complet {{ nom }}</a></p>
          <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
          <h3>Evolution des types de Logements</h3></div>
+
          <table class="w3-table-all w3-hoverable w3-card-4">
             <tbody>
             <tr class="w3-teal">
-                <th style="color:white">Données INSEE</th>
+                <th style="color:white" >Données INSEE :</th>
                 <th class="w3-right-align" style="color:white">2008</th>
-                <th class="w3-right-align" style="color:white"></th>
+                <th class="w3-right-align" style="color:white"><i><small>Evolution 08-13</small></i></th>
                 <th class="w3-right-align" style="color:white">2013</th>
-                <th class="w3-right-align" style="color:white"></th>
+                <th class="w3-right-align" style="color:white"><i><small>Evolution 13-18</small></i></th>
                 <th class="w3-right-align" style="color:white">2018</th>
+                <th class="w3-right-align" style="color:white"><i><small>Evolution 08-18</small></i></th>
             </tr>
             <tr>
-                <td><b>Logements</b></td>
-                <td class="w3-right-align">{{ds.P08_LOG}}</td>
-                <td class="w3-right-align"><i><small>{{f_diff(ds.P13_LOG, ds.P08_LOG, format = "+") }}</small></i></td>
-                <td class="w3-right-align">{{ds.P13_LOG}}</td>
-                <td class="w3-right-align"><i><small>{{f_diff(ds.P18_LOG, ds.P13_LOG, format = "+") }}</small></i></td>
-                <td class="w3-right-align">{{ds.P18_LOG}}</td>
+                <td><b>Logements :</b></td>
+                <td class="w3-right-align"><b>{{ds.P08_LOG}}</b></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P13_LOG-ds.P08_LOG)}}</small></i></td>
+                <td class="w3-right-align"><b>{{ds.P13_LOG}}</b></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_LOG-ds.P13_LOG)}}</small></i></td>
+                <td class="w3-right-align"><b>{{ds.P18_LOG}}</b></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_LOG-ds.P08_LOG)}}</small></i></td>
             </tr>
             <tr>
-                <td>- Résidences Principales</td>
+                <td>- Résidences Principales :</td>
                 <td class="w3-right-align">{{f_percent(ds.P08_RP, ds.P08_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_diff(ds.P13_RP, ds.P08_RP, format = "+") }}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P13_RP-ds.P08_RP)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P13_RP, ds.P13_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_diff(ds.P18_RP, ds.P13_RP, format = "+") }}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RP-ds.P13_RP)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P18_RP, ds.P18_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RP-ds.P08_RP)}}</small></i></td>
             </tr>
             <tr>
-                <td>- Résidences Secondaires</td>
+                <td>- Résidences Secondaires :</td>
                 <td class="w3-right-align">{{f_percent(ds.P08_RSECOCC, ds.P08_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_diff(ds.P13_RSECOCC, ds.P08_RSECOCC, format = "+") }}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P13_RSECOCC-ds.P08_RSECOCC)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P13_RSECOCC, ds.P13_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_diff(ds.P18_RSECOCC, ds.P13_RSECOCC, format = "+") }}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RSECOCC-ds.P13_RSECOCC)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P18_RSECOCC, ds.P18_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RSECOCC-ds.P08_RSECOCC)}}</small></i></td>
             </tr>
             <tr>
-                <td>- Logements Vacants</td>
+                <td>- Logements Vacants :</td>
                 <td class="w3-right-align">{{f_percent(ds.P08_LOGVAC, ds.P08_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_diff(ds.P13_LOGVAC, ds.P08_LOGVAC, format = "+") }}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P13_LOGVAC-ds.P08_LOGVAC)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P13_LOGVAC, ds.P13_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_diff(ds.P18_LOGVAC, ds.P13_LOGVAC, format = "+") }}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_LOGVAC-ds.P13_LOGVAC)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P18_LOGVAC, ds.P18_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_LOGVAC-ds.P08_LOGVAC)}}</small></i></td>
             </tr>
             </tbody>
         </table>
+
+
          <br>
          <p>Evolution de la vacance entre 2008 et 2018 : {{f_val(f_round(ds.evol_log_vac_0818))}}%</p>
          <p>Evolution du secondaire entre 2008 et 2018 : {{f_val(f_round(ds.evol_res_sec_0818))}}%</p>
@@ -1005,8 +1061,10 @@ function hideShowLOG_function() {
     <div v-if="this.data_s != null">
          <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
          <h3>Besoins et Production de Logements</h3></div>
-         <p>Les données 2013-2018 sont définitives.</p>
-         <p>Les données 2020 sont des données estimées à partir de projections des données légales 2019
+         <p>Des données sur la production de logements sont disponibles depuis 2010,
+            cependant les données détaillées Sitadel ne sont disponibles que depuis 2013.</p>
+         <p>Les données 2013-2018 sont définitives.
+            Les données 2020 sont des données estimées à partir de projections des données légales 2019
             et des données Sitadel brutes récentes, qui peuvent être approximatives.</p>
          <table class="w3-table-all w3-hoverable w3-card-4">
                     <tbody>
@@ -1017,9 +1075,11 @@ function hideShowLOG_function() {
                         <th style="color:white" class="w3-right-align">2018</th>
                         <th style="color:white" class="w3-right-align"><b><small>13-20</small></b></th>
                         <th style="color:white" class="w3-right-align">2020</th>
+                        <th style="color:white" class="w3-right-align"><b><small>13-20</small></b></th>
                     </tr>
                     <tr>
                         <td><b>Besoins</b> en Logements :</td>
+                        <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
@@ -1033,6 +1093,7 @@ function hideShowLOG_function() {
                         <td class="w3-right-align">{{ds.C18_PMEN}}</td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align">{{ds.pmen_2020}}</td>
+                        <td class="w3-right-align"></td>
                     </tr>
                     <tr>
                         <td>- Taille des Ménages : </td>
@@ -1040,7 +1101,8 @@ function hideShowLOG_function() {
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align">{{f_round(ds.TM_2018,3)}}</td>
                         <td class="w3-right-align"></td>
-                        <td class="w3-right-align">{{f_round(ds.TM_2020,3)}}</td>
+                        <td class="w3-right-align">{{f_round(ds.tmen_2020,3)}}</td>
+                        <td class="w3-right-align"></td>
                     </tr>
                     <tr>
                         <td>- Besoins en Résidences Principales : </td>
@@ -1049,30 +1111,34 @@ function hideShowLOG_function() {
                         <td class="w3-right-align">{{ds.C18_MEN}}</td>
                         <td class="w3-right-align"><b>{{f_val(ds.men_2020 - ds.C18_MEN)}}</b></td>
                         <td class="w3-right-align">{{ds.men_2020}}</td>
+                        <td class="w3-right-align"><b>{{f_val((ds.C18_MEN - ds.C13_MEN)+(ds.men_2020 - ds.C18_MEN))}}</b></td>
                     </tr>
                     <tr>
                         <td><b>Production</b> en Logements (commencés sur la période) :</td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"><b>{{ds.PROD_LOG_1318}}</b></td>
                         <td class="w3-right-align"></td>
-                        <td class="w3-right-align"><b>{{ds.PROD_LOG_1320}}</b></td>
+                        <td class="w3-right-align"><b>{{ds.PROD_LOG_1320-ds.PROD_LOG_1318}}</b></td>
                         <td class="w3-right-align"></td>
+                        <td class="w3-right-align"><b>{{ds.PROD_LOG_1320}}</b></td>
                     </tr>
                     <tr>
                         <td> - Logements Sociaux Construits (Taux) :</td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align">{{ds.PROD_LLS_1318}}</td>
-                        <td class="w3-right-align">({{ Math.round( ((ds.TX_PROD_LLS_1318 * 10000).toFixed(4)) ) / 100  }}%)</td>
+                        <td class="w3-right-align"><i><small>< ({{ Math.round( ((ds.TX_PROD_LLS_1318 * 10000).toFixed(4)) ) / 100  }}%)</small></i></td>
+                        <td class="w3-right-align">{{ds.PROD_LLS_1320-ds.PROD_LLS_1318}}</td>
+                        <td class="w3-right-align"><i><small>({{ Math.round( ((ds.TX_PROD_LLS_1320 * 10000).toFixed(4)) ) / 100  }}%) ></small></i></td>
                         <td class="w3-right-align">{{ds.PROD_LLS_1320}}</td>
-                        <td class="w3-right-align">({{ Math.round( ((ds.TX_PROD_LLS_1320 * 10000).toFixed(4)) ) / 100  }}%)</td>
                     </tr>
                     <tr>
                         <td><b>Excédents</b> de Logements Commencés par rapport aux besoins pour le logement des habitants :</td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"><b><i>{{ds.EXCES_BESOINS_1318}}</i></b></td>
                         <td class="w3-right-align"></td>
-                        <td class="w3-right-align"><b><i>{{ds.EXCES_BESOINS_1320}}</i></b></td>
+                        <td class="w3-right-align"><b><i>{{ds.EXCES_BESOINS_1320-ds.EXCES_BESOINS_1318}}</i></b></td>
                         <td class="w3-right-align"></td>
+                        <td class="w3-right-align"><b><i>{{ds.EXCES_BESOINS_1320}}</i></b></td>
                     </tr>
                     <tr>
                         <td> -&gt; Nouvelles Résidences Secondaires :</td>
@@ -1093,31 +1159,25 @@ function hideShowLOG_function() {
                     <tr>
                         <td><b>Renouvellement </b> du Parc de Logements :</td>
                         <td class="w3-right-align"></td>
-                        <td class="w3-right-align"><b><i>{{ds.log_1318 - ds.PROD_LOG_1318}}</i></b></td>
+                        <td class="w3-right-align"><b><i>{{ds.log_1318 - ds.PROD_LOG_1318}} log.</i></b></td>
+                        <td class="w3-right-align"><i><small>({{f_round((ds.log_1318 -ds.PROD_LOG_1318)/5,0)}} log./an)</small></i></td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
                     </tr>
                     <tr>
-                        <td> -> Evolution du parc 2013-2018 :</td>
+                        <td> -&gt; Evolution du parc 2013-2018 :</td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align">{{f_round(ds.log_1318,0)}} log.</td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
+                        <td class="w3-right-align"></td>
                     </tr>
                     <tr>
-                        <td> -&gt; Nombre de logements commencés 2012-2017 :</td>
+                        <td> -&gt; Logements commencés 2013-2018 :</td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align">{{ds.PROD_LOG_1318}} log.</td>
-                        <td class="w3-right-align"></td>
-                        <td class="w3-right-align"></td>
-                        <td class="w3-right-align"></td>
-                    </tr>
-                    <tr>
-                        <td> -&gt; Renouvellement annuel du parc : </td>
-                        <td class="w3-right-align"></td>
-                        <td class="w3-right-align">{{f_round((ds.log_1318 -ds.PROD_LOG_1318)/5,0)}} log.</td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
@@ -1133,6 +1193,11 @@ function hideShowLOG_function() {
    -->
     <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
         <h3>Besoins et Constructions de Logements 2010-2019</h3></div>
+
+        <div v-if="this.data_s != null">
+            <p><b>Excédents de Logements sur 10 ans : {{(ds.LOG_COMMENCES_1019)-(ds.BESOIN_LOG_ANNUEL_0813 * 3 + ds.BESOIN_LOG_ANNUEL_1318 * 5 + ds.BESOIN_LOG_ANNUEL_1820 * 2)}}</b></p>
+        </div>
+
         <div id="constructionsConstructionsLogementsChartContainer"      class="center"  style="width:100%; max-width:600px; max-height:500px;"></div>
 
     <div v-if="this.data_s != null">

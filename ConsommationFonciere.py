@@ -99,14 +99,14 @@ def load_sitadel(sitadel1316_file:  str = sitadel1316File,
         downloadFile(sitadelSource1721File, sitadel1721File, zip=True, zipped_file="PC_DP_creant_logements_2017_2022.csv")
         downloadFile(sitadelSourceMetaFile, sitadelMetaFile)
         print_blue("Lecture Sitadel Logements 2013-2016 : " + sitadel1316_file + " ...")
-        sitadel1316 = pd.read_csv(sitadel1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "Etat_DAU": str, "DPC_AUT": str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str})
+        sitadel1316 = pd.read_csv(sitadel1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "Etat_DAU": str, "DPC_AUT": str, "NATURE_PROJET_DECLAREE" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "Type_DAU": str, "Num_DAU": str})
         sitadel1316["Parcelles"] = sitadel1316['sec_cadastre1'].map(str) + sitadel1316['num_cadastre1'].map(str)+" "+\
                                    sitadel1316['sec_cadastre2'].map(str) + sitadel1316['num_cadastre2'].map(str)+" "+\
                                    sitadel1316['sec_cadastre3'].map(str) + sitadel1316['num_cadastre3'].map(str)
         sitadel1316["NATURE_PROJET"]     = sitadel1316["NATURE_PROJET_DECLAREE"]
         sitadel1316["RESIDENCE_SERVICE"] = sitadel1316["RESIDENCE"]
         print_blue("Lecture Sitadel Logements 2017-2022 : " + sitadel1721_file + " ...")
-        sitadel1721 = pd.read_csv(sitadel1721_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "Etat_DAU": str, "DPC_AUT": str, "ADR_LOCALITE_TER" : str, "ADR_CODPOST_TER" : str, "NATURE_PROJET" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str})
+        sitadel1721 = pd.read_csv(sitadel1721_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "Etat_DAU": str, "DPC_AUT": str, "ADR_LOCALITE_TER" : str, "ADR_CODPOST_TER" : str, "NATURE_PROJET_DECLAREE" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "Type_DAU": str, "Num_DAU": str})
         sitadel1721["Parcelles"] = sitadel1721['sec_cadastre1'].map(str) + sitadel1721['num_cadastre1'].map(str)+" "+\
                                    sitadel1721['sec_cadastre2'].map(str) + sitadel1721['num_cadastre2'].map(str)+" "+\
                                    sitadel1721['sec_cadastre3'].map(str) + sitadel1721['num_cadastre3'].map(str)
@@ -1879,8 +1879,8 @@ class DataStore():
         log_termines1316  = com_sitadel1316.loc[com_sitadel1316['Etat_DAU'] == "6"]
         log_commences1721 = com_sitadel1721.loc[com_sitadel1721['Etat_DAU'] == "5"]
         log_termines1721  = com_sitadel1721.loc[com_sitadel1721['Etat_DAU'] == "6"]
-        log_renouv        = com_sitadel.loc[(com_sitadel['NATURE_PROJET'] == "2") & (com_sitadel['Etat_DAU'] != "4")]
-        log_nouveau       = com_sitadel.loc[(com_sitadel['NATURE_PROJET'] == "1") & (com_sitadel['Etat_DAU'] != "4")]
+        log_renouv        = com_sitadel.loc[(com_sitadel['NATURE_PROJET_DECLAREE'] == "2") & (com_sitadel['Etat_DAU'] != "4")]
+        log_nouveau       = com_sitadel.loc[(com_sitadel['NATURE_PROJET_DECLAREE'] == "1") & (com_sitadel['Etat_DAU'] != "4")]
         log_principal     = com_sitadel.loc[(com_sitadel['RES_PRINCIP_OU_SECOND'] == 1) & (com_sitadel['Etat_DAU'] != "4")]
         log_secondaire    = com_sitadel.loc[(com_sitadel['RES_PRINCIP_OU_SECOND'] == 2) & (com_sitadel['Etat_DAU'] != "4")]
         log_particuliers  = com_sitadel.loc[com_sitadel['CAT_DEM'].isin([10, 11, 12])]
@@ -1899,8 +1899,8 @@ class DataStore():
         loc_termines1316   = com_sitadelLocaux1.loc[com_sitadelLocaux1['Etat_DAU'] == "6"]
         loc_commences1721  = com_sitadelLocaux2.loc[com_sitadelLocaux2['Etat_DAU'] == "5"]
         loc_termines1721   = com_sitadelLocaux2.loc[com_sitadelLocaux2['Etat_DAU'] == "6"]
-        loc_nouveau        = com_sitadelLocaux.loc[(com_sitadelLocaux['NATURE_PROJET'] == "1") & (com_sitadelLocaux['Etat_DAU'] != "4")]
-        loc_renouv         = com_sitadelLocaux.loc[(com_sitadelLocaux['NATURE_PROJET'] == "2") & (com_sitadelLocaux['Etat_DAU'] != "4")]
+        loc_nouveau        = com_sitadelLocaux.loc[(com_sitadelLocaux['NATURE_PROJET_DECLAREE'] == "1") & (com_sitadelLocaux['Etat_DAU'] != "4")]
+        loc_renouv         = com_sitadelLocaux.loc[(com_sitadelLocaux['NATURE_PROJET_DECLAREE'] == "2") & (com_sitadelLocaux['Etat_DAU'] != "4")]
 
         # Donnees Logements Paca 2010-2019
         load_logements_paca()
@@ -2339,7 +2339,7 @@ def scot_ouest(code_insee, start_date="2021-05-20", file="scot_ouest"):
         elif (row['Etat_DAU'] == "5") : com_2021.loc[index, "Etat"]   = "Commencé"
         elif (row['Etat_DAU'] == "6") : com_2021.loc[index, "Etat"]   = "Terminé"
         else : com_2021.loc[index, "Etat"] = "NR"
-        com_2021.loc[index, "Nature"]      = "UNA" if (row['NATURE_PROJET'] == "1") else "RU"
+        com_2021.loc[index, "Nature"]      = "UNA" if (row['NATURE_PROJET_DECLAREE'] == "1") else "RU"
         com_2021.loc[index, "Extension"]   = int(row['I_EXTENSION']) + int(row['I_SURELEVATION']) + int(row['I_NIVSUPP'])
         com_2021.loc[index, "Renouv"]      = 1 if ((float(row['SURF_HAB_DEMOLIE']) + float(row['SURF_LOC_DEMOLIE']) + float(row['SURF_HAB_AVANT']) + float(row['NB_LGT_DEMOLIS']) + float(row['SURF_LOC_AVANT']))>0) else 0
 
@@ -2348,7 +2348,7 @@ def scot_ouest(code_insee, start_date="2021-05-20", file="scot_ouest"):
         com_2021.loc[index, "Date"]        = row['DATE_REELLE_AUTORISATION']
 
     com_2021 = com_2021[["Date", "Nature", "Extension", "Renouv", "Etat", "Artif", "Parcelles",
-                         "DEP", "COMM", "Type_DAU", "Etat_DAU", "NATURE_PROJET",
+                         "DEP", "COMM", "Type_DAU", "Etat_DAU", "NATURE_PROJET", "NATURE_PROJET_DECLAREE",
                          "NB_LGT_TOT_CREES",   "NB_LGT_PRET_LOC_SOCIAL", "NB_LGT_ACC_SOC_HORS_PTZ", "NB_LGT_PTZ",
                          "SUPERFICIE_TERRAIN", "DATE_REELLE_AUTORISATION",
                          "SURF_HAB_DEMOLIE",   "SURF_LOC_DEMOLIE", "SURF_HAB_AVANT", "SURF_LOC_AVANT", "I_EXTENSION", "I_SURELEVATION",
