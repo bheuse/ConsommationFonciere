@@ -2106,7 +2106,7 @@ class DataStore():
             total_dict["DISPLAY_EPCI"]  = self.store_code
             total_dict["DISPLAY_ZONE"]  = self.store_code
             total_dict["DISPLAY_DEPT"]  = nom_dept(dept_zone(self.store_code), clean=False)
-            total_dict["DISPLAY_REG"]   = nom_region(region_epci(self.store_code), clean=False)
+            total_dict["DISPLAY_REG"]   = nom_region(region_dept(dept_zone(self.store_code)), clean=False)
 
             total_dict["BASE_NAME"]     = self.get_fullname()
             total_dict["LIBELLE"]       = self.store_name
