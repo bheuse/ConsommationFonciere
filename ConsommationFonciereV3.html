@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:v-on="http://www.w3.org/1999/xhtml">
+
 <head>
     <title>Consommation Fonciere</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -115,8 +116,9 @@
 <!-- Header -->
 <header class="w3-container w3-theme w3-padding" id="myHeader">
     <i onclick="w3_open()" class="fa fa-bars w3-xlarge w3-button w3-theme"></i>
-    <div class="w3-center"><h4>Sobriété Foncière</h4>
-        <h1 class="w3-xxxlarge w3-animate-bottom">Sobriété Foncière par France Nature Environnement</h1>
+    <div class="w3-center"><!-- <h4>Sobriété Foncière</h4>
+        <h1 class="w3-xxxlarge w3-animate-bottom">Sobriété Foncière par France Nature Environnement</h1> -->
+        <h1 class="w3-xxxlarge w3-animate-bottom">Sobriété Foncière</h1>
     Consultez les données de votre territoire et planifiez votre urbanisation
     en accord avec l'objectif Zéro Artificialisation Nette de la loi Climat et Résilience.
           <div class="columns">
@@ -161,12 +163,20 @@
       <div class="w3-center">
         <p></p>
         <p>Objectif Zéro Artificialisation Nette !</p>
-        <a href="https://fne.asso.fr/" target="_blank" ><img src="https://www.mightyearth.org/wp-content/uploads/image003.png" alt="France Nature Environement" width="456" height="128"> </a>
+        <a href="https://www.gadseca.org/" target="_blank" ><img src="https://image.jimcdn.com/app/cms/image/transf/dimension=733x10000:format=jpg/path/sfd51d75c93fbb2a3/image/i5b877b0e2213e021/version/1648396322/image.jpg" alt="Gadseca" width="620" height="180"> </a>
+            <p style='font-family:"Cambria",serif;color:#4F81BD;font-weight:bold;font-style:italic;text-align:center;font-size:11.0pt;'>
+            <span lang=FR>G</span><span lang=FR style='color:#17365D'>roupement des </span>
+            <span lang=FR>A</span><span lang=FR style='color:#17365D'>ssociations de </span>
+            <span lang=FR>D</span><span lang=FR style='color:#17365D'>éfense des </span>
+            <span lang=FR>S</span><span lang=FR style='color:#17365D'>ites et de l’</span><span lang=FR>E</span><span lang=FR style='color:#17365D'>nvironnement de la </span>
+            <span lang=FR>C</span><span lang=FR style='color:#17365D'>ote d’</span><span lang=FR>A</span><span lang=FR style='color:#17365D'>zur</span>
+            </p>
+        <!-- <a href="https://fne.asso.fr/" target="_blank" ><img src="https://www.mightyearth.org/wp-content/uploads/image003.png" alt="France Nature Environement" width="456" height="128"> </a> -->
         <p><a class="w3-btn" href="mailto:gadceca06@gmail.com?subject=A%20propose%20de%20Consommation%20Fonciere"> Information – Contactez nous pour en savoir plus </a></p>
-        <p>Un site developé en collaboration avec le Gadseca et mySophiaAntipolis ! </p>
+        <p>Un site developé en collaboration avec France Nature Environnement et mySophiaAntipolis ! </p>
       </div>
       <footer class="w3-container w3-theme-dark">
-        <h4>France Nature Environnement</h4>
+        <h4>Groupement des Associations de Défense des Sites et de l’Environnement de la Cote d’Azur</h4>
       </footer>
     </div>
 </div>
@@ -1065,7 +1075,7 @@ function hideShowLOG_function() {
             cependant les données détaillées Sitadel ne sont disponibles que depuis 2013.</p>
          <p>Les données 2013-2018 sont définitives.
             Les données 2020 sont des données estimées à partir de projections des données légales 2019
-            et des données Sitadel brutes récentes, qui peuvent être approximatives.</p>
+            et des données Sitadel brutes récentes, qui ne sont pas finales.</p>
          <table class="w3-table-all w3-hoverable w3-card-4">
                     <tbody>
                     <tr class="w3-teal">
@@ -1073,7 +1083,7 @@ function hideShowLOG_function() {
                         <th style="color:white" class="w3-right-align">2013</th>
                         <th style="color:white" class="w3-right-align"><small>13-18</small></th>
                         <th style="color:white" class="w3-right-align">2018</th>
-                        <th style="color:white" class="w3-right-align"><b><small>13-20</small></b></th>
+                        <th style="color:white" class="w3-right-align"><b><small>18-20</small></b></th>
                         <th style="color:white" class="w3-right-align">2020</th>
                         <th style="color:white" class="w3-right-align"><b><small>13-20</small></b></th>
                     </tr>
@@ -1343,7 +1353,7 @@ function hideShowLOG_function() {
             </tr>
             <tr>
                 <td>Taux de réalisation des autorisations sur terrains vierges :</td>
-                <td class="w3-right-align">{{ f_taux(ds.CONSO_LOG_TAUX_REA)  }} ha</td>
+                <td class="w3-right-align">{{ f_round(ds.CONSO_LOG_TAUX_REA * 100, 2)  }}%</td>
             </tr>
             <tr>
                 <td>Superficie des terrains dédiés aux nouvelles activités (y compris extensions) :</td>
