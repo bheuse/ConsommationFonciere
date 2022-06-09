@@ -2583,6 +2583,8 @@ def load_Cache(code_insee=None, file=True):
     """ Load a File for re-use without re-calculations """
     if (code_insee in DataStoreCache) : return DataStoreCache[code_insee]
     if (not file): return None
+    global FORCE
+    if (FORCE == True): return None
     ds = DataStore(nom_commune(code_insee), "COMMUNE", code_insee)
     if (ds.load_data() is None) : return None
     print_green("> Loaded in Cache  : DataStore with code INSEE " + str(ds.store_code) + " : " + ds.store_name)
