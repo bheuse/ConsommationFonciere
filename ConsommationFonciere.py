@@ -1798,7 +1798,7 @@ class DataStore():
         if (code_insee):
             code_postal, commune = get_code_postal_commune(code_insee)
 
-        if (str(code_insee) in DataStoreCache) :
+        if (load_Cache(code_insee, file=True)):
             print_green("Cached Donnees : " + str(code_postal) + " : " + commune + " (Code INSEE : " + code_insee + ")")
             self.data_frame = merge_DataStoreCache(self, code_insee)
             return self
@@ -2075,8 +2075,8 @@ class DataStore():
             total_dict["DISPLAY_NAME"]  = nom_region(self.store_code, clean=False)
             total_dict["DISPLAY_COMM"]  = str_list(list_nom_communes(communes_region(self.store_code)))
             total_dict["DISPLAY_EPCI"]  = str_list(epci_region(self.store_code))
-            total_dict["DISPLAY_ZONE"]  = str_list(list_zones(self.store_code))
-            total_dict["DISPLAY_DEPT"]  = str_list(list_dept(self.store_code, clean=False))
+            total_dict["DISPLAY_ZONE"]  = str_list(list_zones())
+            total_dict["DISPLAY_DEPT"]  = str_list(list_dept(self.store_code))
             total_dict["DISPLAY_REG"]   = nom_region(self.store_code, clean=False)
 
             total_dict["BASE_NAME"]     = self.get_fullname()
@@ -2285,6 +2285,11 @@ class DataStore():
                 self.store_index = 'total'
             if (self.store_type == entite_dept):
                 for commune in communes_dept(self.store_code):
+                    self.collect_data(code_insee=commune)
+                self.total_data(meta=True)
+                self.store_index = 'total'
+            if (self.store_type == entite_region):
+                for commune in communes_region(self.store_code):
                     self.collect_data(code_insee=commune)
                 self.total_data(meta=True)
                 self.store_index = 'total'
@@ -2572,6 +2577,17 @@ def update_DataStoreCache(ds : DataStore, code_insee=None):
         print_green("> Added in Cache  : DataStore with code INSEE " + str(ds["CODE_INSEE"]) + " : "  + ds.store_name)
     else:
         print_red("- Not Added in Cache : DataStore without code INSEE : " + ds.store_name)
+
+
+def load_Cache(code_insee=None, file=True):
+    """ Load a File for re-use without re-calculations """
+    if (code_insee in DataStoreCache) : return DataStoreCache[code_insee]
+    if (not file): return None
+    ds = DataStore(nom_commune(code_insee), "COMMUNE", code_insee)
+    if (ds.load_data() is None) : return None
+    print_green("> Loaded in Cache  : DataStore with code INSEE " + str(ds.store_code) + " : " + ds.store_name)
+    DataStoreCache[str(code_insee)] = ds
+    return ds
 
 
 def merge_DataStoreCache(ds : DataStore, code_insee=None) -> pd.DataFrame :
