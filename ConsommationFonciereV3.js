@@ -318,7 +318,8 @@ const vm = Vue.createApp({
                { id: 3, code : '06' , postal : no_postal , nom : 'Alpes-Maritimes'                   , entity : 'DEPT_Alpes-Maritimes_06' },
                { id: 4, code : '13' , postal : no_postal , nom : 'Bouches-du-Rhône'                  , entity : 'DEPT_Bouches-du-Rhone_13' },
                { id: 5, code : '83' , postal : no_postal , nom : 'Var'                               , entity : 'DEPT_Var_83' },
-               { id: 6, code : '84' , postal : no_postal , nom : 'Vaucluse'                          , entity : 'DEPT_Vaucluse_84' }
+               { id: 6, code : '84' , postal : no_postal , nom : 'Vaucluse'                          , entity : 'DEPT_Vaucluse_84' },
+               { id: 7, code : '93' , postal : no_postal , nom : 'Region Sud'                        , entity : 'REGION_Provence-Alpes-Cote_d_Azur_93' }
                ],
             selectEpcis      : [], // EPCIs of current Region / Departement
             selectZones      : [], // Zones of current Region / Departement
