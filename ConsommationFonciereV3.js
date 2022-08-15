@@ -2291,6 +2291,115 @@ function chartAutorisationsConso(ds, container) {
     }
 }
 
+function chartSCoTOuestAutre(ds, container) {
+
+    // Graphique Autorisations Consommation Fonciere pour les Logements 2017-2022 (ChartJS)
+    $('#'+container).html('');
+    if (ds=== null) { return ; }
+
+    TOT16 = ds.CONSO_LOG_SUPERFICIE2013 + ds.CONSO_LOG_SUPERFICIE2014 + ds.CONSO_LOG_SUPERFICIE2015 + ds.CONSO_LOG_SUPERFICIE2015
+    TOT19 = TOT16 + ds.CONSO_LOG_SUPERFICIE2017 + ds.CONSO_LOG_SUPERFICIE2018 + ds.CONSO_LOG_SUPERFICIE2019
+
+    TOT16_TOT = ds.CONSO_LOG_SUPERFICIE2013_TOT + ds.CONSO_LOG_SUPERFICIE2014_TOT + ds.CONSO_LOG_SUPERFICIE2015_TOT + ds.CONSO_LOG_SUPERFICIE2015_TOT
+    TOT19_TOT = TOT16_TOT + ds.CONSO_LOG_SUPERFICIE2017_TOT + ds.CONSO_LOG_SUPERFICIE2018_TOT + ds.CONSO_LOG_SUPERFICIE2019_TOT
+
+    LAST  = ds.CONSO_LOG_LAST_DATE
+    const data = {
+      labels: [ "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", LAST],
+      datasets: [
+        {
+          label: "Consommation Fonciere - Ha / Par an",
+          data: [f_round(ds.CONSO_LOG_SUPERFICIE2013/10000,1),
+                 f_round(ds.CONSO_LOG_SUPERFICIE2014/10000,1),
+                 f_round(ds.CONSO_LOG_SUPERFICIE2015/10000,1),
+                 f_round(ds.CONSO_LOG_SUPERFICIE2016/10000,1),
+                 f_round(ds.CONSO_LOG_SUPERFICIE2017/10000,1),
+                 f_round(ds.CONSO_LOG_SUPERFICIE2018/10000,1),
+                 f_round(ds.CONSO_LOG_SUPERFICIE2019/10000,1),
+                 f_round(ds.CONSO_LOG_SUPERFICIE2020/10000,1),
+                 f_round(ds.CONSO_LOG_SUPERFICIE2021/10000,1),
+                 f_round(ds.CONSO_LOG_SUPERFICIE2022/10000,1)],
+          fill: false,
+          tension: 0.5,
+          borderDash: [5, 5],
+          borderColor: border_Color,
+          backgroundColor: background_Color,
+        },
+        {
+          label: "Consommation Fonciere - Cumul sur parcelles vierges",
+          data: [ f_round((ds.CONSO_LOG_SUPERFICIE2013)/10000,1) ,
+                  f_round((ds.CONSO_LOG_SUPERFICIE2013 + ds.CONSO_LOG_SUPERFICIE2014)/10000,1) ,
+                  f_round((ds.CONSO_LOG_SUPERFICIE2013 + ds.CONSO_LOG_SUPERFICIE2014 + ds.CONSO_LOG_SUPERFICIE2015)/10000,1) ,
+                  f_round((TOT16)/10000,1) ,
+                  f_round((TOT16 + ds.CONSO_LOG_SUPERFICIE2017)/10000,1) ,
+                  f_round((TOT16 + ds.CONSO_LOG_SUPERFICIE2017 + ds.CONSO_LOG_SUPERFICIE2018)/10000,1),
+                  f_round((TOT16 + ds.CONSO_LOG_SUPERFICIE2017 + ds.CONSO_LOG_SUPERFICIE2018 + ds.CONSO_LOG_SUPERFICIE2019)/10000,1),
+                  f_round((TOT19 + ds.CONSO_LOG_SUPERFICIE2020)/10000,1) ,
+                  f_round((TOT19 + ds.CONSO_LOG_SUPERFICIE2020 + ds.CONSO_LOG_SUPERFICIE2021) /10000,1),
+                  f_round((TOT19 + ds.CONSO_LOG_SUPERFICIE2020 + ds.CONSO_LOG_SUPERFICIE2021 + ds.CONSO_LOG_SUPERFICIE2022)/10000,1)],
+          fill: false,
+          tension: 0.5,
+          borderColor: border_Color,
+          backgroundColor: background_Color,
+        },
+        {
+          label: "Consommation Fonciere - Cumul avec extensions",
+          data: [ f_round((ds.CONSO_LOG_SUPERFICIE2013_TOT)/10000,1) ,
+                  f_round((ds.CONSO_LOG_SUPERFICIE2013_TOT + ds.CONSO_LOG_SUPERFICIE2014_TOT)/10000,1) ,
+                  f_round((ds.CONSO_LOG_SUPERFICIE2013_TOT + ds.CONSO_LOG_SUPERFICIE2014_TOT + ds.CONSO_LOG_SUPERFICIE2015_TOT)/10000,1) ,
+                  f_round((TOT16_TOT)/10000,1) ,
+                  f_round((TOT16_TOT + ds.CONSO_LOG_SUPERFICIE2017_TOT)/10000,1) ,
+                  f_round((TOT16_TOT + ds.CONSO_LOG_SUPERFICIE2017_TOT + ds.CONSO_LOG_SUPERFICIE2018_TOT)/10000,1),
+                  f_round((TOT16_TOT + ds.CONSO_LOG_SUPERFICIE2017_TOT + ds.CONSO_LOG_SUPERFICIE2018_TOT + ds.CONSO_LOG_SUPERFICIE2019_TOT)/10000,1),
+                  f_round((TOT19_TOT + ds.CONSO_LOG_SUPERFICIE2020_TOT)/10000,1) ,
+                  f_round((TOT19_TOT + ds.CONSO_LOG_SUPERFICIE2020_TOT + ds.CONSO_LOG_SUPERFICIE2021_TOT) /10000,1),
+                  f_round((TOT19_TOT + ds.CONSO_LOG_SUPERFICIE2020_TOT + ds.CONSO_LOG_SUPERFICIE2021_TOT + ds.CONSO_LOG_SUPERFICIE2022_TOT)/10000,1)],
+          fill: false,
+          hidden: true,
+          tension: 0.5,
+          borderColor: logements_color,
+          backgroundColor: "#9370DB",
+        }
+      ]
+    };
+
+    const config = {
+      type: 'line',
+      data: data,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true, color: theme_color,
+            text: 'Autorisations de Consommation Fonciere sur terrains vierges sur ' + ds.DISPLAY_NAME,
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: false, color: theme_color,
+              text: 'Annees'
+            }
+          },
+          y: {
+            title: {
+              display: true, color: theme_color,
+              text: 'Hectares Artificialises'
+            },
+          }
+        },
+      },
+    };
+
+    $('<canvas id="'+container+'Canvas"></canvas>').appendTo($('#'+container));
+    if ($("#"+container+"Canvas").get(0)  !== undefined ) {
+        var myChart = new Chart($("#"+container+"Canvas").get(0).getContext("2d"), config);
+    }
+}
+
 function chartSCoTOuest(ds, container) {
 
     // Graphique Autorisations Consommation Fonciere pour le SCoT Ouest (ChartJS)
@@ -2304,7 +2413,114 @@ function chartSCoTOuest(ds, container) {
       labels: [ FIRST_DATE, CURRENT_DATE, "Tendance", "Trajectoire", "2030"],
       datasets: [
         {
-          label: "Trajectoire de Consommation Fonciere Totale (toutes parcelles) - Ha",
+          label: "Objectif de Consommation Foncière SCoT régulière (parcelles > 2500 m2) - Ha",
+          data: [0,
+                 f_round(((ds.SCOT_2030/4)*1)/10000,1),
+                 f_round(((ds.SCOT_2030/4)*2)/10000,1),
+                 f_round(((ds.SCOT_2030/4)*3)/10000,1),
+                 f_round(((ds.SCOT_2030/4)*4)/10000,1)],
+          fill: false,
+          hidden: false,
+          tension: 0.5,
+          borderColor: logements_color,
+          backgroundColor: "#9370DB",
+        },
+        {
+          label: "Objectif de Consommation Foncière SCoT corrigée (parcelles > 2500 m2) - Ha",
+          data: [0,
+                 f_round(ds.SCOT_OUEST_LOG_SUPERFICIE_2500/10000,1),
+                 f_round((ds.SCOT_OUEST_LOG_SUPERFICIE_2500+((ds.SCOT_2030-ds.SCOT_OUEST_LOG_SUPERFICIE_2500)/3))/10000,1),
+                 f_round((ds.SCOT_OUEST_LOG_SUPERFICIE_2500+(((ds.SCOT_2030-ds.SCOT_OUEST_LOG_SUPERFICIE_2500)/3)*2))/10000,1),
+                 f_round(ds.SCOT_2030/10000,1)],
+          fill: false,
+          hidden: true,
+          borderDash: [5, 5],
+          tension: 0.5,
+          borderColor: logements_color,
+          backgroundColor: "#9370DB",
+        },
+        {
+          label: "Trajectoire de Consommation Foncière SCoT (parcelles > 2500 m2) - Ha",
+          data: [0,
+                 f_round(ds.SCOT_OUEST_LOG_SUPERFICIE_2500/10000,1),
+                 f_round(((ds.SCOT_TRAJECTOIRE_2500_2030-ds.SCOT_OUEST_LOG_SUPERFICIE_2500)/3)/10000,1),
+                 f_round(((ds.SCOT_TRAJECTOIRE_2500_2030-ds.SCOT_OUEST_LOG_SUPERFICIE_2500)/3)*2/10000,1),
+                 f_round(ds.SCOT_TRAJECTOIRE_2500_2030/10000,1)],
+          fill: false,
+          tension: 0.5,
+          borderColor: border_Color,
+          backgroundColor: background_Color,
+        },
+        {
+          label: "Trajectoire de Consommation Foncière Totale (toutes parcelles) - Ha",
+          data: [0,
+                 f_round(ds.SCOT_OUEST_LOG_SUPERFICIE_ALL/10000,1),
+                 f_round(((ds.SCOT_TRAJECTOIRE_ALL_2030-ds.SCOT_OUEST_LOG_SUPERFICIE_ALL)/3)/10000,1),
+                 f_round(((ds.SCOT_TRAJECTOIRE_ALL_2030-ds.SCOT_OUEST_LOG_SUPERFICIE_ALL)/3)*2/10000,1),
+                 f_round(ds.SCOT_TRAJECTOIRE_ALL_2030/10000,1)],
+          fill: false,
+          tension: 0.5,
+          borderDash: [5, 5],
+          borderColor: border_Color,
+          backgroundColor: background_Color,
+        }
+      ]
+    };
+
+    const config = {
+      type: 'line',
+      data: data,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true, color: theme_color,
+            text: 'Autorisations de Consommation Foncière sur terrains vierges sur ' + ds.DISPLAY_NAME,
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: false, color: theme_color,
+              text: 'Années'
+            }
+          },
+          y: {
+            title: {
+              display: true, color: theme_color,
+              text: 'Hectares Artificialisés'
+            },
+          }
+        },
+      },
+    };
+
+    $('<canvas id="'+container+'Canvas"></canvas>').appendTo($('#'+container));
+    console.log("chartSCoTOuest  : "+$("#"+container+"Canvas").get(0));
+
+    if ($("#"+container+"Canvas").get(0)  !== undefined ) {
+        var myChart = new Chart($("#"+container+"Canvas").get(0).getContext("2d"), config);
+    }
+}
+
+
+function chartSCoTOuestFull(ds, container) {
+
+    // Graphique Autorisations Consommation Fonciere pour le SCoT Ouest (ChartJS)
+    $('#'+container).html('');
+    if (ds=== null) { return ; }
+
+    FIRST_DATE   = ds.SCOT_OUEST_START_DATE
+    CURRENT_DATE = ds.SCOT_LAST_DATE
+    LAST_DATE    = ds.SCOT_2030_DATE
+    const data = {
+      labels: [ FIRST_DATE, CURRENT_DATE, "Tendance", "Trajectoire", "2030"],
+      datasets: [
+        {
+          label: "Trajectoire de Consommation Foncière Totale (toutes parcelles) - Ha",
           data: [0,
                  f_round(ds.SCOT_OUEST_LOG_SUPERFICIE_ALL/10000,1),
                  f_round(((ds.SCOT_TRAJECTOIRE_ALL_2030-ds.SCOT_OUEST_LOG_SUPERFICIE_ALL)/3)/10000,1),
@@ -2317,7 +2533,7 @@ function chartSCoTOuest(ds, container) {
           backgroundColor: background_Color,
         },
         {
-          label: "Trajectoire de Consommation Fonciere SCoT (parcelles > 2500 m2) - Ha",
+          label: "Trajectoire de Consommation Foncière SCoT (parcelles > 2500 m2) - Ha",
           data: [0,
                  f_round(ds.SCOT_OUEST_LOG_SUPERFICIE_2500/10000,1),
                  f_round(((ds.SCOT_TRAJECTOIRE_2500_2030-ds.SCOT_OUEST_LOG_SUPERFICIE_2500)/3)/10000,1),
@@ -2329,11 +2545,25 @@ function chartSCoTOuest(ds, container) {
           backgroundColor: background_Color,
         },
         {
-          label: "Objectif de Consommation Fonciere SCoT (parcelles > 2500 m2) - Ha",
+          label: "Objectif de Consommation Foncière SCoT regulière (parcelles > 2500 m2) - Ha",
+          data: [0,
+                 f_round(((ds.SCOT_2030/4)*1)/10000,1),
+                 f_round(((ds.SCOT_2030/4)*2)/10000,1),
+                 f_round(((ds.SCOT_2030/4)*3)/10000,1),
+                 f_round(((ds.SCOT_2030/4)*4)/10000,1)],
+          fill: false,
+          hidden: false,
+          borderDash: [5, 5],
+          tension: 0.5,
+          borderColor: logements_color,
+          backgroundColor: "#9370DB",
+        },
+        {
+          label: "Objectif de Consommation Foncière SCoT corrigée (parcelles > 2500 m2) - Ha",
           data: [0,
                  f_round(ds.SCOT_OUEST_LOG_SUPERFICIE_2500/10000,1),
-                 f_round(((ds.SCOT_2030-ds.SCOT_OUEST_LOG_SUPERFICIE_2500)/3)/10000,1),
-                 f_round(((ds.SCOT_2030-ds.SCOT_OUEST_LOG_SUPERFICIE_2500)/3)*2/10000,1),
+                 f_round(((ds.SCOT_OUEST_LOG_SUPERFICIE_2500+(ds.SCOT_2030-ds.SCOT_OUEST_LOG_SUPERFICIE_2500)/4))/10000,1),
+                 f_round(((ds.SCOT_OUEST_LOG_SUPERFICIE_2500+(ds.SCOT_2030-ds.SCOT_OUEST_LOG_SUPERFICIE_2500)/4)*3)/10000,1),
                  f_round(ds.SCOT_2030/10000,1)],
           fill: false,
           hidden: false,
