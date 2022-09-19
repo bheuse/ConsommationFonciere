@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import unittest
 from typing import Union
 import yaml
@@ -165,6 +167,7 @@ def load_sitadel_locaux(sitadelLocaux1316_file:  str = sitadelLocaux1316File,
         sitadel_locaux_Meta = pd.read_excel(xls, 'Variables_Locaux', index_col=0)
     return sitadel_locaux_1316, sitadel_locaux_1721, sitadel_locaux_Meta, sitadel_locaux_1321
 
+
 ############################
 ### Logements Paca 2010-2019
 ############################
@@ -182,6 +185,7 @@ def load_logements_paca(sitadel1019S:  str = sitadel1019SourceFile):
         xls = pd.ExcelFile(sitadel1019SourceFile)
         sitadel1019 = pd.read_excel(xls, 'logements_commences_PACA_1019')
     return sitadel1019
+
 
 ##########################
 ### Evolution 2008-2021
@@ -210,6 +214,7 @@ def load_evolution(evolution_file: str = evolutionFile):
         xls = pd.ExcelFile(evolution_file)
         evolution1821 = pd.read_excel(xls, '2018-2021', index_col=0, dtype={"Unnamed: 0": str})
     return evolution0813, evolution1318, evolution1821
+
 
 ##########################
 ### Projections 2013-2050
@@ -267,7 +272,7 @@ def load_projections_paca(projections_paca_file: str = projectionsPacaFile):
 ### Departements
 ################
 
-departementsSourcePage = "https://www.data.gouv.fr/en/datasets/departements-de-france/"
+departementsSourcePage: str = "https://www.data.gouv.fr/en/datasets/departements-de-france/"
 departementsSourceFile = "https://www.data.gouv.fr/en/datasets/r/70cef74f-70b1-495a-8500-c089229c0254"
 departementsFile = data_dir + "departements-france.csv"
 departements     = None
@@ -315,6 +320,7 @@ def load_interco(interco_file: str = intercoFile):
         intercoEPCI    = pd.read_excel(xls, 'EPCI', index_col=0)
     return intercoDossier, intercoEPCI
 
+
 ####################
 ### SCoT
 ####################
@@ -359,6 +365,7 @@ def load_scot_data(SCoT_File: str = SCoT_File):
             SCOT_DATA["GROUPEMENTS"][NOM]["LIST"] = row['Territoires']
     return SCOT_DATA
 
+
 #################
 ### Codes Postaux
 #################
@@ -380,6 +387,7 @@ def load_codes():
         print_blue("Lecture Codes Postaux Donnees Communes : " + codesPostauxFile + " ...")
         codesPostaux = pd.read_csv(codesPostauxFile, delimiter=';', index_col=0, dtype=str)
     return codesPostaux
+
 
 #################
 ### SRU
@@ -406,6 +414,7 @@ def load_sru(sru_file: str = sruFile):
         sru2020 = pd.read_excel(xls, '2020-2022_communes_sru_en_paca', index_col=2, dtype={"REG": str, "DEP": str})
     return sru2017, sru2020
 
+
 #################
 ### Communes
 #################
@@ -431,15 +440,26 @@ def load_communes(meta_dossier_file: str = metaDossierFile, dossier_complet_file
         dossierComplet = pd.read_csv(dossier_complet_file, delimiter=';', dtype={"CODGEO": "string"}, index_col=0)
     return metaDossier, dossierComplet
 
+
 #####################
 ### Artificialisation
 #####################
 
-artificialisationSourcePage = "https://artificialisation.biodiversitetousvivants.fr/les-donnees-au-1er-janvier-2020"
+artificialisationSourcePage = "https://artificialisation.developpement-durable.gouv.fr/suivi-consommation-espaces-naf"
 artificialisationSourceFile = "https://cerema.app.box.com/v/pnb-action7-indicateurs-ff/file/862179205781"
 artificialisationSourceMeta = "https://artificialisation.biodiversitetousvivants.fr/sites/artificialisation/files/fichiers/2021/08/description%20indicateurs%202009%202020.pdf"
 dossierArtificialisationFile = data_dir + "obs_artif_conso_com_2009_2020_V2.csv"
 dossierArtificialisation = None
+
+"""
+artificialisationSourcePage = "https://artificialisation.biodiversitetousvivants.fr/les-donnees-au-1er-janvier-2020"
+artificialisationSourceFile = "https://cerema.app.box.com/v/pnb-action7-indicateurs-ff/folder/149684581362/obs_artif_conso_com_2009_2021.csv"
+artificialisationSourceMeta = "https://cerema.app.box.com/v/pnb-action7-indicateurs-ff/folder/149684581362/description%20indicateurs%202009%202021.pdf"
+dossierArtificialisationFile = data_dir + "obs_artif_conso_com_2009_2021.csv"
+dossierArtificialisation = None
+"""
+
+
 global_context["URL_SOURCE_ARTIFICIALISATION"] = artificialisationSourcePage
 
 # idcom,idcomtxt,idreg,idregtxt,iddep,iddeptxt,epci20,epci20txt,aav2020,libaav2020,cateaav2020,
@@ -475,7 +495,9 @@ def load_artificialisation(dossier_artificialisation_file: str = dossierArtifici
               "naf17art18" : float, "art17act18" : float, "art17hab18" : float, "art17mix18" : float, "art17inc18" : float,
               "naf18art19" : float, "art18act19" : float, "art18hab19" : float, "art18mix19" : float, "art18inc19" : float,
               "naf19art20" : float, "art19act20" : float, "art19hab20" : float, "art19mix20" : float, "art19inc20" : float,
-              "nafart0920" : float, "artact0920" : float, "arthab0920" : float, "artmix0920" : float, "artinc0920" : float, "artcom0920" : float,
+              "naf20art21" : float, "art20act21" : float, "art20hab21" : float, "art20mix21" : float, "art20inc21" : float,
+              "naf09art21" : float, "art09act21" : float, "art09hab21" : float, "art09mix21" : float, "art09inc21" : float,
+              "artcom2020" : float,
               })
     return dossierArtificialisation
 
@@ -506,6 +528,7 @@ def load_artificialisationPaca(dossier_artificialisationPaca_file: str = dossier
         dossierArtificialisationPaca = pd.read_excel(xls, index_col=0, dtype={"IDCOM": str})
     return dossierArtificialisationPaca
 
+
 #############
 ### Flux 2018
 #############
@@ -526,6 +549,7 @@ def load_flux_2018(p_flux2018SourceFile:  str = flux2018SourceData):
                                                                          'DCRAN': str, 'L_DCRAN': str,
                                                                          'NBFLUX_C18_POP01P' : float})
     return flux2018
+
 
 #############
 ### Flux 2017
@@ -548,9 +572,10 @@ def load_flux_2017(p_flux2017SourceFile: str = flux2017SourceData):
                                                                          'NBFLUX_C17_POP01P' : float})
     return flux2017
 
-#############
+
+#####################
 ### Flux 2014-15-16
-#############
+#####################
 
 flux2016SourceFile = data_dir + "base-texte-flux-mobilite-residentielle-2016.csv"
 flux2016 = None
@@ -566,6 +591,7 @@ def load_flux_2016(flux2016SourceFile:  str = flux2016SourceFile):
                                                                          'NBFLUX_C16_POP01P' : float})
     return flux2016
 
+
 flux2015SourceFile = data_dir + "base-texte-flux-mobilite-residentielle-2015.csv"
 flux2015 = None
 
@@ -579,6 +605,7 @@ def load_flux_2015(flux2015SourceFile:  str = flux2015SourceFile):
                                                                          'DCRAN': str, 'L_DCRAN': str,
                                                                          'NBFLUX_C15_POP01P' : float})
     return flux2015
+
 
 flux2014SourceFile = data_dir + "base-texte-flux-mobilite-residentielle-2014.csv"
 flux2014 = None
@@ -741,6 +768,7 @@ def delete_pattern(directory=output_dir, pattern="*.bck"):
         except Exception as e:
             print("Error while deleting file : " + str(filePath) + " - " + str(e))
 
+
 ###
 ### Display in Browser
 ###
@@ -826,7 +854,7 @@ def perCentStr(value, rounding=0) -> str :
     return round0str(value * 100, rounding)+"%"
 
 
-def clean_name(name: str,sep="_") -> str:
+def clean_name(name: str, sep="_") -> str:
     return unidecode.unidecode(name).replace(" ", sep).replace("\\", sep).replace("'", sep)
 
 
@@ -1127,21 +1155,21 @@ def code_commune(nom_commune : str) -> str:
     return comm_list[0]
 
 
-def nom_dept(code_dept, clean=False) -> str:
+def nom_dept(code_dpt, clean=False) -> str:
     """ Le nom du Departement """
-    if (code_dept == 0) : return "Pas de Nom"
+    if (code_dpt == 0) : return "Pas de Nom"
     load_departements()
-    nom = departements["nom_departement"][code_dept]
+    nom = departements["nom_departement"][code_dpt]
     if (not clean): return nom
     return clean_name(nom)
 
 
-def code_dept(nom_dept) -> str:
+def code_dept(nom_dpt : str) -> int:
     """ Le code du Departement """
-    if (nom_dept == None) : return 0
+    if (not nom_dept) : return 0
     load_departements()
-    if (len(departements[departements["nom_departement"] == nom_dept]) == 0): return 0
-    return departements[departements["nom_departement"] == nom_dept].index[0]
+    if (len(departements[departements["nom_departement"] == nom_dpt]) == 0): return 0
+    return departements[departements["nom_departement"] == nom_dpt].index[0]
 
 
 def nom_commune(code_insee=None, code_postal=None, clean=False) -> str:
@@ -1198,11 +1226,11 @@ def list_nom_zone(codes : list) -> list[str]:
     return list_nom
 
 
-def communes_dept(code_dept) -> list[int]:
+def communes_dept(code_dpt) -> list[int]:
     """ Les Codes INSEE des Communes d'un Departement """
     load_interco()
     index = intercoDossier.index
-    condition = intercoDossier["Unnamed: 4"] == code_dept
+    condition = intercoDossier["Unnamed: 4"] == code_dpt
     epci_indices = index[condition]
     epci_indices_list = epci_indices.tolist()
     return sorted(epci_indices_list)
@@ -1223,13 +1251,13 @@ def list_zones() -> list[str]:
     return scot_consolidation()["GROUPES_COMMUNES"].keys()
 
 
-def list_zones_dept(code_dept="06") -> list[str]:
+def list_zones_dept(code_dpt="06") -> list[str]:
     """ List des Zones dans DEPT """
     global SCOT_DATA
-    code_dept = str(code_dept)
+    code_dpt = str(code_dpt)
     list_zone = list()
     for zone in list_zones() :
-        if (SCOT_DATA["GROUPES_COMMUNES"][zone]["DEPT"] == code_dept) :
+        if (SCOT_DATA["GROUPES_COMMUNES"][zone]["DEPT"] == code_dpt) :
             list_zone.append(zone)
     return list_zone
 
@@ -1314,10 +1342,10 @@ def communes_territoire(territoire: str) -> [list[str], str]:
         return [code_territoire], type_territoire
 
 
-def epci_dept(code_dept) -> list[int]:
+def epci_dept(code_dpt) -> list[int]:
     """ Les Codes INSEE des EPCI d'un Departement """
     load_interco()
-    epci_list = intercoDossier[intercoDossier["Unnamed: 4"] == code_dept]["Unnamed: 2"]
+    epci_list = intercoDossier[intercoDossier["Unnamed: 4"] == code_dpt]["Unnamed: 2"]
     return sorted(list(set(epci_list)))
 
 
@@ -1337,10 +1365,10 @@ def region_epci(code_epci) -> int :
     return epci_list[0]
 
 
-def region_dept(code_dept) -> int :
+def region_dept(code_dpt) -> int :
     """ Le Code de Region du Departement """
     load_interco()
-    reg_list = intercoDossier[intercoDossier["Unnamed: 4"] == code_dept]["Unnamed: 5"]
+    reg_list = intercoDossier[intercoDossier["Unnamed: 4"] == code_dpt]["Unnamed: 5"]
     if reg_list.empty : return 0
     return reg_list[0]
 
@@ -3357,8 +3385,9 @@ def ftp_push_files():
                 "ConsommationFonciere.py",
                 "input/QuestionnerUnProjetDePLU-SCoT.pdf", "input/Alpes-Maritimes-NoteExcedentsLogements.pdf",
                 "input/Guide_Pratique_Artif_complet.pdf",  "input/GuideSF_6_ZCZAE_web.pdf",
-                "input/GuideSF_16_Observatoires_web.pdf",  "input/GuideSF_17_fiscalite_web.pdf",
-                "input/Urbascope.pdf",
+                "input/ -h"
+                "GuideSF_16_Observatoires_web.pdf",  "input/GuideSF_17_fiscalite_web.pdf",
+                "input/Urbascope.pdf",          "input/Urbascope_Septembre2022.pdf",
                 "ConsommationFonciere.html",    "ConsommationFonciere.js",
                 "ConsommationFonciereV2.html",  "ConsommationFonciereV2.js",
                 "input/Legend_Logements.png",   "input/CommentCaMarche.png",
@@ -4164,8 +4193,6 @@ def read_command_line_args(argv):
         print(str(e))
         print(usage)
         sys.exit(2)
-    print(str(opts))
-    print(str(args))
     for opt, arg in opts:
         if opt in ("-h", "--help"):
             print(usage)
