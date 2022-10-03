@@ -45,7 +45,7 @@ matplotlib.use('Agg')
 
 warnings.filterwarnings("ignore")
 warnings.simplefilter(action='ignore', category=pd.errors.PerformanceWarning)
-warnings.simplefilter(action='ignore', category=pd.warnings.FutureWarning)
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 from warnings import simplefilter
 simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
