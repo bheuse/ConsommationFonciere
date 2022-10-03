@@ -45,7 +45,7 @@ matplotlib.use('Agg')
 
 warnings.filterwarnings("ignore")
 warnings.simplefilter(action='ignore', category=pd.errors.PerformanceWarning)
-
+warnings.simplefilter(action='ignore', category=pd.warnings.FutureWarning)
 
 from warnings import simplefilter
 simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
@@ -445,22 +445,12 @@ def load_communes(meta_dossier_file: str = metaDossierFile, dossier_complet_file
 ### Artificialisation
 #####################
 
+"""
 artificialisationSourcePage = "https://artificialisation.developpement-durable.gouv.fr/suivi-consommation-espaces-naf"
 artificialisationSourceFile = "https://cerema.app.box.com/v/pnb-action7-indicateurs-ff/file/862179205781"
 artificialisationSourceMeta = "https://artificialisation.biodiversitetousvivants.fr/sites/artificialisation/files/fichiers/2021/08/description%20indicateurs%202009%202020.pdf"
 dossierArtificialisationFile = data_dir + "obs_artif_conso_com_2009_2020_V2.csv"
 dossierArtificialisation = None
-
-"""
-artificialisationSourcePage = "https://artificialisation.biodiversitetousvivants.fr/les-donnees-au-1er-janvier-2020"
-artificialisationSourceFile = "https://cerema.app.box.com/v/pnb-action7-indicateurs-ff/folder/149684581362/obs_artif_conso_com_2009_2021.csv"
-artificialisationSourceMeta = "https://cerema.app.box.com/v/pnb-action7-indicateurs-ff/folder/149684581362/description%20indicateurs%202009%202021.pdf"
-dossierArtificialisationFile = data_dir + "obs_artif_conso_com_2009_2021.csv"
-dossierArtificialisation = None
-"""
-
-
-global_context["URL_SOURCE_ARTIFICIALISATION"] = artificialisationSourcePage
 
 # idcom,idcomtxt,idreg,idregtxt,iddep,iddeptxt,epci20,epci20txt,aav2020,libaav2020,cateaav2020,
 # naf09art10,art09act10,art09hab10,art09mix10,art09inc10,
@@ -477,13 +467,8 @@ global_context["URL_SOURCE_ARTIFICIALISATION"] = artificialisationSourcePage
 # nafart0920,artact0920,arthab0920,artmix0920,artinc0920, artcom0920,
 # pop12,pop17,pop1217,men12,men17,men1217,emp17,emp12,emp1217,mepart1217,menhab1217,artpop1217,surfcom20
 
-
-def load_artificialisation(dossier_artificialisation_file: str = dossierArtificialisationFile):
-    global dossierArtificialisation
-    downloadFile(artificialisationSourceFile, dossierArtificialisationFile)
-    if (dossierArtificialisation is None):
-        print_blue("Lecture Donnees Artificialisation : " + dossier_artificialisation_file + " ...")
-        dossierArtificialisation = pd.read_csv(dossier_artificialisation_file, delimiter=',', index_col=0, dtype={"idcom": str, "iddep": str, "epci20": str, "aav2020" : str,
+dossierArtificialisation_dtype=
+             {"idcom": str, "iddep": str, "epci20": str, "aav2020" : str,
               "naf09art10" : float, "art09act10" : float, "art09hab10" : float, "art09mix10" : float, "art09inc10" : float,
               "naf10art11" : float, "art10act11" : float, "art10hab11" : float, "art10mix11" : float, "art10inc11" : float,
               "naf11art12" : float, "art11act12" : float, "art11hab12" : float, "art11mix12" : float, "art11inc12" : float,
@@ -498,7 +483,67 @@ def load_artificialisation(dossier_artificialisation_file: str = dossierArtifici
               "naf20art21" : float, "art20act21" : float, "art20hab21" : float, "art20mix21" : float, "art20inc21" : float,
               "naf09art21" : float, "art09act21" : float, "art09hab21" : float, "art09mix21" : float, "art09inc21" : float,
               "artcom2020" : float,
-              })
+              }
+
+"""
+
+artificialisationSourcePage = "https://artificialisation.developpement-durable.gouv.fr/suivi-consommation-espaces-naf#paragraph--2164"
+artificialisationSourceFile = "https://cerema.app.box.com/v/pnb-action7-indicateurs-ff/folder/149684581362/obs_artif_conso_com_2009_2021.csv"
+artificialisationSourceMeta = "https://cerema.app.box.com/v/pnb-action7-indicateurs-ff/folder/149684581362/description%20indicateurs%202009%202021.pdf"
+dossierArtificialisationFile = data_dir + "obs_artif_conso_com_2009_2021.csv"
+dossierArtificialisation = None
+
+"""
+"idcom";"idcomtxt";"idreg";"idregtxt";"iddep";"iddeptxt";
+"epci21";"epci21txt";
+"scot";
+"aav2020";"aav2020txt";"aav2020_typo";
+
+"naf09art10";"art09act10";"art09hab10";"art09mix10";"art09inc10";
+"naf10art11";"art10act11";"art10hab11";"art10mix11";"art10inc11";
+"naf11art12";"art11act12";"art11hab12";"art11mix12";"art11inc12";
+"naf12art13";"art12act13";"art12hab13";"art12mix13";"art12inc13";
+"naf13art14";"art13act14";"art13hab14";"art13mix14";"art13inc14";
+"naf14art15";"art14act15";"art14hab15";"art14mix15";"art14inc15";
+"naf15art16";"art15act16";"art15hab16";"art15mix16";"art15inc16";
+"naf16art17";"art16act17";"art16hab17";"art16mix17";"art16inc17";
+"naf17art18";"art17act18";"art17hab18";"art17mix18";"art17inc18";
+"naf18art19";"art18act19";"art18hab19";"art18mix19";"art18inc19";
+"naf19art20";"art19act20";"art19hab20";"art19mix20";"art19inc20";
+"naf20art21";"art20act21";"art20hab21";"art20mix21";"art20inc21";
+
+"naf09art21";"art09act21";"art09hab21";"art09mix21";"art09inc21";"artcom2020";
+"pop13";"pop18";"pop1318";"men13";"men18";"men1318";"emp13";"emp18";"emp1318";
+"mepart1318";"menhab1318";"artpop1318";"surfcom2021"
+"""
+
+dossierArtificialisation_dtype= {"idcom": str, "iddep": str, "epci21": str, "aav2020" : str,
+              "naf09art10" : float, "art09act10" : float, "art09hab10" : float, "art09mix10" : float, "art09inc10" : float,
+              "naf10art11" : float, "art10act11" : float, "art10hab11" : float, "art10mix11" : float, "art10inc11" : float,
+              "naf11art12" : float, "art11act12" : float, "art11hab12" : float, "art11mix12" : float, "art11inc12" : float,
+              "naf12art13" : float, "art12act13" : float, "art12hab13" : float, "art12mix13" : float, "art12inc13" : float,
+              "naf13art14" : float, "art13act14" : float, "art13hab14" : float, "art13mix14" : float, "art13inc14" : float,
+              "naf14art15" : float, "art14act15" : float, "art14hab15" : float, "art14mix15" : float, "art14inc15" : float,
+              "naf15art16" : float, "art15act16" : float, "art15hab16" : float, "art15mix16" : float, "art15inc16" : float,
+              "naf16art17" : float, "art16act17" : float, "art16hab17" : float, "art16mix17" : float, "art16inc17" : float,
+              "naf17art18" : float, "art17act18" : float, "art17hab18" : float, "art17mix18" : float, "art17inc18" : float,
+              "naf18art19" : float, "art18act19" : float, "art18hab19" : float, "art18mix19" : float, "art18inc19" : float,
+              "naf19art20" : float, "art19act20" : float, "art19hab20" : float, "art19mix20" : float, "art19inc20" : float,
+              "naf20art21" : float, "art20act21" : float, "art20hab21" : float, "art20mix21" : float, "art20inc21" : float,
+              "naf09art21" : float, "art09act21" : float, "art09hab21" : float, "art09mix21" : float, "art09inc21" : float,
+              "artcom2020" : float, "surfcom2021" : float,
+              }
+
+global_context["URL_SOURCE_ARTIFICIALISATION"] = artificialisationSourcePage
+
+
+def load_artificialisation(dossier_artificialisation_file: str = dossierArtificialisationFile):
+    global dossierArtificialisation
+    downloadFile(artificialisationSourceFile, dossierArtificialisationFile)
+    if (dossierArtificialisation is None):
+        print_blue("Lecture Donnees Artificialisation : " + dossier_artificialisation_file + " ...")
+        dossierArtificialisation = pd.read_csv(dossier_artificialisation_file,
+                                               delimiter=',', index_col=0, dtype=dossierArtificialisation_dtype)
     return dossierArtificialisation
 
 
