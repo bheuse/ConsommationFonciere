@@ -7,6 +7,7 @@ import jk_commentjson as jsonc
 import matplotlib.pyplot as plt
 import pandas as pd
 import xlsxwriter
+from dateutil import parser
 from openpyxl import formatting, styles, Workbook, load_workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 import webbrowser
@@ -26,7 +27,6 @@ import warnings
 import zipfile
 import shutil
 from importlib import reload
-from importlib import reload
 import matplotlib
 from scipy.interpolate import make_interp_spline, BSpline
 import numpy as np
@@ -34,7 +34,6 @@ import ftplib
 import markdown
 import logging
 import datetime
-from dateutil import parser
 
 timestamp = datetime.datetime.now().strftime("%y%m%d-%H%M%S")
 logFile   = "output"+os.sep+"_ConsommationFonciere_"+timestamp+".log"
@@ -150,7 +149,7 @@ def load_sitadel_locaux(sitadelLocaux1316_file:  str = sitadelLocaux1316File,
         downloadFile(sitadelLocauxSource1721File, sitadelLocaux1721File, zip=True, zipped_file="PC_DP_creant_locaux_2017_2022.csv")
         downloadFile(sitadelLocauxSourceMetaFile, sitadelLocauxMetaFile)
         print_blue("Lecture Sitadel Locaux 2013-2016 : " + sitadelLocaux1316_file + " ...")
-        sitadel_locaux_1316 = pd.read_csv(sitadelLocaux1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "Etat_DAU": str,"ZONE_OP": str, "NATURE_PROJET": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float})
+        sitadel_locaux_1316 = pd.read_csv(sitadelLocaux1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "Etat_DAU": str, "ZONE_OP": str, "NATURE_PROJET": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float})
         sitadel_locaux_1316["Parcelles"] = sitadel_locaux_1316['sec_cadastre1'].map(str) + sitadel_locaux_1316['num_cadastre1'].map(str)+" " + \
                                            sitadel_locaux_1316['sec_cadastre2'].map(str) + sitadel_locaux_1316['num_cadastre2'].map(str)+" " + \
                                            sitadel_locaux_1316['sec_cadastre3'].map(str) + sitadel_locaux_1316['num_cadastre3'].map(str)
@@ -272,7 +271,7 @@ def load_projections_paca(projections_paca_file: str = projectionsPacaFile):
 ### Departements
 ################
 
-departementsSourcePage: str = "https://www.data.gouv.fr/en/datasets/departements-de-france/"
+departementsSourcePage = "https://www.data.gouv.fr/en/datasets/departements-de-france/"
 departementsSourceFile = "https://www.data.gouv.fr/en/datasets/r/70cef74f-70b1-495a-8500-c089229c0254"
 departementsFile = data_dir + "departements-france.csv"
 departements     = None
@@ -326,18 +325,19 @@ def load_interco(interco_file: str = intercoFile):
 ####################
 
 SCoT_File = data_dir + "Table_EPCI_SCoT.xls"
-SCOT_DATA = None
+SCOT_DATA = {}
 COMMUNES_HORS_PACA = None
 EPCI_SCOT          = None
 GROUPEMENTS        = None
 
+
 def load_scot_data(SCoT_File: str = SCoT_File):
     global SCOT_DATA, COMMUNES_HORS_PACA, EPCI_SCOT, GROUPEMENTS
-    if (SCOT_DATA is None):
+    if (SCOT_DATA is None or SCOT_DATA == {}):
         SCOT_DATA = {}
         print_blue("Lecture Donnees SCoT : " + SCoT_File + " ...")
         xls = pd.ExcelFile(SCoT_File)
-        COMMUNES_HORS_PACA = pd.read_excel(xls, 'Commmunes hors PACA', dtype={"EPCI": str, "LIBEPCI": str,  "Commune": str,  "CODGEO": str})
+        COMMUNES_HORS_PACA = pd.read_excel(xls, 'Communes hors PACA', dtype={"EPCI": str, "LIBEPCI": str,  "Commune": str,  "CODGEO": str})
         EPCI_SCOT          = pd.read_excel(xls, 'EPCI - SCoT', dtype={"SCoT": str, "LIBEPCI": str})
         GROUPEMENTS        = pd.read_excel(xls, 'Groupements', dtype={"Type": str, "DEPT": str, "EPCI": str, "REG": str, "NOM": str, "Territoires": str})
         SCOT_DATA["SCOT_EPCI"] = {}
@@ -376,7 +376,7 @@ codesPostauxFile = data_dir + "laposte_hexasmal.csv"
 codesPostaux = None
 global_context["URL_SOURCE_CODES_POSTAUX"] = codesPostauxSourcePage
 
-# Code_commune_INSEE;Nom_commune;Code_postal;Ligne_5;LibellÃ©_d_acheminement;coordonnees_gps (lat,long)
+# Code_commune_INSEE;Nom_commune;Code_postal;Ligne_5;Libelle_d_acheminement;coordonnees_gps (lat,long)
 # 02547;LA NEUVILLE HOUSSET;02250;;LA NEUVILLE HOUSSET;49.7881379377,3.731716273
 
 
@@ -645,7 +645,7 @@ def load_flux_2015(flux2015SourceFile:  str = flux2015SourceFile):
     global flux2015
     if (flux2015 is None) :
         print_blue("Lecture Flux Mobilite Residentielle 2015 : " + flux2015SourceFile + " ...")
-        flux2015 = pd.read_csv(flux2015SourceFile, delimiter=';', encoding = "ISO-8859-1",
+        flux2015 = pd.read_csv(flux2015SourceFile, delimiter=';', encoding="ISO-8859-1",
                                                                   dtype={'CODGEO': str, 'LIBGEO': str,
                                                                          'DCRAN': str, 'L_DCRAN': str,
                                                                          'NBFLUX_C15_POP01P' : float})
@@ -660,7 +660,7 @@ def load_flux_2014(flux2014SourceFile: str = flux2014SourceFile):
     global flux2014
     if (flux2014 is None) :
         print_blue("Lecture Flux Mobilite Residentielle 2014 : " + flux2014SourceFile + " ...")
-        flux2014 = pd.read_csv(flux2014SourceFile, delimiter=';', encoding = "ISO-8859-1",
+        flux2014 = pd.read_csv(flux2014SourceFile, delimiter=';', encoding="ISO-8859-1",
                                                                   dtype={'CODGEO': str, 'LIBGEO': str,
                                                                          'DCRAN': str, 'L_DCRAN': str,
                                                                          'NBFLUX_C14_POP01P' : float})
@@ -1038,35 +1038,35 @@ def taux(part, total, rounding=3) -> float :
     return round0(part/total, rounding)
 
 
-def f_percent(part, full, rounding=1, suffix="%", format=""):
+def f_percent(part, full, rounding=1, suffix="%", pformat=""):
     """ Retourne formatted part in percent of full     Part = 90, Full = 200 => 45 """
     # Adds suffix: suffix="%"   =>   45%
-    # Adds format: format="+"   =>  +45%
-    # Adds format: format="+()" =>  (+45%) 90
-    # Adds format: format="()"  =>   (45%) 90
+    # Adds format: pformat="+"   =>  +45%
+    # Adds format: pformat="+()" =>  (+45%) 90
+    # Adds format: pformat="()"  =>   (45%) 90
     percent = 0 if (float(full) == 0)  else (float(part) / float(full)) * 100
     s_percent = round0str(percent, rounding)
-    if (format == ""):           return s_percent+suffix
-    if (("+" in format) and (percent > 0)): s_percent = "+"+s_percent
-    if ("(" in format): return "("+s_percent+suffix+") "+str(part)
+    if (pformat == ""):           return s_percent+suffix
+    if (("+" in pformat) and (percent > 0)): s_percent = "+"+s_percent
+    if ("(" in pformat): return "("+s_percent+suffix+") "+str(part)
     return "("+s_percent+suffix+") " + str(part)
 
 
-def f_diff(after, before, format="+"):
-    """  Adds format: format="+"   =>  +45% """
+def f_diff(after, before, pformat="+"):
+    """  Adds pformat: format="+"   =>  +45% """
     # After = 200, Before = 100 => 100
     diff = after - before
-    if (("+" in format) and (float(diff) > 0)): return ("+"+str(diff))
+    if (("+" in pformat) and (float(diff) > 0)): return ("+"+str(diff))
     return ""+str(diff)
 
 
-def f_val(val, format="+", suffix=""):
-    if (("+" in format) and (float(val) > 0)): return ("+"+str(val)+suffix)
+def f_val(val, pformat="+", suffix=""):
+    if (("+" in pformat) and (float(val) > 0)): return ("+"+str(val)+suffix)
     return ""+str(val)+suffix
 
 
-def f_taux(value, rounding=2, suffix="%", format="+"):
-    if ((float(value) > 0) and ("+" in format)): return ("+"+round0str(value, rounding)+suffix)
+def f_taux(value, rounding=2, suffix="%", pformat="+"):
+    if ((float(value) > 0) and ("+" in pformat)): return ("+"+round0str(value, rounding)+suffix)
     return ""+round0str(value, rounding)+suffix
 
 
@@ -1120,7 +1120,7 @@ def get_code_insee_commune_nom(nom_commune) -> int :
     return code_insee
 
 
-def get_code_postal_commune(code_insee) -> Union[int, str]:
+def get_code_postal_commune(code_insee) -> (int, str):
     """ Retourne le code postal et le nom de la commune """
     load_codes()
     try:
@@ -1149,7 +1149,7 @@ def get_code_insee(code_postal : Union[int, str]) -> int:
     return code_insee
 
 
-def get_gps_insee(code_insee : Union[int, str]) -> Union[str, str]:
+def get_gps_insee(code_insee : Union[int, str]) -> (str, str):
     """ Le GPS Coord INSEE du Code Postal """
     load_codes()
     if (code_insee not in codesPostaux["Code_postal"]) :  return "", ""
@@ -1191,7 +1191,7 @@ def code_epci(nom_epci : str) -> str:
     return epci_list[0]
 
 
-def code_commune(nom_commune : str) -> str:
+def code_commune(nom_commune : str) -> Union[int, str]:
     """ Le code de la Commune """
     load_interco()
     if (nom_commune == None) or (nom_commune.strip() == "") : return 0
@@ -1200,21 +1200,21 @@ def code_commune(nom_commune : str) -> str:
     return comm_list[0]
 
 
-def nom_dept(code_dpt, clean=False) -> str:
+def nom_dept(code_dept, clean=False) -> str:
     """ Le nom du Departement """
-    if (code_dpt == 0) : return "Pas de Nom"
+    if (code_dept == 0) : return "Pas de Nom"
     load_departements()
-    nom = departements["nom_departement"][code_dpt]
+    nom = departements["nom_departement"][code_dept]
     if (not clean): return nom
     return clean_name(nom)
 
 
-def code_dept(nom_dpt : str) -> int:
+def code_departement(nom_dept) -> Union [int, str]:
     """ Le code du Departement """
-    if (not nom_dept) : return 0
+    if (nom_dept == None) : return 0
     load_departements()
-    if (len(departements[departements["nom_departement"] == nom_dpt]) == 0): return 0
-    return departements[departements["nom_departement"] == nom_dpt].index[0]
+    if (len(departements[departements["nom_departement"] == nom_dept]) == 0): return 0
+    return departements[departements["nom_departement"] == nom_dept].index[0]
 
 
 def nom_commune(code_insee=None, code_postal=None, clean=False) -> str:
@@ -1271,11 +1271,11 @@ def list_nom_zone(codes : list) -> list[str]:
     return list_nom
 
 
-def communes_dept(code_dpt) -> list[int]:
+def communes_dept(code_dept) -> list[int]:
     """ Les Codes INSEE des Communes d'un Departement """
     load_interco()
     index = intercoDossier.index
-    condition = intercoDossier["Unnamed: 4"] == code_dpt
+    condition = intercoDossier["Unnamed: 4"] == code_dept
     epci_indices = index[condition]
     epci_indices_list = epci_indices.tolist()
     return sorted(epci_indices_list)
@@ -1296,13 +1296,13 @@ def list_zones() -> list[str]:
     return scot_consolidation()["GROUPES_COMMUNES"].keys()
 
 
-def list_zones_dept(code_dpt="06") -> list[str]:
+def list_zones_dept(code_dept="06") -> list[str]:
     """ List des Zones dans DEPT """
     global SCOT_DATA
-    code_dpt = str(code_dpt)
+    code_dept = str(code_dept)
     list_zone = list()
     for zone in list_zones() :
-        if (SCOT_DATA["GROUPES_COMMUNES"][zone]["DEPT"] == code_dpt) :
+        if (SCOT_DATA["GROUPES_COMMUNES"][zone]["DEPT"] == code_dept) :
             list_zone.append(zone)
     return list_zone
 
@@ -1368,9 +1368,9 @@ def communes_territoire(territoire: str) -> [list[str], str]:
         # Territoire = Code Dept
         code_territoire = communes_dept(territoire)
         type_territoire = "DEPT"
-    elif code_dept(territoire):
+    elif code_departement(territoire):
         # Territoire = Nom Dept
-        code_territoire = communes_dept(code_dept(territoire))
+        code_territoire = communes_dept(code_departement(territoire))
         type_territoire = "DEPT"
     elif len(communes_region(territoire)) != 0:
         # Territoire = Code Region
@@ -1387,10 +1387,10 @@ def communes_territoire(territoire: str) -> [list[str], str]:
         return [code_territoire], type_territoire
 
 
-def epci_dept(code_dpt) -> list[int]:
+def epci_dept(code_dept) -> list[int]:
     """ Les Codes INSEE des EPCI d'un Departement """
     load_interco()
-    epci_list = intercoDossier[intercoDossier["Unnamed: 4"] == code_dpt]["Unnamed: 2"]
+    epci_list = intercoDossier[intercoDossier["Unnamed: 4"] == code_dept]["Unnamed: 2"]
     return sorted(list(set(epci_list)))
 
 
@@ -1410,15 +1410,15 @@ def region_epci(code_epci) -> int :
     return epci_list[0]
 
 
-def region_dept(code_dpt) -> int :
+def region_dept(code_dept) -> int :
     """ Le Code de Region du Departement """
     load_interco()
-    reg_list = intercoDossier[intercoDossier["Unnamed: 4"] == code_dpt]["Unnamed: 5"]
+    reg_list = intercoDossier[intercoDossier["Unnamed: 4"] == code_dept]["Unnamed: 5"]
     if reg_list.empty : return 0
     return reg_list[0]
 
 
-def list_dept(code_region=None) -> list[int]:
+def list_dept(code_region=None) -> list[str]:
     """ La liste des Departements """
     load_departements()
     liste_dept = sorted(list(map(str, list(set(departements.index.values.tolist())))))
@@ -1779,7 +1779,7 @@ class DataStore():
         return self.data_frame
 
     def number(self, key, round=0, suffix="") -> str:
-        """ Return a INT key value as a rounded number formatted string, with a suffix (e.g. %)  """
+        """ Return an INT key value as a rounded number formatted string, with a suffix (e.g. %)  """
         return round0str(self.data_frame[key][self.store_index], round)+suffix
 
     def str(self, key) -> str:
@@ -1849,7 +1849,7 @@ class DataStore():
         self.data_frame = self.data_frame.append(pd.Series(self.source_dict, name='source'))
         return self
 
-    # Get Data Frame without Meta Data - Clean Meta Data
+    # Get Data Frame without MetaData - Clean MetaData
     def clean_meta_data(self, inplace=True) :
         """ Removes Meta data from DataStore """
         clean_data_frame = self.data_frame
@@ -2382,7 +2382,7 @@ class DataStore():
 
         global FAST
         html_report_file = None
-        if (not FAST and FAST): # Disabling HTML Reports
+        if (not FAST and FAST):  # Disabling HTML Reports
             self.run_calculs()
             self.run_diagnostic()
             self.run_plots()
@@ -2512,7 +2512,6 @@ def scot_ouest(code_insee, start_date="2021-05-20", file="scot_ouest"):
         work_sheet.append(row)
     data_number_of_rows = len(com_2021.index)
 
-
     red_color      = 'ffc7ce'
     red_color_font = '9c0103'
     green_color    = '00ff00'
@@ -2625,7 +2624,7 @@ def excel_flux_details(data_file, field, region, xls_file):
     data3["Nom"] = ""
     for x_epci in list_dept(region) :
         for y_epci in list_dept(region):
-            xy_data = round(data_file.loc[(data_file['CODGEO'].isin(communes_dept(x_epci)))  & (data_file['DCRAN'].isin(communes_dept(y_epci))) & (data_file['DCRAN'] != data_file['CODGEO'])][field].sum(),0)
+            xy_data = round(data_file.loc[(data_file['CODGEO'].isin(communes_dept(x_epci)))  & (data_file['DCRAN'].isin(communes_dept(y_epci))) & (data_file['DCRAN'] != data_file['CODGEO'])][field].sum(), 0)
             data3[x_epci][y_epci] = xy_data
             data3['Nom'][y_epci] = nom_dept(y_epci)
             xy_data = round(data_file.loc[(~(data_file['CODGEO'].isin(communes_region(region)))) & (data_file['DCRAN'].isin(communes_dept(y_epci))) & (data_file['DCRAN'] != data_file['CODGEO'])][field].sum(), 0)
@@ -2639,11 +2638,11 @@ def excel_flux_details(data_file, field, region, xls_file):
     excel_file = output_dir + xls_file
     print_green("Flux : "+excel_file)
     writer = pd.ExcelWriter(excel_file)
-    # Write dataframe to excel sheet named 'marks'
+    # Write dataframe to Excel sheet named 'marks'
     data3.to_excel(writer, 'dept')
     data2.to_excel(writer, 'epci')
     data1.to_excel(writer, 'communes')
-    # Save the excel file
+    # Save the Excel file
     writer.save()
 
 
@@ -3070,7 +3069,7 @@ def plot_smooth(x_values : list[int], y_values : list[int]):
 
 
 def plot_logements(ds: DataStore):
-    """ Graphique Logements en HTML et png. """
+    """ Graphique des Logements en HTML et png. """
     data_dict = ds.get_row_as_dict(ds.store_index)
     label = "Logements"
 
@@ -3419,7 +3418,7 @@ def ftp_push_files():
                 "output/calculations.json",     "output/datametrics.json",  "output/diagnostics.json",
                 "index.html",
                 "ConsommationFonciereV3.html",  "ConsommationFonciereV3.js"
-               ]
+                ]
     if not FAST:
         filelist.extend([
                 "input/Configuration.xlsx",
@@ -3430,8 +3429,7 @@ def ftp_push_files():
                 "ConsommationFonciere.py",
                 "input/QuestionnerUnProjetDePLU-SCoT.pdf", "input/Alpes-Maritimes-NoteExcedentsLogements.pdf",
                 "input/Guide_Pratique_Artif_complet.pdf",  "input/GuideSF_6_ZCZAE_web.pdf",
-                "input/ -h"
-                "GuideSF_16_Observatoires_web.pdf",  "input/GuideSF_17_fiscalite_web.pdf",
+                "GuideSF_16_Observatoires_web.pdf",        "input/GuideSF_17_fiscalite_web.pdf",
                 "input/Urbascope.pdf",          "input/Urbascope_Septembre2022.pdf",
                 "ConsommationFonciere.html",    "ConsommationFonciere.js",
                 "ConsommationFonciereV2.html",  "ConsommationFonciereV2.js",
@@ -3495,7 +3493,7 @@ def report_zone(zone_name: str = "SCoT_Ouest_Littoral", force=True, with_commune
 
 
 def report_epci(epci_id: str = "200039915", force=True, with_communes=False, data_only : bool = False, ftp_push : bool = False):
-    """ Generates Report for a EPCI identified by Code INSEE  """
+    """ Generates Report for an EPCI identified by Code INSEE  """
     entite = entite_epci
     name   = nom_epci(epci_id, clean=True)
     code   = epci_id
@@ -3653,7 +3651,7 @@ def report_select_dict(region=None, filename=None, force=False) -> dict:
             cd["Clean"]    = "COMMUNE_" + nom_commune(code_insee=c, clean=True) + "_" + cd["INSEE"]
             rd["COMMUNES"].append(cd)
         for d in rd["DEPARTEMENTS_CODES"]:
-            dd = {}
+            dd = { }
             dd["TYPE"]     = "DEPT"
             dd["INSEE"]    = str(d)
             dd["Nom"]      = nom_dept(d, clean=False)
@@ -3733,7 +3731,7 @@ def report_region_dict(region=None, filename=None, force=False) -> dict:
             dd["COMMUNES"] = []
             rd["DEPARTEMENTS"].append(dd)
             for e in epci_dept(d):
-                de = {}
+                de = { }
                 de["TYPE"]   = "EPCI"
                 de["INSEE"]  = str(e)
                 de["Nom"]    = nom_epci(e,   clean=False)
@@ -3823,8 +3821,9 @@ class TestConsommation(unittest.TestCase):
 
     def testScot_Ouest(self):
         print_yellow("> Scot Ouest")
-        scot_ouest(code_insee="06108", start_date="2020-01-01")  # 06108 / 06085
-        scot_ouest(code_insee="06085", start_date="2020-01-01")  # 06108 / 06085
+        # scot_ouest(code_insee="06108", start_date="2020-01-01")  # 06108 / 06085
+        # scot_ouest(code_insee="06085", start_date="2020-01-01")  # 06108 / 06085
+        scot_ouest(code_insee="06083", start_date="2017-01-01")  # 06108 / 06085
         print_yellow("< Scot Ouest")
 
     def testSaintTropez(self):
