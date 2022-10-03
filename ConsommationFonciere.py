@@ -517,7 +517,7 @@ dossierArtificialisation = None
 "mepart1318";"menhab1318";"artpop1318";"surfcom2021"
 """
 
-dossierArtificialisation_dtype= {"idcom": str, "iddep": str, "epci21": str, "aav2020" : str,
+dossierArtificialisation_dtype= {"idcom": str, "iddep": str, "epci21": str, "aav2020" : str, "scot" : str, "aav2020txt" : str,
               "naf09art10" : float, "art09act10" : float, "art09hab10" : float, "art09mix10" : float, "art09inc10" : float,
               "naf10art11" : float, "art10act11" : float, "art10hab11" : float, "art10mix11" : float, "art10inc11" : float,
               "naf11art12" : float, "art11act12" : float, "art11hab12" : float, "art11mix12" : float, "art11inc12" : float,
@@ -543,7 +543,7 @@ def load_artificialisation(dossier_artificialisation_file: str = dossierArtifici
     if (dossierArtificialisation is None):
         print_blue("Lecture Donnees Artificialisation : " + dossier_artificialisation_file + " ...")
         dossierArtificialisation = pd.read_csv(dossier_artificialisation_file,
-                                               delimiter=',', index_col=0, dtype=dossierArtificialisation_dtype)
+                                               delimiter=';', index_col=0, dtype=dossierArtificialisation_dtype)
     return dossierArtificialisation
 
 
