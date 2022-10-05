@@ -155,7 +155,7 @@ def load_sitadel_locaux(sitadelLocaux1316_file:  str = sitadelLocaux1316File,
                                            sitadel_locaux_1316['sec_cadastre3'].map(str) + sitadel_locaux_1316['num_cadastre3'].map(str)
         sitadel_locaux_1316["NATURE_PROJET"]     = sitadel_locaux_1316["NATURE_PROJET_DECLAREE"]
         print_blue("Lecture Sitadel Locaux 2017-2022 : " + sitadelLocaux1721_file + " ...")
-        sitadel_locaux_1721 = pd.read_csv(sitadelLocaux1721_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "Etat_DAU": str, "DPC_AUT": str, "ADR_LOCALITE_TER" : str, "ADR_CODPOST_TER" : str, "NATURE_PROJET" : str, "ZONE_OP": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float})
+        sitadel_locaux_1721 = pd.read_csv(sitadelLocaux1721_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "Etat_DAU": str, "DPC_AUT": str, "ADR_LOCALITE_TER" : str, "ADR_CODPOST_TER" : str, "NATURE_PROJET" : str, "ZONE_OP": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float, "AN_DEPOT": str, "DPC_PREM" : str})
         sitadel_locaux_1721["Parcelles"] = sitadel_locaux_1721['sec_cadastre1'].map(str) + sitadel_locaux_1721['num_cadastre1'].map(str)+" " + \
                                            sitadel_locaux_1721['sec_cadastre2'].map(str) + sitadel_locaux_1721['num_cadastre2'].map(str)+" " + \
                                            sitadel_locaux_1721['sec_cadastre3'].map(str) + sitadel_locaux_1721['num_cadastre3'].map(str)
@@ -1454,31 +1454,46 @@ def list_region() -> list[str]:
 
 
 def get_sru2017(key, code_insee, rounding=6):
-    """ Retourne la valeur comsolidee de la cle SRU 17-19 pour la commune  """
+    """ Retourne la valeur consolidee de la cle SRU 17-19 pour la commune  """
     load_sru(sruFile)
     try:
         return round0(sru2017[key][int(code_insee)], rounding)
     except Exception as e:
-        print(str(e))
+        # print_error(str(key)+" > Exception")
+        # print_error(str(e))
         return 0
 
 
 def get_sru2020(key, code_insee, rounding=6):
-    """ Retourne la valeur comsolidee de la cle SRU 20-22 pour la commune  """
+    """ Retourne la valeur consolidee de la cle SRU 20-22 pour la commune  """
     load_sru(sruFile)
     try:
         return round0(sru2020[key][int(code_insee)], rounding)
     except Exception as e:
-        print(str(e))
+        # print_error(str(key)+" > Exception")
+        # print_error(str(e))
         return 0
 
 
 def get_art(key, code_insee, rounding=6):
-    """ Retourne la valeur comsolidee de la cle ART pour la commune  """
+    """ Retourne la valeur consolidee de la cle ART pour la commune  """
     load_artificialisation()
     try:
         return round0(dossierArtificialisation[key][code_insee], rounding)
-    except Exception :
+    except Exception as e:
+        print_error(str(key)+" > Exception")
+        print_error(str(e))
+        return 0
+
+
+def get_art_ha(key, code_insee, rounding=6):
+    """ Retourne la valeur consolidee de la cle ART pour la commune  en ha """
+    load_artificialisation()
+    try:
+        return round0(dossierArtificialisation[key][code_insee] / 10000, rounding)
+    except Exception as e:
+        print_error(str(key)+" > Exception")
+        print_error(str(e))
         return 0
 
 
@@ -1982,6 +1997,8 @@ class DataStore():
         loc_termines1721   = com_sitadelLocaux2.loc[com_sitadelLocaux2['Etat_DAU'] == "6"]
         loc_nouveau        = com_sitadelLocaux.loc[(com_sitadelLocaux['NATURE_PROJET_DECLAREE'] == "1") & (com_sitadelLocaux['Etat_DAU'] != "4")]
         loc_renouv         = com_sitadelLocaux.loc[(com_sitadelLocaux['NATURE_PROJET_DECLAREE'] == "2") & (com_sitadelLocaux['Etat_DAU'] != "4")]
+        loc_nouveau        = com_sitadelLocaux.loc[(com_sitadelLocaux['NATURE_PROJET_COMPLETEE'] == "1") & (com_sitadelLocaux['Etat_DAU'] != "4")]
+        loc_renouv         = com_sitadelLocaux.loc[(com_sitadelLocaux['NATURE_PROJET_COMPLETEE'] != "1") & (com_sitadelLocaux['Etat_DAU'] != "4")]
 
         # Donnees Logements Paca 2010-2019
         load_logements_paca()
@@ -2240,14 +2257,20 @@ class DataStore():
 
         # Store in Data Frame
         self.data_frame = self.data_frame.append(pd.Series(total_dict, name="total"))
+        #  self.data_frame = pd.concat([self.data_frame, pd.Series(total_dict, name="total")])
         if (meta):
             # Add Meta Data
             self.data_frame = self.data_frame.append(pd.Series(self.meta_dict,   name='meta'))
+            #  self.data_frame = pd.concat([self.data_frame, pd.Series(self.meta_dict,   name='meta')])
             self.data_frame = self.data_frame.sort_index(ascending=False)        # sorting by index
             self.data_frame = self.data_frame.append(pd.Series(self.mode_dict,   name='mode'))
+            #  self.data_frame = pd.concat([self.data_frame, pd.Series(self.mode_dict,   name='mode')])
             self.data_frame = self.data_frame.append(pd.Series(self.type_dict,   name='type'))
+            #  self.data_frame = pd.concat([self.data_frame, pd.Series(self.type_dict,   name='type')])
             self.data_frame = self.data_frame.append(pd.Series(self.source_dict, name='source'))
+            #  self.data_frame = pd.concat([self.data_frame, pd.Series(self.source_dict, name='source')])
             self.data_frame = self.data_frame.append(pd.Series(self.expr_dict,   name='expr'))
+            #  self.data_frame = pd.concat([self.data_frame, pd.Series(self.expr_dict,   name='expr')])
 
         update_DataStoreCache(self)
         return self
