@@ -2005,19 +2005,20 @@ function chartConstructions(ds, container) {
 
 function chartArtificialisationTotale(ds, container) {
 
-    // Graphique Artificialisation Totale 2009-2020 (ChartJS)
+    // Graphique Artificialisation Totale 2009-2021 (ChartJS)
     $('#'+container).html('');
     if (ds=== null) { return ; }
 
     ART1015 = ds.ART_NAF09ART10 + ds.ART_NAF10ART11 + ds.ART_NAF11ART12 + ds.ART_NAF12ART13 + ds.ART_NAF13ART14 + ds.ART_NAF14ART15
+    ART1020 = ART1015 + ds.ART_NAF15ART16 + ds.ART_NAF16ART17 + ds.ART_NAF17ART18 + ds.ART_NAF18ART19 + ds.ART_NAF19ART20
     const data = {
-      labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"],
+      labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"],
       datasets: [
         {
           label: "Artificialisation Totale - Ha / Par an",
           data: [ds.ART_NAF09ART10, ds.ART_NAF10ART11, ds.ART_NAF11ART12, ds.ART_NAF12ART13,
                  ds.ART_NAF13ART14, ds.ART_NAF14ART15, ds.ART_NAF15ART16, ds.ART_NAF16ART17,
-                 ds.ART_NAF17ART18, ds.ART_NAF18ART19, ds.ART_NAF19ART20],
+                 ds.ART_NAF17ART18, ds.ART_NAF18ART19, ds.ART_NAF19ART20, ds.ART_NAF20ART21],
           fill: false,
           tension: 0.5,
           borderDash: [5, 5],
@@ -2036,7 +2037,8 @@ function chartArtificialisationTotale(ds, container) {
                   ART1015 + ds.ART_NAF15ART16 + ds.ART_NAF16ART17,
                   ART1015 + ds.ART_NAF15ART16 + ds.ART_NAF16ART17 + ds.ART_NAF17ART18 ,
                   ART1015 + ds.ART_NAF15ART16 + ds.ART_NAF16ART17 + ds.ART_NAF17ART18 + ds.ART_NAF18ART19,
-                  ART1015 + ds.ART_NAF15ART16 + ds.ART_NAF16ART17 + ds.ART_NAF17ART18 + ds.ART_NAF18ART19 + ds.ART_NAF19ART20],
+                  ART1020 ,
+                  ART1020 + ds.ART_NAF20ART21 ],
           fill: false,
           tension: 0.5,
           borderColor: border_Color,
@@ -2090,14 +2092,16 @@ function chartArtificialisation(ds, container) {
 
     ART1015_LOG = ds.ART_ART09HAB10 + ds.ART_ART10HAB11 + ds.ART_ART11HAB12 + ds.ART_ART12HAB13 + ds.ART_ART13HAB14 + ds.ART_ART14HAB15
     ART1015_TOT = ds.ART_NAF09ART10 + ds.ART_NAF10ART11 + ds.ART_NAF11ART12 + ds.ART_NAF12ART13 + ds.ART_NAF13ART14 + ds.ART_NAF14ART15
+    ART1020_LOG = ART1015_LOG + ds.ART_ART15HAB16 + ds.ART_ART16HAB17 + ds.ART_ART17HAB18 + ds.ART_ART18HAB19 + ds.ART_ART19HAB20
+    ART1020_TOT = ART1015_TOT + ds.ART_NAF15ART16 + ds.ART_NAF16ART17 + ds.ART_NAF17ART18 + ds.ART_NAF18ART19 + ds.ART_NAF19ART20
     const data = {
-      labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"],
+      labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"],
       datasets: [
         {
           label: "Artificialisation Logements - Ha / Par an",
           data: [ds.ART_ART09HAB10, ds.ART_ART10HAB11, ds.ART_ART11HAB12, ds.ART_ART12HAB13,
                  ds.ART_ART13HAB14, ds.ART_ART14HAB15, ds.ART_ART15HAB16, ds.ART_ART16HAB17,
-                 ds.ART_ART17HAB18, ds.ART_ART18HAB19, ds.ART_ART19HAB20],
+                 ds.ART_ART17HAB18, ds.ART_ART18HAB19, ds.ART_ART19HAB20, ds.ART_ART20HAB21],
           fill: false,
           tension: 0.5,
           borderDash: [5, 5],
@@ -2116,7 +2120,8 @@ function chartArtificialisation(ds, container) {
                   ART1015_LOG + ds.ART_ART15HAB16 + ds.ART_ART16HAB17,
                   ART1015_LOG + ds.ART_ART15HAB16 + ds.ART_ART16HAB17 + ds.ART_ART17HAB18 ,
                   ART1015_LOG + ds.ART_ART15HAB16 + ds.ART_ART16HAB17 + ds.ART_ART17HAB18 + ds.ART_ART18HAB19,
-                  ART1015_LOG + ds.ART_ART15HAB16 + ds.ART_ART16HAB17 + ds.ART_ART17HAB18 + ds.ART_ART18HAB19 + ds.ART_ART19HAB20],
+                  ART1020_LOG ,
+                  ART1020_LOG + ds.ART_ART20HAB21],
           fill: false,
           tension: 0.5,
           borderColor: border_Color,
@@ -2134,7 +2139,8 @@ function chartArtificialisation(ds, container) {
                   ART1015_TOT + ds.ART_NAF15ART16 + ds.ART_NAF16ART17,
                   ART1015_TOT + ds.ART_NAF15ART16 + ds.ART_NAF16ART17 + ds.ART_NAF17ART18 ,
                   ART1015_TOT + ds.ART_NAF15ART16 + ds.ART_NAF16ART17 + ds.ART_NAF17ART18 + ds.ART_NAF18ART19,
-                  ART1015_TOT + ds.ART_NAF15ART16 + ds.ART_NAF16ART17 + ds.ART_NAF17ART18 + ds.ART_NAF18ART19 + ds.ART_NAF19ART20],
+                  ART1020_TOT ,
+                  ART1020_TOT + ds.ART_NAF20ART21],
           fill: false,
           hidden: true,
           tension: 0.5,
