@@ -2400,7 +2400,7 @@ class DataStore():
         return self
 
 
-def scot_ouest(code_insee, start_date="2021-05-20", file="scot_ouest"):
+def scot_ouest(code_insee, start_date="2021-05-20", file="scot_ouest", limit=2500):
     global SCOT_OUEST
     load_sitadel()
     load_scot_data()
@@ -2420,20 +2420,20 @@ def scot_ouest(code_insee, start_date="2021-05-20", file="scot_ouest"):
     for index, row in com_2021.iterrows():
         com_2021.loc[index, "Parcelles"] = str(row['sec_cadastre1'])+str(row['num_cadastre1'])+" "+str(row['sec_cadastre2'])+str(row['num_cadastre2'])+" "+str(row['sec_cadastre3'])+str(row['num_cadastre3'])
         parcelles = parcelles + " " + com_2021.loc[index, "Parcelles"]
-        if   (row['Etat_DAU'] == "2") : com_2021.loc[index, "Etat"]   = "Autorisé"
-        elif (row['Etat_DAU'] == "4") : com_2021.loc[index, "Etat"]   = "Annulé"
-        elif (row['Etat_DAU'] == "5") : com_2021.loc[index, "Etat"]   = "Commencé"
-        elif (row['Etat_DAU'] == "6") : com_2021.loc[index, "Etat"]   = "Terminé"
-        else : com_2021.loc[index, "Etat"] = "NR"
-        com_2021.loc[index, "Nature"]      = "UNA" if (row['NATURE_PROJET_DECLAREE'] == "1") else "RU"
-        com_2021.loc[index, "Extension"]   = int(row['I_EXTENSION']) + int(row['I_SURELEVATION']) + int(row['I_NIVSUPP'])
-        com_2021.loc[index, "Renouv"]      = 1 if ((float(row['SURF_HAB_DEMOLIE']) + float(row['SURF_LOC_DEMOLIE']) + float(row['SURF_HAB_AVANT']) + float(row['NB_LGT_DEMOLIS']) + float(row['SURF_LOC_AVANT'])) > 0) else 0
+        if   (row['Etat_DAU'] == "2") : com_2021.loc[index, "Annul"]   = 0 # Autorisé
+        elif (row['Etat_DAU'] == "4") : com_2021.loc[index, "Annul"]   = 1 # Annulé
+        elif (row['Etat_DAU'] == "5") : com_2021.loc[index, "Annul"]   = 0 # Commencé
+        elif (row['Etat_DAU'] == "6") : com_2021.loc[index, "Annul"]   = 0 # Terminé
+        else : com_2021.loc[index, "Annul"] = 0
+        com_2021.loc[index, "Nature"]     = "UNA" if (row['NATURE_PROJET_DECLAREE'] == "1") else "RU"
+        com_2021.loc[index, "Extension"]  = int(row['I_EXTENSION']) + int(row['I_SURELEVATION']) + int(row['I_NIVSUPP'])
+        com_2021.loc[index, "Renouv"]     = 1 if ((float(row['SURF_HAB_DEMOLIE']) + float(row['SURF_LOC_DEMOLIE']) + float(row['SURF_HAB_AVANT']) + float(row['NB_LGT_DEMOLIS']) + float(row['SURF_LOC_AVANT'])) > 0) else 0
 
     for index, row in com_2021.iterrows():
-        com_2021.loc[index, "Artif"]       = row['SUPERFICIE_TERRAIN'] if ((row['Extension'] == 0) and (row['Renouv'] == 0) and (row['Etat_DAU'] != 4)) else 0
-        com_2021.loc[index, "Date"]        = row['DATE_REELLE_AUTORISATION']
+        com_2021.loc[index, "Artif"]      = row['SUPERFICIE_TERRAIN'] if ((row['Extension'] == 0) and (row['Renouv'] == 0) and (int(row['Etat_DAU']) != 4)) else 0
+        com_2021.loc[index, "Date"]       = row['DATE_REELLE_AUTORISATION']
 
-    com_2021 = com_2021[["Date", "Nature", "Extension", "Renouv", "Etat", "Artif", "Parcelles",
+    com_2021 = com_2021[["Date", "Nature", "Extension", "Renouv", "Annul", "Artif", "Parcelles",
                          "DEP", "COMM", "Type_DAU", "Etat_DAU", "NATURE_PROJET", "NATURE_PROJET_DECLAREE",
                          "NB_LGT_TOT_CREES",   "NB_LGT_PRET_LOC_SOCIAL", "NB_LGT_ACC_SOC_HORS_PTZ", "NB_LGT_PTZ",
                          "SUPERFICIE_TERRAIN", "DATE_REELLE_AUTORISATION",
@@ -2445,12 +2445,15 @@ def scot_ouest(code_insee, start_date="2021-05-20", file="scot_ouest"):
     logements  = sum(com_2021["NB_LGT_TOT_CREES"])
     logsoc     = sum(com_2021["NB_LGT_PRET_LOC_SOCIAL"])
     artif      = sum(com_2021["Artif"])
+    artif_17   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2017-01-01")]["Artif"])
     artif_18   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2018-01-01")]["Artif"])
     artif_19   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2019-01-01")]["Artif"])
     artif_20   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2020-01-01")]["Artif"])
     artif_21   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2021-01-01")]["Artif"])
     artif_22   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2022-01-01")]["Artif"])
     artif_SO   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2021-05-20")]["Artif"])
+    artif_SO_S = com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2021-05-20")]
+    artif_SO_L  = sum(artif_SO_S[(artif_SO_S["Artif"] > limit)]["Artif"])
 
     count       = len(com_2021.index)
     count0      = len(com_2021.loc[com_2021["SUPERFICIE_TERRAIN"] == 0].index)
@@ -2460,37 +2463,53 @@ def scot_ouest(code_insee, start_date="2021-05-20", file="scot_ouest"):
     BUDGET_2030 = SCOT_OUEST['Budget 2030'][NOM_COMMUNE] * 10000 if (NOM_COMMUNE in SCOT_OUEST.index) else 0
     BUDGET_2040 = SCOT_OUEST['Budget 2040'][NOM_COMMUNE] * 10000 if (NOM_COMMUNE in SCOT_OUEST.index) else 0
     time_percent = ((10 - (2030 - datetime.date.today().year)-1) / 10)
-    pace_percent = round0(artif_SO/BUDGET_2030, 0) if (BUDGET_2030 > 0) else 0
+    pace_percent = round0(artif_SO_L/BUDGET_2030, 0) if (BUDGET_2030 > 0) else 0
     trajectoire  = "OK"
     if (pace_percent > time_percent) :
         trajectoire = "Consommation Trop Rapide"
 
+    """
     com_2021.loc["Total / Count", "SUPERFICIE_TERRAIN"]     = superficie0
     com_2021.loc["Total / Count", "Type_DAU"]               = count
     com_2021.loc["Total / Count", "NB_LGT_TOT_CREES"]       = logements
     com_2021.loc["Total / Count", "NB_LGT_PRET_LOC_SOCIAL"] = logsoc
     com_2021.loc["Total / Count", "Artif"]                  = artif
-    com_2021.loc["Total / Budget 2030", "Artif"]            = BUDGET_2030
     com_2021.loc["Total / 2018-01-01", "Artif"]             = artif_18
     com_2021.loc["Total / 2019-01-01", "Artif"]             = artif_19
     com_2021.loc["Total / 2020-01-01", "Artif"]             = artif_20
     com_2021.loc["Total / 2021-01-01", "Artif"]             = artif_21
     com_2021.loc["Total / 2022-01-01", "Artif"]             = artif_22
-    com_2021.loc["Total / 2021-05-20", "Artif"]             = artif_SO
-    com_2021.loc["Total / 2020-01-01", "Etat"]              = str(round0(((artif_20/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
-    com_2021.loc["Total / 2021-01-01", "Etat"]              = str(round0(((artif_21/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
-    com_2021.loc["Total / 2021-05-20", "Etat"]              = str(round0(((artif_SO/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
-    com_2021.loc["Total / Time",       "Etat"]              = str(round0(time_percent*100, 0))+"%"
-    com_2021.loc["Total / Time",       "Artif"]             = trajectoire
-    com_2021.loc["Total / Budget 2040", "Artif"]            = BUDGET_2040
+    com_2021.loc["Total / Count",      "DEP"]               = round0(( artif_17 - artif_18 ) / 10000,2)
+    com_2021.loc["Total / 2018-01-01", "DEP"]               = round0(( artif_18 - artif_19 ) / 10000,2)
+    com_2021.loc["Total / 2019-01-01", "DEP"]               = round0(( artif_19 - artif_20 ) / 10000,2)
+    com_2021.loc["Total / 2020-01-01", "DEP"]               = round0(( artif_20 - artif_21 ) / 10000,2)
+    com_2021.loc["Total / 2021-01-01", "DEP"]               = round0(( artif_21 - artif_22 ) / 10000,2)
+    com_2021.loc["Total / 2022-01-01", "DEP"]               = round0(( artif_22  ) / 10000,2)
+    """
+
+    com_2021.loc["Total / Budget 2021 - 2030 Scot Ouest", "Artif"] = BUDGET_2030
+    com_2021.loc["Total / Budget 2021 - 2030 Scot Ouest", "DEP"]   = round0(( BUDGET_2030  ) / 10000,2)
+    com_2021.loc["Total / " + start_date+ "  Toutes Surfaces", "Artif"] = artif_SO
+    com_2021.loc["Total / " + start_date+ "  Toutes Surfaces", "DEP"]   = round0(( artif_SO  ) / 10000,2)
+    com_2021.loc["Total / " + start_date+ "  Toutes Surfaces", "Annul"] = str(round0(((artif_SO/BUDGET_2030)*100), 0))+"%"  if (BUDGET_2030 > 0) else 0
+    com_2021.loc["Total / " + start_date+ "  Surfaces > " + str(limit), "Artif"] = artif_SO_L
+    com_2021.loc["Total / " + start_date+ "  Surfaces > " + str(limit), "DEP"]   = round0(( artif_SO_L  ) / 10000,2)
+    com_2021.loc["Total / " + start_date+ "  Surfaces > " + str(limit), "Annul"] = str(round0(((artif_SO_L/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
+    com_2021.loc["Total / " + start_date+ "  Temps Ecoule", "Annul"]    = str(round0(time_percent*100, 0))+"%"
+    com_2021.loc["Total / " + start_date+ "  Temps Ecoule", "Artif"]    = trajectoire
+    com_2021.loc["Total / Budget 2030 - 2040", "Artif"]     = BUDGET_2040
+    com_2021.loc["Total / Budget 2030 - 2040", "DEP"]       = round0(( BUDGET_2040  ) / 10000,2)
 
     file_name = output_dir + os.sep + "scot_ouest_"+clean_name(NOM_COMMUNE)+".xlsx"
     writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
     com_2021.to_excel(writer, sheet_name=NOM_COMMUNE)
     worksheet1 = writer.sheets[NOM_COMMUNE]
     worksheet1.set_tab_color('green')
-    red_format = writer.book.add_format({'bg_color': 'red'})
-    worksheet1.conditional_format('H1:H1000', {'type': 'cell', 'criteria': 'equal to', 'value': 0, 'format': red_format})
+    red_format  = writer.book.add_format({'bg_color': 'red'})
+    blue_format = writer.book.add_format({'bg_color': 'blue'})
+    # worksheet1.conditional_format('H1:H1000', {'type': 'cell', 'criteria': 'equal to', 'value': 0, 'format': red_format})
+    # worksheet1.conditional_format('H1:H1000', {'type': 'cell', 'criteria': '<', 'value': limit, 'format': blue_format})
+    # worksheet1.conditional_format('H1:H1000', {'type': 'cell', 'criteria': '>', 'value': limit, 'format': red_format})
     # writer.save()
     writer.close()
 
@@ -2515,18 +2534,24 @@ def scot_ouest(code_insee, start_date="2021-05-20", file="scot_ouest"):
     red_color      = 'ffc7ce'
     red_color_font = '9c0103'
     green_color    = '00ff00'
+    blue_color     = '0000ff'
 
     red_font   = styles.Font(bold=True, color=red_color_font)
     red_fill   = styles.PatternFill(start_color=red_color,   end_color=red_color,   fill_type='solid')
+    blue_fill  = styles.PatternFill(start_color=blue_color,  end_color=blue_color,  fill_type='solid')
     green_fill = styles.PatternFill(start_color=green_color, end_color=green_color, fill_type='solid')
     dxf_green_fill = styles.differential.DifferentialStyle(fill=green_fill)
     dxf_red_fill   = styles.differential.DifferentialStyle(font=red_font, border=None, fill=red_fill)
 
-    work_sheet.conditional_formatting.add('C3:C' + str(data_number_of_rows-4), formatting.rule.Rule(type='containsText', text='RU', dxf=dxf_green_fill))
-    work_sheet.conditional_formatting.add('D3:D' + str(data_number_of_rows-4), formatting.rule.CellIsRule(operator='greaterThan',  formula=['0'], fill=green_fill))
-    work_sheet.conditional_formatting.add('E3:E' + str(data_number_of_rows-4), formatting.rule.CellIsRule(operator='greaterThan',  formula=['0'], fill=green_fill))
-    work_sheet.conditional_formatting.add('F3:F' + str(data_number_of_rows-4), formatting.rule.Rule(type='containsText', text='Annulé', dxf=dxf_green_fill))
-    work_sheet.conditional_formatting.add('G3:G' + str(data_number_of_rows-4), formatting.rule.CellIsRule(operator='greaterThan',  formula=['0'], fill=red_fill, font=red_font))
+    work_sheet.conditional_formatting.add('C3:C' + str(data_number_of_rows-3), formatting.rule.Rule(type='containsText', operator="containsText", text='RU', dxf=dxf_green_fill))
+    work_sheet.conditional_formatting.add('D3:D' + str(data_number_of_rows-3), formatting.rule.CellIsRule(operator='greaterThan',  formula=['0'], fill=green_fill))
+    work_sheet.conditional_formatting.add('E3:E' + str(data_number_of_rows-3), formatting.rule.CellIsRule(operator='greaterThan',  formula=['0'], fill=green_fill))
+    work_sheet.conditional_formatting.add('F3:F' + str(data_number_of_rows-3), formatting.rule.CellIsRule(operator='greaterThan',  formula=['0'], fill=green_fill))
+    # work_sheet.conditional_formatting.add('F3:F' + str(data_number_of_rows-3), formatting.rule.Rule(type='containsText', operator="containsText", text='Annul', dxf=dxf_green_fill))
+    # work_sheet.conditional_formatting.add('F3:F' + str(data_number_of_rows-3), formatting.rule.CellIsRule(operator='containsText', formula=['Annul'], fill=green_fill))
+    # work_sheet.conditional_formatting.add('C3:C' + str(data_number_of_rows-3), formatting.rule.CellIsRule(operator='containsText', formula=['RU'],    fill=green_fill))
+    # work_sheet.conditional_formatting.add('G3:G' + str(data_number_of_rows-3), formatting.rule.CellIsRule(operator='greaterThan',  formula=['0'],     fill=blue_fill, font=red_font))
+    work_sheet.conditional_formatting.add('G3:G' + str(data_number_of_rows-3), formatting.rule.CellIsRule(operator='greaterThan',  formula=[str(limit)],  fill=red_fill,  font=red_font))
 
     red_colour = 'ffc7ce'
     red_colour_font = '9c0103'
@@ -2536,33 +2561,40 @@ def scot_ouest(code_insee, start_date="2021-05-20", file="scot_ouest"):
 
     rule = formatting.rule.Rule(type='containsText', text="RU", stopIfTrue=False)
     rule.dxf = styles.differential.DifferentialStyle(font=red_font, border=None, fill=red_fill)
-    work_sheet.conditional_formatting.add('C3:C' + str(data_number_of_rows-4), rule)
+    # work_sheet.conditional_formatting.add('C3:C' + str(data_number_of_rows-4), rule)
+    work_book.close()
 
     # Summary
     try:
         df_sum = pd.read_excel(file_123, sheet_name=sheet_sum, index_col=0)
-    except:
+    except Exception as e:
+        print(str(e))
         df_sum = pd.DataFrame()
         df_sum.index.name = 'Commune'
         df_sum = df_sum.rename_axis('Commune')
     sum_number_of_rows = len(com_2021.index)
 
     # df_sum.at[sheet_123, "Commune"]            = sheet_123
-    df_sum.at[sheet_123, "# Permis"]           = count
-    df_sum.at[sheet_123, "Logements"]          = logements
-    df_sum.at[sheet_123, "Sociaux"]            = logsoc
-    df_sum.at[sheet_123, "Superficie"]         = superficie0
-    df_sum.at[sheet_123, "Consommation SCoT"]  = artif
-    df_sum.at[sheet_123, "Budget 2030"]        = BUDGET_2030
-    df_sum.at[sheet_123, "Conso / 2020-01-01"]   = artif_20
-    df_sum.at[sheet_123, "% / 2020-01-01"]       = str(round0(((artif_20/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
-    df_sum.at[sheet_123, "Conso / 2021-01-01"]   = artif_21
-    df_sum.at[sheet_123, "% / 2021-01-01"]       = str(round0(((artif_21/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
-    df_sum.at[sheet_123, "Conso / 2021-05-20"]   = artif_SO
-    df_sum.at[sheet_123, "% / 2021-05-20"]       = str(round0(((artif_SO/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
-    df_sum.at[sheet_123, "Total / Time"]         = str(round0(((time_percent)*100), 0))+"%"
-    df_sum.at[sheet_123, "Budget 2040"]          = BUDGET_2040
-    df_sum.at[sheet_123, "Trajectoire"]          = trajectoire
+    df_sum.at[sheet_123, "# Permis"]             = count
+    df_sum.at[sheet_123, "Logements"]            = logements
+    df_sum.at[sheet_123, "Sociaux"]              = logsoc
+    # df_sum.at[sheet_123, "Superficie"]           = superficie0
+    # df_sum.at[sheet_123, "Consommation SCoT"]    = artif
+
+    df_sum.at[sheet_123, "Budget 2030"]                   = round0((BUDGET_2030) / 10000, 2)
+    df_sum.at[sheet_123, "Conso Vierge / " + start_date]  = round0((artif_SO) / 10000, 2)
+    df_sum.at[sheet_123, "% Vierge / "     + start_date]  = str(round0(((artif_SO/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
+
+    df_sum.at[sheet_123, "Conso "+str(limit)+ " / "+start_date]   = round0((artif_SO_L) / 10000, 2)
+    df_sum.at[sheet_123, "% "    +str(limit)+ " / "+start_date]   = str(round0(((artif_SO_L/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
+
+    df_sum.at[sheet_123, "Temps"]          = str(round0(((time_percent)*100), 0))+"%"
+    df_sum.at[sheet_123, "Trajectoire"]    = trajectoire
+
+    df_sum.at[sheet_123, "Budget 2040"]    = round0((BUDGET_2040) / 10000, 2)
+
+    # print(str(df_sum.index[0]))
+    # df_sum = df_sum.drop(df_sum.index[0])
 
     if (sheet_sum in work_book.sheetnames):
         work_book.remove(work_book[sheet_sum])
@@ -3823,7 +3855,8 @@ class TestConsommation(unittest.TestCase):
         print_yellow("> Scot Ouest")
         # scot_ouest(code_insee="06108", start_date="2020-01-01")  # 06108 / 06085
         # scot_ouest(code_insee="06085", start_date="2020-01-01")  # 06108 / 06085
-        scot_ouest(code_insee="06083", start_date="2017-01-01")  # 06108 / 06085
+        scot_ouest(code_insee="06108", start_date="2021-05-20")  # 06108 / 06085
+        scot_ouest(code_insee="06085", start_date="2021-05-20")  # 06108 / 06085
         print_yellow("< Scot Ouest")
 
     def testSaintTropez(self):
@@ -3861,6 +3894,7 @@ class TestConsommation(unittest.TestCase):
     def testCAPL(self):
         global FAST
         FAST = True
+        VERBOSE = True
         report_select_dict("93", filename=selection_file, force=True)
         print_yellow("> CA Cannes Pays de Lerins")
         ds = report_epci(epci_id="200039915", force=True, with_communes=True)
