@@ -3517,7 +3517,7 @@ def report_commune(code_insee : str = None, code_postal: str = None, force=True,
 
     if (code_insee in communes_zone("SCoT_Ouest")):
         print_blue("Scot Ouest pour Commune "+str(commune)+" : INSEE ["+str(code_insee+"]"))
-        scot_ouest(code_insee=code_insee, start_date="2020-01-01")
+        scot_ouest(code_insee=code_insee)
 
     if (commune.upper() == "ANTIBES"):
         print_blue("Scot Ouest pour Commune "+str(commune)+" : INSEE ["+str(code_insee+"]"))
