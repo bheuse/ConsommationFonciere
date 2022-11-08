@@ -75,7 +75,12 @@ sitadelSourcePage     = "https://www.data.gouv.fr/fr/datasets/base-des-permis-de
 global_context["URL_SOURCE_SITADEL"] = sitadelSourcePage
 
 sitadelSource1316File = "https://www.data.gouv.fr/fr/datasets/r/67dd4ee1-0d73-4676-a90f-854fe9012f5d"
+sitadelSource1316File = "https://statistiques.developpement-durable.gouv.fr/sites/default/files/2022-10/PC_DP_creant_logements_2013_2016.zip"
+
+sitadelSource1721File = "https://statistiques.developpement-durable.gouv.fr/sites/default/files/2022-10/PC_DP_creant_logements_2017_2022.zip"
 sitadelSource1721File = "https://www.data.gouv.fr/fr/datasets/r/1fa467ef-5e3a-456f-b961-be9032cfa3df"
+sitadelSource1721File = "https://statistiques.developpement-durable.gouv.fr/sites/default/files/2022-10/PC_DP_creant_logements_2017_2022.zip"
+
 sitadelSourceMetaFile = "https://www.data.gouv.fr/fr/datasets/r/9d7d6728-c3bc-44e4-8105-7335ad70d52e"
 sitadel1316File       = data_dir + "PC_DP_creant_logements_2013_2016.csv"
 sitadel1721File       = data_dir + "PC_DP_creant_logements_2017_2022.csv"
@@ -125,7 +130,9 @@ def load_sitadel(sitadel1316_file:  str = sitadel1316File,
 ##########################
 
 sitadelLocauxSource1316File = "https://www.data.gouv.fr/fr/datasets/r/3b987380-d1cf-4047-8dc5-1a19a3ecf812"
+sitadelLocauxSource1316File = "https://statistiques.developpement-durable.gouv.fr/sites/default/files/2022-10/PC_DP_creant_locaux_2013_2016.zip"
 sitadelLocauxSource1721File = "https://www.data.gouv.fr/fr/datasets/r/98ff9fd3-a14e-474d-bb8f-12bde12d9f70"
+sitadelLocauxSource1721File = "https://statistiques.developpement-durable.gouv.fr/sites/default/files/2022-10/PC_DP_creant_locaux_2017_2022.zip"
 sitadelLocauxSourceMetaFile = "https://www.data.gouv.fr/fr/datasets/r/b3ffee5b-fd75-4345-a086-02ded2018705"
 sitadelLocaux1316File = data_dir + "PC_DP_creant_locaux_2013_2016.csv"
 sitadelLocaux1721File = data_dir + "PC_DP_creant_locaux_2017_2022.csv"
@@ -2423,7 +2430,7 @@ class DataStore():
         return self
 
 
-def scot_ouest(code_insee, start_date="2021-05-20", file="scot_ouest", limit=2500):
+def scot_ouest(code_insee, start_date="2021-08-03", file="scot_ouest", limit=2500):
     global SCOT_OUEST
     load_sitadel()
     load_scot_data()
@@ -3880,6 +3887,7 @@ class TestConsommation(unittest.TestCase):
         # scot_ouest(code_insee="06085", start_date="2020-01-01")  # 06108 / 06085
         scot_ouest(code_insee="06108", start_date="2021-05-20")  # 06108 / 06085
         scot_ouest(code_insee="06085", start_date="2021-05-20")  # 06108 / 06085
+        scot_ouest(code_insee="06002", start_date="2021-08-03")  # Amirat
         print_yellow("< Scot Ouest")
 
     def testSaintTropez(self):
