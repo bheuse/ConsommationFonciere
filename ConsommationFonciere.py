@@ -3500,6 +3500,7 @@ def ftp_push_files():
                 "input/Densite_2.jpg",          "input/Densite_3.jpg",
                 "input/Densite_4.jpg",          "input/Densite_5.png",
                 "input/Densite_6.jpg",          "input/Densite_7.png",
+                "input/VigiBatiBack.png",       "input/VigiBatifavicon.png",
                 "input/Gadseca-Logo.png",       "input/Gadseca_50Ans.jpg",
                 "input/Logo2-Vert-FV.png",      "input/Logo2-Vert.png",
                 "input/Logo3-Color-FV.png",     "input/Logo3-Color.png",
