@@ -4,7 +4,7 @@
 
 - [En collaboration avec France Nature Environnement - PACA](https://fnepaca.fr/)
 - [Powered by Gadesca](https://www.gadseca.org)
-- [Contactez-nous / Information]("mailto:gadceca06@gmail.com?subject=A%20propos%20de%20Sobriété%20Foncière")
+- [Contactez-nous / Information](mailto:gadceca06@gmail.com?subject=A%20propos%20de%20Sobriété%20Foncière)
 - [Heberge sur o2Switch  - En Ligne Ici](https://sobrietefonciere.fnepaca.fr/)
 - [Open Source Projet Github](https://github.com/bheuse/ConsommationFonciere)
 
