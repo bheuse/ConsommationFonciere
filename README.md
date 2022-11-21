@@ -173,7 +173,7 @@ Par défaut, un certain nombre de données sont collectées.
 Par configuration, on peut ensuite demander la collecte de données supplémentaires.
 On peut aussi calculer de nouvelles métriques basées sur les autres (par exemple des taux)
 
-Ces métriques sont ensuite disponibles pour générer le rapport.
+Ces métriques sont ensuite disponibles pour générer les rapports.
 
 Pour collecter de nouvelles métriques, ajouter des lignes dans le fichier de configuration, _TAB_ **Collect**
 
