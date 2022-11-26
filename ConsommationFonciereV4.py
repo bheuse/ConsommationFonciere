@@ -492,7 +492,7 @@ def load_communes(meta_dossier_file: str = metaDossierFile, dossier_complet_file
         print_blue("Lecture Meta Donnees Communes : " + metaDossierFile + " ...")
         metaDossier = pd.read_csv(meta_dossier_file, delimiter=';', index_col=0)
         print_blue("Lecture Donnees Communes : " + dossier_complet_file + " ...")
-        dossierComplet = pd.read_csv(dossier_complet_file, delimiter=';', dtype={"CODGEO": str,"P19_POP": float}, index_col=0)
+        dossierComplet = pd.read_csv(dossier_complet_file, delimiter=';', dtype={"CODGEO": str, "P19_POP": float}, index_col=0)
     return metaDossier, dossierComplet
 
 
@@ -3591,7 +3591,7 @@ def ftp_push_files():
                 "ConsommationFonciere.py",
                 "input/QuestionnerUnProjetDePLU-SCoT.pdf", "input/Alpes-Maritimes-NoteExcedentsLogements.pdf",
                 "input/Guide_Pratique_Artif_complet.pdf",  "input/GuideSF_6_ZCZAE_web.pdf",
-                "GuideSF_16_Observatoires_web.pdf",        "input/GuideSF_17_fiscalite_web.pdf",
+                "input/GuideSF_16_Observatoires_web.pdf",  "input/GuideSF_17_fiscalite_web.pdf",
                 "input/Urbascope.pdf",          "input/Urbascope_Septembre2022.pdf",
                 "ConsommationFonciere.html",    "ConsommationFonciere.js",
                 "ConsommationFonciereV2.html",  "ConsommationFonciereV2.js",
