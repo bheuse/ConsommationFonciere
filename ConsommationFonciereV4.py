@@ -268,7 +268,6 @@ global_context["URL_SOURCE_PROJECTIONS_2050"] = projectionsSourcePage
 # Région	Libellé de la région	Population en 2013	Population en 2014	Population en 2015	Population en 2016	Population en 2017	Population en 2018	Population en 2019	Population en 2020	Population en 2021	Population en 2022	Population en 2023	Population en 2024	Population en 2025	Population en 2026	Population en 2027	Population en 2028	Population en 2029	Population en 2030	Population en 2031	Population en 2032	Population en 2033	Population en 2034	Population en 2035	Population en 2036	Population en 2037	Population en 2038	Population en 2039	Population en 2040	Population en 2041	Population en 2042	Population en 2043	Population en 2044	Population en 2045	Population en 2046	Population en 2047	Population en 2048	Population en 2049	Population en 2050
 # code_Regions	libelle_Regions	pop_2013	pop_2014	pop_2015	pop_2016	pop_2017	pop_2018	pop_2019	pop_2020	pop_2021	pop_2022	pop_2023	pop_2024	pop_2025	pop_2026	pop_2027	pop_2028	pop_2029	pop_2030	pop_2031	pop_2032	pop_2033	pop_2034	pop_2035	pop_2036	pop_2037	pop_2038	pop_2039	pop_2040	pop_2041	pop_2042	pop_2043	pop_2044	pop_2045	pop_2046	pop_2047	pop_2048	pop_2049	pop_2050
 
-
 def load_projections(projections_file: str = projectionsFile):
     global projectionsREG, projectionsDPT
     if (projectionsREG is None) or (projectionsREG is None):
@@ -277,6 +276,23 @@ def load_projections(projections_file: str = projectionsFile):
         projectionsDPT = pd.read_excel(xls, 'Population_DEP', index_col=0, dtype={"Unnamed: 0": str, "Unnamed: 1": str})
         projectionsREG = pd.read_excel(xls, 'Population_REG', index_col=0, dtype={"Unnamed: 0": str, "Unnamed: 1": str})
     return projectionsDPT, projectionsREG
+
+
+projectionsSourcePage_2022 = "https://www.insee.fr/fr/statistiques/6652134?sommaire=6652140"
+projectionsSourceFile_2022 = "https://www.insee.fr/fr/statistiques/fichier/6652134/projections_scenario_central.xlsx"
+projectionsFile_2022 = data_dir + "projections_scenario_central_2070.xlsx"
+projectionsDPT_2022 = None
+projectionsREG_2022 = None
+global_context["URL_SOURCE_PROJECTIONS_2050"] = projectionsSourcePage_2022
+
+def load_projections_2022(projections_file_2022: str = projectionsFile_2022):
+    global projectionsREG_2022, projectionsDPT_2022
+    if (projectionsREG_2022 is None) or (projectionsREG_2022 is None):
+        print_blue("Lecture Projections Dept/Reg : " + projections_file_2022 + " ...")
+        xls = pd.ExcelFile(projections_file_2022)
+        projectionsDPT_2022 = pd.read_excel(xls, 'Population_DEP', index_col=0, dtype={"Unnamed: 0": str, "Unnamed: 1": str})
+        projectionsREG_2022 = pd.read_excel(xls, 'Population_REG', index_col=0, dtype={"Unnamed: 0": str, "Unnamed: 1": str})
+    return projectionsDPT_2022, projectionsREG_2022
 
 
 ##############################
@@ -2044,6 +2060,7 @@ class DataStore():
 
         # Donnees Projections Departement & Region 2013-2050
         load_projections()
+        load_projections_2022()
 
         # Donnees Evolution Departement 2008-2021 / 2009-2022
         load_evolution()

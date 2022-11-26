@@ -830,7 +830,7 @@ function hideShowLOG_function() {
 
     <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
         <h3>Evolution de la Population</h3></div>
-        <p>Les projections d'évolution de la population sont issues de l'INSEE, et de son étude Omphale.
+        <p>Les projections d'évolution de la population sont issues de l'INSEE, et de son étude Omphale de 2022.
            Le scenario central est retenu ci-dessous.
            Les taux d'évolution appliqués au territoire sont les projections du niveau départemental.
            Pour PACA, les projections détaillées par territoire peuvent être consultes ici :
@@ -1566,7 +1566,7 @@ function hideShowLOG_function() {
         <h2>Projections</h2>
         <p>Projections 2050 : <a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS">Dossier Insee </a></p>
         <p>Projections Paca : <a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS_PACA">Dossier Omphale </a></p>
-        <p>Les projections d'évolution de la population sont issues de l'INSEE, et de son étude Omphale. Le scenario central est retenu ci-dessous. Les taux d'évolution appliqués au territoire sont les projections du niveau départemental.</p>
+        <p>Les projections d'évolution de la population sont issues de l'INSEE, et de son étude Omphale de 2022. Le scenario central est retenu ci-dessous. Les taux d'évolution appliqués au territoire sont les projections du niveau départemental.</p>
         <p>Les besoins en logement sont liés strictement à l'évolution de la population, et au désserrement des ménages, en supposant une stabilisation de la taille des ménages à terme.</p>
         <table class="w3-table-all w3-hoverable w3-card-4">
             <tbody>
@@ -1575,54 +1575,63 @@ function hideShowLOG_function() {
                 <th style="color:white" class="w3-right-align">2020</th>
                 <th style="color:white" class="w3-right-align">2030</th>
                 <th style="color:white" class="w3-right-align">2040</th>
+                <th style="color:white" class="w3-right-align">2050</th>
             </tr>
             <tr>
                 <td><b>Population :</b></td>
                 <td class="w3-right-align">{{ds.POP_2020}}</td>
                 <td class="w3-right-align">{{ds.POP_2030}}</td>
                 <td class="w3-right-align">{{ds.POP_2040}}</td>
+                <td class="w3-right-align">{{ds.POP_2050}}</td>
             </tr>
             <tr>
                 <td>- Evolution en 10 ans :</td>
                 <td class="w3-right-align"> -</td>
                 <td class="w3-right-align">{{f_val(ds.POP_2030 - ds.POP_2020)}}</td>
                 <td class="w3-right-align">{{f_val(ds.POP_2040 - ds.POP_2030)}}</td>
+                <td class="w3-right-align">{{f_val(ds.POP_2050 - ds.POP_2040)}}</td>
             </tr>
             <tr>
                 <td>- Evolution en % / an :</td>
                 <td class="w3-right-align">-</td>
                 <td class="w3-right-align">{{f_val(ds.TX_POP_2030, format = "+", suffix = "%")}}</td>
                 <td class="w3-right-align">{{f_val(ds.TX_POP_3040, format = "+", suffix = "%")}}</td>
+                <td class="w3-right-align">{{f_val(ds.TX_POP_4050, format = "+", suffix = "%")}}</td>
             </tr>
             <tr>
                 <td><b>Taille des Ménages :</b></td>
                 <td class="w3-right-align">{{ds.TM_2020}}</td>
                 <td class="w3-right-align">{{ds.TM_2030}}</td>
                 <td class="w3-right-align">{{ds.TM_2040}}</td>
+                <td class="w3-right-align">{{ds.TM_2050}}</td>
             </tr>
             <tr>
                 <td>- Evolution en % / an  :</td>
                 <td class="w3-right-align">-</td>
                 <td class="w3-right-align">{{f_val(f_round(ds.TXTM_1319 / 2,3), format = "+", suffix = "%")}}</td>
                 <td class="w3-right-align">{{f_val(f_round(ds.TXTM_1319 / 3,3), format = "+", suffix = "%")}}</td>
+                <td class="w3-right-align">{{f_val(f_round(ds.TXTM_1319 / 4,3), format = "+", suffix = "%")}}</td>
             </tr>
             <tr>
                 <td><b>Besoins en logements pour la population :</b></td>
                 <td class="w3-right-align">{{ds.LOG_2020}}</td>
                 <td class="w3-right-align">{{ds.LOG_2030}}</td>
                 <td class="w3-right-align">{{ds.LOG_2040}}</td>
+                <td class="w3-right-align">{{ds.LOG_2050}}</td>
             </tr>
             <tr>
                 <td>- Besoins en logements nouveaux sur 10 ans :</td>
                 <td class="w3-right-align"> -</td>
                 <td class="w3-right-align">{{f_val(ds.LOG_2030 - ds.LOG_2020)}}</td>
                 <td class="w3-right-align">{{f_val(ds.LOG_2040 - ds.LOG_2030)}}</td>
+                <td class="w3-right-align">{{f_val(ds.LOG_2050 - ds.LOG_2050)}}</td>
             </tr>
             <tr>
                 <td>- Besoins en logements par an :</td>
                 <td class="w3-right-align"> -</td>
-                <td class="w3-right-align">{{f_val(f_round((ds.LOG_2030 - ds.LOG_2020)/10))}} </td>
+                <td class="w3-right-align">{{f_val(f_round((ds.LOG_2030 - ds.LOG_2020)/10))}}</td>
                 <td class="w3-right-align">{{f_val(f_round((ds.LOG_2040 - ds.LOG_2030)/10))}}</td>
+                <td class="w3-right-align">{{f_val(f_round((ds.LOG_2050 - ds.LOG_2040)/10))}}</td>
             </tr>
             </tbody>
         </table>

@@ -2689,7 +2689,7 @@ function chartTailleDesMenages(ds, container) {
     if (ds=== null) { return ; }
 
     const data = {
-      labels: ["2008", "2013", "2019", "2025", "2030", "2035", "2040"],
+      labels: ["2008", "2013", "2019", "2025", "2030", "2035", "2040", "2045", "2050"],
       datasets: [
         {
           label: "Taille des Ménages - Historique",
@@ -2701,7 +2701,7 @@ function chartTailleDesMenages(ds, container) {
         },
         {
           label: "Taille des Ménages - Projetée",
-          data: [ , , ds.TM_2019, (ds.TM_2020 + ds.TM_2030)/2 ,ds.TM_2030, (ds.TM_2030 + ds.TM_2040)/2 , ds.TM_2040],
+          data: [ , , ds.TM_2019, (ds.TM_2020 + ds.TM_2030)/2 ,ds.TM_2030, (ds.TM_2030 + ds.TM_2040)/2 , ds.TM_2040, (ds.TM_2040 + ds.TM_2050)/2 , ds.TM_2050],
           fill: false,
           tension: 0.5,
           borderDash: [5, 5],
@@ -2754,7 +2754,7 @@ function chartGraphiquePopulation(ds, container) {
     if (ds=== null) { return ; }
 
     const data = {
-      labels: ["2008", "2013", "2019", "2025", "2030", "2035", "2040"],
+      labels: ["2008", "2013", "2019", "2025", "2030", "2035", "2040", "2045", "2050"],
       datasets: [
         {
           label: "Population - Historique",
@@ -2766,7 +2766,7 @@ function chartGraphiquePopulation(ds, container) {
         },
         {
           label: "Population - Projetée",
-          data: [ , , ds.P19_POP, (ds.POP_2020 + ds.POP_2030)/2 ,ds.POP_2030, (ds.POP_2030 + ds.POP_2040)/2 , ds.POP_2040],
+          data: [ , , ds.P19_POP, (ds.POP_2020 + ds.POP_2030)/2 ,ds.POP_2030, (ds.POP_2030 + ds.POP_2040)/2 , ds.POP_2040, (ds.POP_2040 + ds.POP_2050)/2 , ds.POP_2050],
           fill: false,
           tension: 0.5,
           borderDash: [5, 5],
