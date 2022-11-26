@@ -492,7 +492,7 @@ def load_communes(meta_dossier_file: str = metaDossierFile, dossier_complet_file
         print_blue("Lecture Meta Donnees Communes : " + metaDossierFile + " ...")
         metaDossier = pd.read_csv(meta_dossier_file, delimiter=';', index_col=0)
         print_blue("Lecture Donnees Communes : " + dossier_complet_file + " ...")
-        dossierComplet = pd.read_csv(dossier_complet_file, delimiter=';', dtype={"CODGEO": "string"}, index_col=0)
+        dossierComplet = pd.read_csv(dossier_complet_file, delimiter=';', dtype={"CODGEO": str,"P19_POP": float}, index_col=0)
     return metaDossier, dossierComplet
 
 
@@ -3586,9 +3586,8 @@ def ftp_push_files():
         filelist.extend([
                 "input/Configuration.xlsx",
                 "index.html",
-                "output/france.json",
-                "Header.png", "Body.png",
-                "README.md",  "README.html",    "README.dillinger.html",
+                "input/Readme-Header.png", "input/Readme-Body.png",
+                "README.md",   "README.dillinger.html",
                 "ConsommationFonciere.py",
                 "input/QuestionnerUnProjetDePLU-SCoT.pdf", "input/Alpes-Maritimes-NoteExcedentsLogements.pdf",
                 "input/Guide_Pratique_Artif_complet.pdf",  "input/GuideSF_6_ZCZAE_web.pdf",
