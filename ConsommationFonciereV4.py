@@ -2527,7 +2527,7 @@ class DataStore():
         return self
 
 
-def scot_ouest(code_insee, start_date="2021-08-03", file="scot_ouest", limit=2500):
+def scot_ouest(code_insee, start_date="2021-08-11", file="scot_ouest", limit=2500):
     global SCOT_OUEST
     load_sitadel()
     load_scot_data()
@@ -3984,11 +3984,9 @@ class TestConsommation(unittest.TestCase):
 
     def testScot_Ouest(self):
         print_yellow("> Scot Ouest")
-        # scot_ouest(code_insee="06108", start_date="2020-01-01")  # 06108 / 06085
-        # scot_ouest(code_insee="06085", start_date="2020-01-01")  # 06108 / 06085
-        scot_ouest(code_insee="06108", start_date="2021-05-20")  # 06108 / 06085
-        scot_ouest(code_insee="06085", start_date="2021-05-20")  # 06108 / 06085
-        scot_ouest(code_insee="06002", start_date="2021-08-03")  # Amirat
+        scot_ouest(code_insee="06108", start_date="2021-08-11")  # 06108 / 06085
+        scot_ouest(code_insee="06085", start_date="2021-08-11")  # 06108 / 06085
+        scot_ouest(code_insee="06002", start_date="2021-08-11")  # Amirat
         print_yellow("< Scot Ouest")
 
     def testSaintTropez(self):
