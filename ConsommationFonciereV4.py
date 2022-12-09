@@ -3580,7 +3580,7 @@ def ftp_push_files():
     filelist = ["input/plots.json",             "output/select.json",
                 "output/calculations.json",     "output/datametrics.json",  "output/diagnostics.json",
                 "index.html",
-                "ConsommationFonciereV3.html",  "ConsommationFonciereV3.js"
+                "ConsommationFonciereV4.html",  "ConsommationFonciereV4.js"
                 ]
     if not FAST:
         filelist.extend([
@@ -3595,6 +3595,7 @@ def ftp_push_files():
                 "input/Urbascope.pdf",          "input/Urbascope_Septembre2022.pdf",
                 "ConsommationFonciere.html",    "ConsommationFonciere.js",
                 "ConsommationFonciereV2.html",  "ConsommationFonciereV2.js",
+                "ConsommationFonciereV3.html",  "ConsommationFonciereV3.js",
                 "input/Legend_Logements.png",   "input/CommentCaMarche.png",
                 "input/Densite.png",            "input/Densite_1.jpg",
                 "input/Densite_2.jpg",          "input/Densite_3.jpg",
