@@ -2578,8 +2578,8 @@ def scot_ouest(code_insee, start_date="2021-08-11", file="scot_ouest", limit=250
     artif_20   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2020-01-01")]["Artif"])
     artif_21   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2021-01-01")]["Artif"])
     artif_22   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2022-01-01")]["Artif"])
-    artif_SO   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2021-05-20")]["Artif"])
-    artif_SO_S = com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2021-05-20")]
+    artif_SO   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > start_date)]["Artif"])
+    artif_SO_S = com_2021[(com_2021["DATE_REELLE_AUTORISATION"]     > start_date)]
     artif_SO_L  = sum(artif_SO_S[(artif_SO_S["Artif"] > limit)]["Artif"])
 
     count       = len(com_2021.index)
@@ -3592,6 +3592,7 @@ def ftp_push_files():
                 "input/QuestionnerUnProjetDePLU-SCoT.pdf", "input/Alpes-Maritimes-NoteExcedentsLogements.pdf",
                 "input/Guide_Pratique_Artif_complet.pdf",  "input/GuideSF_6_ZCZAE_web.pdf",
                 "input/GuideSF_16_Observatoires_web.pdf",  "input/GuideSF_17_fiscalite_web.pdf",
+                "input/Guide_Vers-la-sobriete-fonciere-2022_complet-2.pdf",
                 "input/Urbascope.pdf",          "input/Urbascope_Septembre2022.pdf",
                 "ConsommationFonciere.html",    "ConsommationFonciere.js",
                 "ConsommationFonciereV2.html",  "ConsommationFonciereV2.js",
