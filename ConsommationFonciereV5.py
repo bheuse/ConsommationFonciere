@@ -3408,7 +3408,6 @@ class FTP:
                     "output/calculations.json",     "output/datametrics.json",  "output/diagnostics.json",
                     "index.html",
                     "ConsommationFonciereV5.html",  "ConsommationFonciereV5.js"
-                    "ConsommationFonciereV4.html",  "ConsommationFonciereV4.js"
                     ]
         if not FAST:
             filelist.extend([
@@ -3425,6 +3424,7 @@ class FTP:
                     "ConsommationFonciere.html",    "ConsommationFonciere.js",
                     "ConsommationFonciereV2.html",  "ConsommationFonciereV2.js",
                     "ConsommationFonciereV3.html",  "ConsommationFonciereV3.js",
+                    "ConsommationFonciereV4.html",  "ConsommationFonciereV4.js",
                     "input/Legend_Logements.png",   "input/CommentCaMarche.png",
                     "input/Densite.png",            "input/Densite_1.jpg",
                     "input/Densite_2.jpg",          "input/Densite_3.jpg",
