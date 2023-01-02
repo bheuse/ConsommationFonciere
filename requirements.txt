@@ -13,11 +13,13 @@ mako
 jk_commentjson
 pyyaml
 requests
-scipy
+# scipy
 markdown
 xlsxwriter
 openpyxl
 python-dateutil
+pillow
+kiwisolver
 
 
 

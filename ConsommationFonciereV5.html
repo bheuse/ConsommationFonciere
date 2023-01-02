@@ -1413,7 +1413,7 @@ function hideShowLOG_function() {
         <h3>Objectifs SCoT Ouest Alpes-Maritimes</h3></div>
         <p>SCoT Ouest : <a target="_blank" href="https://cloud.paysdegrasse.fr/index.php/s/4jrNnfwokzSTo6a"> Document D'Objectifs </a></p>
         <p> Le SCoT Ouest Alpes-Maritimes s'est donné comme objectif de limiter son artificialisation par commune.</p>
-        <p> Cette table est issue des données des permis de construire autorisés depuis la mise en place du SCoT, le 11 Aout 2021.</p>
+        <p> Cette table est issue des données des permis de construire autorisés selon le SCoT, depuis le {{ ds.SCOT_OUEST_START_DATE_FORMAT }}.</p>
         <p> C'est la surface des parcelles sujettes a PC qui est prise en compte. Ne sont pas comptés :
             les PC avant l’approbation du SCoT, les Déclarations Préalables, les PC annulés, les PC avec surface existante ou démolition
 	        les PC avec indication d'extension ou de surélévation, les PC sur logements existant, les PC pour les locaux commerciaux ou industriels,
@@ -1422,19 +1422,20 @@ function hideShowLOG_function() {
             ce n'est pas l'emprise au sol imperméabilisée ou minéralisée, mais l’artificialisation correspondant à la définition
             d’artificialisation du décret n° 2022-763 du 29 avril 2022, qui comprend les surfaces espaces verts comme les jardins.</p>
         <p> Le SCoT se veut ne comptabiliser que les parcelles de plus de 2500 m2 dans le budget disponible.
-            Mais comme la plupart des parcelles sont de moins de 2500 m2, qui constituent la majorité de la consommation,
+            Mais comme la plupart des parcelles sont de moins de 2500 m2, et constituent la majorité de la consommation,
             les petites surfaces consommées sont aussi indiquées dans la table ci-dessous.</p>
 
         <table class="w3-table-all w3-hoverable w3-card-4">
             <tbody>
             <tr class="w3-teal">
                 <th style="color:white">Données Sitadel</th>
-                <th style="color:white" class="w3-right-align">Depuis le 11 Aout 2021</th>
+                <th style="color:white" class="w3-right-align">Depuis le {{ ds.SCOT_OUEST_START_DATE_FORMAT }}</th>
             </tr>
             <tr>
                 <td>Dernière autorisation prise en compte :</td>
                 <td class="w3-right-align">{{ ds.SCOT_LAST_DATE }} </td>
             </tr>
+            <!--
             <tr>
                 <td>Nombre de Permis Autorisés :</td>
                 <td class="w3-right-align">{{ f_round(ds.SCOT_OUEST_LOG_COUNT,0) }} </td>
@@ -1447,16 +1448,17 @@ function hideShowLOG_function() {
                 <td>Nombre de logements sociaux :</td>
                 <td class="w3-right-align">{{ f_percent(ds.SCOT_OUEST_LOG_LOG_SOCIAUX , ds.SCOT_OUEST_LOG_LOGEMENTS, rounding=0, suffix = "%", format = "()" )  }} </td>
             </tr>
+            -->
             <tr>
                 <td>Consommation autorisée en parcelles vierges (toutes superficies) :</td>
-                <td class="w3-right-align">{{ f_round(ds.SCOT_OUEST_LOG_SUPERFICIE / 10000,2)  }} ha  </td>
+                <td class="w3-right-align">{{ f_round(ds.SCOT_OUEST_LOG_SUPERFICIE_ALL / 10000,2)  }} ha  </td>
             </tr>
             <tr>
                 <td><b>Objectif de consommation jusqu'en 2030 (parcelles > 2500 m2) :</b></td>
                 <td class="w3-right-align"><b>{{ f_round(ds.SCOT_2030 / 10000,2)  }} ha  </b></td>
             </tr>
             <tr>
-                <td>- Consommation dans le budget de l'objectif (parcelles > 2500 m2) :</td>
+                <td>- Consommation dans le budget de l'objectif 2030 (parcelles > 2500 m2) :</td>
                 <td class="w3-right-align">{{ f_percent(f_round(ds.SCOT_OUEST_LOG_SUPERFICIE_2500 / 10000,2) , ds.SCOT_2030 / 10000, rounding=0, suffix = "%", format = "()")  }}  ha </td>
             </tr>
             <tr>
@@ -1481,6 +1483,13 @@ function hideShowLOG_function() {
 
         <br>
         <div id="artificialisationSCoTOuest"      class="center"  style="width:100%; max-width:600px; max-height:500px;"></div>
+
+        <div class="w3-cell-row">
+            <div class="w3-container w3-cell w3-mobile w3-center">
+                <p></p>
+                <p><a class="btn w3-btn fa fa-download" style="color:white" :href="ds.SCOT_OUEST_URL"> Download Scot Ouest Data</a></p>
+            </div>
+        </div>
 
         <br>
         <diagnostics :diags=this.data_s.Diagnostics type="ALL" categorie="ART"></diagnostics>

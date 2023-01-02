@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from openpyxl import formatting, styles, Workbook, load_workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
+from openpyxl.styles import Alignment
 import webbrowser
 import requests
 import io
@@ -26,7 +27,7 @@ import zipfile
 import shutil
 from importlib import reload
 import matplotlib
-from scipy.interpolate import make_interp_spline, BSpline
+# from scipy.interpolate import make_interp_spline, BSpline
 import numpy as np
 import ftplib
 import markdown
@@ -59,6 +60,7 @@ plots_file           = input_dir  + "plots.json"
 context_file         = output_dir + "context.yaml"
 france_file          = output_dir + "france.json"
 selection_file       = output_dir + "select.json"
+scot_ouest_file      = "scot_ouest"
 
 global_context       = {}
 
@@ -95,10 +97,8 @@ def load_sitadel(sitadel1316_file:  str = data_dir + sitadel1316File,
                  sitadel17PL_file:  str = data_dir + sitadel17PLFile,
                  sitadel_meta_file: str = data_dir + sitadelMetaFile):
     global sitadel1316, sitadel17PL, sitadelMeta, sitadel13PL
-    if (sitadel1316 is None) or (sitadel17PL is None)  or (sitadelMeta is None):
+    if ((sitadel1316 is None) and (sitadel1316_file)):
         Files.downloadFile(sitadelSource1316File, sitadel1316_file, is_zipped=True, zipped_file=sitadel1316File)
-        Files.downloadFile(sitadelSource17PLFile, sitadel17PL_file, is_zipped=True, zipped_file=sitadel17PLFile)
-        Files.downloadFile(sitadelSourceMetaFile, sitadel_meta_file)
         Term.print_blue("Lecture Sitadel Logements 2013-2016 : " + sitadel1316_file + " ...")
         sitadel1316 = pd.read_csv(sitadel1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "Etat_DAU": str, "DPC_AUT": str, "NATURE_PROJET_DECLAREE" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "Type_DAU": str, "Num_DAU": str})
         sitadel1316["Parcelles"] = sitadel1316['sec_cadastre1'].map(str) + sitadel1316['num_cadastre1'].map(str) + " " +\
@@ -106,6 +106,8 @@ def load_sitadel(sitadel1316_file:  str = data_dir + sitadel1316File,
                                    sitadel1316['sec_cadastre3'].map(str) + sitadel1316['num_cadastre3'].map(str)
         sitadel1316["NATURE_PROJET"]     = sitadel1316["NATURE_PROJET_DECLAREE"]
         sitadel1316["RESIDENCE_SERVICE"] = sitadel1316["RESIDENCE"]
+    if ((sitadel17PL is None) and (sitadel17PL_file)):
+        Files.downloadFile(sitadelSource17PLFile, sitadel17PL_file, is_zipped=True, zipped_file=sitadel17PLFile)
         Term.print_blue("Lecture Sitadel Logements 2017-2022 : " + sitadel17PL_file + " ...")
         sitadel17PL = pd.read_csv(sitadel17PL_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "Etat_DAU": str, "DPC_AUT": str, "ADR_LOCALITE_TER" : str, "ADR_CODPOST_TER" : str, "NATURE_PROJET_DECLAREE" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "Type_DAU": str, "Num_DAU": str, "SIREN_DEM": str, "SIRET_DEM": str, "CODPOST_DEM": str })
         sitadel17PL["Parcelles"] = sitadel17PL['sec_cadastre1'].map(str) + sitadel17PL['num_cadastre1'].map(str) + " " + \
@@ -113,10 +115,14 @@ def load_sitadel(sitadel1316_file:  str = data_dir + sitadel1316File,
                                    sitadel17PL['sec_cadastre3'].map(str) + sitadel17PL['num_cadastre3'].map(str)
         sitadel17PL["NATURE_PROJET"]     = sitadel17PL["NATURE_PROJET_DECLAREE"]
         sitadel17PL["RESIDENCE_SERVICE"] = sitadel17PL["RESIDENCE"]
+    if ((sitadelMeta is None) and (sitadel_meta_file)):
+        Files.downloadFile(sitadelSourceMetaFile, sitadel_meta_file)
         Term.print_blue("Lecture Meta Logements Sitadel : " + sitadel_meta_file + " ...")
-        sitadel13PL = pd.concat([sitadel1316, sitadel17PL])
         xls = pd.ExcelFile(sitadel_meta_file)
         sitadelMeta = pd.read_excel(xls, 'Variables_Logements', index_col=0)
+    if ((sitadel1316 is not None) and (sitadel17PL is not None)):
+        sitadel13PL = pd.concat([sitadel1316, sitadel17PL])
+
     return sitadel1316, sitadel17PL, sitadelMeta, sitadel13PL
 
 
@@ -2107,8 +2113,8 @@ class DataStore():
         loc_termines1316   = com_sitadelLocaux1.loc[com_sitadelLocaux1['Etat_DAU'] == "6"]
         loc_commences17PL  = com_sitadelLocaux2.loc[com_sitadelLocaux2['Etat_DAU'] == "5"]
         loc_termines17PL   = com_sitadelLocaux2.loc[com_sitadelLocaux2['Etat_DAU'] == "6"]
-        loc_nouveau        = com_sitadelLocaux.loc[(com_sitadelLocaux['NATURE_PROJET_DECLAREE'] == "1") & (com_sitadelLocaux['Etat_DAU'] != "4")]
-        loc_renouv         = com_sitadelLocaux.loc[(com_sitadelLocaux['NATURE_PROJET_DECLAREE'] == "2") & (com_sitadelLocaux['Etat_DAU'] != "4")]
+        loc_nouveau        = com_sitadelLocaux.loc[(com_sitadelLocaux['NATURE_PROJET_DECLAREE'] == "1")  & (com_sitadelLocaux['Etat_DAU'] != "4")]
+        loc_renouv         = com_sitadelLocaux.loc[(com_sitadelLocaux['NATURE_PROJET_DECLAREE'] == "2")  & (com_sitadelLocaux['Etat_DAU'] != "4")]
         loc_nouveau        = com_sitadelLocaux.loc[(com_sitadelLocaux['NATURE_PROJET_COMPLETEE'] == "1") & (com_sitadelLocaux['Etat_DAU'] != "4")]
         loc_renouv         = com_sitadelLocaux.loc[(com_sitadelLocaux['NATURE_PROJET_COMPLETEE'] != "1") & (com_sitadelLocaux['Etat_DAU'] != "4")]
 
@@ -3596,112 +3602,172 @@ class Report:
         Report.region("93", force=force, ftp_push=ftp_push)
 
     @staticmethod
-    def scot_ouest_commune(code_insee, start_date="2021-08-11", file="scot_ouest", limit=2500):
+    def scot_ouest_commune(code_insee, start_date="2021-08-11", file=scot_ouest_file, limit=2500):
         global SCOT_OUEST
-        load_sitadel()
+        Term.print_green("Scot Ouest for : " + str(code_insee) + " - " + nom_commune(code_insee))
+        load_sitadel(sitadel1316_file=None,sitadel_meta_file=None)
         load_scot_data()
         load_collectData()
+        start_date_2020  = "2020-01-01"
+        start_date_ARRET = "2021-05-21"
+        start_date_EXEC  = "2021-08-11"
         # Annee / Log Aut / Log Commences / Nbre Log / Surface Terrain
-        com_2021 = sitadel17PL[(sitadel17PL['COMM'] == str(code_insee)) &
-                               (sitadel17PL["DATE_REELLE_AUTORISATION"] > start_date)]
+        com_start = sitadel17PL[(sitadel17PL['COMM'] == str(code_insee)) &
+                                (sitadel17PL["DATE_REELLE_AUTORISATION"] > start_date)]
+        # (sitadel17PL["NATURE_PROJET"] == "1") &   # Nouveau (pas Renouvellenent)
+        # (sitadel17PL["Etat_DAU"] != "4") &        # Annulé
+        # (sitadel17PL["Type_DAU"] == "PC") &       # Permis de Construire (pas Declaration Préalable)
 
-        if (com_2021.size == 0) : return None
-        # (sitadel17PL["NATURE_PROJET"] == "1") &
-        # (sitadel17PL["Etat_DAU"] != "4") &
-        # (sitadel17PL["Type_DAU"] == "PC") &
-
-        com_2021.fillna(0)
+        if (com_start.size == 0) : return None
+        com_start.fillna(0)
 
         parcelles   = ""
-        for index, row in com_2021.iterrows():
-            com_2021.loc[index, "Parcelles"] = str(row['sec_cadastre1'])+str(row['num_cadastre1'])+" "+str(row['sec_cadastre2'])+str(row['num_cadastre2'])+" "+str(row['sec_cadastre3'])+str(row['num_cadastre3'])
-            parcelles = parcelles + " " + com_2021.loc[index, "Parcelles"]
-            if   (row['Etat_DAU'] == "2") : com_2021.loc[index, "Annul"]   = 0  # Autorisé
-            elif (row['Etat_DAU'] == "4") : com_2021.loc[index, "Annul"]   = 1  # Annulé
-            elif (row['Etat_DAU'] == "5") : com_2021.loc[index, "Annul"]   = 0  # Commencé
-            elif (row['Etat_DAU'] == "6") : com_2021.loc[index, "Annul"]   = 0  # Terminé
-            else : com_2021.loc[index, "Annul"] = 0
-            com_2021.loc[index, "Nature"]     = "UNA" if (row['NATURE_PROJET_DECLAREE'] == "1") else "RU"
-            com_2021.loc[index, "Extension"]  = int(row['I_EXTENSION']) + int(row['I_SURELEVATION']) + int(row['I_NIVSUPP'])
-            com_2021.loc[index, "Renouv"]     = 1 if ((float(row['SURF_HAB_DEMOLIE']) + float(row['SURF_LOC_DEMOLIE']) + float(row['SURF_HAB_AVANT']) + float(row['NB_LGT_DEMOLIS']) + float(row['SURF_LOC_AVANT'])) > 0) else 0
+        for index, row in com_start.iterrows():
+            com_start.loc[index, "Parcelles"] = str(row['sec_cadastre1'])+str(row['num_cadastre1'])+" "+str(row['sec_cadastre2'])+str(row['num_cadastre2'])+" "+str(row['sec_cadastre3'])+str(row['num_cadastre3'])
+            parcelles = parcelles + " " + com_start.loc[index, "Parcelles"]
+            if   (row['Etat_DAU'] == "2") : com_start.loc[index, "Annul"]   = 0  # Autorisé
+            elif (row['Etat_DAU'] == "4") : com_start.loc[index, "Annul"]   = 1  # Annulé
+            elif (row['Etat_DAU'] == "5") : com_start.loc[index, "Annul"]   = 0  # Commencé
+            elif (row['Etat_DAU'] == "6") : com_start.loc[index, "Annul"]   = 0  # Terminé
+            else : com_start.loc[index, "Annul"] = 0
+            com_start.loc[index, "Nature"]     = "UNA" if (row['NATURE_PROJET_DECLAREE'] == "1") else "RU"
+            com_start.loc[index, "Extension"]  = int(row['I_EXTENSION']) + int(row['I_SURELEVATION']) + int(row['I_NIVSUPP'])
+            com_start.loc[index, "Renouv"]     = 1 if ((float(row['SURF_HAB_DEMOLIE']) + float(row['SURF_LOC_DEMOLIE']) + float(row['SURF_HAB_AVANT']) + float(row['NB_LGT_DEMOLIS']) + float(row['SURF_LOC_AVANT'])) > 0) else 0
 
-        for index, row in com_2021.iterrows():
-            com_2021.loc[index, "Artif"]      = row['SUPERFICIE_TERRAIN'] if ((row['Extension'] == 0) and (row['Renouv'] == 0) and (int(row['Etat_DAU']) != 4)) else 0
-            com_2021.loc[index, "Date"]       = row['DATE_REELLE_AUTORISATION']
+        for index, row in com_start.iterrows():
+            com_start.loc[index, "Artif"]      = row['SUPERFICIE_TERRAIN'] if ((row['Extension'] == 0) and (row['Renouv'] == 0) and (int(row['Etat_DAU']) != 4)) else 0
+            com_start.loc[index, "Date"]       = row['DATE_REELLE_AUTORISATION']
 
-        com_2021 = com_2021[["Date", "Nature", "Extension", "Renouv",   "Annul", "Artif", "Parcelles",
-                             "DEP",  "COMM",   "Type_DAU",  "Etat_DAU", "NATURE_PROJET",  "NATURE_PROJET_DECLAREE",
-                             "NB_LGT_TOT_CREES",   "NB_LGT_PRET_LOC_SOCIAL", "NB_LGT_ACC_SOC_HORS_PTZ", "NB_LGT_PTZ",
-                             "SUPERFICIE_TERRAIN", "DATE_REELLE_AUTORISATION",
-                             "SURF_HAB_DEMOLIE",   "SURF_LOC_DEMOLIE", "SURF_HAB_AVANT", "SURF_LOC_AVANT", "I_EXTENSION", "I_SURELEVATION",
-                             "SURF_HAB_CREEE",     "SURF_LOC_CREEE"]]
-        com_2021.sort_values("DATE_REELLE_AUTORISATION")
+        com_start = com_start[["Date", "Nature", "Extension", "Renouv",   "Annul", "Artif", "Parcelles",
+                               "DEP",  "COMM",   "Type_DAU",  "Etat_DAU", "NATURE_PROJET",  "NATURE_PROJET_DECLAREE",
+                               "NB_LGT_TOT_CREES",   "NB_LGT_PRET_LOC_SOCIAL", "NB_LGT_ACC_SOC_HORS_PTZ", "NB_LGT_PTZ",
+                               "SUPERFICIE_TERRAIN", "DATE_REELLE_AUTORISATION",
+                               "SURF_HAB_DEMOLIE",   "SURF_LOC_DEMOLIE", "SURF_HAB_AVANT", "SURF_LOC_AVANT", "I_EXTENSION", "I_SURELEVATION",
+                               "SURF_HAB_CREEE",     "SURF_LOC_CREEE"]]
+        com_start.sort_values("Date")
 
-        superficie = sum(com_2021["SUPERFICIE_TERRAIN"])
-        logements  = sum(com_2021["NB_LGT_TOT_CREES"])
-        logsoc     = sum(com_2021["NB_LGT_PRET_LOC_SOCIAL"])
-        artif      = sum(com_2021["Artif"])
-        artif_17   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2017-01-01")]["Artif"])
-        artif_18   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2018-01-01")]["Artif"])
-        artif_19   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2019-01-01")]["Artif"])
-        artif_20   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2020-01-01")]["Artif"])
-        artif_21   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2021-01-01")]["Artif"])
-        artif_22   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2022-01-01")]["Artif"])
-        artif_23   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > "2023-01-01")]["Artif"])
-        artif_SO   = sum(com_2021[(com_2021["DATE_REELLE_AUTORISATION"] > start_date)]["Artif"])
-        artif_SO_S = com_2021[(com_2021["DATE_REELLE_AUTORISATION"]     > start_date)]
-        artif_SO_L  = sum(artif_SO_S[(artif_SO_S["Artif"] > limit)]["Artif"])
+        com_2020  = com_start[(com_start["DATE_REELLE_AUTORISATION"] > start_date_2020)]
+        com_arret = com_start[(com_start["DATE_REELLE_AUTORISATION"] > start_date_ARRET)]
+        com_exec  = com_start[(com_start["DATE_REELLE_AUTORISATION"] > start_date_EXEC)]
 
-        count       = len(com_2021.index)
-        count0      = len(com_2021.loc[com_2021["SUPERFICIE_TERRAIN"] == 0].index)
+        superficie = sum(com_start["SUPERFICIE_TERRAIN"])
+        logements  = sum(com_start["NB_LGT_TOT_CREES"])
+        logsociaux = sum(com_start["NB_LGT_PRET_LOC_SOCIAL"])
+        artif      = sum(com_start["Artif"])
+        artif_17   = sum(com_start[(com_start["DATE_REELLE_AUTORISATION"] > "2017-01-01")]["Artif"])
+        artif_18   = sum(com_start[(com_start["DATE_REELLE_AUTORISATION"] > "2018-01-01")]["Artif"])
+        artif_19   = sum(com_start[(com_start["DATE_REELLE_AUTORISATION"] > "2019-01-01")]["Artif"])
+        artif_20   = sum(com_start[(com_start["DATE_REELLE_AUTORISATION"] > "2020-01-01")]["Artif"])
+        artif_21   = sum(com_start[(com_start["DATE_REELLE_AUTORISATION"] > "2021-01-01")]["Artif"])
+        artif_22   = sum(com_start[(com_start["DATE_REELLE_AUTORISATION"] > "2022-01-01")]["Artif"])
+        artif_23   = sum(com_start[(com_start["DATE_REELLE_AUTORISATION"] > "2023-01-01")]["Artif"])
+        artif_24   = sum(com_start[(com_start["DATE_REELLE_AUTORISATION"] > "2024-01-01")]["Artif"])
+        artif_25   = sum(com_start[(com_start["DATE_REELLE_AUTORISATION"] > "2025-01-01")]["Artif"])
+        artif_26   = sum(com_start[(com_start["DATE_REELLE_AUTORISATION"] > "2026-01-01")]["Artif"])
+
+        artif_SO_START   = sum(com_start[(com_start["DATE_REELLE_AUTORISATION"] > start_date)]["Artif"])
+        artif_SO_S_START = com_start[(com_start["DATE_REELLE_AUTORISATION"]     > start_date)]
+        artif_SO_L_START = sum(artif_SO_S_START[(artif_SO_S_START["Artif"] > limit)]["Artif"])
+
+        artif_SO_2020    = sum(com_2020[(com_2020["DATE_REELLE_AUTORISATION"] > start_date_2020)]["Artif"])
+        artif_SO_S_2020  = com_2020[(com_2020["DATE_REELLE_AUTORISATION"]     > start_date_2020)]
+        artif_SO_L_2020  = sum(artif_SO_S_2020[(artif_SO_S_2020["Artif"] > limit)]["Artif"])
+
+        artif_SO_ARRET   = sum(com_arret[(com_arret["DATE_REELLE_AUTORISATION"] > start_date_ARRET)]["Artif"])
+        artif_SO_S_ARRET = com_arret[(com_arret["DATE_REELLE_AUTORISATION"]     > start_date_ARRET)]
+        artif_SO_L_ARRET = sum(artif_SO_S_ARRET[(artif_SO_S_ARRET["Artif"] > limit)]["Artif"])
+
+        artif_SO_EXEC    = sum(com_exec[(com_exec["DATE_REELLE_AUTORISATION"] > start_date_EXEC)]["Artif"])
+        artif_SO_S_EXEC  = com_exec[(com_exec["DATE_REELLE_AUTORISATION"]     > start_date_EXEC)]
+        artif_SO_L_EXEC  = sum(artif_SO_S_EXEC[(artif_SO_S_EXEC["Artif"] > limit)]["Artif"])
+
+        count       = len(com_start.index)
+        count0      = len(com_start.loc[com_start["SUPERFICIE_TERRAIN"] == 0].index)
         superficie0 = round0(superficie + ((superficie/(count-count0))*count0), 0) if (count != count0) else superficie
 
         NOM_COMMUNE = nom_commune(code_insee=code_insee).upper()
         BUDGET_2030 = SCOT_OUEST['Budget 2030'][NOM_COMMUNE] * 10000 if (NOM_COMMUNE in SCOT_OUEST.index) else 0
         BUDGET_2040 = SCOT_OUEST['Budget 2040'][NOM_COMMUNE] * 10000 if (NOM_COMMUNE in SCOT_OUEST.index) else 0
+
         time_percent = ((10 - (2030 - datetime.date.today().year)-1) / 10)
-        pace_percent = round0(artif_SO_L/BUDGET_2030, 0) if (BUDGET_2030 > 0) else 0
-        trajectoire  = "OK"
-        if (pace_percent > time_percent) :
-            trajectoire = "Consommation Trop Rapide"
+        pace_percent = round0(artif_SO_L_START/BUDGET_2030, 0) if (BUDGET_2030 > 0) else 0
+        trajectoire  = "OK" if (pace_percent < time_percent) else "Consommation Trop Rapide"
 
-        """
-        com_2021.loc["Total / Count", "SUPERFICIE_TERRAIN"]     = superficie0
-        com_2021.loc["Total / Count", "Type_DAU"]               = count
-        com_2021.loc["Total / Count", "NB_LGT_TOT_CREES"]       = logements
-        com_2021.loc["Total / Count", "NB_LGT_PRET_LOC_SOCIAL"] = logsoc
-        com_2021.loc["Total / Count", "Artif"]                  = artif
-        com_2021.loc["Total / 2018-01-01", "Artif"]             = artif_18
-        com_2021.loc["Total / 2019-01-01", "Artif"]             = artif_19
-        com_2021.loc["Total / 2020-01-01", "Artif"]             = artif_20
-        com_2021.loc["Total / 2021-01-01", "Artif"]             = artif_21
-        com_2021.loc["Total / 2022-01-01", "Artif"]             = artif_22
-        com_2021.loc["Total / 2023-01-01", "Artif"]             = artif_23
-        com_2021.loc["Total / Count",      "DEP"]               = round0(( artif_17 - artif_18 ) / 10000,2)
-        com_2021.loc["Total / 2018-01-01", "DEP"]               = round0(( artif_18 - artif_19 ) / 10000,2)
-        com_2021.loc["Total / 2019-01-01", "DEP"]               = round0(( artif_19 - artif_20 ) / 10000,2)
-        com_2021.loc["Total / 2020-01-01", "DEP"]               = round0(( artif_20 - artif_21 ) / 10000,2)
-        com_2021.loc["Total / 2021-01-01", "DEP"]               = round0(( artif_21 - artif_22 ) / 10000,2)
-        com_2021.loc["Total / 2022-01-01", "DEP"]               = round0(( artif_22 - artif_21 ) / 10000,2)
-        com_2021.loc["Total / 2023-01-01", "DEP"]               = round0(( artif_23  ) / 10000,2)
-        """
+        data_number_of_rows = len(com_start.index)
 
-        com_2021.loc["Total / Budget 2021 - 2030 Scot Ouest", "Artif"] = BUDGET_2030
-        com_2021.loc["Total / Budget 2021 - 2030 Scot Ouest", "DEP"]   = round0(( BUDGET_2030  ) / 10000, 2)
-        com_2021.loc["Total / " + start_date + "  Toutes Surfaces", "Artif"] = artif_SO
-        com_2021.loc["Total / " + start_date + "  Toutes Surfaces", "DEP"]   = round0(( artif_SO  ) / 10000, 2)
-        com_2021.loc["Total / " + start_date + "  Toutes Surfaces", "Annul"] = str(round0(((artif_SO/BUDGET_2030)*100), 0))+"%"  if (BUDGET_2030 > 0) else 0
-        com_2021.loc["Total / " + start_date + "  Surfaces > " + str(limit), "Artif"] = artif_SO_L
-        com_2021.loc["Total / " + start_date + "  Surfaces > " + str(limit), "DEP"]   = round0(( artif_SO_L  ) / 10000, 2)
-        com_2021.loc["Total / " + start_date + "  Surfaces > " + str(limit), "Annul"] = str(round0(((artif_SO_L/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
-        com_2021.loc["Total / " + start_date + "  Temps Écoulé", "Annul"]    = str(round0(time_percent*100, 0))+"%"
-        com_2021.loc["Total / " + start_date + "  Temps Écoulé", "Artif"]    = trajectoire
-        com_2021.loc["Total / Budget 2030 - 2040", "Artif"]     = BUDGET_2040
-        com_2021.loc["Total / Budget 2030 - 2040", "DEP"]       = round0(( BUDGET_2040  ) / 10000, 2)
+        col_m2 = "Artif"
+        col_ha = "Parcelles"
+        col_pc = "Annul"
 
-        file_name = output_dir + os.sep + "scot_ouest_"+clean_name(NOM_COMMUNE)+".xlsx"
+        # Details SCoT Ouest
+        if (code_insee in communes_zone("SCoT_Ouest")):
+            com_start.loc["Total / Budget 2020 - 2030 Scot Ouest",                col_m2] = BUDGET_2030
+            com_start.loc["Total / Budget 2020 - 2030 Scot Ouest",                col_ha] = round0((BUDGET_2030) / 10000, 2)
+            com_start.loc["Total / " + start_date + "  Toutes Surfaces",          col_m2] = artif_SO_START
+            com_start.loc["Total / " + start_date + "  Toutes Surfaces",          col_ha] = round0((artif_SO_START) / 10000, 2)
+            com_start.loc["Total / " + start_date + "  Toutes Surfaces",          col_pc] = str(round0(((artif_SO_START/BUDGET_2030)*100), 0))+"%"  if (BUDGET_2030 > 0) else 0
+            com_start.loc["Total / " + start_date + "  Surfaces > " + str(limit), col_m2] = artif_SO_L_START
+            com_start.loc["Total / " + start_date + "  Surfaces > " + str(limit), col_ha] = round0((artif_SO_L_START) / 10000, 2)
+            com_start.loc["Total / " + start_date + "  Surfaces > " + str(limit), col_pc] = str(round0(((artif_SO_L_START/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
+            com_start.loc["Total / " + start_date + "  Temps Écoulé",             col_pc] = str(round0(time_percent*100, 0))+"%"
+            com_start.loc["Total / " + start_date + "  Temps Écoulé",             col_m2] = trajectoire
+
+            com_start.loc["Total / " + start_date_2020  + "  Surfaces > " + str(limit), col_m2] = artif_SO_L_2020
+            com_start.loc["Total / " + start_date_2020  + "  Surfaces > " + str(limit), col_ha] = round0((artif_SO_L_2020) / 10000, 2)
+            com_start.loc["Total / " + start_date_2020  + "  Surfaces > " + str(limit), col_pc] = str(round0(((artif_SO_L_2020/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
+            com_start.loc["Total / " + start_date_ARRET + "  Surfaces > " + str(limit), col_m2] = artif_SO_L_ARRET
+            com_start.loc["Total / " + start_date_ARRET + "  Surfaces > " + str(limit), col_ha] = round0((artif_SO_L_ARRET) / 10000, 2)
+            com_start.loc["Total / " + start_date_ARRET + "  Surfaces > " + str(limit), col_pc] = str(round0(((artif_SO_L_ARRET/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
+            com_start.loc["Total / " + start_date_EXEC  + "  Surfaces > " + str(limit), col_m2] = artif_SO_L_EXEC
+            com_start.loc["Total / " + start_date_EXEC  + "  Surfaces > " + str(limit), col_ha] = round0((artif_SO_L_EXEC) / 10000, 2)
+            com_start.loc["Total / " + start_date_EXEC  + "  Surfaces > " + str(limit), col_pc] = str(round0(((artif_SO_L_EXEC/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
+
+            com_start.loc["Total / Budget 2030 - 2040",                           col_m2] = BUDGET_2040
+            com_start.loc["Total / Budget 2030 - 2040",                           col_ha] = round0((BUDGET_2040) / 10000, 2)
+
+        # Total and Yearly Consommmation Fonciere
+        com_start.loc["Total / Count", "SUPERFICIE_TERRAIN"]     = superficie0
+        com_start.loc["Total / Count", "Type_DAU"]               = count
+        com_start.loc["Total / Count", "NB_LGT_TOT_CREES"]       = logements
+        com_start.loc["Total / Count", "NB_LGT_PRET_LOC_SOCIAL"] = logsociaux
+        com_start.loc["Total / Count", col_m2]                   = artif
+        com_start.loc["Total / Count", col_ha]                   = round0((artif) / 10000,2)
+
+        if (artif_17-artif_18):
+            com_start.loc["Total / 2017-01-01", col_m2] = artif_17
+            com_start.loc["Total / 2017-01-01", col_ha] = round0((artif_17-artif_18) / 10000,2)
+        if (artif_18-artif_19):
+            com_start.loc["Total / 2018-01-01", col_m2] = artif_18
+            com_start.loc["Total / 2018-01-01", col_ha] = round0((artif_18-artif_19) / 10000,2)
+        if (artif_19-artif_20):
+            com_start.loc["Total / 2019-01-01", col_m2] = artif_19
+            com_start.loc["Total / 2019-01-01", col_ha] = round0((artif_19-artif_20) / 10000, 2)
+        if (artif_20-artif_21):
+            com_start.loc["Total / 2020-01-01", col_m2] = artif_20
+            com_start.loc["Total / 2020-01-01", col_ha] = round0((artif_20-artif_21) / 10000,2)
+        if (artif_21-artif_22):
+            com_start.loc["Total / 2021-01-01", col_m2] = artif_21
+            com_start.loc["Total / 2021-01-01", col_ha] = round0((artif_21-artif_22) / 10000,2)
+        if (artif_22-artif_23):
+            com_start.loc["Total / 2022-01-01", col_m2] = artif_22
+            com_start.loc["Total / 2022-01-01", col_ha] = round0((artif_22-artif_23) / 10000,2)
+        if (artif_23-artif_24):
+            com_start.loc["Total / 2023-01-01", col_m2] = artif_23
+            com_start.loc["Total / 2023-01-01", col_ha] = round0((artif_23-artif_24) / 10000,2)
+        if (artif_24-artif_25):
+            com_start.loc["Total / 2024-01-01", col_m2] = artif_24
+            com_start.loc["Total / 2024-01-01", col_ha] = round0((artif_24-artif_25) / 10000,2)
+        if (artif_25-artif_26):
+            com_start.loc["Total / 2025-01-01", col_m2] = artif_25
+            com_start.loc["Total / 2025-01-01", col_ha] = round0((artif_25-artif_26) / 10000,2)
+        if (artif_26):
+            com_start.loc["Total / 2026-01-01", col_m2] = artif_26
+            com_start.loc["Total / 2026-01-01", col_ha] = round0((artif_26) / 10000,2)
+
+        # Saving in File
+        file_name = output_dir + scot_ouest_file + "_" + clean_name(NOM_COMMUNE)+".xlsx"
         writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
-        com_2021.to_excel(writer, sheet_name=NOM_COMMUNE)
+        com_start.to_excel(writer, sheet_name=NOM_COMMUNE)
         worksheet1 = writer.sheets[NOM_COMMUNE]
         worksheet1.set_tab_color('green')
         red_format  = writer.book.add_format({'bg_color': 'red'})
@@ -3711,27 +3777,28 @@ class Report:
         # worksheet1.conditional_format('H1:H1000', {'type': 'cell', 'criteria': '>', 'value': limit, 'format': red_format})
         # writer.save()
         writer.close()
+        Term.print_grey("Scot Ouest Output File  : " + str(file_name))
 
+        # Updating Consolidated File
         file_123  = file + ".xlsx"
         sheet_123 = clean_name(NOM_COMMUNE)
         sheet_sum = "Summary"
-
-        #  return file_123  # buggy below
+        Term.print_grey("Scot Ouest Summary File : " + str(file_123))
 
         if (os.path.exists(file_123)):
             work_book = load_workbook(file_123)
         else:
             work_book = Workbook()
 
-        # Data
+        # Data Sheet
         if (sheet_123 in work_book.sheetnames):
             work_book.remove(work_book[sheet_123])
         work_sheet = work_book.create_sheet(0)
         work_sheet.title = sheet_123
-        for row in dataframe_to_rows(com_2021, index=True, header=True):
+        for row in dataframe_to_rows(com_start, index=True, header=True):
             work_sheet.append(row)
-        data_number_of_rows = len(com_2021.index)
 
+        # Formatting Data
         red_color      = 'ffc7ce'
         red_color_font = '9c0103'
         green_color    = '00ff00'
@@ -3744,15 +3811,18 @@ class Report:
         dxf_green_fill = styles.differential.DifferentialStyle(fill=green_fill)
         dxf_red_fill   = styles.differential.DifferentialStyle(font=red_font, border=None, fill=red_fill)
 
-        work_sheet.conditional_formatting.add('C3:C' + str(data_number_of_rows-3), formatting.rule.Rule(type='containsText', operator="containsText", text='RU', dxf=dxf_green_fill))
-        work_sheet.conditional_formatting.add('D3:D' + str(data_number_of_rows-3), formatting.rule.CellIsRule(operator='greaterThan',  formula=['0'], fill=green_fill))
-        work_sheet.conditional_formatting.add('E3:E' + str(data_number_of_rows-3), formatting.rule.CellIsRule(operator='greaterThan',  formula=['0'], fill=green_fill))
-        work_sheet.conditional_formatting.add('F3:F' + str(data_number_of_rows-3), formatting.rule.CellIsRule(operator='greaterThan',  formula=['0'], fill=green_fill))
-        # work_sheet.conditional_formatting.add('F3:F' + str(data_number_of_rows-3), formatting.rule.Rule(type='containsText', operator="containsText", text='Annul', dxf=dxf_green_fill))
-        # work_sheet.conditional_formatting.add('F3:F' + str(data_number_of_rows-3), formatting.rule.CellIsRule(operator='containsText', formula=['Annul'], fill=green_fill))
-        # work_sheet.conditional_formatting.add('C3:C' + str(data_number_of_rows-3), formatting.rule.CellIsRule(operator='containsText', formula=['RU'],    fill=green_fill))
-        # work_sheet.conditional_formatting.add('G3:G' + str(data_number_of_rows-3), formatting.rule.CellIsRule(operator='greaterThan',  formula=['0'],     fill=blue_fill, font=red_font))
-        work_sheet.conditional_formatting.add('G3:G' + str(data_number_of_rows-3), formatting.rule.CellIsRule(operator='greaterThan',  formula=[str(limit)],  fill=red_fill,  font=red_font))
+        data_number_of_rows = data_number_of_rows +2
+        work_sheet.conditional_formatting.add('C3:C' + str(data_number_of_rows), formatting.rule.Rule(type='containsText', operator="containsText", text='RU', dxf=dxf_green_fill))
+        work_sheet.conditional_formatting.add('D3:D' + str(data_number_of_rows), formatting.rule.CellIsRule(operator='greaterThan',  formula=['0'], fill=green_fill))
+        work_sheet.conditional_formatting.add('E3:E' + str(data_number_of_rows), formatting.rule.CellIsRule(operator='greaterThan',  formula=['0'], fill=green_fill))
+        work_sheet.conditional_formatting.add('F3:F' + str(data_number_of_rows), formatting.rule.CellIsRule(operator='greaterThan',  formula=['0'], fill=green_fill))
+
+        # ?? work_sheet.conditional_formatting.add('F3:F' + str(data_number_of_rows), formatting.rule.Rule(type='containsText', operator="containsText", text='Annul', dxf=dxf_green_fill))
+        # ?? work_sheet.conditional_formatting.add('F3:F' + str(data_number_of_rows), formatting.rule.CellIsRule(operator='containsText', formula=['Annul'], fill=green_fill))
+        # ?? work_sheet.conditional_formatting.add('C3:C' + str(data_number_of_rows), formatting.rule.CellIsRule(operator='containsText', formula=['RU'],    fill=green_fill))
+        # ?? work_sheet.conditional_formatting.add('G3:G' + str(data_number_of_rows), formatting.rule.CellIsRule(operator='greaterThan',  formula=['0'],     fill=blue_fill, font=red_font))
+
+        work_sheet.conditional_formatting.add('G3:G' + str(data_number_of_rows), formatting.rule.CellIsRule(operator='greaterThan',  formula=[str(limit)],  fill=red_fill,  font=red_font))
 
         red_colour = 'ffc7ce'
         red_colour_font = '9c0103'
@@ -3762,10 +3832,13 @@ class Report:
 
         rule = formatting.rule.Rule(type='containsText', text="RU", stopIfTrue=False)
         rule.dxf = styles.differential.DifferentialStyle(font=red_font, border=None, fill=red_fill)
-        # work_sheet.conditional_formatting.add('C3:C' + str(data_number_of_rows-4), rule)
+
+        # ?? work_sheet.conditional_formatting.add('C3:C' + str(data_number_of_rows), rule)
+
+        # Saving Data
         work_book.close()
 
-        # Summary
+        # Summary Sheet
         try:
             df_sum = pd.read_excel(file_123, sheet_name=sheet_sum, index_col=0)
         except Exception as e:
@@ -3773,26 +3846,41 @@ class Report:
             df_sum = pd.DataFrame()
             df_sum.index.name = 'Commune'
             df_sum = df_sum.rename_axis('Commune')
-        # sum_number_of_rows = len(com_2021.index)
+        # sum_number_of_rows = len(com_start.index)
 
         # df_sum.at[sheet_123, "Commune"]            = sheet_123
         df_sum.at[sheet_123, "# Permis"]             = count
         df_sum.at[sheet_123, "Logements"]            = logements
-        df_sum.at[sheet_123, "Sociaux"]              = logsoc
+        df_sum.at[sheet_123, "Sociaux"]              = logsociaux
         # df_sum.at[sheet_123, "Superficie"]           = superficie0
         # df_sum.at[sheet_123, "Consommation SCoT"]    = artif
 
         df_sum.at[sheet_123, "Budget 2030"]                   = round0((BUDGET_2030) / 10000, 2)
-        df_sum.at[sheet_123, "Conso Vierge / " + start_date]  = round0((artif_SO) / 10000, 2)
-        df_sum.at[sheet_123, "% Vierge / "     + start_date]  = str(round0(((artif_SO/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
+        df_sum.at[sheet_123, "Conso Vierge / " + start_date]  = round0((artif_SO_START) / 10000, 2)
+        df_sum.at[sheet_123, "% Vierge / "     + start_date]  = str(round0(((artif_SO_START/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
 
-        df_sum.at[sheet_123, "Conso " + str(limit) + " / "+start_date]   = round0((artif_SO_L) / 10000, 2)
-        df_sum.at[sheet_123, "% "     + str(limit) + " / "+start_date]   = str(round0(((artif_SO_L/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
+        df_sum.at[sheet_123, "Conso " + str(limit) + " / "+start_date]   = round0((artif_SO_L_START) / 10000, 2)
+        df_sum.at[sheet_123, "% "     + str(limit) + " / "+start_date]   = str(round0(((artif_SO_L_START/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
 
         df_sum.at[sheet_123, "Temps"]          = str(round0(((time_percent)*100), 0))+"%"
         df_sum.at[sheet_123, "Trajectoire"]    = trajectoire
 
         df_sum.at[sheet_123, "Budget 2040"]    = round0((BUDGET_2040) / 10000, 2)
+
+        df_sum.at[sheet_123, "Conso " + "Vierge"   + " / " + start_date_2020]  = round0((artif_SO_2020) / 10000, 2)
+        df_sum.at[sheet_123, "% "     + "Vierge"   + " / " + start_date_2020]  = str(round0(((artif_SO_2020/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
+        df_sum.at[sheet_123, "Conso " + str(limit) + " / " + start_date_2020]  = round0((artif_SO_L_2020) / 10000, 2)
+        df_sum.at[sheet_123, "% "     + str(limit) + " / " + start_date_2020]  = str(round0(((artif_SO_L_2020/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
+
+        df_sum.at[sheet_123, "Conso " + "Vierge"   + " / " + start_date_ARRET]  = round0((artif_SO_ARRET) / 10000, 2)
+        df_sum.at[sheet_123, "% "     + "Vierge"   + " / " + start_date_ARRET]  = str(round0(((artif_SO_ARRET/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
+        df_sum.at[sheet_123, "Conso " + str(limit) + " / " + start_date_ARRET] = round0((artif_SO_L_ARRET) / 10000, 2)
+        df_sum.at[sheet_123, "% "     + str(limit) + " / " + start_date_ARRET] = str(round0(((artif_SO_L_ARRET/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
+
+        df_sum.at[sheet_123, "Conso " + "Vierge"   + " / " + start_date_EXEC]  = round0((artif_SO_EXEC) / 10000, 2)
+        df_sum.at[sheet_123, "% "     + "Vierge"   + " / " + start_date_EXEC]  = str(round0(((artif_SO_EXEC/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
+        df_sum.at[sheet_123, "Conso " + str(limit) + " / " + start_date_EXEC]  = round0((artif_SO_L_EXEC) / 10000, 2)
+        df_sum.at[sheet_123, "% "     + str(limit) + " / " + start_date_EXEC]  = str(round0(((artif_SO_L_EXEC/BUDGET_2030)*100), 0))+"%" if (BUDGET_2030 > 0) else 0
 
         # print(str(df_sum.index[0]))
         # df_sum = df_sum.drop(df_sum.index[0])
@@ -3804,6 +3892,15 @@ class Report:
 
         for row in dataframe_to_rows(df_sum, header=True):
             work_sheet.append(row)
+
+        work_sheet.delete_rows(2, 1)
+
+        for row in range(1, work_sheet.max_row + 1):
+            if (row in [1]) : continue  # Skip Headers
+            for col in range(1, work_sheet.max_column + 1):
+                if (col in [7,9,10,14,16,18,20,22,24]):
+                    cell = work_sheet.cell(row, col)
+                    cell.alignment = Alignment(horizontal='center', vertical='center')
 
         if ("Sheet" in work_book.sheetnames):
             work_book.remove(work_book["Sheet"])
@@ -3833,13 +3930,13 @@ def report_select_dict(region=None, filename=None, force=False) -> dict:
     if str(region) in report_select: return report_select[str(region)]
 
     if ((force == False) and (os.path.isfile(filename))):
-        Term.print_yellow("+ Reading  Select Index Region " + str(region)  + ": " + filename)
+        Term.print_yellow("+ Reading  Select Index Region " + str(region)  + " : " + filename)
         with open(filename, "r") as read_file:
             Term.print_grey("Converting JSON encoded data into Python dictionary : "+filename)
             select = jsonc.load(read_file)
             report_select[str(region)] = select
             return select
-    Term.print_yellow("+ Creating Select Index Region " + str(region)  + ": " + filename)
+    Term.print_yellow("+ Creating Select Index Region " + str(region)  + " : " + filename)
     select = dict()
     select["REGIONS"] = []
     rd = dict()
@@ -3904,7 +4001,7 @@ def report_select_dict(region=None, filename=None, force=False) -> dict:
     select["REGIONS"].append(rd)
     if (filename):
         Files.save_file(to_json(select, indent=4), filename)
-        Term.print_yellow("+ Saved    Select Index Region " + str(region)  + ": " + filename)
+        Term.print_yellow("+ Saved    Select Index Region " + str(region)  + " : " + filename)
     report_select[str(region)] = select
     return select
 
@@ -3923,7 +4020,7 @@ def report_region_dict(region=None, filename=None, force=False) -> dict:
             france = jsonc.load(read_file)
             report_france[str(region)] = france
             return france
-    Term.print_yellow("+ Creating Index for Region " + str(region)  + ": " + filename)
+    Term.print_yellow("+ Creating Index    for Region " + str(region)  + " : " + filename)
     france = dict()
     france["REGIONS"] = []
     if (not region):
@@ -3997,11 +4094,11 @@ def report_region_dict(region=None, filename=None, force=False) -> dict:
                 dd["COMMUNES"].append(cd)
     if (filename):
         Files.save_file(to_json(france, indent=4),  filename)
-        Term.print_yellow("+ Saved    Index Region  " + str(region)  + ": " + filename)
+        Term.print_yellow("+ Saved    Index    for Region " + str(region) + " : " + filename)
     report_france[str(region)] = france
     return france
 
-def report_scot_ouest(start_date):
+def report_scot_ouest(start_date, ftp_push: bool = False):
     if (str(start_date).lower in ["arret", "mai"]) :
         start_date = "2021-05-21"
     if (str(start_date).lower in ["executoire", "exec", "aout"]) :
@@ -4010,11 +4107,10 @@ def report_scot_ouest(start_date):
         start_date = "2020-01-01"
     if (str(start_date).lower in ["2021", "janvier"]) :
         start_date = "2021-01-01"
-    Term.print_yellow("> Scot Ouest " + str(start_date))
     for commune in communes_zone("SCoT_Ouest"):
-        Files.clean(logs=False, pattern=str(commune), meta=False)
         Report.scot_ouest_commune(code_insee=str(commune), start_date=start_date)
-    Term.print_yellow("< Scot Ouest" + str(start_date))
+    if (ftp_push):
+        FTP.push_file(scot_ouest_file + ".xlsx")
 
 
 class TestSobriete(unittest.TestCase):
@@ -4030,11 +4126,12 @@ class TestSobriete(unittest.TestCase):
 
     # Scot Ouest Test
     def testScotOuest(self):
-        report_scot_ouest("2020") # "2021-08-11" / "2021-05-21" / "2020-01-01"
+        report_scot_ouest("2020", ftp_push = False) # "2021-08-11" / "2021-05-21" / "2020-01-01"
 
     def testScotOuestCommune(self):
-        Report.scot_ouest_commune(code_insee="06085", start_date="2021-08-11")  # Mougins
-        Report.scot_ouest_commune(code_insee="06002", start_date="2021-08-11")  # Amirat
+        Report.scot_ouest_commune(code_insee="06085", start_date="2020-01-01")  # Mougins
+        Report.scot_ouest_commune(code_insee="06004", start_date="2020-01-01", file="scot_Antibes")  # Antibes
+        Report.scot_ouest_commune(code_insee="06002", start_date="2020-01-01")  # Amirat
 
     # Commune Test
     def runCommune(self, commune : str, report : bool = False) -> DataStore:
@@ -4531,7 +4628,7 @@ def read_command_line_args(argv):
             start_date = arg
             setUp()
             Term.print_yellow("> Scot Ouest " + str(start_date))
-            report_scot_ouest(start_date)
+            report_scot_ouest(start_date, ftp_push=FTP_PUSH)
             Term.print_yellow("< Scot Ouest " + str(start_date))
             quit()
         elif optl in ("-r", "--reg"):
