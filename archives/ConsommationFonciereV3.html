@@ -205,7 +205,7 @@
             des ouvertures à l’urbanisation permettra de répondre aux besoins en logements futurs.</p>
         <h3>Le Guide de la Sobriété Foncière</h3>
         <p><a class="w3-btn"  target="_blank"
-              href="input/Guide_Vers-la-sobriete-fonciere-2022_complet-2.pdf">
+              href="https://fnepaca.fr/wp-content/uploads/sites/5/2022/09/guide_Vers-la-sobriete-fonciere-2022_complet-2.pdf">
               Le Guide de la Sobriété Foncière de France Nature Environnement PACA.
         </a></p>
         <p>Ce guide couvre une sélection d’enjeux et de leviers pour atteindre la sobriété foncière.
@@ -520,7 +520,7 @@ function hideShowLOG_function() {
     <h2>Pour aller plus Loin ... </h2>
 
         <p><a class="w3-btn"  target="_blank"
-              href="input/Guide_Vers-la-sobriete-fonciere-2022_complet-2.pdf">
+              href="https://fnepaca.fr/wp-content/uploads/sites/5/2022/09/guide_Vers-la-sobriete-fonciere-2022_complet-2.pdf">
               Le Guide de la Sobriété Foncière de France Nature Environnement PACA.
         </a></p>
 
@@ -619,7 +619,7 @@ function hideShowLOG_function() {
         <div id="graphiquesRepartitionNouveauxLogementsChartContainer"  class="center" style="width:100%; max-width:600px; max-height:500px;"></div>
 
     <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
-        <h3>Evolution de la Répartition des types de Logements entre 2008 et 2019</h3></div>
+        <h3>Evolution de la Répartition des types de Logements entre 2008 et 2018</h3></div>
         <div id="graphiquesRepartitionTypesLogementsChartContainer"     class="center" style="width:100%;max-width:600px; max-height:500px;"></div>
 
     <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
@@ -666,90 +666,90 @@ function hideShowLOG_function() {
                 <th class="w3-right-align" style="color:white">2008</th>
                 <th class="w3-right-align" style="color:white"><i><small>Evolution 08-13</small></i></th>
                 <th class="w3-right-align" style="color:white">2013</th>
-                <th class="w3-right-align" style="color:white"><i><small>Evolution 13-19</small></i></th>
-                <th class="w3-right-align" style="color:white">2019</th>
-                <th class="w3-right-align" style="color:white"><i><small>Evolution 08-19</small></i></th>
+                <th class="w3-right-align" style="color:white"><i><small>Evolution 13-18</small></i></th>
+                <th class="w3-right-align" style="color:white">2018</th>
+                <th class="w3-right-align" style="color:white"><i><small>Evolution 08-18</small></i></th>
             </tr>
             <tr>
                 <td><b>Population :</b></td>
                 <td class="w3-right-align"><b>{{ds.P08_POP}}</b></td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_POP-ds.P08_POP)}} ({{f_val(Math.round( ((ds.TXPOP_0813 * 100).toFixed(2)) ) / 100  )}} %/an)</small></i></td>
                 <td class="w3-right-align"><b>{{ds.P13_POP}}</b></td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_POP-ds.P13_POP)}} ({{f_val(Math.round( ((ds.TXPOP_1319 * 100).toFixed(2)) ) / 100  )}} %/an)</small></i></td>
-                <td class="w3-right-align"><b>{{ds.P19_POP}}</b></td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_POP-ds.P08_POP)}} ({{f_val(Math.round( ((ds.TXPOP_0819 * 100).toFixed(2)) ) / 100  )}} %/an)</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_POP-ds.P13_POP)}} ({{f_val(Math.round( ((ds.TXPOP_1318 * 100).toFixed(2)) ) / 100  )}} %/an)</small></i></td>
+                <td class="w3-right-align"><b>{{ds.P18_POP}}</b></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_POP-ds.P08_POP)}} ({{f_val(Math.round( ((ds.TXPOP_0818 * 100).toFixed(2)) ) / 100  )}} %/an)</small></i></td>
             </tr>
             <tr>
                 <td>Population Hors Ménages :</td>
                 <td class="w3-right-align">{{f_percent(ds.C08_HORS_MEN, ds.P08_POP, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.C13_HORS_MEN-ds.C08_HORS_MEN)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.C13_HORS_MEN, ds.P13_POP, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.C19_HORS_MEN-ds.C13_HORS_MEN)}}</small></i></td>
-                <td class="w3-right-align">{{f_percent(ds.C19_HORS_MEN, ds.P19_POP, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.C19_HORS_MEN-ds.C08_HORS_MEN)}}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.C18_HORS_MEN-ds.C13_HORS_MEN)}}</small></i></td>
+                <td class="w3-right-align">{{f_percent(ds.C18_HORS_MEN, ds.P18_POP, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.C18_HORS_MEN-ds.C08_HORS_MEN)}}</small></i></td>
             </tr>
             <tr>
                 <td>Population des Ménages :</td>
                 <td class="w3-right-align">{{ds.C08_PMEN}}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.C13_PMEN-ds.C08_PMEN)}}</small></i></td>
                 <td class="w3-right-align">{{ds.C13_PMEN}}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.C19_PMEN-ds.C13_PMEN)}}</small></i></td>
-                <td class="w3-right-align">{{ds.C19_PMEN}}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.C19_PMEN-ds.C08_PMEN)}}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.C18_PMEN-ds.C13_PMEN)}}</small></i></td>
+                <td class="w3-right-align">{{ds.C18_PMEN}}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.C18_PMEN-ds.C08_PMEN)}}</small></i></td>
             </tr>
             <tr>
                 <td>Taille des Ménages :</td>
                 <td class="w3-right-align">{{ds.TM_2008}}</td>
                 <td class="w3-right-align"><i><small>{{f_round(ds.TM_2013-ds.TM_2008,3)}} ({{f_val(Math.round( ((ds.TXTM_0813 * 100).toFixed(2)) ) / 100  )}} %/an)</small></i></td>
                 <td class="w3-right-align">{{ds.TM_2013}}</td>
-                <td class="w3-right-align"><i><small>{{f_round(ds.TM_2019-ds.TM_2013,3)}} ({{f_val(Math.round( ((ds.TXTM_1319 * 100).toFixed(2)) ) / 100  )}} %/an)</small></i></td>
-                <td class="w3-right-align">{{ds.TM_2019}}</td>
-                <td class="w3-right-align"><i><small>{{f_round(ds.TM_2019-ds.TM_2008,3)}} ({{f_val(Math.round( ((ds.TXTM_0819 * 100).toFixed(2)) ) / 100  )}} %/an)</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_round(ds.TM_2018-ds.TM_2013,3)}} ({{f_val(Math.round( ((ds.TXTM_1318 * 100).toFixed(2)) ) / 100  )}} %/an)</small></i></td>
+                <td class="w3-right-align">{{ds.TM_2018}}</td>
+                <td class="w3-right-align"><i><small>{{f_round(ds.TM_2018-ds.TM_2008,3)}} ({{f_val(Math.round( ((ds.TXTM_0818 * 100).toFixed(2)) ) / 100  )}} %/an)</small></i></td>
             </tr>
             <tr>
                 <td>Nombre de Ménages :</td>
                 <td class="w3-right-align">{{ds.C08_MEN}}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.C13_MEN-ds.C08_MEN)}}</small></i></td>
                 <td class="w3-right-align">{{ds.C13_MEN}}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.C19_MEN-ds.C13_MEN)}}</small></i></td>
-                <td class="w3-right-align">{{ds.C19_MEN}}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.C19_MEN-ds.C08_MEN)}}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.C18_MEN-ds.C13_MEN)}}</small></i></td>
+                <td class="w3-right-align">{{ds.C18_MEN}}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.C18_MEN-ds.C08_MEN)}}</small></i></td>
             </tr>
             <tr>
                 <td><b>Types de Résidences :</b></td>
                 <td class="w3-right-align"><b>{{ds.P08_LOG}}</b></td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_LOG-ds.P08_LOG)}}</small></i></td>
                 <td class="w3-right-align"><b>{{ds.P13_LOG}}</b></td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_LOG-ds.P13_LOG)}}</small></i></td>
-                <td class="w3-right-align"><b>{{ds.P19_LOG}}</b></td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_LOG-ds.P08_LOG)}}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_LOG-ds.P13_LOG)}}</small></i></td>
+                <td class="w3-right-align"><b>{{ds.P18_LOG}}</b></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_LOG-ds.P08_LOG)}}</small></i></td>
             </tr>
             <tr>
                 <td>- Résidences Principales :</td>
                 <td class="w3-right-align">{{f_percent(ds.P08_RP, ds.P08_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_RP-ds.P08_RP)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P13_RP, ds.P13_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_RP-ds.P13_RP)}}</small></i></td>
-                <td class="w3-right-align">{{f_percent(ds.P19_RP, ds.P19_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_RP-ds.P08_RP)}}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RP-ds.P13_RP)}}</small></i></td>
+                <td class="w3-right-align">{{f_percent(ds.P18_RP, ds.P18_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RP-ds.P08_RP)}}</small></i></td>
             </tr>
             <tr>
                 <td>- Résidences Secondaires :</td>
                 <td class="w3-right-align">{{f_percent(ds.P08_RSECOCC, ds.P08_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_RSECOCC-ds.P08_RSECOCC)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P13_RSECOCC, ds.P13_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_RSECOCC-ds.P13_RSECOCC)}}</small></i></td>
-                <td class="w3-right-align">{{f_percent(ds.P19_RSECOCC, ds.P19_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_RSECOCC-ds.P08_RSECOCC)}}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RSECOCC-ds.P13_RSECOCC)}}</small></i></td>
+                <td class="w3-right-align">{{f_percent(ds.P18_RSECOCC, ds.P18_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RSECOCC-ds.P08_RSECOCC)}}</small></i></td>
             </tr>
             <tr>
                 <td>- Logements Vacants :</td>
                 <td class="w3-right-align">{{f_percent(ds.P08_LOGVAC, ds.P08_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_LOGVAC-ds.P08_LOGVAC)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P13_LOGVAC, ds.P13_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_LOGVAC-ds.P13_LOGVAC)}}</small></i></td>
-                <td class="w3-right-align">{{f_percent(ds.P19_LOGVAC, ds.P19_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_LOGVAC-ds.P08_LOGVAC)}}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_LOGVAC-ds.P13_LOGVAC)}}</small></i></td>
+                <td class="w3-right-align">{{f_percent(ds.P18_LOGVAC, ds.P18_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_LOGVAC-ds.P08_LOGVAC)}}</small></i></td>
             </tr>
             <tr>
                 <td><b>Types de Logements :</b></td>
@@ -765,27 +765,27 @@ function hideShowLOG_function() {
                 <td class="w3-right-align">{{f_percent(ds.P08_MAISON, ds.P08_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_MAISON-ds.P08_MAISON)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P13_MAISON, ds.P13_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_MAISON-ds.P13_MAISON)}}</small></i></td>
-                <td class="w3-right-align">{{f_percent(ds.P19_MAISON, ds.P19_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_MAISON-ds.P08_MAISON)}}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_MAISON-ds.P13_MAISON)}}</small></i></td>
+                <td class="w3-right-align">{{f_percent(ds.P18_MAISON, ds.P18_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_MAISON-ds.P08_MAISON)}}</small></i></td>
             </tr>
             <tr>
                 <td>- Appartements :</td>
                 <td class="w3-right-align">{{f_percent(ds.P08_APPART, ds.P08_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_APPART-ds.P08_APPART)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P13_APPART, ds.P13_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_APPART-ds.P13_APPART)}}</small></i></td>
-                <td class="w3-right-align">{{f_percent(ds.P19_APPART, ds.P19_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_APPART-ds.P08_APPART)}}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_APPART-ds.P13_APPART)}}</small></i></td>
+                <td class="w3-right-align">{{f_percent(ds.P18_APPART, ds.P18_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_APPART-ds.P08_APPART)}}</small></i></td>
             </tr>
             <tr>
                 <td>- Autres :</td>
                 <td class="w3-right-align">{{f_percent(ds.P08_LOG - ds.P08_APPART - ds.P08_MAISON, ds.P08_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val((ds.P13_LOG - ds.P13_APPART - ds.P13_MAISON)-(ds.P08_LOG - ds.P08_APPART - ds.P08_MAISON))}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P13_LOG - ds.P13_APPART - ds.P13_MAISON, ds.P13_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val((ds.P19_LOG - ds.P19_APPART - ds.P19_MAISON)-(ds.P13_LOG - ds.P13_APPART - ds.P13_MAISON))}}</small></i></td>
-                <td class="w3-right-align">{{f_percent(ds.P19_LOG - ds.P19_APPART - ds.P19_MAISON, ds.P19_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val((ds.P19_LOG - ds.P19_APPART - ds.P19_MAISON)-(ds.P08_LOG - ds.P08_APPART - ds.P08_MAISON))}}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val((ds.P18_LOG - ds.P18_APPART - ds.P18_MAISON)-(ds.P13_LOG - ds.P13_APPART - ds.P13_MAISON))}}</small></i></td>
+                <td class="w3-right-align">{{f_percent(ds.P18_LOG - ds.P18_APPART - ds.P18_MAISON, ds.P18_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val((ds.P18_LOG - ds.P18_APPART - ds.P18_MAISON)-(ds.P08_LOG - ds.P08_APPART - ds.P08_MAISON))}}</small></i></td>
             </tr>
             <tr>
                 <td><b>Résidences Principales :</b></td>
@@ -801,27 +801,27 @@ function hideShowLOG_function() {
                 <td class="w3-right-align">{{f_percent(ds.P08_RP_PROP, ds.P08_RP, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_RP_PROP-ds.P08_RP_PROP)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P13_RP_PROP, ds.P13_RP, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_RP_PROP-ds.P13_RP_PROP)}}</small></i></td>
-                <td class="w3-right-align">{{f_percent(ds.P19_RP_PROP, ds.P19_RP, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_RP_PROP-ds.P08_RP_PROP)}}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RP_PROP-ds.P13_RP_PROP)}}</small></i></td>
+                <td class="w3-right-align">{{f_percent(ds.P18_RP_PROP, ds.P18_RP, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RP_PROP-ds.P08_RP_PROP)}}</small></i></td>
             </tr>
             <tr>
                 <td>- Locataires :</td>
                 <td class="w3-right-align">{{f_percent(ds.P08_RP_LOC, ds.P08_RP, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_RP_LOC-ds.P08_RP_LOC)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P13_RP_LOC, ds.P13_RP, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_RP_LOC-ds.P13_RP_LOC)}}</small></i></td>
-                <td class="w3-right-align">{{f_percent(ds.P19_RP_LOC, ds.P19_RP, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_RP_LOC-ds.P08_RP_LOC)}}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RP_LOC-ds.P13_RP_LOC)}}</small></i></td>
+                <td class="w3-right-align">{{f_percent(ds.P18_RP_LOC, ds.P18_RP, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RP_LOC-ds.P08_RP_LOC)}}</small></i></td>
             </tr>
             <tr>
                 <td>- Logés gratuitement :</td>
                 <td class="w3-right-align">{{f_percent(ds.P08_RP - ds.P08_RP_PROP - ds.P08_RP_LOC, ds.P08_RP, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val((ds.P13_RP - ds.P13_RP_PROP - ds.P13_RP_LOC)-(ds.P08_RP - ds.P08_RP_PROP - ds.P08_RP_LOC))}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P13_RP - ds.P13_RP_PROP - ds.P13_RP_LOC, ds.P13_RP, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val((ds.P19_RP - ds.P19_RP_PROP - ds.P19_RP_LOC)-(ds.P13_RP - ds.P13_RP_PROP - ds.P13_RP_LOC))}}</small></i></td>
-                <td class="w3-right-align">{{f_percent(ds.P19_RP - ds.P19_RP_PROP - ds.P19_RP_LOC, ds.P19_RP, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val((ds.P19_RP - ds.P19_RP_PROP - ds.P19_RP_LOC)-(ds.P08_RP - ds.P08_RP_PROP - ds.P08_RP_LOC))}}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val((ds.P18_RP - ds.P18_RP_PROP - ds.P18_RP_LOC)-(ds.P13_RP - ds.P13_RP_PROP - ds.P13_RP_LOC))}}</small></i></td>
+                <td class="w3-right-align">{{f_percent(ds.P18_RP - ds.P18_RP_PROP - ds.P18_RP_LOC, ds.P18_RP, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val((ds.P18_RP - ds.P18_RP_PROP - ds.P18_RP_LOC)-(ds.P08_RP - ds.P08_RP_PROP - ds.P08_RP_LOC))}}</small></i></td>
             </tr>
             </tbody>
         </table>
@@ -830,7 +830,7 @@ function hideShowLOG_function() {
 
     <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
         <h3>Evolution de la Population</h3></div>
-        <p>Les projections d'évolution de la population sont issues de l'INSEE, et de son étude Omphale de 2022.
+        <p>Les projections d'évolution de la population sont issues de l'INSEE, et de son étude Omphale.
            Le scenario central est retenu ci-dessous.
            Les taux d'évolution appliqués au territoire sont les projections du niveau départemental.
            Pour PACA, les projections détaillées par territoire peuvent être consultes ici :
@@ -852,7 +852,7 @@ function hideShowLOG_function() {
          <table class="w3-table-all w3-hoverable w3-card-4">
             <tbody>
             <tr class="w3-teal">
-                <th style="color:white">Données INSEE Moyenne Annuelle 2013-2019</th>
+                <th style="color:white">Données INSEE Moyenne Annuelle 2013-2018</th>
                 <th class="w3-center-align" style="color:white">Part de la Population :</th>
                 <th class="w3-right-align" style="color:white">Total : </th>
                 <th class="w3-right-align" style="color:white">de / vers l'EPCI :</th>
@@ -861,27 +861,27 @@ function hideShowLOG_function() {
             </tr>
             <tr>
                 <td>Population Entrante</td>
-                <td class="w3-center-align">{{f_taux(ds.FLUX_1419_ENTRANT_POPULATION*100)}}</td>
-                <td class="w3-right-align">+{{f_round(ds.FLUX_1419_ENTRANT / 5)}}</td>
-                <td class="w3-right-align">+{{f_round(ds.FLUX_1419_ENTRANT_EPCI / 5)}}</td>
-                <td class="w3-right-align">+{{f_round(ds.FLUX_1419_ENTRANT_DPT / 5)}}</td>
-                <td class="w3-right-align">+{{f_round((ds.FLUX_1419_ENTRANT_FRANCE + ds.FLUX_1419_ENTRANT_INTERNATIONAL) / 5)}}</td>
+                <td class="w3-center-align">{{f_taux(ds.FLUX_1418_ENTRANT_POPULATION*100)}}</td>
+                <td class="w3-right-align">+{{f_round(ds.FLUX_1418_ENTRANT / 5)}}</td>
+                <td class="w3-right-align">+{{f_round(ds.FLUX_1418_ENTRANT_EPCI / 5)}}</td>
+                <td class="w3-right-align">+{{f_round(ds.FLUX_1418_ENTRANT_DPT / 5)}}</td>
+                <td class="w3-right-align">+{{f_round((ds.FLUX_1418_ENTRANT_FRANCE + ds.FLUX_1418_ENTRANT_INTERNATIONAL) / 5)}}</td>
             </tr>
             <tr>
                 <td>Population Sortante</td>
-                <td class="w3-center-align">{{f_taux(-(ds.FLUX_1419_SORTANT_POPULATION*100))}}</td>
-                <td class="w3-right-align">-{{f_round(ds.FLUX_1419_SORTANT / 5)}}</td>
-                <td class="w3-right-align">-{{f_round(ds.FLUX_1419_SORTANT_EPCI / 5)}}</td>
-                <td class="w3-right-align">-{{f_round(ds.FLUX_1419_SORTANT_DPT / 5)}}</td>
-                <td class="w3-right-align">-{{f_round(ds.FLUX_1419_SORTANT_FRANCE / 5)}}</td>
+                <td class="w3-center-align">{{f_taux(-(ds.FLUX_1418_SORTANT_POPULATION*100))}}</td>
+                <td class="w3-right-align">-{{f_round(ds.FLUX_1418_SORTANT / 5)}}</td>
+                <td class="w3-right-align">-{{f_round(ds.FLUX_1418_SORTANT_EPCI / 5)}}</td>
+                <td class="w3-right-align">-{{f_round(ds.FLUX_1418_SORTANT_DPT / 5)}}</td>
+                <td class="w3-right-align">-{{f_round(ds.FLUX_1418_SORTANT_FRANCE / 5)}}</td>
             </tr>
             <tr>
                 <td>Solde - entrées moins sorties</td>
-                <td class="w3-center-align">{{f_taux(ds.FLUX_1419_SOLDE_POPULATION*100)}}</td>
-                <td class="w3-right-align">{{f_val(f_round((ds.FLUX_1419_ENTRANT - ds.FLUX_1419_SORTANT) / 5))}}</td>
-                <td class="w3-right-align">{{f_val(f_round((ds.FLUX_1419_ENTRANT_EPCI - ds.FLUX_1419_SORTANT_EPCI) / 5))}}</td>
-                <td class="w3-right-align">{{f_val(f_round((ds.FLUX_1419_ENTRANT_DPT - ds.FLUX_1419_SORTANT_DPT) / 5))}}</td>
-                <td class="w3-right-align">{{f_val(f_round((ds.FLUX_1419_ENTRANT_FRANCE + ds.FLUX_1419_ENTRANT_INTERNATIONAL - ds.FLUX_1419_SORTANT_FRANCE) / 5))}}</td>
+                <td class="w3-center-align">{{f_taux(ds.FLUX_1418_SOLDE_POPULATION*100)}}</td>
+                <td class="w3-right-align">{{f_val(f_round((ds.FLUX_1418_ENTRANT - ds.FLUX_1418_SORTANT) / 5))}}</td>
+                <td class="w3-right-align">{{f_val(f_round((ds.FLUX_1418_ENTRANT_EPCI - ds.FLUX_1418_SORTANT_EPCI) / 5))}}</td>
+                <td class="w3-right-align">{{f_val(f_round((ds.FLUX_1418_ENTRANT_DPT - ds.FLUX_1418_SORTANT_DPT) / 5))}}</td>
+                <td class="w3-right-align">{{f_val(f_round((ds.FLUX_1418_ENTRANT_FRANCE + ds.FLUX_1418_ENTRANT_INTERNATIONAL - ds.FLUX_1418_SORTANT_FRANCE) / 5))}}</td>
             </tr>
             </tbody>
         </table>
@@ -889,7 +889,7 @@ function hideShowLOG_function() {
          <table class="w3-table-all w3-hoverable w3-card-4">
             <tbody>
             <tr class="w3-teal">
-                <th style="color:white">Données INSEE 2019</th>
+                <th style="color:white">Données INSEE 2018</th>
                 <th class="w3-center-align" style="color:white">Part de la Population :</th>
                 <th class="w3-right-align" style="color:white">Total : </th>
                 <th class="w3-right-align" style="color:white">de / vers l'EPCI :</th>
@@ -898,27 +898,27 @@ function hideShowLOG_function() {
             </tr>
             <tr>
                 <td>Population Entrante</td>
-                <td class="w3-center-align">{{f_taux(ds.FLUX_2019_ENTRANT_POPULATION*100)}}</td>
-                <td class="w3-right-align">+{{ds.FLUX_2019_ENTRANT}}</td>
-                <td class="w3-right-align">+{{ds.FLUX_2019_ENTRANT_EPCI}}</td>
-                <td class="w3-right-align">+{{ds.FLUX_2019_ENTRANT_DPT}}</td>
-                <td class="w3-right-align">+{{ds.FLUX_2019_ENTRANT_FRANCE + ds.FLUX_2019_ENTRANT_INTERNATIONAL}}</td>
+                <td class="w3-center-align">{{f_taux(ds.FLUX_2018_ENTRANT_POPULATION*100)}}</td>
+                <td class="w3-right-align">+{{ds.FLUX_2018_ENTRANT}}</td>
+                <td class="w3-right-align">+{{ds.FLUX_2018_ENTRANT_EPCI}}</td>
+                <td class="w3-right-align">+{{ds.FLUX_2018_ENTRANT_DPT}}</td>
+                <td class="w3-right-align">+{{ds.FLUX_2018_ENTRANT_FRANCE + ds.FLUX_2018_ENTRANT_INTERNATIONAL}}</td>
             </tr>
             <tr>
                 <td>Population Sortante</td>
-                <td class="w3-center-align">{{f_taux(-(ds.FLUX_2019_SORTANT_POPULATION*100))}}</td>
-                <td class="w3-right-align">-{{ds.FLUX_2019_SORTANT}}</td>
-                <td class="w3-right-align">-{{ds.FLUX_2019_SORTANT_EPCI}}</td>
-                <td class="w3-right-align">-{{ds.FLUX_2019_SORTANT_DPT}}</td>
-                <td class="w3-right-align">-{{ds.FLUX_2019_SORTANT_FRANCE}}</td>
+                <td class="w3-center-align">{{f_taux(-(ds.FLUX_2018_SORTANT_POPULATION*100))}}</td>
+                <td class="w3-right-align">-{{ds.FLUX_2018_SORTANT}}</td>
+                <td class="w3-right-align">-{{ds.FLUX_2018_SORTANT_EPCI}}</td>
+                <td class="w3-right-align">-{{ds.FLUX_2018_SORTANT_DPT}}</td>
+                <td class="w3-right-align">-{{ds.FLUX_2018_SORTANT_FRANCE}}</td>
             </tr>
             <tr>
                 <td>Solde Migratoire - entrées moins sorties</td>
-                <td class="w3-center-align">{{f_taux(ds.FLUX_2019_SOLDE_POPULATION*100)}}</td>
-                <td class="w3-right-align">{{f_val(ds.FLUX_2019_ENTRANT - ds.FLUX_2019_SORTANT)}}</td>
-                <td class="w3-right-align">{{f_val(ds.FLUX_2019_ENTRANT_EPCI - ds.FLUX_2019_SORTANT_EPCI)}}</td>
-                <td class="w3-right-align">{{f_val(ds.FLUX_2019_ENTRANT_DPT - ds.FLUX_2019_SORTANT_DPT)}}</td>
-                <td class="w3-right-align">{{f_val(ds.FLUX_2019_ENTRANT_FRANCE + ds.FLUX_2019_ENTRANT_INTERNATIONAL - ds.FLUX_2019_SORTANT_FRANCE)}}</td>
+                <td class="w3-center-align">{{f_taux(ds.FLUX_2018_SOLDE_POPULATION*100)}}</td>
+                <td class="w3-right-align">{{f_val(ds.FLUX_2018_ENTRANT - ds.FLUX_2018_SORTANT)}}</td>
+                <td class="w3-right-align">{{f_val(ds.FLUX_2018_ENTRANT_EPCI - ds.FLUX_2018_SORTANT_EPCI)}}</td>
+                <td class="w3-right-align">{{f_val(ds.FLUX_2018_ENTRANT_DPT - ds.FLUX_2018_SORTANT_DPT)}}</td>
+                <td class="w3-right-align">{{f_val(ds.FLUX_2018_ENTRANT_FRANCE + ds.FLUX_2018_ENTRANT_INTERNATIONAL - ds.FLUX_2018_SORTANT_FRANCE)}}</td>
             </tr>
             </tbody>
         </table>
@@ -942,7 +942,7 @@ function hideShowLOG_function() {
          <table class="w3-table-all w3-hoverable w3-card-4">
             <tbody>
             <tr class="w3-teal">
-                <th style="color:white">Déplacements Domicile Travail 2019</th>
+                <th style="color:white">Déplacements Domicile Travail 2018</th>
                 <th class="w3-right-align" style="color:white">Total : </th>
                 <th class="w3-right-align" style="color:white">de / vers l'EPCI :</th>
                 <th class="w3-right-align" style="color:white">de / vers le Département :</th>
@@ -950,29 +950,29 @@ function hideShowLOG_function() {
             </tr>
             <tr>
                 <td>Résidents d’une commune travaillant dans une autre commune :</td>
-                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2019_ENTRANT)}}</td>
-                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2019_ENTRANT_EPCI)}}</td>
-                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2019_ENTRANT_DPT)}}</td>
-                <td class="w3-right-align">{{f_round((ds.FLUXPRO_2019_ENTRANT_FRANCE + ds.FLUXPRO_2019_ENTRANT_INTERNATIONAL))}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_ENTRANT)}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_ENTRANT_EPCI)}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_ENTRANT_DPT)}}</td>
+                <td class="w3-right-align">{{f_round((ds.FLUXPRO_2018_ENTRANT_FRANCE + ds.FLUXPRO_2018_ENTRANT_INTERNATIONAL))}}</td>
             </tr>
             <tr>
                 <td>Travailleurs dans la commune résidant hors de cette commune :</td>
-                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2019_SORTANT)}}</td>
-                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2019_SORTANT_EPCI)}}</td>
-                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2019_SORTANT_DPT)}}</td>
-                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2019_SORTANT_FRANCE)}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_SORTANT)}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_SORTANT_EPCI)}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_SORTANT_DPT)}}</td>
+                <td class="w3-right-align">{{f_round(ds.FLUXPRO_2018_SORTANT_FRANCE)}}</td>
             </tr>
             <tr>
                 <td>Déplacements liés au travail : </td>
-                <td class="w3-right-align">{{f_round((ds.FLUXPRO_2019_ENTRANT + ds.FLUXPRO_2019_SORTANT))}}</td>
+                <td class="w3-right-align">{{f_round((ds.FLUXPRO_2018_ENTRANT + ds.FLUXPRO_2018_SORTANT))}}</td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
-                <td class="w3-right-align">{{f_round((ds.FLUXPRO_2019_ENTRANT_FRANCE + ds.FLUXPRO_2019_ENTRANT_INTERNATIONAL + ds.FLUXPRO_2019_SORTANT_FRANCE))}}</td>
+                <td class="w3-right-align">{{f_round((ds.FLUXPRO_2018_ENTRANT_FRANCE + ds.FLUXPRO_2018_ENTRANT_INTERNATIONAL + ds.FLUXPRO_2018_SORTANT_FRANCE))}}</td>
             </tr>
             </tbody>
         </table>
          <br>
-         <p>Part des habitants travaillant hors de leur commune de résidence : {{f_round(ds.FLUXPRO_2019_POPULATION*100)}}%</p>
+         <p>Part des habitants travaillant hors de leur commune de résidence : {{f_round(ds.FLUXPRO_2018_POPULATION*100)}}%</p>
          <br>
     </div>
 
@@ -1012,53 +1012,53 @@ function hideShowLOG_function() {
                 <th class="w3-right-align" style="color:white">2008</th>
                 <th class="w3-right-align" style="color:white"><i><small>Evolution 08-13</small></i></th>
                 <th class="w3-right-align" style="color:white">2013</th>
-                <th class="w3-right-align" style="color:white"><i><small>Evolution 13-19</small></i></th>
-                <th class="w3-right-align" style="color:white">2019</th>
-                <th class="w3-right-align" style="color:white"><i><small>Evolution 08-19</small></i></th>
+                <th class="w3-right-align" style="color:white"><i><small>Evolution 13-18</small></i></th>
+                <th class="w3-right-align" style="color:white">2018</th>
+                <th class="w3-right-align" style="color:white"><i><small>Evolution 08-18</small></i></th>
             </tr>
             <tr>
                 <td><b>Logements :</b></td>
                 <td class="w3-right-align"><b>{{ds.P08_LOG}}</b></td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_LOG-ds.P08_LOG)}}</small></i></td>
                 <td class="w3-right-align"><b>{{ds.P13_LOG}}</b></td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_LOG-ds.P13_LOG)}}</small></i></td>
-                <td class="w3-right-align"><b>{{ds.P19_LOG}}</b></td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_LOG-ds.P08_LOG)}}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_LOG-ds.P13_LOG)}}</small></i></td>
+                <td class="w3-right-align"><b>{{ds.P18_LOG}}</b></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_LOG-ds.P08_LOG)}}</small></i></td>
             </tr>
             <tr>
                 <td>- Résidences Principales :</td>
                 <td class="w3-right-align">{{f_percent(ds.P08_RP, ds.P08_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_RP-ds.P08_RP)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P13_RP, ds.P13_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_RP-ds.P13_RP)}}</small></i></td>
-                <td class="w3-right-align">{{f_percent(ds.P19_RP, ds.P19_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_RP-ds.P08_RP)}}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RP-ds.P13_RP)}}</small></i></td>
+                <td class="w3-right-align">{{f_percent(ds.P18_RP, ds.P18_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RP-ds.P08_RP)}}</small></i></td>
             </tr>
             <tr>
                 <td>- Résidences Secondaires :</td>
                 <td class="w3-right-align">{{f_percent(ds.P08_RSECOCC, ds.P08_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_RSECOCC-ds.P08_RSECOCC)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P13_RSECOCC, ds.P13_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_RSECOCC-ds.P13_RSECOCC)}}</small></i></td>
-                <td class="w3-right-align">{{f_percent(ds.P19_RSECOCC, ds.P19_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_RSECOCC-ds.P08_RSECOCC)}}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RSECOCC-ds.P13_RSECOCC)}}</small></i></td>
+                <td class="w3-right-align">{{f_percent(ds.P18_RSECOCC, ds.P18_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_RSECOCC-ds.P08_RSECOCC)}}</small></i></td>
             </tr>
             <tr>
                 <td>- Logements Vacants :</td>
                 <td class="w3-right-align">{{f_percent(ds.P08_LOGVAC, ds.P08_LOG, rounding=1, suffix = "%", format = "()") }}</td>
                 <td class="w3-right-align"><i><small>{{f_val(ds.P13_LOGVAC-ds.P08_LOGVAC)}}</small></i></td>
                 <td class="w3-right-align">{{f_percent(ds.P13_LOGVAC, ds.P13_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_LOGVAC-ds.P13_LOGVAC)}}</small></i></td>
-                <td class="w3-right-align">{{f_percent(ds.P19_LOGVAC, ds.P19_LOG, rounding=1, suffix = "%", format = "()") }}</td>
-                <td class="w3-right-align"><i><small>{{f_val(ds.P19_LOGVAC-ds.P08_LOGVAC)}}</small></i></td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_LOGVAC-ds.P13_LOGVAC)}}</small></i></td>
+                <td class="w3-right-align">{{f_percent(ds.P18_LOGVAC, ds.P18_LOG, rounding=1, suffix = "%", format = "()") }}</td>
+                <td class="w3-right-align"><i><small>{{f_val(ds.P18_LOGVAC-ds.P08_LOGVAC)}}</small></i></td>
             </tr>
             </tbody>
         </table>
 
 
          <br>
-         <p>Evolution de la vacance entre 2008 et 2019 : {{f_val(f_round(ds.evol_log_vac_0819))}}%</p>
-         <p>Evolution du secondaire entre 2008 et 2019 : {{f_val(f_round(ds.evol_res_sec_0819))}}%</p>
+         <p>Evolution de la vacance entre 2008 et 2018 : {{f_val(f_round(ds.evol_log_vac_0818))}}%</p>
+         <p>Evolution du secondaire entre 2008 et 2018 : {{f_val(f_round(ds.evol_res_sec_0818))}}%</p>
     </div>
 
     <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
@@ -1066,7 +1066,7 @@ function hideShowLOG_function() {
         <div id="logementsRepartitionNouveauxLogementsChartContainer"  class="center" style="width:100%; max-width:600px; max-height:500px;"></div>
 
     <div class="w3-container w3-section w3-teal w3-padding-8 w3-round-large">
-        <h3>Evolution de la Répartition des types de Logements entre 2008 et 2019</h3></div>
+        <h3>Evolution de la Répartition des types de Logements entre 2008 et 2018</h3></div>
         <div id="logementsRepartitionTypesLogementsChartContainer"     class="center" style="width:100%;max-width:600px; max-height:500px;"></div>
 
     <div v-if="this.data_s != null">
@@ -1103,7 +1103,7 @@ function hideShowLOG_function() {
          <h3>Besoins et Production de Logements</h3></div>
          <p>Des données sur la production de logements sont disponibles depuis 2010,
             cependant les données détaillées Sitadel ne sont disponibles que depuis 2013.</p>
-         <p>Les données 2013-2019 sont définitives.
+         <p>Les données 2013-2018 sont définitives.
             Les données 2020 sont des données estimées à partir de projections des données légales 2019
             et des données Sitadel brutes récentes, qui ne sont pas finales.</p>
          <table class="w3-table-all w3-hoverable w3-card-4">
@@ -1111,9 +1111,9 @@ function hideShowLOG_function() {
                     <tr class="w3-teal">
                         <th style="color:white">Données INSEE / Sitadel</th>
                         <th style="color:white" class="w3-right-align">2013</th>
-                        <th style="color:white" class="w3-right-align"><small>13-19</small></th>
-                        <th style="color:white" class="w3-right-align">2019</th>
-                        <th style="color:white" class="w3-right-align"><b><small>19-20</small></b></th>
+                        <th style="color:white" class="w3-right-align"><small>13-18</small></th>
+                        <th style="color:white" class="w3-right-align">2018</th>
+                        <th style="color:white" class="w3-right-align"><b><small>18-20</small></b></th>
                         <th style="color:white" class="w3-right-align">2020</th>
                         <th style="color:white" class="w3-right-align"><b><small>13-20</small></b></th>
                     </tr>
@@ -1130,7 +1130,7 @@ function hideShowLOG_function() {
                         <td>- Population des Ménages : </td>
                         <td class="w3-right-align">{{ds.C13_PMEN}}</td>
                         <td class="w3-right-align"></td>
-                        <td class="w3-right-align">{{ds.C19_PMEN}}</td>
+                        <td class="w3-right-align">{{ds.C18_PMEN}}</td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align">{{ds.pmen_2020}}</td>
                         <td class="w3-right-align"></td>
@@ -1139,7 +1139,7 @@ function hideShowLOG_function() {
                         <td>- Taille des Ménages : </td>
                         <td class="w3-right-align">{{f_round(ds.TM_2013,3)}}</td>
                         <td class="w3-right-align"></td>
-                        <td class="w3-right-align">{{f_round(ds.TM_2019,3)}}</td>
+                        <td class="w3-right-align">{{f_round(ds.TM_2018,3)}}</td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align">{{f_round(ds.tmen_2020,3)}}</td>
                         <td class="w3-right-align"></td>
@@ -1147,43 +1147,43 @@ function hideShowLOG_function() {
                     <tr>
                         <td>- Besoins en Résidences Principales : </td>
                         <td class="w3-right-align">{{ds.C13_MEN}}</td>
-                        <td class="w3-right-align"><b>{{f_val(ds.C19_MEN - ds.C13_MEN)}}</b></td>
-                        <td class="w3-right-align">{{ds.C19_MEN}}</td>
-                        <td class="w3-right-align"><b>{{f_val(ds.men_2020 - ds.C19_MEN)}}</b></td>
+                        <td class="w3-right-align"><b>{{f_val(ds.C18_MEN - ds.C13_MEN)}}</b></td>
+                        <td class="w3-right-align">{{ds.C18_MEN}}</td>
+                        <td class="w3-right-align"><b>{{f_val(ds.men_2020 - ds.C18_MEN)}}</b></td>
                         <td class="w3-right-align">{{ds.men_2020}}</td>
-                        <td class="w3-right-align"><b>{{f_val((ds.C19_MEN - ds.C13_MEN)+(ds.men_2020 - ds.C19_MEN))}}</b></td>
+                        <td class="w3-right-align"><b>{{f_val((ds.C18_MEN - ds.C13_MEN)+(ds.men_2020 - ds.C18_MEN))}}</b></td>
                     </tr>
                     <tr>
                         <td><b>Production</b> en Logements (commencés sur la période) :</td>
                         <td class="w3-right-align"></td>
-                        <td class="w3-right-align"><b>{{ds.PROD_LOG_1319}}</b></td>
+                        <td class="w3-right-align"><b>{{ds.PROD_LOG_1318}}</b></td>
                         <td class="w3-right-align"></td>
-                        <td class="w3-right-align"><b>{{ds.PROD_LOG_1320-ds.PROD_LOG_1319}}</b></td>
+                        <td class="w3-right-align"><b>{{ds.PROD_LOG_1320-ds.PROD_LOG_1318}}</b></td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"><b>{{ds.PROD_LOG_1320}}</b></td>
                     </tr>
                     <tr>
                         <td> - Logements Sociaux Construits (Taux) :</td>
                         <td class="w3-right-align"></td>
-                        <td class="w3-right-align">{{ds.PROD_LLS_1319}}</td>
-                        <td class="w3-right-align"><i><small>< ({{ Math.round( ((ds.TX_PROD_LLS_1319 * 10000).toFixed(4)) ) / 100  }}%)</small></i></td>
-                        <td class="w3-right-align">{{ds.PROD_LLS_1320-ds.PROD_LLS_1319}}</td>
+                        <td class="w3-right-align">{{ds.PROD_LLS_1318}}</td>
+                        <td class="w3-right-align"><i><small>< ({{ Math.round( ((ds.TX_PROD_LLS_1318 * 10000).toFixed(4)) ) / 100  }}%)</small></i></td>
+                        <td class="w3-right-align">{{ds.PROD_LLS_1320-ds.PROD_LLS_1318}}</td>
                         <td class="w3-right-align"><i><small>({{ Math.round( ((ds.TX_PROD_LLS_1320 * 10000).toFixed(4)) ) / 100  }}%) ></small></i></td>
                         <td class="w3-right-align">{{ds.PROD_LLS_1320}}</td>
                     </tr>
                     <tr>
                         <td><b>Excédents</b> de Logements Commencés par rapport aux besoins pour le logement des habitants :</td>
                         <td class="w3-right-align"></td>
-                        <td class="w3-right-align"><b><i>{{ds.EXCES_BESOINS_1319}}</i></b></td>
+                        <td class="w3-right-align"><b><i>{{ds.EXCES_BESOINS_1318}}</i></b></td>
                         <td class="w3-right-align"></td>
-                        <td class="w3-right-align"><b><i>{{ds.EXCES_BESOINS_1320-ds.EXCES_BESOINS_1319}}</i></b></td>
+                        <td class="w3-right-align"><b><i>{{ds.EXCES_BESOINS_1320-ds.EXCES_BESOINS_1318}}</i></b></td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"><b><i>{{ds.EXCES_BESOINS_1320}}</i></b></td>
                     </tr>
                     <tr>
                         <td> -&gt; Nouvelles Résidences Secondaires :</td>
                         <td class="w3-right-align"></td>
-                        <td class="w3-right-align">{{ds.NOUV_RESSEC_1319}}</td>
+                        <td class="w3-right-align">{{ds.NOUV_RESSEC_1318}}</td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
@@ -1192,7 +1192,7 @@ function hideShowLOG_function() {
                     <tr>
                         <td> -&gt; Nouvelles Résidences Vacantes :</td>
                         <td class="w3-right-align"></td>
-                        <td class="w3-right-align">{{ds.NOUV_LOGVAC_1319}}</td>
+                        <td class="w3-right-align">{{ds.NOUV_LOGVAC_1318}}</td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
@@ -1201,25 +1201,25 @@ function hideShowLOG_function() {
                     <tr>
                         <td><b>Renouvellement </b> du Parc de Logements :</td>
                         <td class="w3-right-align"></td>
-                        <td class="w3-right-align"><b><i>{{ds.log_1319 - ds.PROD_LOG_1319}} log.</i></b></td>
-                        <td class="w3-right-align"><i><small>({{f_round((ds.log_1319 -ds.PROD_LOG_1319)/5,0)}} log./an)</small></i></td>
+                        <td class="w3-right-align"><b><i>{{ds.log_1318 - ds.PROD_LOG_1318}} log.</i></b></td>
+                        <td class="w3-right-align"><i><small>({{f_round((ds.log_1318 -ds.PROD_LOG_1318)/5,0)}} log./an)</small></i></td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
                     </tr>
                     <tr>
-                        <td> -&gt; Evolution du parc 2013-2019 :</td>
+                        <td> -&gt; Evolution du parc 2013-2018 :</td>
                         <td class="w3-right-align"></td>
-                        <td class="w3-right-align">{{f_round(ds.log_1319,0)}} log.</td>
+                        <td class="w3-right-align">{{f_round(ds.log_1318,0)}} log.</td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
                     </tr>
                     <tr>
-                        <td> -&gt; Logements commencés 2013-2019 :</td>
+                        <td> -&gt; Logements commencés 2013-2018 :</td>
                         <td class="w3-right-align"></td>
-                        <td class="w3-right-align">{{ds.PROD_LOG_1319}} log.</td>
+                        <td class="w3-right-align">{{ds.PROD_LOG_1318}} log.</td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
                         <td class="w3-right-align"></td>
@@ -1237,7 +1237,7 @@ function hideShowLOG_function() {
         <h3>Besoins et Constructions de Logements 2010-2019</h3></div>
 
         <div v-if="this.data_s != null">
-            <p><b>Excédents de Logements sur 10 ans : {{(ds.LOG_COMMENCES_1019)-(ds.BESOIN_LOG_ANNUEL_0813 * 3 + ds.BESOIN_LOG_ANNUEL_1319 * 5 + ds.BESOIN_LOG_ANNUEL_1920 * 2)}}</b></p>
+            <p><b>Excédents de Logements sur 10 ans : {{(ds.LOG_COMMENCES_1019)-(ds.BESOIN_LOG_ANNUEL_0813 * 3 + ds.BESOIN_LOG_ANNUEL_1318 * 5 + ds.BESOIN_LOG_ANNUEL_1820 * 2)}}</b></p>
         </div>
 
         <div id="constructionsConstructionsLogementsChartContainer"      class="center"  style="width:100%; max-width:600px; max-height:500px;"></div>
@@ -1311,16 +1311,16 @@ function hideShowLOG_function() {
             <tbody>
             <tr class="w3-teal">
                 <th style="color:white">Artificialisation</th>
-                <th style="color:white"class="w3-right-align">2013 - 2019</th>
+                <th style="color:white"class="w3-right-align">2013 - 2018</th>
             </tr>
             <tr>
                 <td>Artificialisation à destination de l'habitat :</td>
-                <td class="w3-right-align">{{ ds.ART_ART13HAB19  }} ha</td>
+                <td class="w3-right-align">{{ ds.ART_ART13HAB18  }} ha</td>
             </tr>
             <tr>
                 <td>Nouveaux logements (Résidences principales, secondaires et vacantes) :</td>
-                <div v-if="ds.ART_LOG1319 > 0">
-                <td class="w3-right-align">{{ ds.ART_LOG1319 }}</td>
+                <div v-if="ds.ART_LOG1318 > 0">
+                <td class="w3-right-align">{{ ds.ART_LOG1318 }}</td>
                 </div>
             </tr>
             <tr>
@@ -1413,7 +1413,7 @@ function hideShowLOG_function() {
         <h3>Objectifs SCoT Ouest Alpes-Maritimes</h3></div>
         <p>SCoT Ouest : <a target="_blank" href="https://cloud.paysdegrasse.fr/index.php/s/4jrNnfwokzSTo6a"> Document D'Objectifs </a></p>
         <p> Le SCoT Ouest Alpes-Maritimes s'est donné comme objectif de limiter son artificialisation par commune.</p>
-        <p> Cette table est issue des données des permis de construire autorisés selon le SCoT, depuis le {{ ds.SCOT_OUEST_START_DATE_FORMAT }}.</p>
+        <p> Cette table est issue des données des permis de construire autorisés depuis la mise en place du SCoT, le 20 Mai 2021.</p>
         <p> C'est la surface des parcelles sujettes a PC qui est prise en compte. Ne sont pas comptés :
             les PC avant l’approbation du SCoT, les Déclarations Préalables, les PC annulés, les PC avec surface existante ou démolition
 	        les PC avec indication d'extension ou de surélévation, les PC sur logements existant, les PC pour les locaux commerciaux ou industriels,
@@ -1422,20 +1422,19 @@ function hideShowLOG_function() {
             ce n'est pas l'emprise au sol imperméabilisée ou minéralisée, mais l’artificialisation correspondant à la définition
             d’artificialisation du décret n° 2022-763 du 29 avril 2022, qui comprend les surfaces espaces verts comme les jardins.</p>
         <p> Le SCoT se veut ne comptabiliser que les parcelles de plus de 2500 m2 dans le budget disponible.
-            Mais comme la plupart des parcelles sont de moins de 2500 m2, et constituent la majorité de la consommation,
+            Mais comme la plupart des parcelles sont de moins de 2500 m2, qui constituent la majorité de la consommation,
             les petites surfaces consommées sont aussi indiquées dans la table ci-dessous.</p>
 
         <table class="w3-table-all w3-hoverable w3-card-4">
             <tbody>
             <tr class="w3-teal">
                 <th style="color:white">Données Sitadel</th>
-                <th style="color:white" class="w3-right-align">Depuis le {{ ds.SCOT_OUEST_START_DATE_FORMAT }}</th>
+                <th style="color:white" class="w3-right-align">Depuis le 20 Mai 2021</th>
             </tr>
             <tr>
                 <td>Dernière autorisation prise en compte :</td>
                 <td class="w3-right-align">{{ ds.SCOT_LAST_DATE }} </td>
             </tr>
-            <!--
             <tr>
                 <td>Nombre de Permis Autorisés :</td>
                 <td class="w3-right-align">{{ f_round(ds.SCOT_OUEST_LOG_COUNT,0) }} </td>
@@ -1448,17 +1447,16 @@ function hideShowLOG_function() {
                 <td>Nombre de logements sociaux :</td>
                 <td class="w3-right-align">{{ f_percent(ds.SCOT_OUEST_LOG_LOG_SOCIAUX , ds.SCOT_OUEST_LOG_LOGEMENTS, rounding=0, suffix = "%", format = "()" )  }} </td>
             </tr>
-            -->
             <tr>
-                <td>Consommation autorisée en parcelles vierges (toutes superficies) :</td>
-                <td class="w3-right-align">{{ f_round(ds.SCOT_OUEST_LOG_SUPERFICIE_ALL / 10000,2)  }} ha  </td>
+                <td>Consommation en parcelles vierges autorisées (toutes superficies) :</td>
+                <td class="w3-right-align">{{ f_round(ds.SCOT_OUEST_LOG_SUPERFICIE / 10000,2)  }} ha  </td>
             </tr>
             <tr>
                 <td><b>Objectif de consommation jusqu'en 2030 (parcelles > 2500 m2) :</b></td>
                 <td class="w3-right-align"><b>{{ f_round(ds.SCOT_2030 / 10000,2)  }} ha  </b></td>
             </tr>
             <tr>
-                <td>- Consommation dans le budget de l'objectif 2030 (parcelles > 2500 m2) :</td>
+                <td>- Consommation dans le budget de l'objectif (parcelles > 2500 m2) :</td>
                 <td class="w3-right-align">{{ f_percent(f_round(ds.SCOT_OUEST_LOG_SUPERFICIE_2500 / 10000,2) , ds.SCOT_2030 / 10000, rounding=0, suffix = "%", format = "()")  }}  ha </td>
             </tr>
             <tr>
@@ -1483,13 +1481,6 @@ function hideShowLOG_function() {
 
         <br>
         <div id="artificialisationSCoTOuest"      class="center"  style="width:100%; max-width:600px; max-height:500px;"></div>
-
-        <div class="w3-cell-row">
-            <div class="w3-container w3-cell w3-mobile w3-center">
-                <p></p>
-                <p><a class="btn w3-btn fa fa-download" style="color:white" :href="ds.SCOT_OUEST_URL"> Download Scot Ouest Data</a></p>
-            </div>
-        </div>
 
         <br>
         <diagnostics :diags=this.data_s.Diagnostics type="ALL" categorie="ART"></diagnostics>
@@ -1552,12 +1543,12 @@ function hideShowLOG_function() {
                 <td class="w3-right-align">{{ds.NB_LGT_PRET_LOC_SOCIAL_1316}}</td>
             </tr>
             <tr>
-                <td>Logements sociaux commencés en 2017-2022</td>
-                <td class="w3-right-align">{{ds.NB_LGT_PRET_LOC_SOCIAL_17PL}}</td>
+                <td>Logements sociaux commencés en 2017-2021</td>
+                <td class="w3-right-align">{{ds.NB_LGT_PRET_LOC_SOCIAL_1721}}</td>
             </tr>
             <tr>
-                <td><b>Total 2013-2022</b></td>
-                <td class="w3-right-align"><b>{{ds.NB_LGT_PRET_LOC_SOCIAL_13PL}}</b></td>
+                <td><b>Total 2013-2021</b></td>
+                <td class="w3-right-align"><b>{{ds.NB_LGT_PRET_LOC_SOCIAL_1321}}</b></td>
             </tr>
         </table>
         </div>
@@ -1575,7 +1566,7 @@ function hideShowLOG_function() {
         <h2>Projections</h2>
         <p>Projections 2050 : <a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS">Dossier Insee </a></p>
         <p>Projections Paca : <a target="_blank" :href="ds.URL_SOURCE_PROJECTIONS_PACA">Dossier Omphale </a></p>
-        <p>Les projections d'évolution de la population sont issues de l'INSEE, et de son étude Omphale de 2022. Le scenario central est retenu ci-dessous. Les taux d'évolution appliqués au territoire sont les projections du niveau départemental.</p>
+        <p>Les projections d'évolution de la population sont issues de l'INSEE, et de son étude Omphale. Le scenario central est retenu ci-dessous. Les taux d'évolution appliqués au territoire sont les projections du niveau départemental.</p>
         <p>Les besoins en logement sont liés strictement à l'évolution de la population, et au désserrement des ménages, en supposant une stabilisation de la taille des ménages à terme.</p>
         <table class="w3-table-all w3-hoverable w3-card-4">
             <tbody>
@@ -1584,63 +1575,54 @@ function hideShowLOG_function() {
                 <th style="color:white" class="w3-right-align">2020</th>
                 <th style="color:white" class="w3-right-align">2030</th>
                 <th style="color:white" class="w3-right-align">2040</th>
-                <th style="color:white" class="w3-right-align">2050</th>
             </tr>
             <tr>
                 <td><b>Population :</b></td>
                 <td class="w3-right-align">{{ds.POP_2020}}</td>
                 <td class="w3-right-align">{{ds.POP_2030}}</td>
                 <td class="w3-right-align">{{ds.POP_2040}}</td>
-                <td class="w3-right-align">{{ds.POP_2050}}</td>
             </tr>
             <tr>
                 <td>- Evolution en 10 ans :</td>
                 <td class="w3-right-align"> -</td>
                 <td class="w3-right-align">{{f_val(ds.POP_2030 - ds.POP_2020)}}</td>
                 <td class="w3-right-align">{{f_val(ds.POP_2040 - ds.POP_2030)}}</td>
-                <td class="w3-right-align">{{f_val(ds.POP_2050 - ds.POP_2040)}}</td>
             </tr>
             <tr>
                 <td>- Evolution en % / an :</td>
                 <td class="w3-right-align">-</td>
                 <td class="w3-right-align">{{f_val(ds.TX_POP_2030, format = "+", suffix = "%")}}</td>
                 <td class="w3-right-align">{{f_val(ds.TX_POP_3040, format = "+", suffix = "%")}}</td>
-                <td class="w3-right-align">{{f_val(ds.TX_POP_4050, format = "+", suffix = "%")}}</td>
             </tr>
             <tr>
                 <td><b>Taille des Ménages :</b></td>
                 <td class="w3-right-align">{{ds.TM_2020}}</td>
                 <td class="w3-right-align">{{ds.TM_2030}}</td>
                 <td class="w3-right-align">{{ds.TM_2040}}</td>
-                <td class="w3-right-align">{{ds.TM_2050}}</td>
             </tr>
             <tr>
                 <td>- Evolution en % / an  :</td>
                 <td class="w3-right-align">-</td>
-                <td class="w3-right-align">{{f_val(f_round(ds.TXTM_1319 / 2,3), format = "+", suffix = "%")}}</td>
-                <td class="w3-right-align">{{f_val(f_round(ds.TXTM_1319 / 3,3), format = "+", suffix = "%")}}</td>
-                <td class="w3-right-align">{{f_val(f_round(ds.TXTM_1319 / 4,3), format = "+", suffix = "%")}}</td>
+                <td class="w3-right-align">{{f_val(f_round(ds.TXTM_1318 / 2,3), format = "+", suffix = "%")}}</td>
+                <td class="w3-right-align">{{f_val(f_round(ds.TXTM_1318 / 3,3), format = "+", suffix = "%")}}</td>
             </tr>
             <tr>
                 <td><b>Besoins en logements pour la population :</b></td>
                 <td class="w3-right-align">{{ds.LOG_2020}}</td>
                 <td class="w3-right-align">{{ds.LOG_2030}}</td>
                 <td class="w3-right-align">{{ds.LOG_2040}}</td>
-                <td class="w3-right-align">{{ds.LOG_2050}}</td>
             </tr>
             <tr>
                 <td>- Besoins en logements nouveaux sur 10 ans :</td>
                 <td class="w3-right-align"> -</td>
                 <td class="w3-right-align">{{f_val(ds.LOG_2030 - ds.LOG_2020)}}</td>
                 <td class="w3-right-align">{{f_val(ds.LOG_2040 - ds.LOG_2030)}}</td>
-                <td class="w3-right-align">{{f_val(ds.LOG_2050 - ds.LOG_2050)}}</td>
             </tr>
             <tr>
                 <td>- Besoins en logements par an :</td>
                 <td class="w3-right-align"> -</td>
-                <td class="w3-right-align">{{f_val(f_round((ds.LOG_2030 - ds.LOG_2020)/10))}}</td>
+                <td class="w3-right-align">{{f_val(f_round((ds.LOG_2030 - ds.LOG_2020)/10))}} </td>
                 <td class="w3-right-align">{{f_val(f_round((ds.LOG_2040 - ds.LOG_2030)/10))}}</td>
-                <td class="w3-right-align">{{f_val(f_round((ds.LOG_2050 - ds.LOG_2040)/10))}}</td>
             </tr>
             </tbody>
         </table>
@@ -1842,7 +1824,7 @@ function hideShowLOG_function() {
         <div class="w3-container">
 
             <div v-if="this.data_s != null">
-                <p>Population 2013-2019 : {{ f_val(ds.P19_POP - ds.P13_POP) }} habitants ({{f_val(ds.TXPOP_1319)}} %/an). 2019 : {{ds.POP_LEGALE_2019}} habitants </p>
+                <p>Population 2013-2018 : {{ f_val(ds.P18_POP - ds.P13_POP) }} habitants ({{f_val(ds.TXPOP_1318)}} %/an). 2019 : {{ds.POP_LEGALE_2019}} habitants </p>
             </div>
             <div class="w3-container w3-cell">
                 <calculette-evol ref="CalculetteEvolPopulation"
@@ -1871,7 +1853,7 @@ function hideShowLOG_function() {
         </div>
         <br>
             <div v-if="this.data_s != null">
-                <p>Taille des Ménages 2013-2019: {{ ds.TM_2013 }} -> {{ ds.TM_2019 }} personnes / ménage ({{f_val(ds.TXTM_1319)}} %/an)</p>
+                <p>Taille des Ménages 2013-2018: {{ ds.TM_2013 }} -> {{ ds.TM_2018 }} personnes / ménage ({{f_val(ds.TXTM_1318)}} %/an)</p>
             </div>
         <div class="w3-container">
             <div class="w3-container w3-cell">
@@ -2063,19 +2045,19 @@ function hideShowLOG_function() {
             <tbody>
             <tr class="w3-teal">
                 <th height="43" class="w3-left-align  w3-teal">Période d'étude :</th>
-                <th class="w3-right-align w3-teal">2019</th>
+                <th class="w3-right-align w3-teal">2018</th>
                 <th class="w3-right-align w3-teal">2030</th>
                 <th class="w3-right-align w3-grey">Variation</th>
             </tr>
             <tr>
                 <td height="43"> Population</td>
-                <td class="w3-right-align">{{this.ds.oz_population_2019}}</td>
+                <td class="w3-right-align">{{this.ds.oz_population_2018}}</td>
                 <td class="w3-right-align">{{this.ds.oz_population_2030}}</td>
                 <td class="w3-right-align">{{this.ds.oz_population_variation}}</td>
             </tr>
             <tr>
                 <td height="43"> Nombre de personnes par ménage</td>
-                <td class="w3-right-align">{{this.ds.oz_tm_2019}}</td>
+                <td class="w3-right-align">{{this.ds.oz_tm_2018}}</td>
                 <td class="w3-right-align">{{this.ds.oz_tm_2030}}</td>
                 <td class="w3-right-align">{{this.ds.oz_tm_variation}}</td>
             </tr>
@@ -2099,13 +2081,13 @@ function hideShowLOG_function() {
             </tr>
             <tr>
                 <td height="43">Parc de logements vacants</td>
-                <td class="w3-right-align">{{this.ds.oz_parc_res_vac_2019}}</td>
+                <td class="w3-right-align">{{this.ds.oz_parc_res_vac_2018}}</td>
                 <td class="w3-right-align">{{this.ds.oz_parc_res_vac_2030}}</td>
                 <td class="w3-right-align">{{this.ds.oz_parc_res_vac_variation}}</td>
             </tr>
             <tr>
                 <td height="43">Parc de résidences secondaires</td>
-                <td class="w3-right-align">{{this.ds.oz_parc_res_sec_2019}}</td>
+                <td class="w3-right-align">{{this.ds.oz_parc_res_sec_2018}}</td>
                 <td class="w3-right-align">{{this.ds.oz_parc_res_sec_2030}}</td>
                 <td class="w3-right-align">{{this.ds.oz_parc_res_sec_variation}}</td>
             </tr>
@@ -2170,7 +2152,7 @@ function hideShowLOG_function() {
                             <th class="w3-right-align w3-grey">Hectares</th>
                         </tr>
                         <tr>
-                            <td class="w3-right-align">2009-2019 :</td>
+                            <td class="w3-right-align">2009-2018 :</td>
                             <td class="w3-right-align">{{Math.round(this.ds.oz_ha_consommes_ha_zan_historique*10)/10}}</td>
                         </tr>
                         <tr>
@@ -2384,7 +2366,7 @@ function hideShowLOG_function() {
                             <th class="w3-right-align w3-grey">Hectares</th>
                         </tr>
                         <tr>
-                            <td class="w3-right-align">2009-2019 :</td>
+                            <td class="w3-right-align">2009-2018 :</td>
                             <td class="w3-right-align">{{Math.round(this.ds.oz_ha_consommes_ha_zan_historique*10)/10}}</td>
                         </tr>
                         <tr>
@@ -2491,19 +2473,19 @@ function hideShowLOG_function() {
             <tbody>
             <tr class="w3-teal">
                 <th height="43" class="w3-left-align  w3-teal">Période d'étude :</th>
-                <th class="w3-right-align w3-teal">2019</th>
+                <th class="w3-right-align w3-teal">2018</th>
                 <th class="w3-right-align w3-teal">2030</th>
                 <th class="w3-right-align w3-grey">Variation</th>
             </tr>
             <tr>
                 <td height="43">Population</td>
-                <td class="w3-right-align">{{this.ds.oz_population_2019}}</td>
+                <td class="w3-right-align">{{this.ds.oz_population_2018}}</td>
                 <td class="w3-right-align">{{this.ds.oz_population_2030}}</td>
                 <td class="w3-right-align">{{this.ds.oz_population_variation}}</td>
             </tr>
             <tr>
                 <td height="43">Personnes par ménage</td>
-                <td class="w3-right-align">{{this.ds.oz_tm_2019}}</td>
+                <td class="w3-right-align">{{this.ds.oz_tm_2018}}</td>
                 <td class="w3-right-align">{{this.ds.oz_tm_2030}}</td>
                 <td class="w3-right-align">{{this.ds.oz_tm_variation}}</td>
             </tr>
@@ -2527,13 +2509,13 @@ function hideShowLOG_function() {
             </tr>
             <tr>
                 <td height="43">Logements vacants</td>
-                <td class="w3-right-align">{{this.ds.oz_parc_res_vac_2019}}</td>
+                <td class="w3-right-align">{{this.ds.oz_parc_res_vac_2018}}</td>
                 <td class="w3-right-align">{{this.ds.oz_parc_res_vac_2030}}</td>
                 <td class="w3-right-align">{{this.ds.oz_parc_res_vac_variation}}</td>
             </tr>
             <tr>
                 <td height="43">Résidences secondaires</td>
-                <td class="w3-right-align">{{this.ds.oz_parc_res_sec_2019}}</td>
+                <td class="w3-right-align">{{this.ds.oz_parc_res_sec_2018}}</td>
                 <td class="w3-right-align">{{this.ds.oz_parc_res_sec_2030}}</td>
                 <td class="w3-right-align">{{this.ds.oz_parc_res_sec_variation}}</td>
             </tr>
@@ -2598,7 +2580,7 @@ function hideShowLOG_function() {
                             <th class="w3-right-align w3-grey">Hectares</th>
                         </tr>
                         <tr>
-                            <td class="w3-right-align">2009-2019 :</td>
+                            <td class="w3-right-align">2009-2018 :</td>
                             <td class="w3-right-align">{{Math.round(this.ds.oz_ha_consommes_ha_zan_historique*10)/10}}</td>
                         </tr>
                         <tr>
@@ -2815,7 +2797,7 @@ function hideShowLOG_function() {
                             <th class="w3-right-align w3-grey">Hectares</th>
                         </tr>
                         <tr>
-                            <td class="w3-right-align">2009-2019 :</td>
+                            <td class="w3-right-align">2009-2018 :</td>
                             <td class="w3-right-align">{{Math.round(this.ds.oz_ha_consommes_ha_zan_historique*10)/10}}</td>
                         </tr>
                         <tr>
@@ -2971,7 +2953,7 @@ function hideShowLOG_function() {
             <tr>
                 <td height="50" >1 - Population</td>
                 <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="-10" max="10" step="0.001"  style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_pop_taux"></td>
-                <td class="w3-right-align">{{this.ds.P19_POP}}</td>
+                <td class="w3-right-align">{{this.ds.P18_POP}}</td>
                 <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="0" max="9999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_pop_depart"></td>
                 <td class="w3-right-align">{{this.ds.michel_pop_arrivee}}</td>
                 <td class="w3-right-align">{{this.ds.michel_pop_arrivee - this.ds.michel_pop_depart}}</td>
@@ -2981,8 +2963,8 @@ function hideShowLOG_function() {
             </tr>
             <tr>
                 <td height="50" >2.1 - Population hors Ménages</td>
-                <td class="w3-right-align">{{((this.ds.C19_HORS_MEN/this.ds.P19_POP)*100).toFixed(1)}}%</td>
-                <td class="w3-right-align">{{this.ds.C19_HORS_MEN}}</td>
+                <td class="w3-right-align">{{((this.ds.C18_HORS_MEN/this.ds.P18_POP)*100).toFixed(1)}}%</td>
+                <td class="w3-right-align">{{this.ds.C18_HORS_MEN}}</td>
                 <td class="w3-right-align w3-2021-french-blue"> {{((this.ds.michel_pop_hm_depart/this.ds.michel_pop_depart)*100).toFixed(1)}}% - <input  type="number" min="0" max="9999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_pop_hm_depart"></td>
                 <td class="w3-right-align w3-2021-french-blue"> {{((this.ds.michel_pop_hm_arrivee/this.ds.michel_pop_arrivee)*100).toFixed(1)}}% - <input  type="number" min="0" max="9999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_pop_hm_arrivee"></td>
                 <td class="w3-right-align">{{this.ds.michel_pop_hm_delta}}</td>
@@ -2990,7 +2972,7 @@ function hideShowLOG_function() {
             <tr>
                 <td height="50" >2.2 - Population des Ménages</td>
                 <td class="w3-right-align">{{this.ds.michel_pop_taux}}</td>
-                <td class="w3-right-align">{{this.ds.C19_MEN}}</td>
+                <td class="w3-right-align">{{this.ds.C18_MEN}}</td>
                 <td class="w3-right-align">{{this.ds.michel_pop_men_depart}}</td>
                 <td class="w3-right-align">{{this.ds.michel_pop_men_arrivee}}</td>
                 <td class="w3-right-align">{{this.ds.michel_pop_men_delta}}</td>
@@ -2998,7 +2980,7 @@ function hideShowLOG_function() {
             <tr>
                 <td height="50" >2.3 - Taille des Ménages</td>
                 <td class="w3-right-align">{{this.ds.michel_tm_tendance_5_ans}}</td>
-                <td class="w3-right-align">{{this.ds.TM_2019}}</td>
+                <td class="w3-right-align">{{this.ds.TM_2018}}</td>
                 <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="1" max="5" step="0.001" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_tm_depart"></td>
                 <td class="w3-right-align w3-2021-french-blue"> <input  type="number" min="1" max="5" step="0.001" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_tm_arrivee"></td>
                 <td class="w3-right-align">{{this.ds.michel_tm_delta}}</td>
@@ -3006,7 +2988,7 @@ function hideShowLOG_function() {
             <tr>
                 <td height="50" >2.4 - Résidences Principales</td>
                 <td class="w3-right-align">{{this.ds.michel_tx_rp_an_donnee *100}}%</td>
-                <td class="w3-right-align">{{this.ds.C19_MEN}}</td>
+                <td class="w3-right-align">{{this.ds.C18_MEN}}</td>
                 <td class="w3-right-align">{{((this.ds.michel_rp_depart/this.ds.michel_log_depart)*100).toFixed(1)}}% - {{this.ds.michel_rp_depart}}</td>
                 <td class="w3-right-align">{{((this.ds.michel_rp_arrivee/this.ds.michel_log_arrivee)*100).toFixed(1)}}% - {{this.ds.michel_rp_arrivee}}</td>
                 <td class="w3-right-align">{{this.ds.michel_rp_delta}}</td>
@@ -3014,7 +2996,7 @@ function hideShowLOG_function() {
             <tr>
                 <td height="50" >3 - Residences Secondaires</td>
                 <td class="w3-right-align">{{this.ds.michel_tx_rs_an_donnee *100}}%</td>
-                <td class="w3-right-align">{{this.ds.P19_RSECOCC}}</td>
+                <td class="w3-right-align">{{this.ds.P18_RSECOCC}}</td>
                 <td class="w3-right-align w3-2021-french-blue"> {{((this.ds.michel_rs_depart/this.ds.michel_log_depart)*100).toFixed(1)}}% <input  type="number" min="0" max="9999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_rs_depart"></td>
                 <td class="w3-right-align w3-2021-french-blue"> {{((this.ds.michel_rs_arrivee/this.ds.michel_log_arrivee)*100).toFixed(1)}}% <input  type="number" min="0" max="9999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_rs_arrivee"></td>
                 <td class="w3-right-align">{{this.ds.michel_rs_delta}}</td>
@@ -3022,7 +3004,7 @@ function hideShowLOG_function() {
             <tr>
                 <td height="50" >4 - Residences Vacantes</td>
                 <td class="w3-right-align">{{this.ds.michel_tx_rv_an_donnee *100}}% </td>
-                <td class="w3-right-align">{{this.ds.P19_LOGVAC}}</td>
+                <td class="w3-right-align">{{this.ds.P18_LOGVAC}}</td>
                 <td class="w3-right-align w3-2021-french-blue"> {{((this.ds.michel_rv_depart/this.ds.michel_log_depart)*100).toFixed(1)}}% <input  type="number" min="0" max="9999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_rv_depart"></td>
                 <td class="w3-right-align w3-2021-french-blue"> {{((this.ds.michel_rv_arrivee/this.ds.michel_log_arrivee)*100).toFixed(1)}}% <input  type="number" min="0" max="9999999" style="text-align: right;" v-on:blur="recalc" v-on:change="recalc" v-model.number="this.ds.michel_rv_arrivee"></td>
                 <td class="w3-right-align">{{this.ds.michel_rv_delta}}</td>
@@ -3030,7 +3012,7 @@ function hideShowLOG_function() {
             <tr>
                 <td height="50" >4.1- Parc Total de Logements</td>
                 <td class="w3-right-align">100.0%</td>
-                <td class="w3-right-align">{{this.ds.log_2019}}</td>
+                <td class="w3-right-align">{{this.ds.log_2018}}</td>
                 <td class="w3-right-align">{{this.ds.michel_log_depart}}</td>
                 <td class="w3-right-align">{{this.ds.michel_log_arrivee}}</td>
                 <td class="w3-right-align">{{this.ds.michel_log_delta}}</td>
@@ -3058,7 +3040,7 @@ function hideShowLOG_function() {
                 <th class="w3-right-align w3-teal">Renouvellement</th>
             </tr>
             <tr>
-                <td height="50" >5.0 - Renouvellement du Parc (sur 2013-2019)</td>
+                <td height="50" >5.0 - Renouvellement du Parc (sur 2013-2018)</td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
                 <td class="w3-right-align"></td>
@@ -3249,7 +3231,7 @@ function hideShowLOG_function() {
 ########################
 -->
 
-<script  src="ConsommationFonciereV5.js?v=1"></script>
+<script  src="ConsommationFonciereV3.js?v=1"></script>
 
 </body>
 </html>
