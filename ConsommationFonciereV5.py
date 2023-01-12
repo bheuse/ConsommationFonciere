@@ -3419,6 +3419,8 @@ class FTP:
             filelist.extend([
                     "index.html",
                     "README.md",   "README.dillinger.html",
+                    "ConsommationFonciere.html",    "ConsommationFonciereV2.html",
+                    "ConsommationFonciereV3.html",  "ConsommationFonciereV4.html",
                     "input/Configuration.xlsx",
                     "input/Readme-Header.png", "input/Readme-Body.png",
                     "input/QuestionnerUnProjetDePLU-SCoT.pdf", "input/Alpes-Maritimes-NoteExcedentsLogements.pdf",
@@ -3426,8 +3428,6 @@ class FTP:
                     "input/GuideSF_16_Observatoires_web.pdf",  "input/GuideSF_17_fiscalite_web.pdf",
                     "input/Urbascope.pdf",                     "input/Urbascope_Septembre2022.pdf",
                     "input/Guide_Vers-la-sobriete-fonciere-2022_complet-2.pdf",
-                    "ConsommationFonciere.html",    "ConsommationFonciereV2.html",
-                    "ConsommationFonciereV3.html",  "ConsommationFonciereV4.html",
                     "input/Legend_Logements.png",   "input/CommentCaMarche.png",
                     "input/Densite.png",            "input/Densite_1.jpg",
                     "input/Densite_2.jpg",          "input/Densite_3.jpg",
