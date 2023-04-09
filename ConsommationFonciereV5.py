@@ -77,9 +77,12 @@ sitadelSource1316File = "https://www.data.gouv.fr/fr/datasets/r/67dd4ee1-0d73-46
 sitadelSource1316File = "https://statistiques.developpement-durable.gouv.fr/sites/default/files/2022-10/PC_DP_creant_logements_2013_2016.zip"
 sitadel1316File       = "PC_DP_creant_logements_2013_2016.csv"
 
+
+
 sitadelSource17PLFile = "https://www.data.gouv.fr/fr/datasets/r/1fa467ef-5e3a-456f-b961-be9032cfa3df"
 sitadelSource17PLFile = "https://statistiques.developpement-durable.gouv.fr/sites/default/files/2022-10/PC_DP_creant_logements_2017_2022.zip"
-sitadel17PLFile       = "PC_DP_creant_logements_2017_2022.csv"
+sitadelSource17PLFile = "https://www.statistiques.developpement-durable.gouv.fr/sites/default/files/2023-03/pc_dp_creant_logements_2017_2023_0.zip"
+sitadel17PLFile       = "PC_DP_creant_logements_2017_2023.csv"
 
 sitadelSourceMetaFile = "https://www.data.gouv.fr/fr/datasets/r/9d7d6728-c3bc-44e4-8105-7335ad70d52e"
 sitadelMetaFile       = "dictionnaire_variables_logements_permis_construire.xls"
@@ -108,7 +111,7 @@ def load_sitadel(sitadel1316_file:  str = data_dir + sitadel1316File,
         sitadel1316["RESIDENCE_SERVICE"] = sitadel1316["RESIDENCE"]
     if ((sitadel17PL is None) and (sitadel17PL_file)):
         Files.downloadFile(sitadelSource17PLFile, sitadel17PL_file, is_zipped=True, zipped_file=sitadel17PLFile)
-        Term.print_blue("Lecture Sitadel Logements 2017-2022 : " + sitadel17PL_file + " ...")
+        Term.print_blue("Lecture Sitadel Logements 2017-2023 : " + sitadel17PL_file + " ...")
         sitadel17PL = pd.read_csv(sitadel17PL_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "Etat_DAU": str, "DPC_AUT": str, "ADR_LOCALITE_TER" : str, "ADR_CODPOST_TER" : str, "NATURE_PROJET_DECLAREE" : str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "Type_DAU": str, "Num_DAU": str, "SIREN_DEM": str, "SIRET_DEM": str, "CODPOST_DEM": str })
         sitadel17PL["Parcelles"] = sitadel17PL['sec_cadastre1'].map(str) + sitadel17PL['num_cadastre1'].map(str) + " " + \
                                    sitadel17PL['sec_cadastre2'].map(str) + sitadel17PL['num_cadastre2'].map(str) + " " + \
@@ -133,10 +136,11 @@ def load_sitadel(sitadel1316_file:  str = data_dir + sitadel1316File,
 sitadelLocauxSource1316File = "https://statistiques.developpement-durable.gouv.fr/sites/default/files/2022-10/PC_DP_creant_locaux_2013_2016.zip"
 # sitadelLocauxSource1316File = "https://www.data.gouv.fr/fr/datasets/r/3b987380-d1cf-4047-8dc5-1a19a3ecf812"
 sitadelLocauxSource17PLFile = "https://statistiques.developpement-durable.gouv.fr/sites/default/files/2022-10/PC_DP_creant_locaux_2017_2022.zip"
+sitadelLocauxSource17PLFile = "https://www.statistiques.developpement-durable.gouv.fr/sites/default/files/2023-03/pc_dp_creant_locaux_2017_2023_0.zip"
 # sitadelLocauxSource17PLFile = "https://www.data.gouv.fr/fr/datasets/r/98ff9fd3-a14e-474d-bb8f-12bde12d9f70"
 sitadelLocauxSourceMetaFile = "https://www.data.gouv.fr/fr/datasets/r/b3ffee5b-fd75-4345-a086-02ded2018705"
 sitadelLocaux1316File = data_dir + "PC_DP_creant_locaux_2013_2016.csv"
-sitadelLocaux17PLFile = data_dir + "PC_DP_creant_locaux_2017_2022.csv"
+sitadelLocaux17PLFile = data_dir + "PC_DP_creant_locaux_2017_2023.csv"
 sitadelLocauxMetaFile = data_dir + "dictionnaire_variables_locaux_permis_construire.xls"
 
 sitadel_locaux_1316 : pd.DataFrame = None
@@ -154,7 +158,7 @@ def load_sitadel_locaux(sitadelLocaux1316_file:  str = sitadelLocaux1316File,
     global sitadel_locaux_1316, sitadel_locaux_17PL, sitadel_locaux_Meta, sitadel_locaux_13PL
     if (sitadel_locaux_1316 is None) or (sitadel_locaux_17PL is None)  or (sitadel_locaux_Meta is None):
         Files.downloadFile(sitadelLocauxSource1316File, sitadelLocaux1316File, is_zipped=True, zipped_file="PC_DP_creant_locaux_2013_2016.csv")
-        Files.downloadFile(sitadelLocauxSource17PLFile, sitadelLocaux17PLFile, is_zipped=True, zipped_file="PC_DP_creant_locaux_2017_2022.csv")
+        Files.downloadFile(sitadelLocauxSource17PLFile, sitadelLocaux17PLFile, is_zipped=True, zipped_file="PC_DP_creant_locaux_2017_2023.csv")
         Files.downloadFile(sitadelLocauxSourceMetaFile, sitadelLocauxMetaFile)
         Term.print_blue("Lecture Sitadel Locaux 2013-2016 : " + sitadelLocaux1316_file + " ...")
         sitadel_locaux_1316 = pd.read_csv(sitadelLocaux1316_file, delimiter=';', index_col=4, encoding='latin-1', dtype={"DEP": str, "COMM": str, "DPC_AUT": str, "Etat_DAU": str, "ZONE_OP": str, "NATURE_PROJET": str, "I_EXTENSION": str, "I_SURELEVATION": str, "I_NIVSUPP": str, "SUPERFICIE_TERRAIN": float, "SURF_HAB_AVANT": float})
@@ -4096,13 +4100,13 @@ def report_region_dict(region=None, filename=None, force=False) -> dict:
     return france
 
 def report_scot_ouest(start_date, ftp_push: bool = False):
-    if (str(start_date).lower in ["arret", "mai"]) :
+    if (str(start_date).lower() in ["arret", "mai"]) :
         start_date = "2021-05-21"
-    if (str(start_date).lower in ["executoire", "exec", "aout"]) :
+    if (str(start_date).lower() in ["executoire", "exec", "aout"]) :
         start_date = "2021-08-11"
-    if (str(start_date).lower in ["2020", "scot"]) :
+    if (str(start_date).lower() in ["2020", "scot"]) :
         start_date = "2020-01-01"
-    if (str(start_date).lower in ["2021", "janvier"]) :
+    if (str(start_date).lower() in ["2021", "janvier"]) :
         start_date = "2021-01-01"
     for commune in communes_zone("SCoT_Ouest"):
         Report.scot_ouest_commune(code_insee=str(commune), start_date=start_date)
@@ -4123,7 +4127,7 @@ class TestSobriete(unittest.TestCase):
 
     # Scot Ouest Test
     def testScotOuest(self):
-        report_scot_ouest("2020", ftp_push = False) # "2021-08-11" / "2021-05-21" / "2020-01-01"
+        report_scot_ouest(start_date="2020", ftp_push = False) # "2021-08-11" / "2021-05-21" / "2020-01-01"
 
     def testScotOuestCommune(self):
         Report.scot_ouest_commune(code_insee="06085", start_date="2020-01-01")  # Mougins
