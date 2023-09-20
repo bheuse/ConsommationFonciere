@@ -22,6 +22,13 @@ CMD [ "./RunVigiFoncierPaca.sh"]
 
 # CMD [ "python", "./ConsommationFonciereV4.py --clean" ]
 
-
-
-
+#  sudo apt update
+#  sudo apt upgrade
+#  sudo apt autoremove
+#  sudo apt install software-properties-common
+#  sudo add-apt-repository ppa:deadsnakes/ppa
+#  sudo apt install python3.9 python3.9-venv
+#  python3.9 --version
+#  python3.9  -m venv venv
+#  source venv/bin/activate
+#  pip install -r requirements.txt
