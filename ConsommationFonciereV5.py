@@ -595,7 +595,7 @@ dossierArtificialisation_dtype=
               "artcom2020" : float,
               }
 
-"""
+=====
 
 artificialisationSourcePage = "https://artificialisation.developpement-durable.gouv.fr/suivi-consommation-espaces-naf#paragraph--2164"
 artificialisationSourceFile = "https://cerema.app.box.com/v/pnb-action7-indicateurs-ff/folder/149684581362/obs_artif_conso_com_2009_2021.csv"
@@ -603,7 +603,6 @@ artificialisationSourceMeta = "https://cerema.app.box.com/v/pnb-action7-indicate
 dossierArtificialisationFile = data_dir + "obs_artif_conso_com_2009_2021.csv"
 dossierArtificialisation : pd.DataFrame = None
 
-"""
 "idcom";"idcomtxt";"idreg";"idregtxt";"iddep";"iddeptxt";
 "epci21";"epci21txt";
 "scot";
@@ -623,9 +622,9 @@ dossierArtificialisation : pd.DataFrame = None
 "naf20art21";"art20act21";"art20hab21";"art20mix21";"art20inc21";
 
 "naf09art21";"art09act21";"art09hab21";"art09mix21";"art09inc21";"artcom2020";
+
 "pop13";"pop18";"pop1318";"men13";"men18";"men1318";"emp13";"emp18";"emp1318";
 "mepart1318";"menhab1318";"artpop1318";"surfcom2021"
-"""
 
 dossierArtificialisation_dtype = {"idcom": str, "iddep": str, "epci21": str, "aav2020" : str, "scot" : str, "aav2020txt" : str,
               "naf09art10" : float, "art09act10" : float, "art09hab10" : float, "art09mix10" : float, "art09inc10" : float,
@@ -643,6 +642,57 @@ dossierArtificialisation_dtype = {"idcom": str, "iddep": str, "epci21": str, "aa
               "naf09art21" : float, "art09act21" : float, "art09hab21" : float, "art09mix21" : float, "art09inc21" : float,
               "artcom2020" : float, "surfcom2021" : float,
               }
+
+==========
+
+idcom;idcomtxt;idreg;idregtxt;iddep;iddeptxt;epci22;epci22txt;scot;aav2020;aav2020txt;aav2020_typo;
+
+naf09art10;art09act10;art09hab10;art09mix10;art09rou10;art09fer10;art09inc10;
+naf10art11;art10act11;art10hab11;art10mix11;art10rou11;art10fer11;art10inc11;
+naf11art12;art11act12;art11hab12;art11mix12;art11rou12;art11fer12;art11inc12;
+naf12art13;art12act13;art12hab13;art12mix13;art12rou13;art12fer13;art12inc13;
+naf13art14;art13act14;art13hab14;art13mix14;art13rou14;art13fer14;art13inc14;
+naf14art15;art14act15;art14hab15;art14mix15;art14rou15;art14fer15;art14inc15;
+naf15art16;art15act16;art15hab16;art15mix16;art15rou16;art15fer16;art15inc16;
+naf16art17;art16act17;art16hab17;art16mix17;art16rou17;art16fer17;art16inc17;
+naf17art18;art17act18;art17hab18;art17mix18;art17rou18;art17fer18;art17inc18;
+naf18art19;art18act19;art18hab19;art18mix19;art18rou19;art18fer19;art18inc19;
+naf19art20;art19act20;art19hab20;art19mix20;art19rou20;art19fer20;art19inc20;
+naf20art21;art20act21;art20hab21;art20mix21;art20rou21;art20fer21;art20inc21;
+naf21art22;art21act22;art21hab22;art21mix22;art21rou22;art21fer22;art21inc22;
+
+naf09art22;art09act22;art09hab22;art09mix22;art09inc22;art09rou22;art09fer22;
+
+artcom0922;pop13;pop19;pop1319;men13;men19;men1319;emp13;emp19;emp1319;mepart1319;menhab1319;artpop1319;surfcom2022
+
+"""
+
+artificialisationSourcePage = "https://artificialisation.developpement-durable.gouv.fr/mesurer-la-consommation-despaces/telecharger-les-donnees"
+artificialisationSourceFile = "https://euc1.boxcloud.com/d/1/a1!aFbfhAoOGdqAbO1Q0JzVh3vTgUEGXsscOi3m7pAcFddCf4cjDaNNJAuEs_EU3_Mce4cwTSKWOfKwpPHzz9g9EVxhfBoEV6WcM9OU8moJa43xwI1pPFZBLGl6aZDl_xoMikeABxuZuDCumV37HdIucz8FMijRP4N9HvUk2HPzSTjSxdBCm9dPwOUolIH-T1EnTZHhj1PUOCio4DMybgKsSibAFcR2zoB-I3jlGsNGf74FVfrRMa03Vw_nSIyX4idFsbTDGOEfo4tExMXgjB4Q3AyNbSfeboJU7hqX8DJuIxCjA5mADbYXA4rfZzhwnVcL4cAobS18GEmYg4waOc9_gYsUfyTtYjlIWnstKYzqTX6h_81K5X5FKzGlF5ZYiasprGCsx0PjuLBdXYH45y3MkC1KkCyC48Q2BPMBaI_lEilzNhbRqGpJ0ISut3mMnXmuSUowm9XX5bQRVAeaTteLcaqYVH5-IeKXTbwYhFY4k3F-2bkLWOVAPJhyqpxG4ExPuHnMERCBqzci19TlHGhqDPPLwIa6aobgsubyHzVF-m3VCSVOtptIJUmuNYwGYlfpnlyjSat7ngH5oZC-s6hUBJ3VRfQU4ArAuggmQ9UFKi7uJZ_9wvObsvdw68WGNeABqjgGKKM7FUp3YYjZ0XNFoMRytU2egB6JA3q7uKVpjiLTv_wMRxN0ln4TyWmHcEyOwpwBT-SMlrXLbkgwtSLg40ZsHoVRqh1jBtpOeUx7YzrLVC2bdla1pS5KzOuKMGuYGZtXiEhKmAvxlhc2_I41TmYxxTjh5oVYFF_Bl2hO_PrvHQ8xGPRasnt_uvs-2ACEjkoRpVATKr89aK5Y2dG7OFRVyf5buoxu6bN_JUeD6AJN7auDvjo1XPFsss_bjBfWsNYs7Xi3qM3WJ5Es_EavWlSyShU6g9flFDLsB77DGFjNPYorVpqbTI6ZXYAL934MG7ZrtLDVLPTmUy2oxslVoFvq39Z7OrJFWdRknQKD6NlCagcut3SKLnNHRrLr6jLe6Z69rgdeL29vxRPf-M_KLB060yc9ozSdhcNEwzXRqr2HOPfs1V7x7ovRYXTzXvLu3vVpRc2VseB_LW2z8PktFrklu7p_WEcBLgl_vIMwdd_C9vGbfl3HGHq7WNbaEet623Rg3diFm4q4bUdf2Ri_fUqSlAfe4SbxqR6ofXkgU8zC1CKaQ_FS7yi6f1hSUqelq7Mco8ffwITpOXERdMYM95V5yBmnhLnLVV-izttfaIkoEb_yE54zfO0KJCGIlX4BG3_txT3Iuxu9/download"
+artificialisationSourceMeta = "https://euc1.boxcloud.com/d/1/a1!hkeqA2PakgpZVOAOEl0bzQTkQetJN48XkUF1vnlP_ewGdEt9HBnA_oHyBjhUnIbJpnaOU9K7-aFUb1b_OgYRW2C-Ctg3_lLAeq1ldKqSOZjgeOFJJKPnZmGgZBDa1DeIM3tNsWwD7kF-eAJmxhc2AoOq4lkJppnMm05d4lnZMm8V1WMf6L86_kPw9M3WJ_gmdM467SqkJPPGa3H-g55SO68qa7EeOFMI0JlcUb5R0AYdxg5x8qc6p1wb55jW5h3foUwK6sffuV16hlgfUwYakcxeLDGzCNS0dUpX9C6vZHcSQqJNcY8MEpfhPkXg04GQsYqucc0MhAFtpgg2svabivXqIfFoz84Rj6Fex0KIx_E_aqkqYz9GAL-pgVf4Lz_CfvCk-5Fspc2z0R8Qnh4hEjzn8YiTjpAmpEFhz1ilNVMWG-3hKeg8LzllLpCmW-8to7Tch-LkmLLnqLGFbU2rlmbjdN6-zWdd7dhgt0n76etrWdCDhw8UoCScdKDa4zSVjn5VK4qHJCYRrCFtyzaSlgwGpA_h26VWF3pPGDBNhKqrFYJlJnWDnS343JaDAfJFmqgz_1QVGMU-TYMXVFBX6TI3vxeBOM3i6UnrRa4zmIKILsPR6JKeC_MMy-poL8qgmmdpcZUAG_kEDvAVgrj8yjLcTQyPSSPiBFMoArBcr0w1ol3nFnkYudo3j9vjY4r9vj4Ga_r14p1Mgk9p-o-0EqW1m5sQ_6tSCWXiRyvdVb5ncmMzuhvNa374hD9Lu0T8aohOX9KKO0M0Ew5ffjc2tlQ2EVB-OWblY8uaMZu9wVFshZGQvDuV0QwLUjWwsmbSo4gWs9Ihbwkuqq4EfyC7XHe2GMx0TxNkmyD2yvIiYxa-yfF2xY8bQMYkehrRorxL5hZCKHN9I2T9rWe1P0A0tay9bu12rgKNOpV-9yT-1LDpXPBsD88H804Ndge9Lensw5PKiczq77EbuHmexGuRWnU685jkyEE94OP3_rr5b1xK9A4n4DWIF-0O-e5vXiL3vzvuWSvVBnG4939H7OHdE_3R2BzMaPDWnPKXLmaWv9jqQKayM6cbWaPz2uEKnl-VarRQEpOapv7KzB1-NKjjq8utx_FV7MyrUjpS5NFM_biquJAOy9CRC-99NT_xC6F2eq5Pv_78qkkxf3f27Epu4UVZhnMWWdQUuq4CzRBo2qumuePVt0mEq6kDAOjWMnGQJvx1-qbd1jnECHW0yn7JiPnjIxxn4279EoIoBJrSnEhn_fOqFH7IKysXL3WVbWrWfEWPoaSr35_jZvtPwyd3yEsv7yAFyUWf4RIAM2cer7lUaaBEWbaGDVcgI38PPEdqIKI-jbvVJBNK5xvaMw../download"
+dossierArtificialisationFile = data_dir + "obs_artif_conso_com_2009_2022.csv"
+dossierArtificialisation : pd.DataFrame = None
+
+dossierArtificialisation_dtype = {"idcom": str, "iddep": str, "epci22": str, "aav2020" : str, "scot" : str, "aav2020txt" : str,
+              "naf09art10" : float, "art09act10" : float, "art09hab10" : float, "art09mix10" : float, "art09inc10" : float,
+              "naf10art11" : float, "art10act11" : float, "art10hab11" : float, "art10mix11" : float, "art10inc11" : float,
+              "naf11art12" : float, "art11act12" : float, "art11hab12" : float, "art11mix12" : float, "art11inc12" : float,
+              "naf12art13" : float, "art12act13" : float, "art12hab13" : float, "art12mix13" : float, "art12inc13" : float,
+              "naf13art14" : float, "art13act14" : float, "art13hab14" : float, "art13mix14" : float, "art13inc14" : float,
+              "naf14art15" : float, "art14act15" : float, "art14hab15" : float, "art14mix15" : float, "art14inc15" : float,
+              "naf15art16" : float, "art15act16" : float, "art15hab16" : float, "art15mix16" : float, "art15inc16" : float,
+              "naf16art17" : float, "art16act17" : float, "art16hab17" : float, "art16mix17" : float, "art16inc17" : float,
+              "naf17art18" : float, "art17act18" : float, "art17hab18" : float, "art17mix18" : float, "art17inc18" : float,
+              "naf18art19" : float, "art18act19" : float, "art18hab19" : float, "art18mix19" : float, "art18inc19" : float,
+              "naf19art20" : float, "art19act20" : float, "art19hab20" : float, "art19mix20" : float, "art19inc20" : float,
+              "naf20art21" : float, "art20act21" : float, "art20hab21" : float, "art20mix21" : float, "art20inc21" : float,
+              "naf21art22" : float, "art21act22" : float, "art21hab22" : float, "art21mix22" : float, "art21inc22" : float,
+              "naf09art22" : float, "art09act22" : float, "art09hab22" : float, "art09mix22" : float, "art09inc22" : float,
+              "artcom0922" : float, "surfcom2022" : float,
+              }
+
+
+
 
 global_context["URL_SOURCE_ARTIFICIALISATION"] = artificialisationSourcePage
 
@@ -682,6 +732,27 @@ def load_artificialisationPaca(dossier_artificialisationPaca_file: str = dossier
         xls = pd.ExcelFile(dossier_artificialisationPaca_file)
         dossierArtificialisationPaca = pd.read_excel(xls, index_col=0, dtype={"IDCOM": str})
     return dossierArtificialisationPaca
+
+
+#############
+### Flux 2020
+#############
+
+flux2020SourcePage = "https://www.insee.fr/fr/statistiques/7630358"
+flux2020SourceFile = "https://www.insee.fr/fr/statistiques/fichier/7630358/base-flux-mobilite-residentielle-2020-csv.zip"
+flux2020SourceMeta = "https://www.insee.fr/fr/statistiques/7630358#dictionnaire"
+flux2020SourceData = data_dir + "base-flux-mobilite-residentielle-2019.csv"
+flux2020 : pd.DataFrame = None
+
+
+def load_flux_2020(p_flux2020SourceFile:  str = flux2020SourceData):
+    global flux2020
+    if (flux2020 is not None) : return flux2020
+    Term.print_blue("Lecture Flux Mobilite Residentielle 2019 : " + p_flux2020SourceFile + " ...")
+    flux2020 = pd.read_csv(p_flux2020SourceFile, delimiter=';',
+               dtype={'CODGEO': str, 'LIBGEO': str, 'DCRAN': str, 'L_DCRAN': str, 'NBFLUX_C19_POP01P' : float})
+    return flux2020
+
 
 #############
 ### Flux 2019
@@ -3423,7 +3494,6 @@ class FTP:
             filelist.extend([
                     "index.html",
                     "README.md",   "README.dillinger.html",
-                    "ConsommationFonciere.html",    "ConsommationFonciereV2.html",
                     "ConsommationFonciereV3.html",  "ConsommationFonciereV4.html",
                     "input/Configuration.xlsx",
                     "input/Readme-Header.png", "input/Readme-Body.png",
@@ -3644,7 +3714,8 @@ class Report:
                                "NB_LGT_TOT_CREES",   "NB_LGT_PRET_LOC_SOCIAL", "NB_LGT_ACC_SOC_HORS_PTZ", "NB_LGT_PTZ",
                                "SUPERFICIE_TERRAIN", "DATE_REELLE_AUTORISATION",
                                "SURF_HAB_DEMOLIE",   "SURF_LOC_DEMOLIE", "SURF_HAB_AVANT", "SURF_LOC_AVANT", "I_EXTENSION", "I_SURELEVATION",
-                               "SURF_HAB_CREEE",     "SURF_LOC_CREEE"]]
+                               "SURF_HAB_CREEE",     "SURF_LOC_CREEE",
+                               "ADR_NUM_TER", "ADR_TYPEVOIE_TER", "ADR_LIBVOIE_TER", "ADR_LIEUDIT_TER", "ADR_LOCALITE_TER", "ADR_CODPOST_TER" ]]
         com_start.sort_values("Date")
 
         com_2020  = com_start[(com_start["DATE_REELLE_AUTORISATION"] > start_date_2020)]
