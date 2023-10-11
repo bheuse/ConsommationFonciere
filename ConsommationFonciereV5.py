@@ -76,6 +76,7 @@ global_context["URL_SOURCE_SITADEL"] = sitadelSourcePage
 
 sitadelSource1316File = "https://www.data.gouv.fr/fr/datasets/r/67dd4ee1-0d73-4676-a90f-854fe9012f5d"
 sitadelSource1316File = "https://statistiques.developpement-durable.gouv.fr/sites/default/files/2022-10/PC_DP_creant_logements_2013_2016.zip"
+sitadelSource1316File = "https://www.data.gouv.fr/en/datasets/base-des-permis-de-construire-et-autres-autorisations-durbanisme-sitadel/#/resources/67dd4ee1-0d73-4676-a90f-854fe9012f5d"
 sitadel1316File       = "PC_DP_creant_logements_2013_2016.csv"
 
 
@@ -83,9 +84,11 @@ sitadel1316File       = "PC_DP_creant_logements_2013_2016.csv"
 sitadelSource17PLFile = "https://www.data.gouv.fr/fr/datasets/r/1fa467ef-5e3a-456f-b961-be9032cfa3df"
 sitadelSource17PLFile = "https://statistiques.developpement-durable.gouv.fr/sites/default/files/2022-10/PC_DP_creant_logements_2017_2022.zip"
 sitadelSource17PLFile = "https://www.statistiques.developpement-durable.gouv.fr/sites/default/files/2023-03/pc_dp_creant_logements_2017_2023_0.zip"
+sitadelSource17PLFile = "https://www.data.gouv.fr/en/datasets/base-des-permis-de-construire-et-autres-autorisations-durbanisme-sitadel/#/resources/1fa467ef-5e3a-456f-b961-be9032cfa3df"
 sitadel17PLFile       = "PC_DP_creant_logements_2017_2023.csv"
 
 sitadelSourceMetaFile = "https://www.data.gouv.fr/fr/datasets/r/9d7d6728-c3bc-44e4-8105-7335ad70d52e"
+sitadelSourceMetaFile = "https://www.data.gouv.fr/en/datasets/base-des-permis-de-construire-et-autres-autorisations-durbanisme-sitadel/#/resources/9d7d6728-c3bc-44e4-8105-7335ad70d52e"
 sitadelMetaFile       = "dictionnaire_variables_logements_permis_construire.xls"
 
 sitadel1316 : pd.DataFrame = None
@@ -135,10 +138,14 @@ def load_sitadel(sitadel1316_file:  str = data_dir + sitadel1316File,
 ##########################
 
 sitadelLocauxSource1316File = "https://statistiques.developpement-durable.gouv.fr/sites/default/files/2022-10/PC_DP_creant_locaux_2013_2016.zip"
-# sitadelLocauxSource1316File = "https://www.data.gouv.fr/fr/datasets/r/3b987380-d1cf-4047-8dc5-1a19a3ecf812"
+sitadelLocauxSource1316File = "https://www.data.gouv.fr/fr/datasets/r/3b987380-d1cf-4047-8dc5-1a19a3ecf812"
+sitadelLocauxSource1316File = "https://www.data.gouv.fr/en/datasets/base-des-permis-de-construire-et-autres-autorisations-durbanisme-sitadel/#/resources/3b987380-d1cf-4047-8dc5-1a19a3ecf812"
+
 sitadelLocauxSource17PLFile = "https://statistiques.developpement-durable.gouv.fr/sites/default/files/2022-10/PC_DP_creant_locaux_2017_2022.zip"
 sitadelLocauxSource17PLFile = "https://www.statistiques.developpement-durable.gouv.fr/sites/default/files/2023-03/pc_dp_creant_locaux_2017_2023_0.zip"
-# sitadelLocauxSource17PLFile = "https://www.data.gouv.fr/fr/datasets/r/98ff9fd3-a14e-474d-bb8f-12bde12d9f70"
+sitadelLocauxSource17PLFile = "https://www.data.gouv.fr/fr/datasets/r/98ff9fd3-a14e-474d-bb8f-12bde12d9f70"
+sitadelLocauxSource17PLFile = "https://www.data.gouv.fr/en/datasets/base-des-permis-de-construire-et-autres-autorisations-durbanisme-sitadel/#/resources/98ff9fd3-a14e-474d-bb8f-12bde12d9f70"
+
 sitadelLocauxSourceMetaFile = "https://www.data.gouv.fr/fr/datasets/r/b3ffee5b-fd75-4345-a086-02ded2018705"
 sitadelLocaux1316File = data_dir + "PC_DP_creant_locaux_2013_2016.csv"
 sitadelLocaux17PLFile = data_dir + "PC_DP_creant_locaux_2017_2023.csv"
@@ -751,7 +758,7 @@ def load_flux_2020(p_flux2020SourceFile:  str = flux2020SourceData):
     if (flux2020 is not None) : return flux2020
     Term.print_blue("Lecture Flux Mobilite Residentielle 2020 : " + p_flux2020SourceFile + " ...")
     flux2020 = pd.read_csv(p_flux2020SourceFile, delimiter=';',
-               dtype={'CODGEO': str, 'LIBGEO': str, 'DCRAN': str, 'L_DCRAN': str, 'NBFLUX_C19_POP01P' : float})
+               dtype={'CODGEO': str, 'LIBGEO': str, 'DCRAN': str, 'L_DCRAN': str, 'NBFLUX_C20_POP01P' : float})
     return flux2020
 
 
