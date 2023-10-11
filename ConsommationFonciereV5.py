@@ -749,7 +749,7 @@ flux2020 : pd.DataFrame = None
 def load_flux_2020(p_flux2020SourceFile:  str = flux2020SourceData):
     global flux2020
     if (flux2020 is not None) : return flux2020
-    Term.print_blue("Lecture Flux Mobilite Residentielle 2019 : " + p_flux2020SourceFile + " ...")
+    Term.print_blue("Lecture Flux Mobilite Residentielle 2020 : " + p_flux2020SourceFile + " ...")
     flux2020 = pd.read_csv(p_flux2020SourceFile, delimiter=';',
                dtype={'CODGEO': str, 'LIBGEO': str, 'DCRAN': str, 'L_DCRAN': str, 'NBFLUX_C19_POP01P' : float})
     return flux2020
@@ -877,6 +877,29 @@ def load_fluxpro_2018(p_fluxpro2018SourceFile:  str = fluxpro2018SourceData):
     fluxpro2018 = pd.read_csv(p_fluxpro2018SourceFile, delimiter=';',
                   dtype={'CODGEO': str, 'LIBGEO': str, 'DCRAN': str, 'L_DCRAN': str, 'NBFLUX_C18_POP01P' : float})
     return fluxpro2018
+
+
+######################
+### Flux Travail 2020
+######################
+
+fluxpro2020SourcePage = "https://www.insee.fr/fr/statistiques/7630376"
+fluxpro2020SourceFile = "https://www.insee.fr/fr/statistiques/fichier/7630376/base-flux-mobilite-domicile-lieu-travail-2020-csv.zip"
+fluxpro2020SourceMeta = "https://www.insee.fr/fr/statistiques/7630376#dictionnaire"
+fluxpro2020SourceData = data_dir + "base-flux-mobilite-domicile-lieu-travail-2020.csv"
+fluxpro2020 : pd.DataFrame = None
+
+
+# CODGEO;LIBGEO;DCLT;L_DCLT;NBFLUX_C20_POP01P
+def load_fluxpro_2020(p_fluxpro2020SourceFile:  str = fluxpro2020SourceData):
+    global fluxpro2020
+    if (fluxpro2020 is not None) : return fluxpro2020
+    Term.print_blue("Lecture Flux Mobilite Domicile Travail 2020 : " + p_fluxpro2020SourceFile + " ...")
+    fluxpro2020 = pd.read_csv(p_fluxpro2020SourceFile, delimiter=';',
+                  dtype={'CODGEO': str, 'LIBGEO': str, 'DCRAN': str, 'L_DCRAN': str, 'NBFLUX_C20_POP01P' : float})
+    return fluxpro2020
+
+
 
 ######################
 ### Flux Travail 2019
@@ -2204,8 +2227,10 @@ class DataStore():
         load_flux_2017()
         load_flux_2018()
         load_flux_2019()
+        load_flux_2020()
         load_fluxpro_2018()
         load_fluxpro_2019()
+        load_fluxpro_2020()
 
         # Collected Data
         Term.print_green("> Calculs Métriques : " + str(code_postal) + " : " + commune + " (Code INSEE : " + code_insee + ")")
