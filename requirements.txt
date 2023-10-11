@@ -20,7 +20,7 @@ openpyxl
 python-dateutil
 pillow
 kiwisolver
-
+tqdm
 
 
 

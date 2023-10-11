@@ -34,6 +34,7 @@ import markdown
 import logging
 import datetime
 from dateutil import parser
+from tqdm import tqdm
 
 timestamp = datetime.datetime.now().strftime("%y%m%d-%H%M%S")
 logFile   = "output"+os.sep+"_ConsommationFonciere_"+timestamp+".log"
@@ -2626,7 +2627,10 @@ class Flux:
     @staticmethod
     def report(year="all"):
         # Donnees Flux
-        if (str(year) in ["all", "2019"] ) :
+        if (str(year) in ["all", "2020"] ) :
+            load_flux_2020()
+            Flux.report_details(flux2020, "NBFLUX_C20_POP01P" , "93", 'Flux2020-93.xlsx')
+        if (str(year) in ["all", "2020"] ) :
             load_flux_2019()
             Flux.report_details(flux2019, "NBFLUX_C19_POP01P" , "93", 'Flux2019-93.xlsx')
         if (str(year) in ["all", "2018"]):
@@ -3563,7 +3567,7 @@ class Report:
         if (with_communes):
             comm_len = len(communes_zone(name))
             comm_idx = 0
-            for commune in communes_zone(name):
+            for commune in tqdm(communes_zone(name), desc="Communes : "):
                 comm_idx = comm_idx + 1
                 Term.print_grey("###> Commune " + str(comm_idx) + "/" + str(comm_len))
                 Report.commune(code_insee=str(commune), force=force, ftp_push=ftp_push)
@@ -3581,7 +3585,7 @@ class Report:
         if (with_communes):
             comm_len = len(communes_epci(epci_id))
             comm_idx = 0
-            for commune in communes_epci(epci_id):
+            for commune in tqdm(communes_epci(epci_id), desc="Communes : "):
                 comm_idx = comm_idx + 1
                 Term.print_grey("###> Commune " + str(comm_idx) + "/" + str(comm_len))
                 Report.commune(code_insee=str(commune), force=force, ftp_push=ftp_push)
@@ -3603,15 +3607,15 @@ class Report:
             epci_idx = 0
             zone_len = len(list_zones_dept(dept_id))
             zone_idx = 0
-            for commune in communes_dept(dept_id):
+            for commune in tqdm(communes_dept(dept_id), desc="Communes : "):
                 comm_idx = comm_idx + 1
                 Term.print_grey("###> Commune " + str(comm_idx) + "/" + str(comm_len) + " # EPCI " + str(epci_idx) + "/" + str(epci_len) + " # Zone " + str(zone_idx) + "/" + str(zone_len))
                 Report.commune(code_insee=str(commune), force=force, ftp_push=ftp_push)
-            for epci in epci_dept(dept_id):
+            for epci in tqdm(epci_dept(dept_id), desc="EPCI : "):
                 epci_idx = epci_idx + 1
                 Term.print_grey("###> Commune " + str(comm_idx) + "/" + str(comm_len) + " # EPCI " + str(epci_idx) + "/" + str(epci_len) + " # Zone " + str(zone_idx) + "/" + str(zone_len))
                 Report.epci(epci_id=str(epci), force=force, with_communes=False, ftp_push=ftp_push)
-            for zone in list_zones_dept(dept_id):
+            for zone in tqdm(list_zones_dept(dept_id), desc="Zones : "):
                 zone_idx = zone_idx + 1
                 Term.print_grey("###> Commune " + str(comm_idx) + "/" + str(comm_len) + " # EPCI " + str(epci_idx) + "/" + str(epci_len) + " # Zone " + str(zone_idx) + "/" + str(zone_len))
                 Report.zone(zone_name=str(zone), force=force, with_communes=False, ftp_push=ftp_push)
